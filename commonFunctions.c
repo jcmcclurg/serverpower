@@ -41,7 +41,7 @@ char* readLine(void){
 int checkStdin(void){
 	fd_set rfds;
 	struct timeval tv;
-	int retval, len;
+	int retval;
 
 	/* Watch stdin (fd 0) for 0 seconds to see when it has input. */
 	FD_ZERO(&rfds);
@@ -50,7 +50,7 @@ int checkStdin(void){
 	tv.tv_usec = 0;
 
 	/* check if stdin has input */
-	retval = select(stdin, &rfds, NULL, NULL, &tv);
+	retval = select(1, &rfds, NULL, NULL, &tv);
 	if(retval == -1){
 		perror("checkStdin() experienced error.");
 		exit(EXIT_FAILURE);
