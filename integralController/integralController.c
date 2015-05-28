@@ -11,8 +11,6 @@ int main(void) {
 	signal(SIGINT, terminateProgram);
 
 	char* str;
-	int len;
-	double f;
 	do {
 		str = readLine();
 		if(str != NULL){

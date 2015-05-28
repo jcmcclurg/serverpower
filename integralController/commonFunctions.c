@@ -18,7 +18,7 @@ void terminateProgram(int signum) {
 // Reads a line from stdin, and strips the newline at the end.
 // Exits the program if someone types more than BUFLEN characters in a line.
 char _readLine_buf[READLINE_BUFLEN];
-char* readLine(){
+char* readLine(void){
 	char* str;
 	int len;
 	_readLine_buf[READLINE_BUFLEN - 1] = 0;
@@ -35,4 +35,26 @@ char* readLine(){
 		str[len - 1] = 0;
 	}
 	return str;
+}
+
+// Returns true if stdin has stuff to read, false if not.
+int checkStdin(void){
+	fd_set rfds;
+	struct timeval tv;
+	int retval;
+
+	/* Watch stdin (fd 0) for 0 seconds to see when it has input. */
+	FD_ZERO(&rfds);
+	FD_SET(0, &rfds);
+	tv.tv_sec = 0;
+	tv.tv_usec = 0;
+
+	/* check if stdin has input */
+	retval = select(1, &rfds, NULL, NULL, &tv);
+	if(retval == -1){
+		perror("checkStdin() experienced error.");
+		exit(EXIT_FAILURE);
+	}
+
+	return retval;
 }

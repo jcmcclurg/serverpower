@@ -9,13 +9,13 @@ DEPENDS = commonFunctions.o
 all: $(TARGET)
 
 $(TARGET): $(TARGET).o $(DEPENDS)
-	$(CC) $(CFLAGS) -o $(TARGET) $(TARGET).o $(DEPENDS)
+	$(CC) -o $(TARGET) $(TARGET).o $(DEPENDS) $(CFLAGS)
 
 integralController.o: integralController.c
-	gcc -c integralController.c
+	$(CC) -c integralController.c $(CFLAGS)
 
 commonFunctions.o: commonFunctions.c commonFunctions.h
-	gcc -c commonFunctions.c
+	$(CC) -c commonFunctions.c $(CFLAGS)
 
 clean:
 	$(RM) $(TARGET) $(TARGET).o $(DEPENDS)
