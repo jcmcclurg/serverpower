@@ -11,4 +11,6 @@ void terminateProgram(int sigNum);
 // READLINE_BUFLEN characters per line.
 char* readLine(void);
 
+int checkStdin(void);
+
 #endif
