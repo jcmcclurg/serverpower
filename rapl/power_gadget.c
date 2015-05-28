@@ -74,7 +74,10 @@ void print_rapl_control_info(uint64_t node)  // added by Joe Hall 4/25/15
    pkg_rapl_power_limit_control_t pkg_plc;
    pkg_rapl_parameters_t pkg_param;
    pp0_rapl_power_limit_control_t pp0_plc;
-   pp1_rapl_power_limit_control_t pp1_plc;
+   //pp1_rapl_power_limit_control_t pp1_plc;
+   dram_rapl_power_limit_control_t dram_plc;
+   dram_rapl_parameters_t dram_param;
+   
    uint64_t pp0_priority_level;
    uint64_t pp1_priority_level;
 
@@ -84,8 +87,8 @@ void print_rapl_control_info(uint64_t node)  // added by Joe Hall 4/25/15
    err += get_pp0_balance_policy(node, &pp0_priority_level);
    //err += get_pp1_rapl_power_limit_control(node, &pp1_plc);  pp1 only on client systems
    //err += get_pp1_balance_policy(node, &pp1_priority_level);
-   //err += get_dram_power_limit_control(node, &dram_plc);
-   //err += get_dram_rapl_parameters(node, &dram_param);
+   err += get_dram_power_limit_control(node, &dram_plc);
+   err += get_dram_rapl_parameters(node, &dram_param);
 
    if (err > 0){
 	printf("%d error(s) getting RAPL info.\n");
@@ -116,6 +119,17 @@ void print_rapl_control_info(uint64_t node)  // added by Joe Hall 4/25/15
 		,pp1_plc.power_limit_watts,pp1_plc.limit_time_window_seconds,pp1_plc.limit_enabled
 		,pp1_plc.clamp_enabled,pp1_plc.lock_enabled,pp1_priority_level);	
 */  
+	   printf("RAPL DRAM Power Limit Control:\n"
+		"PowerLimit(W) =\t%f\tWindow(sec) =%f\nLimitON = %d\tClampON = %d\n"
+		"LockON = %d\n\n"
+		,dram_plc.power_limit_watts,dram_plc.limit_time_window_seconds,dram_plc.limit_enabled
+		,dram_plc.clamp_enabled,dram_plc.lock_enabled);
+
+	   printf("RAPL DRAM Parameters:\nThermalSpecPower(W) = %f\tMaxWindow(sec) = %f\n" 
+		 "MinimumPower(W) = %f\tMaximumPower(W) = %f\n\n"
+       	 ,dram_param.thermal_spec_power_watts,dram_param.maximum_limit_time_window_seconds
+		 ,dram_param.minimum_power_watts,dram_param.maximum_power_watts);
+
     }
 
 }
@@ -333,6 +347,10 @@ do_print_energy_info()
 						else if (pp=='c') {
 							pp0_plc.power_limit_watts = setpoint;
 							ret = set_pp0_rapl_power_limit_control(i, &pp0_plc);
+						}
+                        else if (pp='d') {
+							dram_plc.power_limit_watts = setpoint;
+							ret = set_dram_rapl_power_limit_control(i, &dram_plc);
 						}
 						//fprintf(stdout, "Setpoint = %f\n", setpoint);
 						//print_rapl_control_info(i);
@@ -607,7 +625,7 @@ int get_usr_input(char *buff, int *bytes_so_far) {
 	    }
 	}        
 	else {
-		;
+		return 0;
    		//printf("No data within five seconds.\n");
 	}
 }	
@@ -618,6 +636,9 @@ char interpret_power_limit_command(char *command, double *str) {
 			*str = atof(command+1);
 			break;
 		case ('c'):
+			*str = atof(command+1);
+			break;
+		case ('d'):
 			*str = atof(command+1);
 			break;
 		case ('q'):
