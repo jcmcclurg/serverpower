@@ -100,11 +100,11 @@ typedef struct dram_rapl_parameters_t {
     double maximum_power_watts;
     double maximum_limit_time_window_seconds;
 } dram_rapl_parameters_t;
-int get_dram_rapl_power_limit_control_t(uint64_t node, dram_rapl_power_limit_control_t *rapl_power_limit_control);
+int get_dram_rapl_power_limit_control(uint64_t node, dram_rapl_power_limit_control_t *rapl_power_limit_control);
 int get_dram_total_energy_consumed(uint64_t node, double *total_energy_consumed);
-int get_dram_rapl_parameters_t(uint64_t node, dram_rapl_parameters_t *rapl_parameters);
+int get_dram_rapl_parameters(uint64_t node, dram_rapl_parameters_t *rapl_parameters);
 int get_dram_accumulated_throttled_time(uint64_t node, double *accumulated_throttled_time_seconds);
-int set_dram_rapl_power_limit_control_t(uint64_t node, dram_rapl_power_limit_control_t *rapl_power_limit_control);
+int set_dram_rapl_power_limit_control(uint64_t node, dram_rapl_power_limit_control_t *rapl_power_limit_control);
 
 
 /*! \brief RAPL power limit control structure, PP0 domain */

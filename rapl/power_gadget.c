@@ -85,13 +85,13 @@ void print_rapl_control_info(uint64_t node)  // added by Joe Hall 4/25/15
    err += get_pkg_rapl_parameters(node, &pkg_param);
    err += get_pp0_rapl_power_limit_control(node, &pp0_plc);
    err += get_pp0_balance_policy(node, &pp0_priority_level);
-   //err += get_pp1_rapl_power_limit_control(node, &pp1_plc);  pp1 only on client systems
+   //err += get_pp1_rapl_power_limit_control(node, &pp1_plc);  //pp1 only on client systems
    //err += get_pp1_balance_policy(node, &pp1_priority_level);
-   err += get_dram_power_limit_control(node, &dram_plc);
+   err += get_dram_rapl_power_limit_control(node, &dram_plc);  // dram only on server systems
    err += get_dram_rapl_parameters(node, &dram_param);
 
    if (err > 0){
-	printf("%d error(s) getting RAPL info.\n");
+   		printf("%d error(s) getting RAPL info.\n", err);
    }
    else {
 	   printf("RAPL power limit control structure:\n"
@@ -236,6 +236,14 @@ do_print_energy_info()
     pp0_plc.clamp_enabled = 1;
     pp0_plc.lock_enabled = 0;
 
+	dram_rapl_power_limit_control_t dram_plc;
+	dram_plc.power_limit_watts = 35.0;
+    dram_plc.limit_time_window_seconds = 0.001;
+    dram_plc.limit_enabled = 1;
+    dram_plc.clamp_enabled = 1;
+    dram_plc.lock_enabled = 0;
+	
+
     /* if output FILE pointer is not initiated in main(), let it be standard output (Joe)*/
     if (fp==NULL) {
 		fp = stdout;
@@ -348,14 +356,14 @@ do_print_energy_info()
 							pp0_plc.power_limit_watts = setpoint;
 							ret = set_pp0_rapl_power_limit_control(i, &pp0_plc);
 						}
-                        else if (pp='d') {
+                        else if (pp=='d') {
 							dram_plc.power_limit_watts = setpoint;
 							ret = set_dram_rapl_power_limit_control(i, &dram_plc);
 						}
-						//fprintf(stdout, "Setpoint = %f\n", setpoint);
-						//print_rapl_control_info(i);
-        			if (ret > 0) 
-	    				printf(stdout, "Error setting PKG power limit controls\n");
+						//fprintf(stdout, "Setpoint = %f & char = %c\n", setpoint,pp);
+						print_rapl_control_info(i);
+        			if (ret != 0)
+	    				fprintf(stdout, "Error setting RAPL power limit controls\n");
 				}					
     		}
 			else if (setpoint == -1) // -1 for quit, therefore exit while()
@@ -456,7 +464,7 @@ main(int argc, char **argv)
     int i = 0;
     int ret = 0;
 
-    // original r320 settings:
+    // original factory RAPL settings:
     pp0_rapl_power_limit_control_t pp0_plc_orig;
     pp0_plc_orig.power_limit_watts = 0.0;
     pp0_plc_orig.limit_time_window_seconds = 0.000977;
@@ -464,7 +472,7 @@ main(int argc, char **argv)
     pp0_plc_orig.clamp_enabled = 0;
     pp0_plc_orig.lock_enabled = 0;
     
-    // original r320 settings:
+    // original factory RAPL settings:
     pkg_rapl_power_limit_control_t pkg_plc_orig;
     pkg_plc_orig.power_limit_watts_1 = 80.0;
     pkg_plc_orig.power_limit_watts_2 = 96.0;
@@ -475,6 +483,14 @@ main(int argc, char **argv)
     pkg_plc_orig.clamp_enabled_1 = 0;
     pkg_plc_orig.clamp_enabled_2 = 0;
     pkg_plc_orig.lock_enabled = 0;
+
+	// original factory RAPL settings:
+    dram_rapl_power_limit_control_t dram_plc_orig;
+	dram_plc_orig.power_limit_watts = 0.0;
+    dram_plc_orig.limit_time_window_seconds = 1.0;
+    dram_plc_orig.limit_enabled = 0;
+    dram_plc_orig.clamp_enabled = 0;
+    dram_plc_orig.lock_enabled = 0;
 
     /* Clean up if we're told to exit */
     signal(SIGINT, sigint_handler);
@@ -515,6 +531,9 @@ main(int argc, char **argv)
 		ret = set_pkg_rapl_power_limit_control(i,&pkg_plc_orig);
         if (ret > 0)
 	    	fprintf(stdout, "Error setting PKG power limit controls\n");
+		ret = set_dram_rapl_power_limit_control(i,&dram_plc_orig);
+		if (ret > 0)
+	    	fprintf(stdout, "Error setting DRAM power limit controls\n");
 		//print_rapl_control_info(i);
     }
     
@@ -531,6 +550,9 @@ main(int argc, char **argv)
 		ret = set_pkg_rapl_power_limit_control(i,&pkg_plc_orig);
         if (ret > 0)
 	    	fprintf(stdout, "Error setting PKG power limit controls\n");
+		ret = set_dram_rapl_power_limit_control(i,&dram_plc_orig);
+		if (ret > 0)
+	    	fprintf(stdout, "Error setting DRAM power limit controls\n");
 		//print_rapl_control_info(i);
     }
 
