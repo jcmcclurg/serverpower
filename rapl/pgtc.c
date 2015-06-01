@@ -38,14 +38,12 @@ char          thz1[6] = "xxxxx"; //thermalzone1 temperature (Celsius) -- code ad
 int get_usr_input(char *buff, int *bytes_so_far); // get stdin input
 char interpret_power_limit_command(char *command, double *str); // interpret stdin input for power limit command
 
-void get_CPU_temperature(char *thz0,char *thz1) // get temperature of thermal zones 0 & 1 -- code added by Joe Hall 4/19/15
+void get_CPU_temperature(char *thz0) // get temperature of thermal zones 0  -- code added by Joe Hall 4/19/15
 {
     FILE *f; 
     char c; 
     //char thz0[5] = "xxxxx";
-    //char thz1[5] = "xxxxx";
     int i0 = 0;
-    int i1 = 0;
     f=fopen("/sys/class/thermal/thermal_zone0/temp","rt"); 
     while((c=fgetc(f))!=EOF){ 
         //printf("%c",c);
@@ -55,17 +53,6 @@ void get_CPU_temperature(char *thz0,char *thz1) // get temperature of thermal zo
     } 
     thz0[5]='\0';
     fclose(f); 
-/*
-    f=fopen("/sys/class/thermal/thermal_zone1/temp","rt"); 
-    while((c=fgetc(f))!=EOF){ 
-        //printf("%c",c);
-        thz1[i1]=c;
-        i1++; 
-    } 
-    thz1[5]='\0';
-    fclose(f); 
-*/
-    //printf("thermal zone0: %s\nthermal zone1: %s\n\n",thz0,thz1);
 }
 
 void print_rapl_control_info(uint64_t node)  // added by Joe Hall 4/25/15
@@ -164,16 +151,16 @@ void
 convert_time_to_string(struct timespec tv, char* time_buf)
 {
     time_t sec;
-    int nsec;
+    int msec;
     struct tm *timeinfo;
     char tmp_buf[9];
 
     sec = tv.tv_sec;
     timeinfo = localtime(&sec);
-    nsec = tv.tv_nsec;
+    msec = tv.tv_nsec/1000000;
 
     strftime(tmp_buf, 9, "%H:%M:%S", timeinfo);
-    sprintf(time_buf, "%s:%d",tmp_buf,nsec);
+    sprintf(time_buf, "%s:%d",tmp_buf,msec);
 }
 
 /*
@@ -276,8 +263,9 @@ do_print_energy_info()
     setbuf(fp, NULL);
 
     /* Print header */
-    fprintf(fp, "System Time,RDTSC,Elapsed Time (sec),");
-    for (i = node; i < num_node; i++) {
+//    fprintf(fp, "System Time,RDTSC,Elapsed Time (sec),");
+	fprintf(fp, "System Time,");
+/*    for (i = node; i < num_node; i++) {
         fprintf(fp, "IA Frequency_%d (MHz),",i);
         if(is_supported_domain(RAPL_PKG))
             fprintf(fp,"Processor Power_%d (Watt),Cumulative Processor Energy_%d (Joules),Cumulative Processor Energy_%d (mWh),", i,i,i);
@@ -288,6 +276,20 @@ do_print_energy_info()
         if(is_supported_domain(RAPL_DRAM))
             fprintf(fp, "DRAM Power_%d (Watt),Cumulative DRAM Energy_%d (Joules),Cumulative DRAM Energy_%d(mWh),", i,i,i);
     }
+*/
+	// short version
+	for (i = node; i < num_node; i++) {
+        fprintf(fp, "IA Frequency_%d (MHz),",i);
+        if(is_supported_domain(RAPL_PKG))
+            fprintf(fp,"Processor Power_%d (Watt)",i);
+        if(is_supported_domain(RAPL_PP0))
+            fprintf(fp, "IA Power_%d (Watt),",i);
+        if(is_supported_domain(RAPL_PP1))
+            fprintf(fp, "GT Power_%d (Watt),",i);
+        if(is_supported_domain(RAPL_DRAM))
+            fprintf(fp, "DRAM Power_%d (Watt),",i);
+    }
+
  	//   fprintf(fp,"ThermalZone0(Celsius),ThermalZone1(Celsius),"); // Added by Joe Hall 4/19/15
     fprintf(fp,"ThermalZone0(Celsius),");
     fprintf(fp, "\n");
@@ -343,8 +345,8 @@ do_print_energy_info()
                     // just the sleep delay, in order to more accourately account for
                     // the delay between samples
                     power_watt[i][domain] = delta / interval_elapsed_time;
-                    cum_energy_J[i][domain] += delta;
-                    cum_energy_mWh[i][domain] = cum_energy_J[i][domain] / 3.6; // mWh
+//                    cum_energy_J[i][domain] += delta;
+ //                   cum_energy_mWh[i][domain] = cum_energy_J[i][domain] / 3.6; // mWh
                 }
             }
         }
@@ -353,20 +355,21 @@ do_print_energy_info()
         total_elapsed_time = end - start;
         convert_time_to_string(tv, time_buffer);
 
-        read_tsc(&tsc);
-        fprintf(fp,"%s,%llu,%.4lf,", time_buffer, tsc, total_elapsed_time);
+ //       read_tsc(&tsc);
+ //       fprintf(fp,"%s,%llu,%.4lf,", time_buffer, tsc, total_elapsed_time);
+		fprintf(fp,"%s,", time_buffer);
         for (i = node; i < num_node; i++) {
             //get_pp0_freq_mhz(i, &freq);
             get_pp0_freq_mhz(i, freq); //changed by Joe 4/25/15 to get 4 CPU freq
             fprintf(fp, "%u|%u|%u|%u,", freq[0],freq[1],freq[2],freq[3]);
             for (domain = 0; domain < RAPL_NR_DOMAIN; ++domain) {
-                if(is_supported_domain(domain)) {
-                    fprintf(fp, "%.4lf,%.4lf,%.4lf,",
-                            power_watt[i][domain], cum_energy_J[i][domain], cum_energy_mWh[i][domain]);
+            	if(is_supported_domain(domain)) {
+//              	fprintf(fp, "%.4lf,%.4lf,%.4lf,",power_watt[i][domain], cum_energy_J[i][domain], cum_energy_mWh[i][domain]);
+					fprintf(fp, "%.4lf,",power_watt[i][domain]);
                 }
             }
         }
-        get_CPU_temperature(thz0,thz1);
+        get_CPU_temperature(thz0);
         fprintf(fp, "%s,",thz0);
         fprintf(fp, "\n");
 
@@ -393,7 +396,7 @@ do_print_energy_info()
 							ret = set_dram_rapl_power_limit_control(i, &dram_plc);
 						}
 						//fprintf(stdout, "Setpoint = %f & char = %c\n", setpoint,pp);
-						print_rapl_control_info(i);
+						//print_rapl_control_info(i);
         			if (ret != 0)
 	    				fprintf(stdout, "Error setting RAPL power limit controls\n");
 				}					
@@ -406,8 +409,8 @@ do_print_energy_info()
     }
 
     end = clock();
-
-    /* Print summary */
+/*
+    // Print summary 
     fprintf(stdout, "\nTotal Elapsed Time(sec)=%.4lf\n\n", total_elapsed_time);
     for (i = node; i < num_node; i++) {
         if(is_supported_domain(RAPL_PKG)){
@@ -433,6 +436,7 @@ do_print_energy_info()
     }
     read_tsc(&tsc);
     fprintf(stdout,"TSC=%llu\n", tsc);
+*/
 }
 
 void

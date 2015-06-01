@@ -237,8 +237,8 @@ do_print_energy_info()
     pp0_plc.lock_enabled = 0;
 
 	dram_rapl_power_limit_control_t dram_plc;
-	dram_plc.power_limit_watts = 35.0;
-    dram_plc.limit_time_window_seconds = 0.001;
+	dram_plc.power_limit_watts = 30.0;
+    dram_plc.limit_time_window_seconds = 0.03;
     dram_plc.limit_enabled = 1;
     dram_plc.clamp_enabled = 1;
     dram_plc.lock_enabled = 0;
@@ -426,7 +426,7 @@ cmdline(int argc, char **argv)
         switch (opt) {
         case 'e':
             delay_ms_temp = atoi(optarg);
-            if(delay_ms_temp > 50) {
+            if(delay_ms_temp > 0) {
                 delay_us = delay_ms_temp * 1000;
             } else {
                 fprintf(stdout, "Sampling delay must be greater than 50 ms.\n");
@@ -531,7 +531,7 @@ main(int argc, char **argv)
 		ret = set_pkg_rapl_power_limit_control(i,&pkg_plc_orig);
         if (ret > 0)
 	    	fprintf(stdout, "Error setting PKG power limit controls\n");
-		ret = set_dram_rapl_power_limit_control(i,&dram_plc_orig);
+	//	ret = set_dram_rapl_power_limit_control(i,&dram_plc_orig);
 		if (ret > 0)
 	    	fprintf(stdout, "Error setting DRAM power limit controls\n");
 		//print_rapl_control_info(i);
@@ -550,7 +550,7 @@ main(int argc, char **argv)
 		ret = set_pkg_rapl_power_limit_control(i,&pkg_plc_orig);
         if (ret > 0)
 	    	fprintf(stdout, "Error setting PKG power limit controls\n");
-		ret = set_dram_rapl_power_limit_control(i,&dram_plc_orig);
+	//	ret = set_dram_rapl_power_limit_control(i,&dram_plc_orig);
 		if (ret > 0)
 	    	fprintf(stdout, "Error setting DRAM power limit controls\n");
 		//print_rapl_control_info(i);
