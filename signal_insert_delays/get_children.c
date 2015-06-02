@@ -23,17 +23,14 @@
 #include <sys/vfs.h>
 #include <sys/types.h>
 #include <dirent.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include "get_children.h"
 
 #define UNKNOWN_CLASS 0
 #define CHILD_CLASS 1
 #define NONCHILD_CLASS 2
-
-typedef struct process_tree_struct {
-	int class;
-	int parent;
-	int pid;
-	int ppid;
-} process_tree;
 
 static int check_proc() {
 	struct statfs mnt;
@@ -75,7 +72,7 @@ static pid_t getppid_of(pid_t pid) {
 	return atoi(token);
 }
 
-// Returns the number of processes in the tree, and populates the process tree.
+// Returns the number of processes in the tree, and populates the process tree, or returns -1 on failure.
 process_tree* proc_tree_buffer;
 int proc_tree_buffer_size;
 int* child_buffer;
@@ -85,7 +82,7 @@ int get_children(int** childNodes, int rootPID)
 {
 	if(!check_proc()) {
 		perror("procfs is not mounted!\nAborting\n");
-		exit(EXIT_FAILURE);
+		return -1;
 	}
 	//open a directory stream to /proc directory
 	DIR* procDir;
@@ -100,11 +97,11 @@ int get_children(int** childNodes, int rootPID)
 
 	if(procDir == NULL) {
 		perror("opendir");
-		exit(EXIT_FAILURE);
+		return -1;
 	}
 
 	// Get number of processes
-	while(ep = readdir(procDir)){
+	while( (ep = readdir(procDir)) ){
 		pid = parseStrAsUint(ep->d_name);
 		if(pid >= 0){
 			numProcs++;
@@ -116,12 +113,13 @@ int get_children(int** childNodes, int rootPID)
 	if(proc_tree_buffer_size < numProcs){
 		free(proc_tree_buffer);
 		proc_tree_buffer = (process_tree*) malloc(numProcs*sizeof(process_tree));
+		proc_tree_buffer_size = numProcs;
 	}
 
 	procTree = proc_tree_buffer;
 
 	rewinddir(procDir);
-	while(numProcs > 0 && ep = readdir(procDir)){
+	while((numProcs > 0) && (ep = readdir(procDir)) ){
 		pid = parseStrAsUint(ep->d_name);
 		if(pid >= 0){
 			ppid = getppid_of(pid);
@@ -136,20 +134,20 @@ int get_children(int** childNodes, int rootPID)
 		}
 	}
 	if(rootNode == -1){
-		perror("rootNode");
-		exit(EXIT_FAILURE);
+		perror("There is no process with the specified PID");
+		return -1;
 	}
 	closedir(procDir);
 	
 	// Make the tree edges.
 	numProcs = ret - numProcs;
-	*num_procs = numProcs;
 	for(i = 0; i < numProcs; i++){
 		pid = procTree[i].pid;	
 		ppid = procTree[i].ppid;
 		for(j = 0; j < numProcs; j++){
 			if(i != j && ppid == procTree[j].pid ){
-				procTree[i].parent = procTree[j].pid;
+				procTree[i].parent = j;
+				//fprintf(stdout,"g[%d]=%d has parent g[%d]=%d\n",i,pid,j,ppid);
 			}
 		}
 	}
@@ -158,13 +156,13 @@ int get_children(int** childNodes, int rootPID)
 	i = rootNode;
 	procTree[i].class = CHILD_CLASS;
 	counter = 1;
-	while( (i = (*procTree)[i].parent) != -1 ){
+	while( (i = procTree[i].parent) != -1 ){
 		procTree[i].class = NONCHILD_CLASS;
 	}
 
 	// Separate the rest of the nodes into CHILD and NONCHILD status
 	for(i = 0; i < numProcs; i++){
-		if((*procTree)[i].class == UKNOWN_CLASS){
+		if(procTree[i].class == UNKNOWN_CLASS){
 			j = i;
 			ret = UNKNOWN_CLASS;
 			// Traverse the node up to a parent with a known status.
@@ -191,12 +189,12 @@ int get_children(int** childNodes, int rootPID)
 			}
 		}
 	}
-	*num_children = counter;
 
 	// Increase the size of the buffer if needed.
 	if(child_buffer_size < counter){
 		free(child_buffer);
 		child_buffer = (int*) malloc(counter*sizeof(int));
+		child_buffer_size = counter;
 	}
 	*childNodes = child_buffer;
 
