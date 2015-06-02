@@ -13,11 +13,16 @@ import time
 import datetime
 
 # Function: worker()
-def worker(ns,i,jobs):
+def worker(ns,i):
+    filename = "data/worker%d"%i
+    j = 0
     while ns.running:
         time.sleep(ns.sleeplen)
-        k += np.sqrt(np.random.random())
-	jobs = i
+        i += np.sqrt(np.random.random())
+        j += 1
+    fp = open(filename,'w+')
+    fp.write("%d\n"%j)
+    fp.close()
 
 # Main:
 if __name__ == '__main__':
@@ -28,7 +33,8 @@ if __name__ == '__main__':
     mgr = multiprocessing.Manager()
     ns = mgr.Namespace()
     ns.running = True
-    ns.sleeplen = 10
+    ns.sleeplen = 1
+    ns.jobs = [-1,-1,-1,-1]
     n = 4
 
     print "Opening delay.csv"
@@ -40,12 +46,12 @@ if __name__ == '__main__':
     np.random.seed()
 
     w = []
-	jobs = list((0,0,0,0))
 
     for i in range(0,n):
-        w.append(multiprocessing.Process(name="w%d"%(i), target=worker, args=(ns,i,jobs[i]))
+        w.append(multiprocessing.Process(name="w%d"%(i), target=worker, args=(ns,i)))
 
     print "Main thread starting workers"
+
     for i in range(0,n):
         w[i].start()
 
@@ -74,9 +80,6 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         print "Exiting."
 
-	for i in range(0,n):
-        w[i].start()
-
     finally:
         f1.close()
         print "Closed delay.csv"
@@ -84,3 +87,4 @@ if __name__ == '__main__':
 
         for i in range(0,n):
             w[i].join()
+
