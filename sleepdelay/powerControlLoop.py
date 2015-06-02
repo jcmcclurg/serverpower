@@ -7,19 +7,19 @@ Created on Wed Mar  4 14:46:47 2015
 import multiprocessing
 import numpy as np
 import time
-import fuzzy_ctrl
+#import fuzzy_ctrl
 
 def controlLoop(n):
     propFactor = 0.00
-    derivFactor = 0.00
+    derivFactor = 0.00000
     intFactor = 0.0001
     
     lastTime = time.time() - n.sleepTime
     totalTime = 0
     
-    err = 0
-    lastErr = 0
-    intErr = 0
+    err = 0.0
+    lastErr = 0.0
+    intErr = 0.0
 
     delay = 1.0
     print "Worker started"
@@ -51,7 +51,7 @@ ns = mgr.Namespace()
 ns.running = True
 ns.actualPower = 0
 ns.setPoint = 15
-ns.sleepTime = 0.01
+ns.sleepTime = 0.1
 ns.pMax=25.
 ns.pMin=3.
 

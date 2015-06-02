@@ -377,6 +377,7 @@ do_print_energy_info()
         if(total_elapsed_time >= duration)
             break;
 
+
 		// set RAPL Power Limits: (added by Joe Hall 5/27/15)
 		rcvd = get_usr_input(buff, &bytes_so_far); // get stdin input
 		if (rcvd == 1) {
@@ -396,7 +397,7 @@ do_print_energy_info()
 							ret = set_dram_rapl_power_limit_control(i, &dram_plc);
 						}
 						//fprintf(stdout, "Setpoint = %f & char = %c\n", setpoint,pp);
-						//print_rapl_control_info(i);
+				//		print_rapl_control_info(i);
         			if (ret != 0)
 	    				fprintf(stdout, "Error setting RAPL power limit controls\n");
 				}					
