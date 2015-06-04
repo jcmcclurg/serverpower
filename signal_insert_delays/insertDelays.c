@@ -8,6 +8,7 @@
 #include "get_children.h"
 
 #define errExit(msg)	do { close_children(); perror(msg); exit(EXIT_FAILURE); } while (0)
+#define normExit()	do { close_children(); exit(EXIT_SUCCESS); } while (0)
 
 #define INITIAL_PERIOD 0.1
 #define INITIAL_DUTY 0.2
@@ -15,6 +16,9 @@
 #define MODE_NO_PID 0
 #define MODE_LIMIT 1
 #define MODE_PID_DIRTY 2
+
+#define MAX_DUTY 0.99
+#define MIN_DUTY 0.01
 
 double period;
 double duty;
@@ -43,7 +47,7 @@ void sig_handler(int signo){
 		if(f)
 			errExit("Couldn't send SIGCONT");
 
-		exit(EXIT_SUCCESS);
+		normExit();
 	}
 	else{
 		errExit("Caught weird signal");
@@ -120,7 +124,40 @@ void start_timer(void){
 	update_period(period);
 }
 
-int main(void) {
+int update_children(int p){
+	int i;
+	numChildren = get_children(&children, p);
+	if(numChildren > 0){
+		limiting_mode = MODE_LIMIT;
+		fprintf(stderr,"   => {");
+		for(i = 0; i < numChildren-1; i++){
+			fprintf(stderr,"%d,", children[i]);
+		}
+		fprintf(stderr,"%d", children[numChildren - 1]);
+		fprintf(stderr,"}\n");
+		return 0;
+	}
+	else{
+		fprintf(stderr,"Can't get the children of %d anymore.\n",pid);
+		return -1;
+	}
+}
+
+int set_pid(int p){
+	process_running = 1;
+	fprintf(stderr,"Target PID = %d\n",pid);
+	stop_timer();
+	if(!update_children(p)){
+		pid = p;
+		start_timer();
+	}
+	else{
+		process_running = 0;
+	}
+	return pid;
+}
+
+int main(int argc, char *argv[]) {
 	struct sigevent sev;
 	sigset_t mask;
 	struct sigaction sa;
@@ -160,65 +197,52 @@ int main(void) {
 	if (sigprocmask(SIG_UNBLOCK, &mask, NULL) == -1)
 		errExit("sigprocmask");
 
-	fprintf(stderr,"PID: %d\n",getpid());
+	fprintf(stderr,"My PID is %d\n",getpid());
 
-	int i;
+	int p = -1;
 	init_children();
-	// A long long wait so that we can easily issue a signal to this process
+
+	if(argc > 1){
+		p = set_pid(atoi(argv[1]));
+		fprintf(stderr,"I am controlling PID %d\n",pid);
+	}
+
 	while(1){
 		char* str;
 		str = readLine();
 		if(str != NULL){
-			if(str[0] == 'd'){
-				double d = atof(str + 1);
-				update_duty(d);
-			}
-			else if(str[0] == 't'){
+			//else if(str[0] == 't'){
+			if(str[0] == 't'){
 				double t = atof(str + 1);
 				update_period(t);
 			}
 			else if(str[0] == 'p'){
-				pid = atoi(str + 1);
-				stop_timer();
-				if(pid != 0){
-					process_running = 1;
-					fprintf(stderr,"Target PID = %d\n",pid);
-					numChildren = get_children(&children, pid);
-					if(numChildren > 0){
-						fprintf(stderr,"   => {");
-						for(i = 0; i < numChildren-1; i++){
-							fprintf(stderr,"%d,", children[i]);
-						}
-						fprintf(stderr,"%d", children[numChildren - 1]);
-						fprintf(stderr,"}\n");
-						start_timer();
-					}
-					else{
-						fprintf(stderr,"Can't get the children of %d.\n",pid);
-					}
+				p = set_pid(atoi(str + 1));
+			}
+			else if(str[0] == 'q'){
+				normExit();
+			}
+			else{
+				if(str[0] == 'd'){
+					str++;
 				}
+
+				double d = atof(str);
+				if(d > MAX_DUTY)
+					d = MAX_DUTY;
+				else if(d < MIN_DUTY)
+					d = MIN_DUTY;
+
+				update_duty(d);
 			}
 		}
 
 		do_work();
 		if((limiting_mode & MODE_PID_DIRTY)){
-			numChildren = get_children(&children, pid);
-			if(numChildren > 0){
-				limiting_mode = MODE_LIMIT;
-				fprintf(stderr,"   => {");
-				for(i = 0; i < numChildren-1; i++){
-					fprintf(stderr,"%d,", children[i]);
-				}
-				fprintf(stderr,"%d", children[numChildren - 1]);
-				fprintf(stderr,"}\n");
-			}
-			else{
-				stop_timer();
-				fprintf(stderr,"Can't get the children of %d anymore.\n",pid);
-			}
+			update_children(p);
 		}
 	}
 
-	exit(EXIT_SUCCESS);
+	normExit();
 	return 0;
 }
