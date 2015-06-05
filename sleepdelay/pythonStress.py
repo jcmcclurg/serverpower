@@ -39,7 +39,7 @@ if __name__ == '__main__':
 
     print "Opening delay.csv"
     f1=open('data/delay.csv','w+')
-    f1.write("start date & time: %s\n"%(str(start_datetime)))
+    #f1.write("start date & time: %s\n"%(str(start_datetime)))
     f1.write("time,delay (sec)\n")
 
 
@@ -63,7 +63,7 @@ if __name__ == '__main__':
             try:
                 if(float(a) >= 0):
                     ns.sleeplen = float(a)
-                    f1.write("%s,%s\n" %(str(time.time()),str(ns.sleeplen)))
+                    f1.write("%s,%s\n" %(str(datetime.datetime.now().time()),str(ns.sleeplen)))
 
             except ValueError:
                 pass

@@ -211,7 +211,7 @@ do_print_energy_info()
 
     char time_buffer[32];
     //struct timeval tv;
-	struct timespec tv, t_setpoint;    
+	struct timespec tv, t_setpoint, t_realtime;    
 	int msec;
     uint64_t tsc;
     uint64_t freq[4];
@@ -319,9 +319,9 @@ do_print_energy_info()
     while (1) {
 
         usleep(delay_us);
-
+		clock_gettime(CLOCK_REALTIME, &t_realtime); // get RT clock for print timestamp
 		// use clock_gettime() instead w/ CLOCK_MONOTONIC
-		clock_gettime(CLOCK_MONOTONIC, &tv);  // get time stamp
+		clock_gettime(CLOCK_MONOTONIC, &tv);  // get Monotonic time stamp for power calculation
         //gettimeofday(&tv, NULL); // get time stamp
 
 		// immediately get energy counter info
@@ -358,7 +358,7 @@ do_print_energy_info()
 
         end = interval_start;  // save last timestamp for reference in next iteration
         total_elapsed_time = end - start;
-        convert_time_to_string(tv, time_buffer);
+        convert_time_to_string(t_realtime, time_buffer); // print real-time stamp to file
 
  //       read_tsc(&tsc);
  //       fprintf(fp,"%s,%llu,%.4lf,", time_buffer, tsc, total_elapsed_time);
@@ -413,8 +413,8 @@ do_print_energy_info()
 					} // end for(numnode)
 				} //end if-else(pp)	
 
-                // timestamp setpoint
-				clock_gettime(CLOCK_MONOTONIC, &t_setpoint);
+                // timestamp setpoint using real-time clock
+				clock_gettime(CLOCK_REALTIME, &t_setpoint);
 				convert_time_to_string(t_setpoint, time_buffer);
 				fprintf(fp_setpoint, "%s,%.2f,\n",time_buffer,setpoint);
     		} // end if(setpoint)
