@@ -32,6 +32,7 @@ plot(t_pg,p_pg,'r:.','displayname','power registers');
 hold on;
 grid on;
 plot(t_dl,-log(d_dl),'b:.','displayname','delay time');
+%plot(t_dl,(.1./d_dl),'b:.','displayname','delay time');
 title('Time delay & Estimated (processor counters) Power');
 xlabel('Time (seconds since 00:00 hours)');
 ylabel('Power (watts)');
