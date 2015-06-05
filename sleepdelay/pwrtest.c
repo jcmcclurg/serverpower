@@ -16,34 +16,34 @@ int main (void) {
 	int delay_us = delay_sec*1000000;
 	double num_steps = 10; // number of step inputs
 	//double dur_sec = 60; // test duration	
-	double pmax = 24;
-	double pmin = 12;
+	double pmax = 35;
+	double pmin = 10;
     double step_height = (pmax-pmin)/num_steps;
 	int i;
 	struct timespec tv;
 	char time_buffer[32];
 
 	//open output file
-	FILE	*fp = NULL; 
-	fp=fopen("data/setpoint.csv", "w");
+//	FILE	*fp = NULL; 
+//	fp=fopen("data/setpoint.csv", "w");
 
 	for (i=0;i<num_steps+1;i++){
 		fprintf(stdout, "s%.2f\n",pmin);
-		clock_gettime(CLOCK_MONOTONIC, &tv);
-		convert_time_to_string(tv, time_buffer);
-		fprintf(fp, "%s,%.2f,\n",time_buffer,pmin);
+//		clock_gettime(CLOCK_MONOTONIC, &tv);
+//		convert_time_to_string(tv, time_buffer);
+//		fprintf(fp, "%s,%.2f,\n",time_buffer,pmin);
 		usleep(delay_us); 
 		fprintf(stdout, "s%.2f\n",(double)i*step_height+pmin); 
-		clock_gettime(CLOCK_MONOTONIC, &tv);
-		convert_time_to_string(tv, time_buffer);
-		fprintf(fp, "%s,%.2f,\n",time_buffer,(double)i*step_height+pmin);
+//		clock_gettime(CLOCK_MONOTONIC, &tv);
+//		convert_time_to_string(tv, time_buffer);
+//		fprintf(fp, "%s,%.2f,\n",time_buffer,(double)i*step_height+pmin);
 		usleep(delay_us);
 	}
-	fprintf(stdout, "q\n"); 
+	fprintf(stdout, "quit pwrtest.c\n"); 
 
 	// close output file
-    if (fp!=NULL)
-        fclose(fp);
+//    if (fp!=NULL)
+//        fclose(fp);
 
 	return EXIT_SUCCESS;
 }
