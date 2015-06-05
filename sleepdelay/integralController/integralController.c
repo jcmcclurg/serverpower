@@ -19,6 +19,7 @@ int main(int argc, char* argv[]) {
 	double error = NAN;
 	double integral = 0.0;
 	double currentTime = NAN;
+	double gain = 1.0;
 
 	if(argc > 1 && argv[1][0] == 'v'){
 		verbose = 1;
@@ -56,7 +57,7 @@ int main(int argc, char* argv[]) {
 					integral += integralDelta;
 					if(verbose)
 						fprintf(stderr," => integral + %f = %f\n",integralDelta,integral);
-					fprintf(stdout,"%f\n",integral);
+					fprintf(stdout,"%f\n",gain*integral);
 				}
 				else{
 					if(verbose)
