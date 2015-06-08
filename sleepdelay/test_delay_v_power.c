@@ -16,8 +16,8 @@ int main (void) {
 	double delay_sec = 0.5;
 	int delay_us = delay_sec*1000000;
 	double num_steps = 1000; // number of step inputs
-	double dmax = 0.001;
-	double dmin = 0.000001;
+	double dmax = 0.1;
+	double dmin = 0.001;
     double step_height = (dmax-dmin)/num_steps;
 	double i;
 

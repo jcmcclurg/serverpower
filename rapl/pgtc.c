@@ -74,8 +74,8 @@ void print_rapl_control_info(uint64_t node)  // added by Joe Hall 4/25/15
    err += get_pp0_balance_policy(node, &pp0_priority_level);
    //err += get_pp1_rapl_power_limit_control(node, &pp1_plc);  //pp1 only on client systems
    //err += get_pp1_balance_policy(node, &pp1_priority_level);
-   err += get_dram_rapl_power_limit_control(node, &dram_plc);  // dram only on server systems
-   err += get_dram_rapl_parameters(node, &dram_param);
+   //err += get_dram_rapl_power_limit_control(node, &dram_plc);  // dram only on server systems
+   //err += get_dram_rapl_parameters(node, &dram_param);
 
    if (err > 0){
    		printf("%d error(s) getting RAPL info.\n", err);
@@ -211,7 +211,7 @@ do_print_energy_info()
 
     char time_buffer[32];
     //struct timeval tv;
-	struct timespec tv;    
+	struct timespec tv, t_setpoint, t_realtime;    
 	int msec;
     uint64_t tsc;
     uint64_t freq[4];
@@ -231,8 +231,10 @@ do_print_energy_info()
 	pkg_rapl_power_limit_control_t pkg_plc;
 	pkg_plc.power_limit_watts_1 = 80.0;
 	pkg_plc.power_limit_watts_2 = 96.0;
+	// printed rapl info: MaxWindow(sec) = 0.045898
 	pkg_plc.limit_time_window_seconds_1 = 8.8;
-	pkg_plc.limit_time_window_seconds_2 = 0.007812;
+	//pkg_plc.limit_time_window_seconds_2 = 0.007812;
+	pkg_plc.limit_time_window_seconds_2 = 0.045898;
 	pkg_plc.limit_enabled_1 = 1;
 	pkg_plc.limit_enabled_2 = 1;
 	pkg_plc.clamp_enabled_1 = 1;
@@ -252,15 +254,20 @@ do_print_energy_info()
     dram_plc.limit_enabled = 1;
     dram_plc.clamp_enabled = 1;
     dram_plc.lock_enabled = 0;
-	
 
+	//open output file for setpoint
+ 	FILE	*fp_setpoint = NULL; 
+	fp_setpoint=fopen("data/setpoint.csv", "w");
+	
+	//open outpu file for msr data
+	fp=fopen("data/data.csv","w");
     /* if output FILE pointer is not initiated in main(), let it be standard output (Joe)*/
     if (fp==NULL) {
 		fp = stdout;
     }
 	
     /* don't buffer if piped */
-    setbuf(fp, NULL);
+    setbuf(stdout, NULL);
 
     /* Print header */
 //    fprintf(fp, "System Time,RDTSC,Elapsed Time (sec),");
@@ -314,9 +321,9 @@ do_print_energy_info()
     while (1) {
 
         usleep(delay_us);
-
+		clock_gettime(CLOCK_REALTIME, &t_realtime); // get RT clock for print timestamp
 		// use clock_gettime() instead w/ CLOCK_MONOTONIC
-		clock_gettime(CLOCK_MONOTONIC, &tv);  // get time stamp
+		clock_gettime(CLOCK_MONOTONIC, &tv);  // get Monotonic time stamp for power calculation
         //gettimeofday(&tv, NULL); // get time stamp
 
 		// immediately get energy counter info
@@ -353,7 +360,7 @@ do_print_energy_info()
 
         end = interval_start;  // save last timestamp for reference in next iteration
         total_elapsed_time = end - start;
-        convert_time_to_string(tv, time_buffer);
+        convert_time_to_string(t_realtime, time_buffer); // print real-time stamp to file
 
  //       read_tsc(&tsc);
  //       fprintf(fp,"%s,%llu,%.4lf,", time_buffer, tsc, total_elapsed_time);
@@ -365,9 +372,10 @@ do_print_energy_info()
             for (domain = 0; domain < RAPL_NR_DOMAIN; ++domain) {
             	if(is_supported_domain(domain)) {
 //              	fprintf(fp, "%.4lf,%.4lf,%.4lf,",power_watt[i][domain], cum_energy_J[i][domain], cum_energy_mWh[i][domain]);
-					fprintf(fp, "%.4lf,",power_watt[i][domain]);
+					fprintf(fp, "%.4lf,",power_watt[i][domain]); // print to file
                 }
             }
+			fprintf(stdout,"%.4lf\n",power_watt[node][RAPL_PKG]); // print out PKG power to pipe
         }
         get_CPU_temperature(thz0);
         fprintf(fp, "%s,",thz0);
@@ -377,12 +385,17 @@ do_print_energy_info()
         if(total_elapsed_time >= duration)
             break;
 
+
 		// set RAPL Power Limits: (added by Joe Hall 5/27/15)
 		rcvd = get_usr_input(buff, &bytes_so_far); // get stdin input
 		if (rcvd == 1) {
 			pp = interpret_power_limit_command(buff, &setpoint); // interpret stdin input for power limit command
 			if (setpoint > 0) {
-				for (i=0;i<num_node;i++) { // added by Joe Hall 4/25/15
+				if (pp=='s') {
+					fprintf(stdout, "s%f\n", setpoint); // forward setpoint to pipe via stdout
+				}
+				else {
+					for (i=0;i<num_node;i++) { // added by Joe Hall 4/25/15
 						if (pp=='p') {
 							pkg_plc.power_limit_watts_2 = setpoint;
 							ret = set_pkg_rapl_power_limit_control(i,&pkg_plc);
@@ -397,17 +410,27 @@ do_print_energy_info()
 						}
 						//fprintf(stdout, "Setpoint = %f & char = %c\n", setpoint,pp);
 						//print_rapl_control_info(i);
-        			if (ret != 0)
-	    				fprintf(stdout, "Error setting RAPL power limit controls\n");
-				}					
-    		}
-			else if (setpoint == -1) // -1 for quit, therefore exit while()
+						if (ret != 0)
+	    					fprintf(fp, "Error setting RAPL power limit controls\n");
+					} // end for(numnode)
+				} //end if-else(pp)	
+
+                // timestamp setpoint using real-time clock
+				clock_gettime(CLOCK_REALTIME, &t_setpoint);
+				convert_time_to_string(t_setpoint, time_buffer);
+				fprintf(fp_setpoint, "%s,%.2f,\n",time_buffer,setpoint);
+    		} // end if(setpoint)
+			else if (setpoint == -1) { // -1 for quit, therefore exit while()
+				fprintf(stdout, "quit power_gadget\n"); // forward quit-command to pipe via stdout
 				break;
+			}
 		}
 		// else rcvd=-1 means perror("select") 
 		
     }
-
+    if (fp_setpoint!=NULL) // close filepointer
+        fclose(fp_setpoint);
+    
     end = clock();
 /*
     // Print summary 
@@ -570,11 +593,11 @@ main(int argc, char **argv)
 	//	ret = set_dram_rapl_power_limit_control(i,&dram_plc_orig);
 		if (ret > 0)
 	    	fprintf(stdout, "Error setting DRAM power limit controls\n");
-		//print_rapl_control_info(i);
+		print_rapl_control_info(i);
     }
     
 	// prints energy info from msr registers and also polls stdin for power_limiting commands
-    do_print_energy_info();
+//    do_print_energy_info();
     
     // reset rapl power_limits to factory settings after do_print_energy_info()
     for (i=0;i<num_node;i++) { // added by Joe Hall 4/25/15
@@ -699,10 +722,15 @@ char interpret_power_limit_command(char *command, double *str) {
 		case ('d'):
 			*str = atof(command+1);
 			break;
+		case ('s'):
+			*str = atof(command+1);
+			break;
 		case ('q'):
 			*str = -1;
 			break;
 		default:
+			command = "ignore";
+			*str = 0;
 			break;
 	}
 	return command[0];
