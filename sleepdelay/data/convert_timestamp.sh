@@ -15,6 +15,9 @@ cut -d, -f2 setpoint.csv | tee power_sp.csv #> /dev/null
 awk -F [::.,] '{printf("%.16G\n",($1*3600+$2*60+$3+$4/1000000))}' delay.csv | tee time_dl.csv
 cut -d, -f2 delay.csv | tee delay_dl.csv
 
+# get work done by workers
+cat worker* > work.txt
+
 # now paste together with:
 
 paste -d ',' time_lv.csv power_lv.csv time_pg.csv power_pg.csv thermalzns.csv > pver.csv #> /dev/null

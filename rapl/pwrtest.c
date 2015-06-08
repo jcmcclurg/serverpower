@@ -12,7 +12,7 @@ void convert_time_to_string(struct timespec tv, char* time_buf);
 
 int main (void) {
 
-	double delay_sec = 1;
+	double delay_sec = 2;
 	int delay_us = delay_sec*1000000;
 	double num_steps = 10; // number of step inputs
 	//double dur_sec = 60; // test duration	
