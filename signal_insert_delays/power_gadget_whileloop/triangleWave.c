@@ -62,32 +62,26 @@ int cmdline(int argc, char **argv){
 	int r = DEFRES;
 	double mnv = DEFMINV;
 	double mxv = DEFMAXV;
-	prefix_buffer[0] = 0;
 
 	progname = argv[0];
 
-	while ((opt = getopt(argc, argv, "f:r:n:x:p:")) != -1) {
+	while ((opt = getopt(argc, argv, "f:r:n:x:p")) != -1) {
 		switch (opt) {
-		case 'f':
-			f = atof(optarg);
-			break;
-		case 'r':
-			r = atoi(optarg);
-			break;
-		case 'n':
-			mnv = atof(optarg);
-			break;
-		case 'x':
-			mxv = atof(optarg);
+		case 'e':
+			delay_ms_temp = atoi(optarg);
+			if(delay_ms_temp >= 0) {
+				delay_us = delay_ms_temp * 1000;
+			} else {
+				fprintf(stdout, "Sampling delay must be positive.\n");
+				return -1;
+			}
 			break;
 		case 'h':
 			usage();
 			exit(EXIT_SUCCESS);
 			break;
 		case 'p':
-			fprintf(stdout,"Hi.");
 			sprintf(prefix_buffer,"%s",optarg);
-			fprintf(stdout,"Hi.");
 			break;
 		default:
 			usage();
