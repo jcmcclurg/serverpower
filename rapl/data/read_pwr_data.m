@@ -32,10 +32,12 @@ plot(t_pg,p_pg,'r:.','displayname','power registers');
 hold on;
 grid on;
 %plot(t_lv,p_lv,'b:.','displayname','power meter');
-stairs(t_sp,p_sp,'g--','displayname','set point');
+[xst,yst]=stairs(t_sp,p_sp,'g--','displayname','set point');
+plot(xst,yst,'g--','displayname','setpoint');
+
 %plot(t_lv,p_lv_ave,'g','displayname','power meter ave (over 5)');
 %plot(t_lv,p_lv_ave_ten-10,'g:.','displayname','power meter ave (over 10) - 10W');
-title('Measured (current sensor) & Estimated (processor counters) Power');
+title('Estimated (processor counters) Power & Setpoint');
 xlabel('Time (seconds since 00:00 hours)');
 ylabel('Power (watts)');
 legend();
