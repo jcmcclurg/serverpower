@@ -16,8 +16,8 @@ int main (void) {
 	int delay_us = delay_sec*1000000;
 	double num_steps = 10; // number of step inputs
 	//double dur_sec = 60; // test duration	
-	double pmax = 35;
-	double pmin = 20;
+	double pmax = 20;
+	double pmin = 3;
     double step_height = (pmax-pmin)/num_steps;
 	int i;
 	struct timespec tv;
@@ -28,12 +28,12 @@ int main (void) {
 	fp=fopen("data/setpoint.csv", "w");
 
 	for (i=0;i<num_steps+1;i++){
-		fprintf(stdout, "p%.2f\n",pmin);
+		fprintf(stdout, "c%.2f\n",pmin);
 		clock_gettime(CLOCK_MONOTONIC, &tv);
 		convert_time_to_string(tv, time_buffer);
 		fprintf(fp, "%s,%.2f,\n",time_buffer,pmin);
 		usleep(delay_us); 
-		fprintf(stdout, "p%.2f\n",(double)i*step_height+pmin); 
+		fprintf(stdout, "c%.2f\n",(double)i*step_height+pmin); 
 		clock_gettime(CLOCK_MONOTONIC, &tv);
 		convert_time_to_string(tv, time_buffer);
 		fprintf(fp, "%s,%.2f,\n",time_buffer,(double)i*step_height+pmin);

@@ -234,7 +234,7 @@ do_print_energy_info()
 	// printed rapl info: MaxWindow(sec) = 0.045898
 	pkg_plc.limit_time_window_seconds_1 = 8.8;
 	//pkg_plc.limit_time_window_seconds_2 = 0.007812;
-	pkg_plc.limit_time_window_seconds_2 = 0.045898;
+	pkg_plc.limit_time_window_seconds_2 = 0.001;
 	pkg_plc.limit_enabled_1 = 1;
 	pkg_plc.limit_enabled_2 = 1;
 	pkg_plc.clamp_enabled_1 = 1;
@@ -243,7 +243,7 @@ do_print_energy_info()
 
     pp0_rapl_power_limit_control_t pp0_plc;
     pp0_plc.power_limit_watts = 50.0;
-    pp0_plc.limit_time_window_seconds = 0.001;
+    pp0_plc.limit_time_window_seconds = 0.0001;
     pp0_plc.limit_enabled = 1;
     pp0_plc.clamp_enabled = 1;
     pp0_plc.lock_enabled = 0;
@@ -409,7 +409,7 @@ do_print_energy_info()
 							ret = set_dram_rapl_power_limit_control(i, &dram_plc);
 						}
 						//fprintf(stdout, "Setpoint = %f & char = %c\n", setpoint,pp);
-						//print_rapl_control_info(i);
+//						print_rapl_control_info(i);
 						if (ret != 0)
 	    					fprintf(fp, "Error setting RAPL power limit controls\n");
 					} // end for(numnode)
@@ -485,10 +485,10 @@ cmdline(int argc, char **argv)
         switch (opt) {
         case 'e':
             delay_ms_temp = atoi(optarg);
-            if(delay_ms_temp > 9) {
+            if(delay_ms_temp > 1) {
                 delay_us = delay_ms_temp * 1000;
             } else {
-                fprintf(stdout, "Sampling delay must be greater than 10 ms.\n");
+                fprintf(stdout, "Sampling delay must be greater than 1 ms.\n");
                 return -1;
             }
             break;
