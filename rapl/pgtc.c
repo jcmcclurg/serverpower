@@ -231,8 +231,10 @@ do_print_energy_info()
 	pkg_rapl_power_limit_control_t pkg_plc;
 	pkg_plc.power_limit_watts_1 = 80.0;
 	pkg_plc.power_limit_watts_2 = 96.0;
+	// printed rapl info: MaxWindow(sec) = 0.045898
 	pkg_plc.limit_time_window_seconds_1 = 8.8;
-	pkg_plc.limit_time_window_seconds_2 = 0.007812;
+	//pkg_plc.limit_time_window_seconds_2 = 0.007812;
+	pkg_plc.limit_time_window_seconds_2 = 0.045898;
 	pkg_plc.limit_enabled_1 = 1;
 	pkg_plc.limit_enabled_2 = 1;
 	pkg_plc.clamp_enabled_1 = 1;
@@ -591,7 +593,7 @@ main(int argc, char **argv)
 	//	ret = set_dram_rapl_power_limit_control(i,&dram_plc_orig);
 		if (ret > 0)
 	    	fprintf(stdout, "Error setting DRAM power limit controls\n");
-		//print_rapl_control_info(i);
+	//	print_rapl_control_info(i);
     }
     
 	// prints energy info from msr registers and also polls stdin for power_limiting commands
