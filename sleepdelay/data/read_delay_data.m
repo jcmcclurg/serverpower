@@ -28,11 +28,12 @@ d_dl=data2{2};
 %plot data
 fh=figure();
 
-plot(t_pg,p_pg,'r:.','displayname','power registers');
+plot(t_pg,p_pg,'r','displayname','power registers');
 hold on;
 grid on;
-plot(t_dl,-log(d_dl),'b:.','displayname','delay time');
-%plot(t_dl,(.1./d_dl),'b:.','displayname','delay time');
+%plot(t_dl,32-(5000*d_dl),'b:.','displayname','delay time');
+plot(t_dl,20-log(d_dl),'b-.','displayname','delay time');
+%plot(t_dl,(0.01./(((22*10**9)**-1)+d_dl./10.0)),'b:.','displayname','delay time');
 title('Time delay & Estimated (processor counters) Power');
 xlabel('Time (seconds since 00:00 hours)');
 ylabel('Power (watts)');
