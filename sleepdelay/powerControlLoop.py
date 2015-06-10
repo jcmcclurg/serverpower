@@ -10,7 +10,7 @@ import time
 #import fuzzy_ctrl
 
 def controlLoop(n):
-    propFactor = 0.00001
+    propFactor = 0.0000
     derivFactor = 0.00000
     intFactor = 0.001
     
@@ -50,8 +50,8 @@ mgr = multiprocessing.Manager()
 ns = mgr.Namespace()
 ns.running = True
 ns.actualPower = 0
-ns.setPoint = 35
-ns.sleepTime = 0.04
+ns.setPoint = 20
+ns.sleepTime = 0.1
 ns.pMax=25.
 ns.pMin=3.
 
