@@ -4,38 +4,70 @@
 #include <stdlib.h>
 #include <sys/time.h>
 #include <time.h>
+#include "insertDelays.h"
 #include "commonFunctions.h"
 #include "get_children.h"
-
-#define errExit(msg)	do { free(nopeList); close_children(); perror(msg); exit(EXIT_FAILURE); } while (0)
-#define normExit()	do { free(nopeList); close_children(); exit(EXIT_SUCCESS); } while (0)
-
-#define INITIAL_PERIOD 0.1
-#define INITIAL_DUTY 0.5
-
-#define MODE_NO_PID 0
-#define MODE_LIMIT 1
-#define MODE_PID_DIRTY 2
-
-#define MAX_DUTY 0.99
-#define MIN_DUTY 0.01
 
 double period;
 double duty;
 
-int pid;
 int my_pid;
 int my_ppid;
 int limiting_mode;
 int process_running;
 struct timespec twork;
+
 int* children;
+int childrenLen;
 int numChildren;
+
 int* parentList;
+int parentListLen;
 int numParents;
+
 int* nopeList;
 int nopeListLen;
+int numNope;
+
 char* progname;
+
+void setup_insertDelays(void){
+	/* don't buffer if piped */
+	setbuf(stdout, NULL);
+
+	parentList = NULL;
+	nopeList = NULL;
+	children = NULL;
+	parentListLen = 0;
+	childrenLen = 0;
+	nopeListLen = 0;
+	numNope = 0;
+	numChildren = 0;
+	numParents = 0;
+
+	process_running = 0;
+	pid = -1;
+	limiting_mode = MODE_NO_PID;
+	period = INITIAL_PERIOD;
+	duty = INITIAL_DUTY;
+
+	init_children();
+}
+
+void close_insertDelays(void){
+	free(parentList);
+	free(nopeList);
+	free(children);
+
+	parentListLen = 0;
+	childrenLen = 0;
+	nopeListLen = 0;
+	numNope = 0;
+	numChildren = 0;
+	numParents = 0;
+
+	close_children();
+}
 
 void sig_handler(int signo){
 	if(signo == SIGINT){
@@ -136,7 +168,7 @@ void start_timer(timer_t timerid){
 int update_children(int p){
 	int i,j,k;
 	fprintf(stderr,"Hi\n");
-	numChildren = get_children(&children, p);
+	numChildren = get_children(&children, NULL, NULL, NULL, p);
 	fprintf(stderr,"Hi\n");
 	if(numChildren > 0){
 		limiting_mode = MODE_LIMIT;
@@ -199,6 +231,42 @@ void usage(){
 	fprintf(stdout, "\n");
 }
 
+int set_default_parents(void){
+	int i,j;
+	char c;
+	process_tree* ptree;
+	int numProcs;
+
+	// Run get children on a known root, so we can populate ptree
+	if(get_children(NULL, NULL, &ptree, &numProcs, 1)){
+		fprintf(stderr, "Couldn't get children of init.\n");
+		return -1;
+	}
+
+	if(numProcs > parentListLen){
+		free(parentList);
+		parentList = (int*) malloc(sizeof(int)*numProcs);
+	}
+	
+	numParents = 0;
+	for(i = 0; i < numProcs; i++){
+		if( ( j = get_stoppable_status(ptree[i].pid)) == STOPPABLE)
+			parentList[numParents++] = ptree[i].pid;
+		else if(j == DOES_NOT_CONTINUE || j == INSUFFICIENT_PERMISSIONS_CONT){
+			fprintf(stderr, "Process %d didn't start back up again.\n",ptree[i].pid);
+			return -1;
+		}
+	}
+	fprintf(stderr, "Found %d restartable processes.\n",numParents);
+
+	numParents = get_roots(ptree, numProcs, parentList, numParents);
+	fprintf(stderr, "Found %d roots: ",numChildren);
+	for(i = 0; i < numParents; i++){
+		fprintf(stderr," %d",parentList[i]);
+	}
+	fprintf(stderr,"\n");
+	return 0;
+}
 
 int cmdline(int argc, char **argv){
 	int i;
@@ -206,6 +274,7 @@ int cmdline(int argc, char **argv){
 	my_ppid = getppid();
 	my_pid = getpid();
 	fprintf(stderr,"My PID is %d\n",my_pid);
+	fprintf(stderr,"My PPID is %d\n",my_ppid);
 
 	char p_flag_pos = -1;
 	char e_flag_pos = -1;
@@ -219,11 +288,18 @@ int cmdline(int argc, char **argv){
 		}
 	}
 
-	// User does not specify parent pid list. The default is to collect the 
-	if(e_flag_pos == 1 || argc == 1){
+	// User does not specify parent pid list. The default is to collect the modifyable processes.
+	if(e_flag_pos == 1 && argc == 2){
+		usage();
+		errExit("Exclusion flag provided without any exclusions");
+	}
+	else if(e_flag_pos == 1 || argc == 1){
+		if(set_default_parents()){
+			errExit("Couldn't get the default parent list");
+		}
 	}
 
-	else if(argc == 2){
+	if(e_flag_pos != -1){
 		nopeListLen = 2;
 		nopeList = (int*) malloc(sizeof(int)*nopeListLen);
 		nopeList[0] = my_pid;
@@ -256,21 +332,12 @@ int main(int argc, char *argv[]) {
 	sigset_t mask;
 	struct sigaction sa;
 	timer_t timerid;
-	process_running = 0;
-	pid = -1;
-	limiting_mode = MODE_NO_PID;
-	period = INITIAL_PERIOD;
-	duty = INITIAL_DUTY;
-	nopeList = NULL;
-	nopeListLen = 0;
 
 	if(signal(SIGINT,sig_handler) == SIG_ERR)
 		errExit("Can't catch SIGINT.");
 
-	/* don't buffer if piped */
-	setbuf(stdout, NULL);
+	setup_insertDelays();
 
-	init_children();
 	if(cmdline(argc, argv))
 		errExit("cmdline");
 	normExit();

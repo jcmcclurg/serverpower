@@ -28,10 +28,6 @@
 #include <string.h>
 #include "get_children.h"
 
-#define UNKNOWN_CLASS 0
-#define CHILD_CLASS 1
-#define NONCHILD_CLASS 2
-
 static int check_proc() {
 	struct statfs mnt;
 	if (statfs("/proc", &mnt) < 0)
@@ -55,7 +51,7 @@ static int parseStrAsUint(char* s){
 	return atoi(s);
 }
 
-static pid_t getppid_of(pid_t pid) {
+pid_t get_ppid_of(pid_t pid) {
 	char statfile[20];
 	char buffer[1024];
 	sprintf(statfile, "/proc/%d/stat", pid);
@@ -72,26 +68,59 @@ static pid_t getppid_of(pid_t pid) {
 	return atoi(token);
 }
 
+char get_status_of(pid_t pid){
+	char statfile[20];
+	char buffer[1024];
+	sprintf(statfile, "/proc/%d/stat", pid);
+	FILE *fd = fopen(statfile, "r");
+	if (fd==NULL) return -1;
+	if (fgets(buffer, sizeof(buffer), fd)==NULL) {
+		fclose(fd);
+		return -1;
+	}
+	fclose(fd);
+	char *token = strtok(buffer, " ");
+	int i;
+	for (i=0; i<2; i++) token = strtok(NULL, " ");
+	return token[0];
+}
+
 // Returns the number of processes in the tree, and populates the process tree, or returns -1 on failure.
 process_tree* proc_tree_buffer;
 int proc_tree_buffer_size;
 int* child_buffer;
 int child_buffer_size;
 
-int get_children(int** childNodes, int rootPID)
-{
+int tag_proc_tree(process_tree* procTree, int* numProcs, int* nonChildren, int numNonChildren){
+	int numTagged;
+	for(i = 0; i < numProcs; i++){
+		procTree[i].class = UNKNOWN_CLASS;
+		for(j = 0; j < numNonChildren; j++){
+			if(nonChildren[j] == procTree[i].pid){
+				procTree[i].class = NONCHILD_CLASS;
+				numTagged++;
+				break;
+			}
+		}
+	}
+	return 0;
+}
+
+int update_proc_tree(process_tree** procTree){
 	if(!check_proc()) {
 		perror("procfs is not mounted!\nAborting\n");
 		return -1;
 	}
 	//open a directory stream to /proc directory
 	DIR* procDir;
+	int i,j,k;
 	struct dirent *ep;
 	int pid, ppid;
-	int numProcs = 0;
+	int totalPIDs = 0;
 	int ret, i, j, rootNode, counter;
-	rootNode = -1;
-	process_tree* procTree;
+
+	if(rootPIDs == NULL)
+		numRootPIDs = 0;
 
 	procDir = opendir("/proc");
 
@@ -104,74 +133,76 @@ int get_children(int** childNodes, int rootPID)
 	while( (ep = readdir(procDir)) ){
 		pid = parseStrAsUint(ep->d_name);
 		if(pid >= 0){
-			numProcs++;
+			totalPIDs++;
 		}
 	}
-	ret = numProcs;
 
 	// Increase the size of the buffer if needed.
-	if(proc_tree_buffer_size < numProcs){
+	if(proc_tree_buffer_size < totalPIDs){
 		free(proc_tree_buffer);
-		proc_tree_buffer = (process_tree*) malloc(numProcs*sizeof(process_tree));
-		proc_tree_buffer_size = numProcs;
+		proc_tree_buffer = (process_tree*) malloc(totalPIDs*sizeof(process_tree));
+		proc_tree_buffer_size = totalPIDs;
 	}
 
-	procTree = proc_tree_buffer;
-
+	// Populate the process tree.
 	rewinddir(procDir);
-	while((numProcs > 0) && (ep = readdir(procDir)) ){
+	for(j = 0; (j < totalPIDs) && (ep = readdir(procDir)); j++ ){
 		pid = parseStrAsUint(ep->d_name);
 		if(pid >= 0){
-			ppid = getppid_of(pid);
-			numProcs--;
-			procTree[numProcs].pid = pid;
-			procTree[numProcs].ppid = ppid;
-			procTree[numProcs].parent = -1;
-			procTree[numProcs].class = UNKNOWN_CLASS;
-			if(pid == rootPID){
-				rootNode = numProcs;
-			}
+			ppid = get_ppid_of(pid);
+			proc_tree_buffer[j].pid = pid;
+			proc_tree_buffer[j].ppid = ppid;
+			proc_tree_buffer[j].parent = -1;
+			proc_tree_buffer[j].class = UNKNOWN_CLASS;
 		}
 	}
+	// Adjust for processes which died between the first and second read of the directory.
+	totalPIDs = j;
+
 	if(rootNode == -1){
 		perror("There is no process with the specified PID");
 		return -1;
 	}
 	closedir(procDir);
 	
-	// Make the tree edges.
-	numProcs = ret - numProcs;
-	for(i = 0; i < numProcs; i++){
-		pid = procTree[i].pid;	
-		ppid = procTree[i].ppid;
-		for(j = 0; j < numProcs; j++){
-			if(i != j && ppid == procTree[j].pid ){
-				procTree[i].parent = j;
+	// Make the tree edges. 
+	for(i = 0; i < totalPIDs; i++){
+		pid = proc_tree_buffer[i].pid;	
+		ppid = proc_tree_buffer[i].ppid;
+		for(j = 0; j < totalPIDs; j++){
+			if(i != j && ppid == proc_tree_buffer[j].pid ){
+				proc_tree_buffer[i].parent = j;
 				//fprintf(stdout,"g[%d]=%d has parent g[%d]=%d\n",i,pid,j,ppid);
 			}
 		}
 	}
+	return 0;
+}
+
+int get_children(	int** childNodes, int* numChildren,
+						process_tree* procTree, int numProcs,
+						int* rootPIDs, int numRootPIDs) {
 
 	// Mark all the parent nodes of rootNode as nonchildren
 	i = rootNode;
-	procTree[i].class = CHILD_CLASS;
+	proc_tree_buffer[i].class = CHILD_CLASS;
 	counter = 1;
-	while( (i = procTree[i].parent) != -1 ){
-		procTree[i].class = NONCHILD_CLASS;
+	while( (i = proc_tree_buffer[i].parent) != -1 ){
+		proc_tree_buffer[i].class = NONCHILD_CLASS;
 	}
 
 	// Separate the rest of the nodes into CHILD and NONCHILD status
-	for(i = 0; i < numProcs; i++){
-		if(procTree[i].class == UNKNOWN_CLASS){
+	for(i = 0; i < totalPIDs; i++){
+		if(proc_tree_buffer[i].class == UNKNOWN_CLASS){
 			j = i;
 			ret = UNKNOWN_CLASS;
 			// Traverse the node up to a parent with a known status.
-			while( (j = procTree[j].parent) != -1){
-				if( procTree[j].class == NONCHILD_CLASS){
+			while( (j = proc_tree_buffer[j].parent) != -1){
+				if( proc_tree_buffer[j].class == NONCHILD_CLASS){
 					ret = NONCHILD_CLASS;
 					break;
 				}
-				else if( procTree[j].class == CHILD_CLASS){
+				else if( proc_tree_buffer[j].class == CHILD_CLASS){
 					ret = CHILD_CLASS;
 					break;
 				}
@@ -180,9 +211,9 @@ int get_children(int** childNodes, int rootPID)
 			// Mark all the nodes in that trail with the (now) known status.
 			if(ret != UNKNOWN_CLASS){
 				j = i;
-				while( procTree[j].class == UNKNOWN_CLASS){
-					procTree[j].class = ret;
-					j = procTree[j].parent;
+				while( proc_tree_buffer[j].class == UNKNOWN_CLASS){
+					proc_tree_buffer[j].class = ret;
+					j = proc_tree_buffer[j].parent;
 					if(ret == CHILD_CLASS)
 						counter++;
 				}
@@ -196,15 +227,27 @@ int get_children(int** childNodes, int rootPID)
 		child_buffer = (int*) malloc(counter*sizeof(int));
 		child_buffer_size = counter;
 	}
-	*childNodes = child_buffer;
-
 	j = 0;
-	for(i = 0; i < numProcs; i++){
-		if(procTree[i].class == CHILD_CLASS){
-			(*childNodes)[j++] = procTree[i].pid;
+	for(i = 0; i < totalPIDs; i++){
+		if(proc_tree_buffer[i].class == CHILD_CLASS){
+			child_buffer[j++] = proc_tree_buffer[i].pid;
 		}
 	}
-	return counter;
+
+	if(childNodes != NULL){
+		*childNodes = child_buffer;
+	}
+	
+	if(numChildren != NULL)
+		*numChildren = counter;
+
+	if(procTree != NULL)
+		*procTree = proc_tree_buffer;
+
+	if(numProcs != NULL)
+		*numProcs = totalPIDs;
+
+	return 0;
 }
 
 void init_children(void){
@@ -219,4 +262,86 @@ void close_children(void){
 	child_buffer_size = 0;
 	free(proc_tree_buffer);
 	free(child_buffer);
+}
+
+void reset
+
+int get_roots(process_tree* procTree, int numProcs, int* children, int numChildren){
+	int i,j;
+	char changed;
+
+	// Mark the appropriate nodes in the tree tentatively as nonchildren. All the rest are unknown.
+	
+	for(i = 0; i < numProcs; i++){
+		if(procTree[i].class == NONCHILD_CLASS){
+			j = i;
+			// Find out whether this node has any other marked nodes in its lineage.
+			changed = 0;
+			//fprintf(stderr,"%d->",procTree[j].pid );
+			while( (j = procTree[j].parent) != -1 ){
+				//fprintf(stderr,"%d",procTree[j].pid );
+				if(procTree[j].class != UNKNOWN_CLASS ){
+					changed = 1;
+					break;
+				}
+				//else{
+				//	fprintf(stderr,"->");
+				//}
+			}
+
+			// If so, the whole lineage (excluding the topmost node) are children.
+			if(changed){
+				//fprintf(stderr," CHILDREN\n" );
+				procTree[i].class = CHILD_CLASS;
+				j = procTree[i].parent;
+				while( procTree[j].class == UNKNOWN_CLASS  ){
+					procTree[j].class = CHILD_CLASS;
+					j = procTree[j].parent;
+				}
+			}
+			//else{
+			//	fprintf(stderr," ROOT\n" );
+			//}
+		}
+	}
+
+	j = 0;
+	for(i = 0; i < numProcs; i++){
+		if(procTree[i].class == NONCHILD_CLASS){
+			children[j] = procTree[i].pid;
+			j++;
+		}
+	}
+	return j;
+}
+
+int get_stoppable_status(pid_t pid){
+	if(pid == my_pid){
+		return IS_SELF;
+	}
+	else if(pid != my_ppid){
+		return IS_PARENT;
+	}
+	else{
+		if(kill(pid, SIGSTOP)){
+			return INSUFFICIENT_PERMISSIONS_STOP;
+		}
+		else{
+			usleep(CHECK_EXTERNAL_RESTART_WAITLEN_US);
+			if( (c = get_status_of(pid)) != 'T'){
+				return EXTERNALLY_RESTARTED;
+			}
+			else if(kill(pid, SIGCONT)){
+				return INSUFFICIENT_PERMISSIONS_CONT;
+			}
+
+			usleep(CHECK_CONT_WAITLEN_US);
+			if(get_status_of(pid) == 'T'){
+				return DOES_NOT_CONTINUE;
+			}
+			else{
+				return STOPPABLE;
+			}
+		}
+	}
 }
