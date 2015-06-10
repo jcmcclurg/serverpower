@@ -88,10 +88,16 @@ char get_status_of(pid_t pid){
 // Returns the number of processes in the tree, and populates the process tree, or returns -1 on failure.
 process_tree* proc_tree_buffer;
 int proc_tree_buffer_size;
+int num_procs;
+
 int* child_buffer;
 int child_buffer_size;
+int num_children;
 
-int tag_proc_tree(process_tree* procTree, int* numProcs, int* nonChildren, int numNonChildren){
+int tag_proc_tree_nonchildren(int* nonChildren, int numNonChildren){
+	process_tree* procTree = proc_tree_buffer;
+	int numProcs = num_procs;
+
 	int numTagged;
 	for(i = 0; i < numProcs; i++){
 		procTree[i].class = UNKNOWN_CLASS;
@@ -103,7 +109,7 @@ int tag_proc_tree(process_tree* procTree, int* numProcs, int* nonChildren, int n
 			}
 		}
 	}
-	return 0;
+	return numTagged;
 }
 
 int update_proc_tree(process_tree** procTree){
@@ -179,99 +185,53 @@ int update_proc_tree(process_tree** procTree){
 	return 0;
 }
 
-int get_children(	int** childNodes, int* numChildren,
-						process_tree* procTree, int numProcs,
-						int* rootPIDs, int numRootPIDs) {
-
-	// Mark all the parent nodes of rootNode as nonchildren
-	i = rootNode;
-	proc_tree_buffer[i].class = CHILD_CLASS;
-	counter = 1;
-	while( (i = proc_tree_buffer[i].parent) != -1 ){
-		proc_tree_buffer[i].class = NONCHILD_CLASS;
-	}
-
-	// Separate the rest of the nodes into CHILD and NONCHILD status
-	for(i = 0; i < totalPIDs; i++){
-		if(proc_tree_buffer[i].class == UNKNOWN_CLASS){
-			j = i;
-			ret = UNKNOWN_CLASS;
-			// Traverse the node up to a parent with a known status.
-			while( (j = proc_tree_buffer[j].parent) != -1){
-				if( proc_tree_buffer[j].class == NONCHILD_CLASS){
-					ret = NONCHILD_CLASS;
-					break;
-				}
-				else if( proc_tree_buffer[j].class == CHILD_CLASS){
-					ret = CHILD_CLASS;
-					break;
-				}
-			}
-
-			// Mark all the nodes in that trail with the (now) known status.
-			if(ret != UNKNOWN_CLASS){
-				j = i;
-				while( proc_tree_buffer[j].class == UNKNOWN_CLASS){
-					proc_tree_buffer[j].class = ret;
-					j = proc_tree_buffer[j].parent;
-					if(ret == CHILD_CLASS)
-						counter++;
-				}
-			}
-		}
-	}
-
-	// Increase the size of the buffer if needed.
-	if(child_buffer_size < counter){
-		free(child_buffer);
-		child_buffer = (int*) malloc(counter*sizeof(int));
-		child_buffer_size = counter;
-	}
+int get_children(	int** childNodes, int* numChildNodes,
+						int* exclusions, int numExclusions,
+						char exclude_nonstoppable){
+	process_tree* procTree = proc_tree_buffer;
+	int numProcs = num_procs;
+	int i,j,k;
 	j = 0;
-	for(i = 0; i < totalPIDs; i++){
-		if(proc_tree_buffer[i].class == CHILD_CLASS){
-			child_buffer[j++] = proc_tree_buffer[i].pid;
+	for(i = 0; i < numProcs; i++){
+		if(procTree[i].class != UNKNOWN_CLASS){
+			j++;
 		}
 	}
-
-	if(childNodes != NULL){
-		*childNodes = child_buffer;
+	// Increase the size of the buffer if needed.
+	if(child_buffer_size < j){
+		free(child_buffer);
+		child_buffer = (int*) malloc(j*sizeof(int));
+		child_buffer_size = j;
 	}
-	
-	if(numChildren != NULL)
-		*numChildren = counter;
-
-	if(procTree != NULL)
-		*procTree = proc_tree_buffer;
-
-	if(numProcs != NULL)
-		*numProcs = totalPIDs;
-
+	*numChildNodes = j;
+	num_children = *numChildNodes;
+	j = 0;
+	for(i = 0; i < *numChildNodes; i++){
+		if((procTree[i].class != UNKNOWN_CLASS) &&
+		(!exclude_nonstoppable || get_stoppable_status(procTree[i].pid) == STOPPABLE)	){
+			for(k = 0; k < )
+			}
+			child_buffer[j] = procTree[i].pid;
+			j++;
+		}
+	}
+	*childNodes = child_buffer;
 	return 0;
 }
 
-void init_children(void){
-	proc_tree_buffer = NULL;
-	proc_tree_buffer_size = 0;
-	child_buffer = NULL;
-	child_buffer_size = 0;
-}
+int tag_proc_tree_children(int* rootPIDs, int numRootPIDs) {
+	int numProcs = num_procs;
 
-void close_children(void){
-	proc_tree_buffer_size = 0;
-	child_buffer_size = 0;
-	free(proc_tree_buffer);
-	free(child_buffer);
-}
+	if(tag_proc_tree_nonchildren(rootPIDs, numRootPIDs) == 0){
+		perror("Couldn't find any PIDs in the list you specified!");
+		return -1;
+	}
 
-void reset
-
-int get_roots(process_tree* procTree, int numProcs, int* children, int numChildren){
 	int i,j;
 	char changed;
+	process_tree* procTree = proc_tree_buffer;
+	int numProcs = num_procs;
 
-	// Mark the appropriate nodes in the tree tentatively as nonchildren. All the rest are unknown.
-	
 	for(i = 0; i < numProcs; i++){
 		if(procTree[i].class == NONCHILD_CLASS){
 			j = i;
@@ -289,7 +249,7 @@ int get_roots(process_tree* procTree, int numProcs, int* children, int numChildr
 				//}
 			}
 
-			// If so, the whole lineage (excluding the topmost node) are children.
+			// If so, the whole lineage (excluding the topmost node) are rootPIDs.
 			if(changed){
 				//fprintf(stderr," CHILDREN\n" );
 				procTree[i].class = CHILD_CLASS;
@@ -304,16 +264,23 @@ int get_roots(process_tree* procTree, int numProcs, int* children, int numChildr
 			//}
 		}
 	}
-
-	j = 0;
-	for(i = 0; i < numProcs; i++){
-		if(procTree[i].class == NONCHILD_CLASS){
-			children[j] = procTree[i].pid;
-			j++;
-		}
-	}
-	return j;
+	return 0;
 }
+
+void init_children(void){
+	proc_tree_buffer = NULL;
+	proc_tree_buffer_size = 0;
+	child_buffer = NULL;
+	child_buffer_size = 0;
+}
+
+void close_children(void){
+	proc_tree_buffer_size = 0;
+	child_buffer_size = 0;
+	free(proc_tree_buffer);
+	free(child_buffer);
+}
+
 
 int get_stoppable_status(pid_t pid){
 	if(pid == my_pid){
@@ -345,3 +312,22 @@ int get_stoppable_status(pid_t pid){
 		}
 	}
 }
+
+// Only the parents who have no parents need to be kept.
+void prune_parents_list(void){
+	int i;
+	numParents = get_roots(ptree, numProcs, parentList, numParents);
+	fprintf(stderr, "Found %d roots: ",numChildren);
+	for(i = 0; i < numParents; i++){
+		fprintf(stderr," %d",parentList[i]);
+	}
+	fprintf(stderr,"\n");
+}
+
+// Only the children who are stoppable need to be kept.
+void prune_children_list(void){
+	int i;
+	for(i = 0; i < numParents; i++){
+	}
+}
+
