@@ -25,8 +25,13 @@ Gets the children of rootPID as a list.
 Also returns the entire process tree.
 Uses and re-uses buffers which get cleaned up in close_children.
 */
-int get_children(int** childNodes, int* numChildren, process_tree** procTree, int* numProcs, int rootPID);
+int get_children(int** childNodes, int* numChildren, process_tree** procTree, int* numProcs, int* rootPIDs, int numRootPIDs);
 
+/*
+Gets the whole process tree, with rootPIDs marked as NONCHILD_CLASS
+You can specify rootPIDs as NULL or numRootPIDs = 0 to skip this.
+*/
+int get_proc_tree(process_tree** procTree, int* numProcs, int* rootPIDs, int numRootPIDs);
 
 /*
 Takes process_tree structure pointer (created by get_children), and a
@@ -35,7 +40,6 @@ list of child PIDs.
 The children array is repopulated with the root nodes.
 Returns the number of root nodes found.
 */
-int get_roots(process_tree* procTree, int numProcs, int* children, int numChildren);
 
 void init_children(void);
 

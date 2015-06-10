@@ -231,6 +231,7 @@ void usage(){
 	fprintf(stdout, "\n");
 }
 
+
 int set_default_parents(void){
 	int i,j;
 	char c;
@@ -259,17 +260,12 @@ int set_default_parents(void){
 	}
 	fprintf(stderr, "Found %d restartable processes.\n",numParents);
 
-	numParents = get_roots(ptree, numProcs, parentList, numParents);
-	fprintf(stderr, "Found %d roots: ",numChildren);
-	for(i = 0; i < numParents; i++){
-		fprintf(stderr," %d",parentList[i]);
-	}
-	fprintf(stderr,"\n");
+	prune_parents_list();
 	return 0;
 }
 
 int cmdline(int argc, char **argv){
-	int i;
+	int i,j,k,l;
 	progname = argv[0];
 	my_ppid = getppid();
 	my_pid = getpid();
@@ -278,51 +274,84 @@ int cmdline(int argc, char **argv){
 
 	char p_flag_pos = -1;
 	char e_flag_pos = -1;
-
+	j = 0;
 	for(i = 1; i < argc; i++){
-		if(argv[i][0] == '-' && argv[i][1] == 'p'){
-			p_flag_pos = i;
+		if(argv[i][0] == '-'){
+			if(argv[i][1] == 'p'){
+				p_flag_pos = i;
+			}
+			else if(argv[i][1] == 'e'){
+				e_flag_pos = i;
+			}
+			j++;
 		}
-		else if(argv[i][0] == '-' && argv[i][1] == 'e'){
-			e_flag_pos = i;
-		}
+	}
+
+	if(j > 2){
+		usage();
+		return -1;
 	}
 
 	// User does not specify parent pid list. The default is to collect the modifyable processes.
-	if(e_flag_pos == 1 && argc == 2){
-		usage();
-		errExit("Exclusion flag provided without any exclusions");
-	}
-	else if(e_flag_pos == 1 || argc == 1){
+	if((e_flag_pos == 1 && p_flag_pos == -1) || argc == 1){
 		if(set_default_parents()){
-			errExit("Couldn't get the default parent list");
+			fprintf(stderr,"Couldn't get the default parent list");
+			return -1;
 		}
 	}
-
-	if(e_flag_pos != -1){
-		nopeListLen = 2;
-		nopeList = (int*) malloc(sizeof(int)*nopeListLen);
-		nopeList[0] = my_pid;
-		nopeList[1] = my_ppid;
+	else if(p_flag_pos == -1){
+		if(e_flag_pos == -1){
+			numParents = argc - 1;
+		}
+		else{
+			numParents = e_flag_pos - 1;
+		}
+		p_flag_pos = 0;
+	}
+	else if(p_flag_pos < e_flag_pos){
+		numParents = e_flag_pos - p_flag_pos - 1;
+	}
+	else if(p_flag_pos == 1)
+		numParents = argc - p_flag_pos + 1;
 	}
 	else{
-		nopeListLen = argc;
-		nopeList = (int*) malloc(sizeof(int)*nopeListLen);
-		nopeList[0] = my_pid;
-		nopeList[1] = my_ppid;
-		for(i = 2; i < nopeListLen; i++){
-			nopeList[i] = atoi(argv[i]);
-		}
-	}
-
-	if(set_pid(atoi(argv[1]), 0 )){
-		fprintf(stderr,"Couldn't control %d\n",pid);
+		usage();
 		return -1;
 	}
-	else{
-		fprintf(stderr,"I am controlling PID %d\n",pid);
+
+	if(numParents > parentListLen){
+		free(parentList);
+		parentList = (int*) malloc(sizeof(int)*numParents);
 	}
-	
+
+	for(i = 0; i <= numParents; i++){
+		parentList[i] = atoi(argv[i + p_flag_pos + 1]);
+	}
+	prune_parents_list();
+
+	// There are excluded processes
+	if(e_flag_pos != -1){
+		if(p_flag_pos > e_flag_pos){
+			numNope = p_flag_pos - e_flag_pos + 1;
+		}
+		else if(p_flag_pos == 1 || p_flag_pos == -1)
+			numNope = argc - e_flag_pos + 1;
+		}
+		else{
+			usage();
+			return -1;
+		}
+
+		if(numNope > nopeListLen){
+			free(nopeList);
+			nopeList = (int*) malloc(sizeof(int)*numNope);
+		}
+
+		for(i = 0; i < numNope; i++ ){
+			nopeList[i] = atoi(argv[i + e_flag_pos + 1]);
+		}
+	}
+
 	return 0;
 }
 
@@ -339,7 +368,8 @@ int main(int argc, char *argv[]) {
 	setup_insertDelays();
 
 	if(cmdline(argc, argv))
-		errExit("cmdline");
+		errExit("Couldn't get set up.");
+
 	normExit();
 
 	/* Establish handler for timer signal */
