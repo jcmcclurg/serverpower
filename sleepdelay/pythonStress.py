@@ -16,9 +16,11 @@ import datetime
 def worker(ns,i):
     filename = "data/worker%d"%i
     j = 0
+    i = 3.427239
     while ns.running:
         time.sleep(ns.sleeplen)
-        i += np.sqrt(np.random.random())
+        #i += np.sqrt(np.random.random())
+        i += i
         j += 1
     fp = open(filename,'w+')
     fp.write("%d\n"%j)
@@ -30,12 +32,13 @@ if __name__ == '__main__':
     start_datetime = datetime.datetime.now()
     start_sec = time.time()
 
+
     mgr = multiprocessing.Manager()
     ns = mgr.Namespace()
     ns.running = True
-    ns.sleeplen = 1
-    ns.jobs = [-1,-1,-1,-1]
-    n = 4
+    ns.sleeplen = 0.1
+    n = 8
+    
 
     print "Opening delay.csv"
     f1=open('data/delay.csv','w+')
@@ -54,6 +57,7 @@ if __name__ == '__main__':
 
     for i in range(0,n):
         w[i].start()
+		
 
     try:
         a = " "
