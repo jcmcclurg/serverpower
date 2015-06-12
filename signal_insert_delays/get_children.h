@@ -7,6 +7,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <signal.h>
+#include <unistd.h>
+#include <time.h>
+#include "get_children.h"
+
 
 #define UNKNOWN_CLASS 0
 #define CHILD_CLASS 1
@@ -20,27 +25,12 @@ typedef struct process_tree_struct {
 } process_tree;
 
 
-/*
-Gets the children of rootPID as a list.
-Also returns the entire process tree.
-Uses and re-uses buffers which get cleaned up in close_children.
-*/
-int get_children(int** childNodes, int* numChildren, process_tree** procTree, int* numProcs, int* rootPIDs, int numRootPIDs);
-
-/*
-Gets the whole process tree, with rootPIDs marked as NONCHILD_CLASS
-You can specify rootPIDs as NULL or numRootPIDs = 0 to skip this.
-*/
-int get_proc_tree(process_tree** procTree, int* numProcs, int* rootPIDs, int numRootPIDs);
-
-/*
-Takes process_tree structure pointer (created by get_children), and a
-list of child PIDs.
-
-The children array is repopulated with the root nodes.
-Returns the number of root nodes found.
-*/
-
+pid_t get_ppid_of(pid_t pid);
+char get_status_of(pid_t pid);
+int tag_proc_tree_nonchildren(int* nonChildren, int numNonChildren);
+int update_proc_tree(process_tree** procTree, int* numProcs);
+int update_children(	int** childNodes, int* numChildNodes, int* exclusions, int numExclusions,	char exclude_nonstoppable);
+int tag_proc_tree_children(int* rootPIDs, int numRootPIDs);
 void init_children(void);
 
 void close_children(void);
