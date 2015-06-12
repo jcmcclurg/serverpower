@@ -215,10 +215,10 @@ int update_children(	int** childNodes, int* numChildNodes,
 	}
 	*numChildNodes = j;
 	#ifdef DEBUG
-	fprintf(stderr,"%d children:\n", j);
+	fprintf(stderr,"Updating %d children (en=%d):\n", j, exclude_nonstoppable);
 	#endif
 	j = 0;
-	for(i = 0; i < *numChildNodes; i++){
+	for(i = 0; i < numProcs; i++){
 		if((procTree[i].class != UNKNOWN_CLASS) &&
 		(!exclude_nonstoppable || get_stoppable_status(procTree[i].pid) == STOPPABLE)	){
 			// Check if it is in exclude list
@@ -236,7 +236,17 @@ int update_children(	int** childNodes, int* numChildNodes,
 				#endif
 				j++;
 			}
+			#ifdef DEBUG
+			else{
+				fprintf(stderr,"Oops. %d is not a child.\n",procTree[i].pid);
+			}
+			#endif
 		}
+		#ifdef DEBUG
+		else{
+			fprintf(stderr,"%d did not make the cut: CLS:%d, STS:%d\n",procTree[i].pid, procTree[i].class, get_stoppable_status(procTree[i].pid));
+		}
+		#endif
 	}
 	*childNodes = child_buffer;
 	*numChildNodes = j;
@@ -260,46 +270,44 @@ int tag_proc_tree_children(int* rootPIDs, int numRootPIDs) {
 	process_tree* procTree = proc_tree_buffer;
 
 	for(i = 0; i < numProcs; i++){
-		if(procTree[i].class == NONCHILD_CLASS){
-			j = i;
-			// Find out whether this node has any other marked nodes in its lineage.
-			changed = 0;
+		j = i;
+		// Find out whether this node has any other marked nodes in its lineage.
+		changed = 0;
+		#ifdef DEBUG
+		fprintf(stderr,"%d->",procTree[j].pid );
+		#endif
+		while( (j = procTree[j].parent) != -1 ){
 			#ifdef DEBUG
-			fprintf(stderr,"%d->",procTree[j].pid );
+			fprintf(stderr,"%d",procTree[j].pid );
 			#endif
-			while( (j = procTree[j].parent) != -1 ){
-				#ifdef DEBUG
-				fprintf(stderr,"%d",procTree[j].pid );
-				#endif
-				if(procTree[j].class != UNKNOWN_CLASS ){
-					changed = 1;
-					break;
-				}
-				#ifdef DEBUG
-				else{
-					fprintf(stderr,"->");
-				}
-				#endif
-			}
-
-			// If so, the whole lineage (excluding the topmost node) are rootPIDs.
-			if(changed){
-				#ifdef DEBUG
-				fprintf(stderr," CHILDREN\n" );
-				#endif
-				procTree[i].class = CHILD_CLASS;
-				j = procTree[i].parent;
-				while( procTree[j].class == UNKNOWN_CLASS  ){
-					procTree[j].class = CHILD_CLASS;
-					j = procTree[j].parent;
-				}
+			if(procTree[j].class != UNKNOWN_CLASS ){
+				changed = 1;
+				break;
 			}
 			#ifdef DEBUG
 			else{
-				fprintf(stderr," ROOT\n" );
+				fprintf(stderr,"->");
 			}
 			#endif
 		}
+
+		// If so, the whole lineage (excluding the topmost node) are rootPIDs.
+		if(changed){
+			#ifdef DEBUG
+			fprintf(stderr," CHILD\n" );
+			#endif
+			procTree[i].class = CHILD_CLASS;
+			j = procTree[i].parent;
+			while( procTree[j].class == UNKNOWN_CLASS  ){
+				procTree[j].class = CHILD_CLASS;
+				j = procTree[j].parent;
+			}
+		}
+		#ifdef DEBUG
+		else{
+			fprintf(stderr,"\n" );
+		}
+		#endif
 	}
 	return 0;
 }
