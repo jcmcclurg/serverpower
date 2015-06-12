@@ -1,6 +1,6 @@
 CC?=gcc
 CFLAGS?=-Wall -g -D_GNU_SOURCE
-TARGETS=insertDelays triangleWave
+TARGETS=insertDelays triangleWave sig_catcher
 LIBS=commonFunctions.o get_children.o
 
 UNAME := $(shell uname)
@@ -18,6 +18,9 @@ commonFunctions.o: commonFunctions.c commonFunctions.h
 
 triangleWave:	triangleWave.c
 	$(CC) -o triangleWave triangleWave.c $(CFLAGS) $(FLAGS)
+
+sig_catcher: sig_catcher.c
+	$(CC) -o sig_catcher sig_catcher.c $(CFLAGS) $(FLAGS)
 
 clean:
 	rm -f *~ *.o $(TARGETS)

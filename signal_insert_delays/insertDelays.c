@@ -54,13 +54,12 @@ void sig_handler(int signo){
 		if(!process_running && (limiting_mode & MODE_LIMIT)){
 			int i;
 			for(i = 0; i < numChildren; i++){
-				if(children[i] > 0)
-					f += kill(children[i],SIGCONT);
+				f += kill(children[i],SIGCONT);
 			}
 			process_running = 1;
 		}
 
-		if(f)
+		if(f > 0)
 			errExit("Couldn't send SIGCONT");
 
 		normExit();
@@ -75,11 +74,10 @@ static void handler(int sig, siginfo_t *si, void *uc) {
 		int i;
 		int f = 0;
 		for(i = 0; i < numChildren; i++){
-			if(children[i] > 0)
-				f += kill(children[i],SIGCONT);
+			f += kill(children[i],SIGCONT);
 		}
 		process_running = 1;
-		if(f)
+		if(f > 0)
 			limiting_mode |= MODE_PID_DIRTY;
 	}
 }
@@ -101,11 +99,10 @@ void do_work(void){
 		int i;
 		int f = 0;
 		for(i = 0; i < numChildren; i++){
-			if(children[i] > 0)
-				f += kill(children[i],SIGSTOP);
+			f += kill(children[i],SIGSTOP);
 		}
 		process_running = 0;
-		if(f)
+		if(f > 0)
 			limiting_mode |= MODE_PID_DIRTY;
 	}
 }
@@ -317,6 +314,7 @@ int main(int argc, char *argv[]) {
 	if (sigprocmask(SIG_UNBLOCK, &mask, NULL) == -1)
 		errExit("sigprocmask");
 
+	start_timer(timerid);
 	while(1){
 		char* str;
 		str = readLine();
