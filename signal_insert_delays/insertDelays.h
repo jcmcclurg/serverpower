@@ -6,7 +6,7 @@
 #define normExit()	do { close_insertDelays(); exit(EXIT_SUCCESS); } while (0)
 
 // Initial values
-#define INITIAL_PERIOD 1.0
+#define INITIAL_PERIOD 0.1
 #define INITIAL_DUTY 0.5
 
 #define MODE_NO_PID 0

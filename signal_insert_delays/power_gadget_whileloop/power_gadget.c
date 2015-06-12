@@ -29,6 +29,9 @@ const char   *version = "2.2_josiah";
 uint64_t	  num_node = 0;
 uint64_t	  delay_us = 1000000;
 char prefix_buffer[64];
+char display_time;
+char display_power;
+char display_energy;
 
 double convert_time_to_sec(struct timespec tv){
 	double elapsed_time = ((double)(tv.tv_sec)) + (((double)(tv.tv_nsec))/1.0e9);
@@ -73,9 +76,13 @@ void do_print_energy_info(){
 		exit(EXIT_FAILURE);
 	}
 	fprintf(stderr,"Total energy consumed: %f\n", currentEnergy);
-	//fprintf(stdout,"Time (s),Energy Buffer (J),Power (W)\n");
-	//fprintf(stderr,"Time (s),Power (W)\n");
-	fprintf(stderr,"Power (W)\n");
+	if(display_time)
+		fprintf(stderr,"Time (s) ");
+	if(display_energy)
+		fprintf(stderr,"Energy Buffer (J) ");
+	if(display_power)
+		fprintf(stderr,"Power (W)");
+	fprintf(stderr,"\n");
 
 	// Timed period
 	while(1){
@@ -92,11 +99,15 @@ void do_print_energy_info(){
 		if(energyConsumed < 0){
 			energyConsumed += MAX_ENERGY_STATUS_JOULES;
 		}
-		//fprintf(stdout,"%f,%f,%f\n",currentTime_sec, currentEnergy, energyConsumed/duration_sec);
-		//fprintf(stdout,"%f,%f\n",currentTime_sec, energyConsumed/duration_sec);
-		fprintf(stdout,"%s%f\n",prefix_buffer,energyConsumed/duration_sec);
-	}
 
+		if(display_time)
+			fprintf(stdout,"%f ",currentTime_sec);
+		if(display_energy)
+			fprintf(stdout,"%f ",currentEnergy);
+		if(display_power)
+			fprintf(stdout,"%s%f",prefix_buffer,energyConsumed/duration_sec);
+		fprintf(stdout,"\n");
+	}
 }
 
 void usage(){
@@ -110,11 +121,15 @@ void usage(){
 
 int cmdline(int argc, char **argv){
 	int			 opt;
+	int i = -1;
 	uint64_t	delay_ms_temp = 1000;
-
+	display_time = 0;
+	display_power = 0;
+	display_energy = 0;
+	
 	progname = argv[0];
 
-	while ((opt = getopt(argc, argv, "e:p:")) != -1) {
+	while ((opt = getopt(argc, argv, "e:p:c:")) != -1) {
 		switch (opt) {
 		case 'e':
 			delay_ms_temp = atoi(optarg);
@@ -132,10 +147,25 @@ int cmdline(int argc, char **argv){
 		case 'p':
 			sprintf(prefix_buffer,"%s",optarg);
 			break;
+		case 'c':
+			i = 0;
+			while(optarg[i] != 0){
+				if(optarg[i] == 't')
+					display_time = 1;
+				else if(optarg[i] == 'e')
+					display_energy = 1;
+				else if(optarg[i] == 'p')
+					display_power = 1;
+				i++;
+			}
+			break;
 		default:
 			usage();
 			return -1;
 		}
+	}
+	if(i == -1){
+		display_power = 1;
 	}
 	return 0;
 }
