@@ -22,7 +22,7 @@ void sig_handler(int signo)
 	}
 }
 
-void main(void) {
+int main(void) {
 	long l = 0;
 	if(signal(SIGCONT,sig_handler) == SIG_ERR){
 		fprintf(stderr,"Can't catch SIGCONT.\n");
@@ -48,4 +48,5 @@ void main(void) {
 			got_sigcont = 0;
 	}
 	exit(EXIT_SUCCESS);
+	return 0;
 }
