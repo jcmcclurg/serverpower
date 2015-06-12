@@ -28,11 +28,10 @@ void do_work(void);
 void update_period(double p, timer_t timerid);
 void stop_timer(timer_t timerid);
 
-void start_timer(timer_t timerid){
-int update_children(int p){
-int set_pid(int p,timer_t timerid){
-void usage(){
-int set_default_parents(void){
-int cmdline(int argc, char **argv){
+void start_timer(timer_t timerid);
+int set_pid(int p,timer_t timerid);
+void usage();
+int set_default_parents(void);
+int cmdline(int argc, char **argv);
 
 #endif
