@@ -206,7 +206,7 @@ int cmdline(int argc, char **argv){
 			numParents = e_flag_pos - p_flag_pos - 1;
 		}
 		else if(p_flag_pos == 1){
-			numParents = argc - p_flag_pos + 1;
+			numParents = argc - p_flag_pos - 1;
 		}
 		else{
 			usage();
@@ -215,9 +215,9 @@ int cmdline(int argc, char **argv){
 
 		parentList = (int*) malloc(sizeof(int)*numParents);
 		#ifdef DEBUG
-		fprintf(stderr,"Parent list: ");
+		fprintf(stderr,"Parent list (%d): ",numParents);
 		#endif
-		for(i = 0; i <= numParents; i++){
+		for(i = 0; i < numParents; i++){
 			parentList[i] = atoi(argv[i + p_flag_pos + 1]);
 			#ifdef DEBUG
 			fprintf(stderr,"%d ",parentList[i]);
@@ -245,7 +245,7 @@ int cmdline(int argc, char **argv){
 
 		nopeList = (int*) malloc(sizeof(int)*numNope);
 		#ifdef DEBUG
-		fprintf(stderr,"Exclusion list: ");
+		fprintf(stderr,"Exclusion list (%d): ",numNope);
 		#endif
 		for(i = 0; i < numNope; i++ ){
 			nopeList[i] = atoi(argv[i + e_flag_pos + 1]);
