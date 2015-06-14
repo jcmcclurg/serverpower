@@ -38,6 +38,7 @@ void close_children(void);
 char get_status_of(pid_t pid);
 pid_t get_ppid_of(pid_t pid);
 
+char* get_name_of(pid_t pid);
 
 #define CHECK_EXTERNAL_RESTART_WAITLEN_US 5000
 #define CHECK_CONT_WAITLEN_US 5000

@@ -40,6 +40,18 @@ void setup_insertDelays(void){
 }
 
 void close_insertDelays(void){
+	int f = 0;
+	if(!process_running && (limiting_mode & MODE_LIMIT)){
+		int i;
+		for(i = 0; i < numChildren; i++){
+			f += kill(children[i],SIGCONT);
+		}
+		process_running = 1;
+	}
+
+	if(f > 0)
+		errExit("Couldn't send SIGCONT");
+
 	numChildren = 0;
 	children = NULL;
 	free(nopeList);
@@ -49,19 +61,6 @@ void close_insertDelays(void){
 void sig_handler(int signo){
 	if(signo == SIGINT){
 		printf("\rreceived SIGINT\n");
-
-		int f = 0;
-		if(!process_running && (limiting_mode & MODE_LIMIT)){
-			int i;
-			for(i = 0; i < numChildren; i++){
-				f += kill(children[i],SIGCONT);
-			}
-			process_running = 1;
-		}
-
-		if(f > 0)
-			errExit("Couldn't send SIGCONT");
-
 		normExit();
 	}
 	else{
@@ -261,7 +260,7 @@ int cmdline(int argc, char **argv){
 	#ifdef DEBUG
 	fprintf(stderr,"Controllable list: ");
 	for(i = 0; i < numChildren; i++){
-		fprintf(stderr,"%d ",children[i]);
+		fprintf(stderr,"%s(%d) ", get_name_of(children[i]), children[i]);
 	}
 	fprintf(stderr,"\n");
 	#endif

@@ -1,5 +1,11 @@
 #!/bin/bash
 
+epids=${1:-excludedPIDs}
+
+echo $$ >> $epids
+echo $PPID >> $epids
+echo $BASHPID >> $epids
+
 sleep 5
 
 d="0.9"

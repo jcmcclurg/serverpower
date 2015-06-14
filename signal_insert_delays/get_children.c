@@ -68,6 +68,23 @@ pid_t get_ppid_of(pid_t pid) {
 	return atoi(token);
 }
 
+char nameof_buff[1024];
+char* get_name_of(pid_t pid) {
+	char statfile[20];
+	sprintf(statfile, "/proc/%d/stat", pid);
+	FILE *fd = fopen(statfile, "r");
+	if (fd==NULL) return NULL;
+	if (fgets(nameof_buff, sizeof(nameof_buff), fd)==NULL) {
+		fclose(fd);
+		return NULL;
+	}
+	fclose(fd);
+
+	char* buffer = strtok(nameof_buff, " ");
+	buffer = strtok(NULL, " ");
+	return buffer;
+}
+
 char get_status_of(pid_t pid){
 	char statfile[20];
 	char buffer[1024];
@@ -219,8 +236,7 @@ int update_children(	int** childNodes, int* numChildNodes,
 	#endif
 	j = 0;
 	for(i = 0; i < numProcs; i++){
-		if((procTree[i].class != UNKNOWN_CLASS) &&
-		(!exclude_nonstoppable || get_stoppable_status(procTree[i].pid) == STOPPABLE)	){
+		if(procTree[i].class != UNKNOWN_CLASS){
 			// Check if it is in exclude list
 			c = 0;
 			for(k = 0; k < numExclusions; k++){
@@ -229,7 +245,7 @@ int update_children(	int** childNodes, int* numChildNodes,
 					break;
 				}
 			}
-			if(!c){
+			if(!c && (!exclude_nonstoppable || get_stoppable_status(procTree[i].pid) == STOPPABLE)	){
 				child_buffer[j] = procTree[i].pid;
 				#ifdef DEBUG
 				fprintf(stderr,"Yes. %d is child.\n",child_buffer[j]);
@@ -237,8 +253,11 @@ int update_children(	int** childNodes, int* numChildNodes,
 				j++;
 			}
 			#ifdef DEBUG
+			else if(c){
+				fprintf(stderr,"Oops. %d is on exclusion list.\n",procTree[i].pid);
+			}
 			else{
-				fprintf(stderr,"Oops. %d is not a child.\n",procTree[i].pid);
+				fprintf(stderr,"Oops. %d isn't stoppable.\n",procTree[i].pid);
 			}
 			#endif
 		}
