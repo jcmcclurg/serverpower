@@ -1,4 +1,4 @@
-b=input('Type the name: ')
+b=input('Type the name: ','s')
 %b='253705126_1434500446';
 
 [status, output] = system(['cat ./' b '.log | grep "Starting power gadget at " | cut -d \  -f 5']);
@@ -35,7 +35,8 @@ end
 
 [v,i] = sort(stepValues);
 boxplot(windows(i(1:numSteps)));
-set(gca(),'xtick', 1:numSteps, 'xticklabel', v(1:numSteps)*100 );
+set(gca(),'xtick', 1:20:numSteps, 'xticklabel', v(1:20:numSteps)*100 );
 title('CPU duty cycle vs average power')
 ylabel('Power (W) ')
 xlabel('Duty cycle (percent)')
+print([b '.svg'],'-S1280x1024')
