@@ -3,7 +3,7 @@
 epids=${1:-excludedPIDs}
 
 echo "Starting power gadget at "`date +%s.%N` >&2
-sudo ./power_gadget_whileloop/power_gadget -e 51 -c tp & 
+sudo ./power_gadget_whileloop/power_gadget -e 150 -c tp & 
 pgpid=$!
 
 echo $$ >> $epids
