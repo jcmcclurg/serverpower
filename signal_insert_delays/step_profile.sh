@@ -6,27 +6,20 @@ echo $$ >> $epids
 echo $PPID >> $epids
 echo $BASHPID >> $epids
 
+steps=120
 sleep 5
 
-d="0.9"
-echo "Step to $d at " `date +%s.%N` >&2
-echo $d
-sleep 5
+for i in `seq $steps`; do
+	printf -v d "0.%03d" $(( (($i - 1)*1000) / $steps ))
+	echo "Step to $d at "`date +%s.%N` >&2
+	echo $d
+	sleep 5
 
-d="0.1"
-echo "Step to $d at " `date +%s.%N` >&2
-echo $d
-sleep 5
+	printf -v d "0.%03d" $(( (($steps - $i)*1000) / $steps ))
+	echo "Step to $d at "`date +%s.%N` >&2
+	echo $d
+	sleep 5
+done
 
-d="0.5"
-echo "Step to $d at " `date +%s.%N` >&2
-echo $d
-sleep 5
-
-d="0.1"
-echo "Step to $d at " `date +%s.%N` >&2
-echo $d
-sleep 5
-
-echo "Quitting at " `date +%s.%N` >&2
+echo "Quitting at "`date +%s.%N` >&2
 echo "q"
