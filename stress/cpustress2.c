@@ -33,29 +33,28 @@ int main (void)
     int    fd_stdin;
  
 
-    ns.sleeplen = 1000;
+    ns.sleeplen = 0;
     ns.running = true;
 
     fd_stdin = fileno(stdin);
 
-
-
+    printf("please insert the time delay \n ");
     while(ns.running)
     {
         FD_ZERO(&readfds);
         FD_SET(fileno(stdin), &readfds);
-        tv.tv_sec = 5;
+        tv.tv_sec = 0;
         tv.tv_usec = 0;
-        printf("please insert the time delay \n ");
         fflush(stdout);
         num_readable = select(fd_stdin +1, &readfds, NULL, NULL, &tv);
         if (num_readable == 0)
         {
-            printf("\nPerforming default action after %d seconds\n",5);
+            //printf("\nPerforming default action after %d seconds\n",5);
             //exit(1);
+            worker();
+            sleep(ns.sleeplen);
         }
-
-        if (num_readable == 1)
+        else if (num_readable == 1)
         {
             ns.running = true;
 
@@ -78,12 +77,11 @@ int main (void)
                 {
                     
                     printf("Fields read: %d, Number read by main: %d\n", ns.fieldsRead, ns.sleeplen);
+                    printf("please insert the time delay \n ");
                     break;
                 }
 		
             }
-	worker();
-        sleep(ns.sleeplen);
         }
        
     }
