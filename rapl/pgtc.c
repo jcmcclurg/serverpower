@@ -38,14 +38,12 @@ char          thz1[6] = "xxxxx"; //thermalzone1 temperature (Celsius) -- code ad
 int get_usr_input(char *buff, int *bytes_so_far); // get stdin input
 char interpret_power_limit_command(char *command, double *str); // interpret stdin input for power limit command
 
-void get_CPU_temperature(char *thz0,char *thz1) // get temperature of thermal zones 0 & 1 -- code added by Joe Hall 4/19/15
+void get_CPU_temperature(char *thz0) // get temperature of thermal zones 0  -- code added by Joe Hall 4/19/15
 {
     FILE *f; 
     char c; 
     //char thz0[5] = "xxxxx";
-    //char thz1[5] = "xxxxx";
     int i0 = 0;
-    int i1 = 0;
     f=fopen("/sys/class/thermal/thermal_zone0/temp","rt"); 
     while((c=fgetc(f))!=EOF){ 
         //printf("%c",c);
@@ -55,17 +53,6 @@ void get_CPU_temperature(char *thz0,char *thz1) // get temperature of thermal zo
     } 
     thz0[5]='\0';
     fclose(f); 
-/*
-    f=fopen("/sys/class/thermal/thermal_zone1/temp","rt"); 
-    while((c=fgetc(f))!=EOF){ 
-        //printf("%c",c);
-        thz1[i1]=c;
-        i1++; 
-    } 
-    thz1[5]='\0';
-    fclose(f); 
-*/
-    //printf("thermal zone0: %s\nthermal zone1: %s\n\n",thz0,thz1);
 }
 
 void print_rapl_control_info(uint64_t node)  // added by Joe Hall 4/25/15
@@ -87,8 +74,8 @@ void print_rapl_control_info(uint64_t node)  // added by Joe Hall 4/25/15
    err += get_pp0_balance_policy(node, &pp0_priority_level);
    //err += get_pp1_rapl_power_limit_control(node, &pp1_plc);  //pp1 only on client systems
    //err += get_pp1_balance_policy(node, &pp1_priority_level);
-   err += get_dram_rapl_power_limit_control(node, &dram_plc);  // dram only on server systems
-   err += get_dram_rapl_parameters(node, &dram_param);
+   //err += get_dram_rapl_power_limit_control(node, &dram_plc);  // dram only on server systems
+   //err += get_dram_rapl_parameters(node, &dram_param);
 
    if (err > 0){
    		printf("%d error(s) getting RAPL info.\n", err);
@@ -164,16 +151,16 @@ void
 convert_time_to_string(struct timespec tv, char* time_buf)
 {
     time_t sec;
-    int nsec;
+    int msec;
     struct tm *timeinfo;
     char tmp_buf[9];
 
     sec = tv.tv_sec;
     timeinfo = localtime(&sec);
-    nsec = tv.tv_nsec;
+    msec = tv.tv_nsec/1000000;
 
     strftime(tmp_buf, 9, "%H:%M:%S", timeinfo);
-    sprintf(time_buf, "%s:%d",tmp_buf,nsec);
+    sprintf(time_buf, "%s:%d",tmp_buf,msec);
 }
 
 /*
@@ -224,7 +211,7 @@ do_print_energy_info()
 
     char time_buffer[32];
     //struct timeval tv;
-	struct timespec tv;    
+	struct timespec tv, t_setpoint, t_realtime;    
 	int msec;
     uint64_t tsc;
     uint64_t freq[4];
@@ -244,8 +231,10 @@ do_print_energy_info()
 	pkg_rapl_power_limit_control_t pkg_plc;
 	pkg_plc.power_limit_watts_1 = 80.0;
 	pkg_plc.power_limit_watts_2 = 96.0;
+	// printed rapl info: MaxWindow(sec) = 0.045898
 	pkg_plc.limit_time_window_seconds_1 = 8.8;
-	pkg_plc.limit_time_window_seconds_2 = 0.007812;
+	//pkg_plc.limit_time_window_seconds_2 = 0.007812;
+	pkg_plc.limit_time_window_seconds_2 = 0.0001;
 	pkg_plc.limit_enabled_1 = 1;
 	pkg_plc.limit_enabled_2 = 1;
 	pkg_plc.clamp_enabled_1 = 1;
@@ -254,7 +243,7 @@ do_print_energy_info()
 
     pp0_rapl_power_limit_control_t pp0_plc;
     pp0_plc.power_limit_watts = 50.0;
-    pp0_plc.limit_time_window_seconds = 0.001;
+    pp0_plc.limit_time_window_seconds = 0.0001;
     pp0_plc.limit_enabled = 1;
     pp0_plc.clamp_enabled = 1;
     pp0_plc.lock_enabled = 0;
@@ -265,19 +254,25 @@ do_print_energy_info()
     dram_plc.limit_enabled = 1;
     dram_plc.clamp_enabled = 1;
     dram_plc.lock_enabled = 0;
-	
 
+	//open output file for setpoint
+ 	FILE	*fp_setpoint = NULL; 
+	fp_setpoint=fopen("data/setpoint.csv", "w");
+	
+	//open outpu file for msr data
+	fp=fopen("data/data.csv","w");
     /* if output FILE pointer is not initiated in main(), let it be standard output (Joe)*/
     if (fp==NULL) {
 		fp = stdout;
     }
 	
     /* don't buffer if piped */
-    setbuf(fp, NULL);
+    setbuf(stdout, NULL);
 
     /* Print header */
-    fprintf(fp, "System Time,RDTSC,Elapsed Time (sec),");
-    for (i = node; i < num_node; i++) {
+//    fprintf(fp, "System Time,RDTSC,Elapsed Time (sec),");
+	fprintf(fp, "System Time,");
+/*    for (i = node; i < num_node; i++) {
         fprintf(fp, "IA Frequency_%d (MHz),",i);
         if(is_supported_domain(RAPL_PKG))
             fprintf(fp,"Processor Power_%d (Watt),Cumulative Processor Energy_%d (Joules),Cumulative Processor Energy_%d (mWh),", i,i,i);
@@ -288,6 +283,20 @@ do_print_energy_info()
         if(is_supported_domain(RAPL_DRAM))
             fprintf(fp, "DRAM Power_%d (Watt),Cumulative DRAM Energy_%d (Joules),Cumulative DRAM Energy_%d(mWh),", i,i,i);
     }
+*/
+	// short version
+	for (i = node; i < num_node; i++) {
+        fprintf(fp, "IA Frequency_%d (MHz),",i);
+        if(is_supported_domain(RAPL_PKG))
+            fprintf(fp,"Processor Power_%d (Watt)",i);
+        if(is_supported_domain(RAPL_PP0))
+            fprintf(fp, "IA Power_%d (Watt),",i);
+        if(is_supported_domain(RAPL_PP1))
+            fprintf(fp, "GT Power_%d (Watt),",i);
+        if(is_supported_domain(RAPL_DRAM))
+            fprintf(fp, "DRAM Power_%d (Watt),",i);
+    }
+
  	//   fprintf(fp,"ThermalZone0(Celsius),ThermalZone1(Celsius),"); // Added by Joe Hall 4/19/15
     fprintf(fp,"ThermalZone0(Celsius),");
     fprintf(fp, "\n");
@@ -312,9 +321,9 @@ do_print_energy_info()
     while (1) {
 
         usleep(delay_us);
-
+		clock_gettime(CLOCK_REALTIME, &t_realtime); // get RT clock for print timestamp
 		// use clock_gettime() instead w/ CLOCK_MONOTONIC
-		clock_gettime(CLOCK_MONOTONIC, &tv);  // get time stamp
+		clock_gettime(CLOCK_MONOTONIC, &tv);  // get Monotonic time stamp for power calculation
         //gettimeofday(&tv, NULL); // get time stamp
 
 		// immediately get energy counter info
@@ -343,30 +352,32 @@ do_print_energy_info()
                     // just the sleep delay, in order to more accourately account for
                     // the delay between samples
                     power_watt[i][domain] = delta / interval_elapsed_time;
-                    cum_energy_J[i][domain] += delta;
-                    cum_energy_mWh[i][domain] = cum_energy_J[i][domain] / 3.6; // mWh
+//                    cum_energy_J[i][domain] += delta;
+ //                   cum_energy_mWh[i][domain] = cum_energy_J[i][domain] / 3.6; // mWh
                 }
             }
         }
 
         end = interval_start;  // save last timestamp for reference in next iteration
         total_elapsed_time = end - start;
-        convert_time_to_string(tv, time_buffer);
+        convert_time_to_string(t_realtime, time_buffer); // print real-time stamp to file
 
-        read_tsc(&tsc);
-        fprintf(fp,"%s,%llu,%.4lf,", time_buffer, tsc, total_elapsed_time);
+ //       read_tsc(&tsc);
+ //       fprintf(fp,"%s,%llu,%.4lf,", time_buffer, tsc, total_elapsed_time);
+		fprintf(fp,"%s,", time_buffer);
         for (i = node; i < num_node; i++) {
             //get_pp0_freq_mhz(i, &freq);
             get_pp0_freq_mhz(i, freq); //changed by Joe 4/25/15 to get 4 CPU freq
             fprintf(fp, "%u|%u|%u|%u,", freq[0],freq[1],freq[2],freq[3]);
             for (domain = 0; domain < RAPL_NR_DOMAIN; ++domain) {
-                if(is_supported_domain(domain)) {
-                    fprintf(fp, "%.4lf,%.4lf,%.4lf,",
-                            power_watt[i][domain], cum_energy_J[i][domain], cum_energy_mWh[i][domain]);
+            	if(is_supported_domain(domain)) {
+//              	fprintf(fp, "%.4lf,%.4lf,%.4lf,",power_watt[i][domain], cum_energy_J[i][domain], cum_energy_mWh[i][domain]);
+					fprintf(fp, "%.4lf,",power_watt[i][domain]); // print to file
                 }
             }
+			fprintf(stdout,"%.4lf\n",power_watt[node][RAPL_PKG]); // print out PKG power to pipe
         }
-        get_CPU_temperature(thz0,thz1);
+        get_CPU_temperature(thz0);
         fprintf(fp, "%s,",thz0);
         fprintf(fp, "\n");
 
@@ -374,12 +385,17 @@ do_print_energy_info()
         if(total_elapsed_time >= duration)
             break;
 
+
 		// set RAPL Power Limits: (added by Joe Hall 5/27/15)
 		rcvd = get_usr_input(buff, &bytes_so_far); // get stdin input
 		if (rcvd == 1) {
 			pp = interpret_power_limit_command(buff, &setpoint); // interpret stdin input for power limit command
 			if (setpoint > 0) {
-				for (i=0;i<num_node;i++) { // added by Joe Hall 4/25/15
+				if (pp=='s') {
+					fprintf(stdout, "s%f\n", setpoint); // forward setpoint to pipe via stdout
+				}
+				else {
+					for (i=0;i<num_node;i++) { // added by Joe Hall 4/25/15
 						if (pp=='p') {
 							pkg_plc.power_limit_watts_2 = setpoint;
 							ret = set_pkg_rapl_power_limit_control(i,&pkg_plc);
@@ -393,21 +409,31 @@ do_print_energy_info()
 							ret = set_dram_rapl_power_limit_control(i, &dram_plc);
 						}
 						//fprintf(stdout, "Setpoint = %f & char = %c\n", setpoint,pp);
-						print_rapl_control_info(i);
-        			if (ret != 0)
-	    				fprintf(stdout, "Error setting RAPL power limit controls\n");
-				}					
-    		}
-			else if (setpoint == -1) // -1 for quit, therefore exit while()
+//						print_rapl_control_info(i);
+						if (ret != 0)
+	    					fprintf(fp, "Error setting RAPL power limit controls\n");
+					} // end for(numnode)
+				} //end if-else(pp)	
+
+                // timestamp setpoint using real-time clock
+				clock_gettime(CLOCK_REALTIME, &t_setpoint);
+				convert_time_to_string(t_setpoint, time_buffer);
+				fprintf(fp_setpoint, "%s,%.2f,\n",time_buffer,setpoint);
+    		} // end if(setpoint)
+			else if (setpoint == -1) { // -1 for quit, therefore exit while()
+				fprintf(stdout, "quit power_gadget\n"); // forward quit-command to pipe via stdout
 				break;
+			}
 		}
 		// else rcvd=-1 means perror("select") 
 		
     }
-
+    if (fp_setpoint!=NULL) // close filepointer
+        fclose(fp_setpoint);
+    
     end = clock();
-
-    /* Print summary */
+/*
+    // Print summary 
     fprintf(stdout, "\nTotal Elapsed Time(sec)=%.4lf\n\n", total_elapsed_time);
     for (i = node; i < num_node; i++) {
         if(is_supported_domain(RAPL_PKG)){
@@ -433,6 +459,7 @@ do_print_energy_info()
     }
     read_tsc(&tsc);
     fprintf(stdout,"TSC=%llu\n", tsc);
+*/
 }
 
 void
@@ -458,10 +485,10 @@ cmdline(int argc, char **argv)
         switch (opt) {
         case 'e':
             delay_ms_temp = atoi(optarg);
-            if(delay_ms_temp > 9) {
+            if(delay_ms_temp > 1) {
                 delay_us = delay_ms_temp * 1000;
             } else {
-                fprintf(stdout, "Sampling delay must be greater than 10 ms.\n");
+                fprintf(stdout, "Sampling delay must be greater than 1 ms.\n");
                 return -1;
             }
             break;
@@ -566,7 +593,7 @@ main(int argc, char **argv)
 	//	ret = set_dram_rapl_power_limit_control(i,&dram_plc_orig);
 		if (ret > 0)
 	    	fprintf(stdout, "Error setting DRAM power limit controls\n");
-		//print_rapl_control_info(i);
+	//	print_rapl_control_info(i);
     }
     
 	// prints energy info from msr registers and also polls stdin for power_limiting commands
@@ -695,10 +722,15 @@ char interpret_power_limit_command(char *command, double *str) {
 		case ('d'):
 			*str = atof(command+1);
 			break;
+		case ('s'):
+			*str = atof(command+1);
+			break;
 		case ('q'):
 			*str = -1;
 			break;
 		default:
+			command = "ignore";
+			*str = 0;
 			break;
 	}
 	return command[0];

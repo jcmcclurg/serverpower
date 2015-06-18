@@ -58,21 +58,3 @@ int checkStdin(void){
 
 	return retval;
 }
-
-double convert_time_to_sec(struct timespec tv){
-	double elapsed_time = ((double)(tv.tv_sec)) + (((double)(tv.tv_nsec))/1.0e9);
-	return elapsed_time;
-}
-
-double getCurrentTime(void){
-	struct timespec currentTime;
-	clock_gettime(CLOCK_BOOTTIME, &currentTime);
-	return convert_time_to_sec(currentTime);
-}
-
-double getDuration(double* previousTime){
-	double currentTime = getCurrentTime();
-	double prevTime = *previousTime;
-	*previousTime = currentTime;
-	return currentTime - prevTime;
-}

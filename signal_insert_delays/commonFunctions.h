@@ -2,7 +2,6 @@
 #define commonFunctions_h
 
 #define READLINE_BUFLEN 64
-#include <time.h>
 
 // Terminates the program, and prints a message indicating the signal.
 void terminateProgram(int sigNum);
@@ -13,10 +12,5 @@ void terminateProgram(int sigNum);
 char* readLine(void);
 
 int checkStdin(void);
-
-double convert_time_to_sec(struct timespec tv);
-
-double getCurrentTime();
-double getDuration(double* prevTime);
 
 #endif
