@@ -27,6 +27,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 FILE 	     *fp = NULL;  
 char         *progname;
+char quiet;
 const char   *version = "2.2";
 uint64_t      num_node = 0;
 uint64_t      delay_us = 1000000;
@@ -37,6 +38,131 @@ char          thz1[6] = "xxxxx"; //thermalzone1 temperature (Celsius) -- code ad
 
 int get_usr_input(char *buff, int *bytes_so_far); // get stdin input
 char interpret_power_limit_command(char *command, double *str); // interpret stdin input for power limit command
+
+void do_set_power_limit(void)
+{
+    int i = 0;
+    int domain = 0;
+    uint64_t node = 0;
+    double new_sample;
+    double delta;
+    double power;
+
+    double prev_sample[num_node][RAPL_NR_DOMAIN];
+    double power_watt[num_node][RAPL_NR_DOMAIN];
+    double cum_energy_J[num_node][RAPL_NR_DOMAIN];
+    double cum_energy_mWh[num_node][RAPL_NR_DOMAIN];
+
+    char time_buffer[32];
+    struct timeval tv;
+    int msec;
+    uint64_t tsc;
+    uint64_t freq[4];
+    double start, end, interval_start;
+    double total_elapsed_time;
+    double interval_elapsed_time;
+
+    // setup input command variables:
+    int	rcvd = 0;
+    char input[256];
+    char *buff = &input[0];
+    int	bytes_so_far = 0; 
+    int ret;
+    double setpoint = 0.0;
+    char pp;
+
+	pkg_rapl_power_limit_control_t pkg_plc;
+	pkg_plc.power_limit_watts_1 = 80.0;
+	pkg_plc.power_limit_watts_2 = 96.0;
+	pkg_plc.limit_time_window_seconds_1 = 8.8;
+	pkg_plc.limit_time_window_seconds_2 = 0.007812;
+	pkg_plc.limit_enabled_1 = 1;
+	pkg_plc.limit_enabled_2 = 1;
+	pkg_plc.clamp_enabled_1 = 1;
+	pkg_plc.clamp_enabled_2 = 1;
+	pkg_plc.lock_enabled = 0;  
+
+    pp0_rapl_power_limit_control_t pp0_plc;
+    pp0_plc.power_limit_watts = 50.0;
+    pp0_plc.limit_time_window_seconds = 0.001;
+    pp0_plc.limit_enabled = 1;
+    pp0_plc.clamp_enabled = 1;
+    pp0_plc.lock_enabled = 0;
+
+	dram_rapl_power_limit_control_t dram_plc;
+	dram_plc.power_limit_watts = 30.0;
+    dram_plc.limit_time_window_seconds = 0.03;
+    dram_plc.limit_enabled = 1;
+    dram_plc.clamp_enabled = 1;
+    dram_plc.lock_enabled = 0;
+    /* if output FILE pointer is not initiated in main(), let it be standard output (Joe)*/
+    if (fp==NULL) {
+		fp = stdout;
+    }
+	
+    /* don't buffer if piped */
+    setbuf(fp, NULL);
+    /* Read initial values */
+    for (i = node; i < num_node; i++) {
+        for (domain = 0; domain < RAPL_NR_DOMAIN; ++domain) {
+            if(is_supported_domain(domain)) {
+                prev_sample[i][domain] = get_rapl_energy_info(domain, i);
+            }
+        }
+    // debug
+    //fprintf(fp, "debug\n");
+    }
+
+    gettimeofday(&tv, NULL);
+    start = convert_time_to_sec(tv);
+    end = start;
+
+    while (1) {
+
+        usleep(delay_us);
+        gettimeofday(&tv, NULL);
+        interval_start = convert_time_to_sec(tv);
+        interval_elapsed_time = interval_start - end;
+        total_elapsed_time = end - start;
+		  
+        // check to see if we are done
+        if(total_elapsed_time >= duration)
+            break;
+
+		// set RAPL Power Limits: (added by Joe Hall 5/27/15)
+		rcvd = get_usr_input(buff, &bytes_so_far); // get stdin input
+		if (rcvd == 1) {
+			pp = interpret_power_limit_command(buff, &setpoint); // interpret stdin input for power limit command
+			if (setpoint > 0) {
+				for (i=0;i<num_node;i++) { // added by Joe Hall 4/25/15
+						if (pp=='p') {
+							pkg_plc.power_limit_watts_2 = setpoint;
+							ret = set_pkg_rapl_power_limit_control(i,&pkg_plc);
+						}
+						else if (pp=='c') {
+							pp0_plc.power_limit_watts = setpoint;
+							ret = set_pp0_rapl_power_limit_control(i, &pp0_plc);
+						}
+                        else if (pp=='d') {
+							dram_plc.power_limit_watts = setpoint;
+							ret = set_dram_rapl_power_limit_control(i, &dram_plc);
+						}
+						//fprintf(stdout, "Setpoint = %f & char = %c\n", setpoint,pp);
+						print_rapl_control_info(i);
+        			if (ret != 0)
+	    				fprintf(stdout, "Error setting RAPL power limit controls\n");
+				}					
+    		}
+			else if (setpoint == -1) // -1 for quit, therefore exit while()
+				break;
+		}
+		// else rcvd=-1 means perror("select") 
+		
+    }
+    end = clock();
+    read_tsc(&tsc);
+    fprintf(stdout,"TSC=%llu\n", tsc);
+}
 
 void get_CPU_temperature(char *thz0,char *thz1) // get temperature of thermal zones 0 & 1 -- code added by Joe Hall 4/19/15
 {
@@ -185,8 +311,7 @@ convert_time_to_sec(struct timeval tv)
 }
 
 
-void
-do_print_energy_info()
+void do_print_energy_info()
 {
     int i = 0;
     int domain = 0;
@@ -408,7 +533,7 @@ usage()
 {
     fprintf(stdout, "\nIntel(r) Power Gadget %s\n", version);
     fprintf(stdout, "\nUsage: \n");
-    fprintf(stdout, "%s [-e [sampling delay (ms) ] optional] -d [duration (sec)]\n", progname);
+    fprintf(stdout, "%s [-e [sampling delay (ms) ] optional] -d [duration (sec)] -q [quiet: Turns off all reading of power. Just sets the power limit.]\n", progname);
     fprintf(stdout, "\nExample: %s -e 1000 -d 10\n", progname);
     fprintf(stdout, "\n");
 }
@@ -419,11 +544,14 @@ cmdline(int argc, char **argv)
 {
     int             opt;
     uint64_t    delay_ms_temp = 1000;
-
+	 quiet = 0;
     progname = argv[0];
 
-    while ((opt = getopt(argc, argv, "e:d:")) != -1) {
+    while ((opt = getopt(argc, argv, "e:d:q")) != -1) {
         switch (opt) {
+		  case 'q':
+		  		quiet = 1;
+				break;
         case 'e':
             delay_ms_temp = atoi(optarg);
             if(delay_ms_temp > 0) {
@@ -538,7 +666,12 @@ main(int argc, char **argv)
     }
     
 	// prints energy info from msr registers and also polls stdin for power_limiting commands
+	if(quiet){
+    do_set_power_limit();
+	}
+	 else{
     do_print_energy_info();
+	 }
     
     // reset rapl power_limits to factory settings after do_print_energy_info()
     for (i=0;i<num_node;i++) { // added by Joe Hall 4/25/15
