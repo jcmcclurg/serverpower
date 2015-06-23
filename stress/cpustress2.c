@@ -41,11 +41,11 @@ int main ()
     printf("INSTRUCTIONS:\n");
     printf("1. please insert the time delay in a range of 0 to 500 \n");
     printf("2. to quit the program type q and press enter twice \n");
-    printf("3. to access the previous delay time you typed press p and enter\n");
-    printf("4. to make the CPU achieve its minimum performance press l and enter\n");
-    printf("5. to make the CPU achieve its maximum performance press h and enter\n"); 
-    printf("6. to show a map that contains increments of 5 percent from 20 to 100 percent,press m and enter\n");
-    printf("7. to show the instructions again, press i and enter\n");
+    printf("3. to access the previous delay time you typed press z and enter\n");
+    printf("4. to make the CPU achieve its minimum performance press v and enter\n");
+    printf("5. to make the CPU achieve its maximum performance press r and enter\n"); 
+    printf("6. to show a map that contains increments of 5 percent from 20 to 100 percent,press w and enter\n");
+    printf("7. to show the instructions again, press s and enter\n");
 
     while(ns.running)
     {
@@ -71,7 +71,7 @@ int main ()
             while(ns.running)
             {
 	      fgets(ns.sleeplen,sizeof(ns.sleeplen),stdin);
-		
+		printf("%d\n",strcmp(ns.sleeplen,"s"));
 		if(isalpha(ns.sleeplen[0]))
                 {
      		   i = i+1;
@@ -84,35 +84,37 @@ int main ()
 			   return EXIT_SUCCESS;
 			}
 			
-		  else if(strcmp(ns.sleeplen,"p") == 10)
+		  else if(strcmp(ns.sleeplen,"z") == 10)
 			{
 			store[1] = val;
 			ns.fieldsRead = 1;
-			printf("p key pressed\n");
+			printf("z key pressed\n");
 	printf("Fields read: %d, Number read by main: %f\n", ns.fieldsRead, store[1]);
 			printf("please insert the time delay \n ");
 			break;
 		 	}
 
-			else if(strcmp(ns.sleeplen,"l")==10 )
+			else if(strcmp(ns.sleeplen,"v")==10 )
 			{
 			ns.fieldsRead = 1;
 			store[1] = 10000;
 			ns.fieldsRead = 1;
-			printf("l key pressed\n");
+			printf("v key pressed\n");
 			printf("please insert the time delay \n ");
+		printf("Fields read: %d, Number read by main: %f\n", ns.fieldsRead, store[1]);
 			break;
 		 	}
-			else if(strcmp(ns.sleeplen,"h")==10 )
+			else if(strcmp(ns.sleeplen,"r")==10 )
 			{
 			ns.fieldsRead = 1;
 			  store[1] = 0; 
 			ns.fieldsRead = 1;
-			printf("h key pressed\n");
+			printf("r key pressed\n");
+		printf("Fields read: %d, Number read by main: %f\n", ns.fieldsRead, store[1]);
 			printf("please insert the time delay \n ");
 				break;
 			}
-			else if(strcmp(ns.sleeplen,"m")==10 )
+			else if(strcmp(ns.sleeplen,"w")==10 )
 			{
 			
 			ns.fieldsRead = 1;
@@ -124,22 +126,22 @@ int main ()
 			{
 			printf("             %d                        %f\n",per[k],time[k]);
 			}	
+		printf("w key pressed\n");
 		printf("Fields read: %d, Number read by main: %f\n", ns.fieldsRead, store[1]);
 			printf("please insert the time delay \n ");
 			   break;	
 			}
-		else if(strcmp(ns.sleeplen,"i")==10 )
+		else if(strcmp(ns.sleeplen,"s")==10)
 			{
-			store[1] = val;
 			ns.fieldsRead = 1;
 			 printf("INSTRUCTIONS:\n");
     printf("1. please insert the time delay in a range of 0 to 500 \n");
     printf("2. to quit the program type q and press enter twice \n");
-    printf("3. to access the previous delay time you typed press p and enter\n");
-    printf("4. to make the CPU achieve its minimum performance press l and enter\n");
-    printf("5. to make the CPU achieve its maximum performance press h and enter\n"); 
-    printf("6. to show a map that contains increments of 5 percent from 20 to 100 percent\n");
-    printf("7. to show the instructions again\n\n");
+    printf("3. to access the previous delay time you typed press z and enter\n");
+    printf("4. to make the CPU achieve its minimum performance press v and enter\n");
+    printf("5. to make the CPU achieve its maximum performance press r and enter\n"); 
+printf("6. to show a map that contains increments of 5 percent from 20 to 100 percent,press w and enter\n");
+    printf("7. to show the instructions again, press s and enter\n");
 	printf("Fields read: %d, Number read by main: %f\n", ns.fieldsRead, store[1]);
 	printf("please insert the time delay \n ");
 			break;
