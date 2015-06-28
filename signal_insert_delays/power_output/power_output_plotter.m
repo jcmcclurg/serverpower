@@ -40,4 +40,4 @@ set(gca(),'xtick', 1:20:numSteps, 'xticklabel', v(1:20:numSteps)*100 );
 title('CPU duty cycle vs average power')
 ylabel('Power (W) ')
 xlabel('Duty cycle (percent)')
-%print([b '.svg'],'-S1280x1024')
+print([b '.png'],'-S1280x1024')

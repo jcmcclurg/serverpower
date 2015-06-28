@@ -1,5 +1,6 @@
 b=input('Type the name: ','s')
-%b='855178272_1434669946';
+%b='253705126_1434500446';
+%b='244991366_1434682629';
 
 [status, output] = system(['cat ./' b '.log | grep "Starting power gadget at " | cut -d \  -f 5']);
 assert(status == 0);
@@ -27,19 +28,16 @@ riseTime = 0.1;
 
 windows = {};
 numSteps = (length(stepTimes)-1);
-avgNum = zeros(numSteps,1);
 for i = 1:numSteps
 	window = (a(:,1) >= (stepTimes(i)+riseTime)) & (a(:,1) < (stepTimes(i+1)-riseTime));
 	windows(i) = a(window,2);
-	avgNum(i) = sum(window);
 	%plot(a(window,1),a(window,2))
 end
 
 [v,i] = sort(stepValues);
 boxplot(windows(i(1:10:numSteps)));
-set(gca(),'xtick', 1:100:numSteps, 'xticklabel', v(1:100:numSteps) );
+set(gca(),'xtick', 1:20:numSteps, 'xticklabel', 100-v(1:20:numSteps) );
 title('CPU duty cycle vs average power')
 ylabel('Power (W) ')
 xlabel('Duty cycle (percent)')
 print([b '.png'],'-S1280x1024')
-mean(avgNum)
