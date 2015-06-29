@@ -10,7 +10,7 @@ echo The range is $rangeMin-$rangeMax. The value is sleep injection percent. >&2
 
 limitVal=0
 
-trap "echo 0 > $device/cur_state; echo 'Reset powerclamp on exit.' >&2; exit;" SIGINT SIGTERM
+trap "echo '0' > $device/cur_state; echo 'Reset powerclamp on exit.' >&2; exit;" SIGINT SIGTERM
 
 while [[ "$limitVal" != "q" ]]; do
 	if [ $(echo "$limitVal < $rangeMin" | bc) == 1 ]; then
@@ -18,10 +18,10 @@ while [[ "$limitVal" != "q" ]]; do
 	elif [ $(echo "$limitVal > $rangeMax" | bc) == 1 ]; then
 		limitVal=$rangeMax
 	fi
-	echo $limitVal > $device/cur_state
+	echo "$limitVal" > $device/cur_state
 	echo "Set to $limitVal" >&2
 	read limitVal
 done
-echo 0 > $device/cur_state;
+echo "0" > $device/cur_state;
 echo 'Reset powerclamp.' >&2;
 echo "Done" >&2
