@@ -1,5 +1,5 @@
 b=input('Type the name: ','s')
-%b='562281316_1435616496';
+%b='731046106_1435688014';
 
 [status, output] = system(['cat ./' b '.log | grep "Starting power gadget at " | cut -d \  -f 5']);
 assert(status == 0);
@@ -33,15 +33,16 @@ for i = 1:numSteps
 	%plot(a(window,1),a(window,2))
 end
 
-[v,i] = sort(100-stepValues);
-plotI = i(1:10:numSteps);
-plotV = v(1:10:numSteps);
-boxplot(windows(plotI));
-ticks = unique([1:5:length(plotI) length(plotI)]);
+[v,i] = sort(stepValues);
 
-set(gca(),'xtick', ticks, 'xticklabel', plotV(ticks) );
-title('CPU duty cycle vs average power')
+plotI = i;
+plotV = v;
+boxplot(windows(plotI));
+
+ticks = [1:2:length(plotI)];
+set(gca(),'xtick', ticks, 'xticklabel', plotV(ticks)/1e6 );
+title('CPU frequency vs average power')
 ylabel('Power (W) ')
-xlabel('Duty cycle (percent)')
+xlabel('CPU frequency (GHz)')
 print([b '.png'],'-S1280x1024')
-print('powerclamp.png','-S1280x1024')
+print('cpufreq.png','-S1280x1024')

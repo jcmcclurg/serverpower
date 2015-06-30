@@ -1,5 +1,4 @@
 b=input('Type the name: ','s')
-%b='253705126_1434500446';
 %b='244991366_1434682629';
 
 [status, output] = system(['cat ./' b '.log | grep "Starting power gadget at " | cut -d \  -f 5']);
@@ -35,9 +34,14 @@ for i = 1:numSteps
 end
 
 [v,i] = sort(stepValues);
-boxplot(windows(i(1:10:numSteps)));
-set(gca(),'xtick', 1:20:numSteps, 'xticklabel', v(1:20:numSteps)*100 );
+plotI = i(1:10:numSteps);
+plotV = v(1:10:numSteps);
+boxplot(windows(plotI));
+ticks = unique([1:5:length(plotI) length(plotI)]);
+
+set(gca(),'xtick', ticks, 'xticklabel', 100*plotV(ticks) );
 title('CPU duty cycle vs average power')
 ylabel('Power (W) ')
 xlabel('Duty cycle (percent)')
 print([b '.png'],'-S1280x1024')
+print('insert_delays.png','-S1280x1024')

@@ -36,10 +36,15 @@ for i = 1:numSteps
 end
 
 [v,i] = sort(stepValues);
-boxplot(windows(i(1:10:numSteps)));
-set(gca(),'xtick', 1:100:numSteps, 'xticklabel', v(1:100:numSteps) );
-title('CPU duty cycle vs average power')
+
+plotI = i(1:10:numSteps);
+plotV = v(1:10:numSteps);
+boxplot(windows(plotI));
+ticks = unique([1:5:length(plotI) length(plotI)]);
+
+set(gca(),'xtick', ticks, 'xticklabel', plotV(ticks) );
+title('RAPL package limit vs average power')
 ylabel('Power (W) ')
-xlabel('Duty cycle (percent)')
+xlabel('RAPL package limit (W)')
 print([b '.png'],'-S1280x1024')
-mean(avgNum)
+print('rapl.png','-S1280x1024')
