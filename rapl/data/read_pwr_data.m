@@ -24,7 +24,10 @@ p_pg=data{4};
 tmp0_pg=data{5};
 t_sp=data2{1};
 p_sp=data2{2};
-
+data_pg = [t_pg p_pg];
+data_sp = [t_sp p_sp];
+save data_pg.mat data_pg;
+save data_sp.mat data_sp;
 %plot data
 fh=figure();
 
@@ -32,7 +35,7 @@ plot(t_pg,p_pg,'r:.','displayname','power registers');
 hold on;
 grid on;
 %plot(t_lv,p_lv,'b:.','displayname','power meter');
-[xst,yst]=stairs(t_sp,p_sp,'g--','displayname','set point');
+[xst,yst]=stairs(t_sp(1:end-1),p_sp(1:end-1),'g--','displayname','set point');
 plot(xst,yst,'g--','displayname','setpoint');
 
 %plot(t_lv,p_lv_ave,'g','displayname','power meter ave (over 5)');
