@@ -12,7 +12,7 @@ sleep 5
 
 trap "echo 'Stopping stress' >&2; pkill -P $spid; echo 'Stopping power gadget' >&2; sudo kill -s SIGINT $pgpid; exit;" SIGINT SIGTERM
 
-./step_profile.sh | sudo ./powerclamp.sh
+./step_profile.sh | ./cpufreq.sh
 sleep 5
 echo "Stopping stress at "`date +%s.%N` >&2
 pkill -P $spid

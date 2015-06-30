@@ -1,23 +1,20 @@
 #!/bin/bash
 
 sleeplen=15
-steps=200
-minPower=0
-maxPower=50
 
 freqVals=($(sudo cpufreq-info -s | sed -e "s/:[^\n,]\+, \+/\n/g" | sed -e "s/:.\+//g"))
 
 sleep $sleeplen
-
-for i in $(seq ${#freqVals[@]}); do
-	d=`echo "($i - 1)/$steps + $minPower" | bc`
+len=${#freqVals[@]}
+for i in $(seq $len); do
+	d=${freqVals[$[ $i - 1 ]]}
 	echo "Step to $d at "`date +%s.%N` >&2
-	printf "%0.3f\n" $d
+	echo "$d"
 	sleep $sleeplen
 
-	d=`echo "scale=3; ($maxPower - $minPower)*($steps - $i)/$steps + $minPower" | bc`
+	d=${freqVals[$[ $len - $i ]]}
 	echo "Step to $d at "`date +%s.%N` >&2
-	printf "%0.3f\n" $d
+	echo "$d"
 	sleep $sleeplen
 done
 
