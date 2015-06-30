@@ -1,0 +1,15 @@
+% methods to check for name of connected usb drive
+sudo fdisk -l
+lsblk
+dmesg
+
+%example method to mount usb connected and named as /dev/sdc1
+sudo mkdir /media/usb (if does not exist)
+sudo mount /dev/sdc1 /media/usb
+
+% can not read files
+
+% to unmount
+sudo umount /dev/sdc1
+
+
