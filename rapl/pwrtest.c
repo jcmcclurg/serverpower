@@ -16,7 +16,7 @@ int main (void) {
 	int delay_us = delay_sec*1000000;
 	double num_steps = 10; // number of step inputs
 	//double dur_sec = 60; // test duration	
-	double pmax = 35;
+	double pmax = 44;
 	double pmin = 20;
     double step_height = (pmax-pmin)/num_steps;
 	int i;
