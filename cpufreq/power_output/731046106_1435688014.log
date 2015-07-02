@@ -1,0 +1,80 @@
+Starting power gadget at 1435688014.734855926
+Clock resolution:
+	tv_sec: 0
+	tv_nsec: 1
+Current time:
+	tv_sec: 8254
+	tv_nsec: 122874839
+Current time (s): 8254.122875
+Total energy consumed: 33204.047440
+Time (s) Power (W)
+Starting stress at 1435688019.738442972
+Welcome to the cpufreq cpu limiter. Please make sure you have
+intel_pstate=disable) on your kernel options.
+The range is 2200000,2100000,2000000,1900000,1800000,1700000,1600000,1500000,1400000,1300000,1200000. The value is the CPU frequency.
+The voltage is controlled by the processor.
+Set to governor to userspace (returned 0).
+Set to 2200000
+Step to 2200000 at 1435688039.838946018
+Set to 2200000
+Step to 1200000 at 1435688054.867003574
+Set to 1200000
+Step to 2100000 at 1435688069.899351746
+Set to 2100000
+Step to 1300000 at 1435688084.931010156
+Set to 1300000
+Step to 2000000 at 1435688099.963267573
+Set to 2000000
+Step to 1400000 at 1435688114.999037596
+Set to 1400000
+Step to 1900000 at 1435688130.027213062
+Set to 1900000
+Step to 1500000 at 1435688145.063057888
+Set to 1500000
+Step to 1800000 at 1435688160.091204586
+Set to 1800000
+Step to 1600000 at 1435688175.119081039
+Set to 1600000
+Step to 1700000 at 1435688190.143144147
+Set to 1700000
+Step to 1700000 at 1435688205.183137148
+Set to 1700000
+Step to 1600000 at 1435688220.207234549
+Set to 1600000
+Step to 1800000 at 1435688235.233966831
+Set to 1800000
+Step to 1500000 at 1435688250.263098364
+Set to 1500000
+Step to 1900000 at 1435688265.295203984
+Set to 1900000
+Step to 1400000 at 1435688280.319064666
+Set to 1400000
+Step to 2000000 at 1435688295.339222327
+Set to 2000000
+Step to 1300000 at 1435688310.361526628
+Set to 1300000
+Step to 2100000 at 1435688325.384058016
+Set to 2100000
+Step to 1200000 at 1435688340.418503730
+Set to 1200000
+Step to 2200000 at 1435688355.451327759
+Set to 2200000
+Quitting at 1435688370.475014847
+Reset cpufreq
+Done
+Stopping stress at 1435688375.554981066
+stress: FAIL: [5178] (416) <-- worker 5181 got signal 15
+stress: WARN: [5178] (418) now reaping child worker processes
+stress: FAIL: [5178] (422) kill error: No such process
+stress: FAIL: [5178] (416) <-- worker 5180 got signal 15
+stress: WARN: [5178] (418) now reaping child worker processes
+stress: FAIL: [5178] (422) kill error: No such process
+stress: FAIL: [5178] (416) <-- worker 5182 got signal 15
+stress: WARN: [5178] (418) now reaping child worker processes
+stress: FAIL: [5178] (422) kill error: No such process
+stress: FAIL: [5178] (416) <-- worker 5183 got signal 15
+stress: WARN: [5178] (418) now reaping child worker processes
+stress: FAIL: [5178] (422) kill error: No such process
+stress: FAIL: [5178] (452) failed run completed in 356s
+Stopping power gadget at 1435688380.587421150
+Done.
