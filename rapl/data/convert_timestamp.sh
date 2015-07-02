@@ -15,4 +15,4 @@ cut -d, -f2 setpoint.csv | tee power_sp.csv #> /dev/null
 paste -d ',' time_lv.csv power_lv.csv time_pg.csv power_pg.csv thermalzns.csv > pver.csv #> /dev/null
 paste -d ',' time_sp.csv power_sp.csv > setpt.csv #> /dev/null
 
-#octave read_pwr_data.m
+octave ~/joe/serverpower/rapl/data/read_pwr_data.m

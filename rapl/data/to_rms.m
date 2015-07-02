@@ -4,14 +4,14 @@ clear all;
 clc;
 
 % open file and get current data
-fid = fopen('scope_23_1.csv');
+fid = fopen('scope_24_1.csv');
 data_iac = textscan(fid,'%f %f','Delimiter',',','HeaderLines',2);
 fclose(fid);
 t_iac = data_iac{1}; % time (seconds)
 iac = data_iac{2}/2.0; % voltage_measurement/gain = current (Amps)
 
 % open file and get voltage data
-fid = fopen('scope_23_2.csv');
+fid = fopen('scope_24_2.csv');
 data_vac = textscan(fid,'%f %f','Delimiter',',','HeaderLines',2);
 fclose(fid);
 t_vac = data_vac{1}; % time (seconds)
@@ -65,19 +65,19 @@ for i=0:length(pinst_abs_ave)-1
 end
 
 
-%get power_gadget data
+	%get power_gadget data
 load data_pg.mat
-t_pg = data_pg(1:end,1);
+t_pg = data_pg(1:end,1)-47062.291;
 p_pg = data_pg(1:end,2);
-%load data_sp.mat
-%t_sp = data_sp(1:end,1);
-%p_sp = data_sp(1:end,2);
+	%load data_sp.mat
+	%t_sp = data_sp(1:end,1);
+	%p_sp = data_sp(1:end,2);
 
-%p_base=prms_ave-p_pg; %need to interpolate
+	%p_base=prms_ave-p_pg; %need to interpolate
 p_pg_interp=interp1(t_pg,p_pg,t_ave);
 p_base=pinst_ave-p_pg_interp;
 
-%plot data
+	%plot data
 figure;
 h2=plot(t_iac,prms,'b','displayname','RMS Power (running period window)');
 hold on;
