@@ -19,8 +19,8 @@ def worker(ns,i):
     i = 3.427239
     while ns.running:
         time.sleep(ns.sleeplen)
-        #i += np.sqrt(np.random.random())
-        i += i
+        i += np.sqrt(np.random.random())
+        #i += i
         j += 1
     fp = open(filename,'w+')
     fp.write("%d\n"%j)
