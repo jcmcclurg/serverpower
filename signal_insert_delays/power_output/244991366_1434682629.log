@@ -1,0 +1,1685 @@
+Starting power gadget at 1434682629.249115800
+Clock resolution:
+	tv_sec: 0
+	tv_nsec: 1
+Current time:
+	tv_sec: 14253
+	tv_nsec: 80111668
+Current time (s): 14253.080112
+Total energy consumed: 38206.560913
+Time (s) Power (W)
+Starting stress at 1434682634.252938411
+g[2]=3 has parent g[1]=2
+g[3]=4 has parent g[1]=2
+g[4]=5 has parent g[1]=2
+g[5]=7 has parent g[1]=2
+g[6]=8 has parent g[1]=2
+g[7]=9 has parent g[1]=2
+g[8]=10 has parent g[1]=2
+g[9]=11 has parent g[1]=2
+g[10]=12 has parent g[1]=2
+g[11]=13 has parent g[1]=2
+g[12]=14 has parent g[1]=2
+g[13]=15 has parent g[1]=2
+g[14]=16 has parent g[1]=2
+g[15]=17 has parent g[1]=2
+g[16]=18 has parent g[1]=2
+g[17]=19 has parent g[1]=2
+g[18]=20 has parent g[1]=2
+g[19]=21 has parent g[1]=2
+g[20]=22 has parent g[1]=2
+g[21]=23 has parent g[1]=2
+g[22]=24 has parent g[1]=2
+g[23]=25 has parent g[1]=2
+g[24]=26 has parent g[1]=2
+g[25]=27 has parent g[1]=2
+g[26]=28 has parent g[1]=2
+g[27]=29 has parent g[1]=2
+g[28]=30 has parent g[1]=2
+g[29]=31 has parent g[1]=2
+g[30]=32 has parent g[1]=2
+g[31]=33 has parent g[1]=2
+g[32]=34 has parent g[1]=2
+g[33]=35 has parent g[1]=2
+g[34]=36 has parent g[1]=2
+g[35]=37 has parent g[1]=2
+g[36]=38 has parent g[1]=2
+g[37]=39 has parent g[1]=2
+g[38]=40 has parent g[1]=2
+g[39]=41 has parent g[1]=2
+g[40]=42 has parent g[1]=2
+g[41]=43 has parent g[1]=2
+g[42]=44 has parent g[1]=2
+g[43]=45 has parent g[1]=2
+g[44]=46 has parent g[1]=2
+g[45]=47 has parent g[1]=2
+g[46]=48 has parent g[1]=2
+g[47]=49 has parent g[1]=2
+g[48]=50 has parent g[1]=2
+g[49]=51 has parent g[1]=2
+g[50]=52 has parent g[1]=2
+g[51]=53 has parent g[1]=2
+g[52]=54 has parent g[1]=2
+g[53]=55 has parent g[1]=2
+g[54]=56 has parent g[1]=2
+g[55]=57 has parent g[1]=2
+g[56]=58 has parent g[1]=2
+g[57]=59 has parent g[1]=2
+g[58]=60 has parent g[1]=2
+g[59]=61 has parent g[1]=2
+g[60]=62 has parent g[1]=2
+g[61]=63 has parent g[1]=2
+g[62]=64 has parent g[1]=2
+g[63]=65 has parent g[1]=2
+g[64]=66 has parent g[1]=2
+g[65]=67 has parent g[1]=2
+g[66]=68 has parent g[1]=2
+g[67]=69 has parent g[1]=2
+g[68]=70 has parent g[1]=2
+g[69]=71 has parent g[1]=2
+g[70]=72 has parent g[1]=2
+g[71]=73 has parent g[1]=2
+g[72]=74 has parent g[1]=2
+g[73]=75 has parent g[1]=2
+g[74]=76 has parent g[1]=2
+g[75]=77 has parent g[1]=2
+g[76]=78 has parent g[1]=2
+g[77]=79 has parent g[1]=2
+g[78]=80 has parent g[1]=2
+g[79]=81 has parent g[1]=2
+g[80]=82 has parent g[1]=2
+g[81]=83 has parent g[1]=2
+g[82]=84 has parent g[1]=2
+g[83]=85 has parent g[1]=2
+g[84]=86 has parent g[1]=2
+g[85]=87 has parent g[1]=2
+g[86]=88 has parent g[1]=2
+g[87]=89 has parent g[1]=2
+g[88]=90 has parent g[1]=2
+g[89]=91 has parent g[1]=2
+g[90]=92 has parent g[1]=2
+g[91]=93 has parent g[1]=2
+g[92]=94 has parent g[1]=2
+g[93]=95 has parent g[1]=2
+g[94]=96 has parent g[1]=2
+g[95]=97 has parent g[1]=2
+g[96]=98 has parent g[1]=2
+g[97]=99 has parent g[1]=2
+g[98]=100 has parent g[1]=2
+g[99]=101 has parent g[1]=2
+g[100]=102 has parent g[1]=2
+g[101]=103 has parent g[1]=2
+g[102]=104 has parent g[1]=2
+g[103]=106 has parent g[1]=2
+g[104]=108 has parent g[1]=2
+g[105]=109 has parent g[1]=2
+g[106]=110 has parent g[1]=2
+g[107]=122 has parent g[1]=2
+g[108]=123 has parent g[1]=2
+g[109]=124 has parent g[1]=2
+g[110]=126 has parent g[1]=2
+g[111]=145 has parent g[1]=2
+g[112]=146 has parent g[1]=2
+g[113]=152 has parent g[1]=2
+g[114]=194 has parent g[1]=2
+g[115]=199 has parent g[1]=2
+g[116]=203 has parent g[1]=2
+g[117]=204 has parent g[1]=2
+g[118]=205 has parent g[1]=2
+g[119]=206 has parent g[1]=2
+g[120]=207 has parent g[1]=2
+g[121]=208 has parent g[1]=2
+g[122]=209 has parent g[1]=2
+g[123]=210 has parent g[1]=2
+g[124]=211 has parent g[1]=2
+g[125]=212 has parent g[1]=2
+g[126]=213 has parent g[1]=2
+g[127]=214 has parent g[1]=2
+g[128]=215 has parent g[1]=2
+g[129]=236 has parent g[1]=2
+g[130]=238 has parent g[1]=2
+g[131]=240 has parent g[1]=2
+g[132]=241 has parent g[1]=2
+g[133]=242 has parent g[1]=2
+g[134]=245 has parent g[1]=2
+g[135]=262 has parent g[1]=2
+g[136]=263 has parent g[1]=2
+g[137]=264 has parent g[1]=2
+g[138]=371 has parent g[0]=1
+g[139]=434 has parent g[0]=1
+g[140]=441 has parent g[1]=2
+g[141]=443 has parent g[0]=1
+g[142]=519 has parent g[1]=2
+g[143]=549 has parent g[1]=2
+g[144]=624 has parent g[0]=1
+g[145]=631 has parent g[0]=1
+g[146]=805 has parent g[0]=1
+g[147]=807 has parent g[0]=1
+g[148]=810 has parent g[0]=1
+g[149]=821 has parent g[0]=1
+g[150]=832 has parent g[1]=2
+g[151]=948 has parent g[0]=1
+g[152]=949 has parent g[151]=948
+g[153]=1010 has parent g[0]=1
+g[154]=1011 has parent g[0]=1
+g[155]=1012 has parent g[154]=1011
+g[156]=1118 has parent g[0]=1
+g[157]=1405 has parent g[0]=1
+g[158]=1409 has parent g[0]=1
+g[159]=1410 has parent g[0]=1
+g[160]=1418 has parent g[0]=1
+g[161]=1420 has parent g[0]=1
+g[162]=1421 has parent g[0]=1
+g[163]=1424 has parent g[0]=1
+g[164]=1431 has parent g[0]=1
+g[165]=1432 has parent g[0]=1
+g[166]=1467 has parent g[0]=1
+g[167]=1477 has parent g[0]=1
+g[168]=1507 has parent g[160]=1418
+g[169]=1512 has parent g[0]=1
+g[170]=1641 has parent g[0]=1
+g[171]=1683 has parent g[0]=1
+g[172]=1758 has parent g[0]=1
+g[173]=1853 has parent g[0]=1
+g[174]=1992 has parent g[1]=2
+g[175]=1997 has parent g[1]=2
+g[176]=2050 has parent g[0]=1
+g[177]=2061 has parent g[0]=1
+g[178]=2128 has parent g[0]=1
+g[179]=2139 has parent g[173]=1853
+g[180]=2162 has parent g[1]=2
+g[181]=2408 has parent g[160]=1418
+g[182]=2454 has parent g[181]=2408
+g[183]=2457 has parent g[0]=1
+g[184]=2458 has parent g[0]=1
+g[185]=2477 has parent g[0]=1
+g[186]=2487 has parent g[0]=1
+g[187]=2489 has parent g[0]=1
+g[188]=2560 has parent g[0]=1
+g[189]=8963 has parent g[181]=2408
+g[190]=8965 has parent g[189]=8963
+g[191]=22534 has parent g[1]=2
+g[192]=24772 has parent g[0]=1
+g[193]=27732 has parent g[1]=2
+g[194]=27985 has parent g[1]=2
+g[195]=30683 has parent g[1]=2
+g[196]=30913 has parent g[190]=8965
+g[197]=30915 has parent g[196]=30913
+g[198]=30945 has parent g[190]=8965
+g[199]=30947 has parent g[198]=30945
+g[200]=31073 has parent g[190]=8965
+g[201]=31075 has parent g[200]=31073
+g[202]=31077 has parent g[201]=31075
+g[203]=31079 has parent g[202]=31077
+g[204]=31099 has parent g[201]=31075
+g[205]=31101 has parent g[204]=31099
+g[206]=31102 has parent g[204]=31099
+g[207]=31103 has parent g[204]=31099
+g[208]=31104 has parent g[204]=31099
+g[209]=31114 has parent g[199]=30947
+g[210]=31133 has parent g[201]=31075
+g[211]=31134 has parent g[201]=31075
+g[212]=31136 has parent g[210]=31133
+g[213]=31138 has parent g[211]=31134
+g[2]=3 has parent g[1]=2
+g[3]=4 has parent g[1]=2
+g[4]=5 has parent g[1]=2
+g[5]=7 has parent g[1]=2
+g[6]=8 has parent g[1]=2
+g[7]=9 has parent g[1]=2
+g[8]=10 has parent g[1]=2
+g[9]=11 has parent g[1]=2
+g[10]=12 has parent g[1]=2
+g[11]=13 has parent g[1]=2
+g[12]=14 has parent g[1]=2
+g[13]=15 has parent g[1]=2
+g[14]=16 has parent g[1]=2
+g[15]=17 has parent g[1]=2
+g[16]=18 has parent g[1]=2
+g[17]=19 has parent g[1]=2
+g[18]=20 has parent g[1]=2
+g[19]=21 has parent g[1]=2
+g[20]=22 has parent g[1]=2
+g[21]=23 has parent g[1]=2
+g[22]=24 has parent g[1]=2
+g[23]=25 has parent g[1]=2
+g[24]=26 has parent g[1]=2
+g[25]=27 has parent g[1]=2
+g[26]=28 has parent g[1]=2
+g[27]=29 has parent g[1]=2
+g[28]=30 has parent g[1]=2
+g[29]=31 has parent g[1]=2
+g[30]=32 has parent g[1]=2
+g[31]=33 has parent g[1]=2
+g[32]=34 has parent g[1]=2
+g[33]=35 has parent g[1]=2
+g[34]=36 has parent g[1]=2
+g[35]=37 has parent g[1]=2
+g[36]=38 has parent g[1]=2
+g[37]=39 has parent g[1]=2
+g[38]=40 has parent g[1]=2
+g[39]=41 has parent g[1]=2
+g[40]=42 has parent g[1]=2
+g[41]=43 has parent g[1]=2
+g[42]=44 has parent g[1]=2
+g[43]=45 has parent g[1]=2
+g[44]=46 has parent g[1]=2
+g[45]=47 has parent g[1]=2
+g[46]=48 has parent g[1]=2
+g[47]=49 has parent g[1]=2
+g[48]=50 has parent g[1]=2
+g[49]=51 has parent g[1]=2
+g[50]=52 has parent g[1]=2
+g[51]=53 has parent g[1]=2
+g[52]=54 has parent g[1]=2
+g[53]=55 has parent g[1]=2
+g[54]=56 has parent g[1]=2
+g[55]=57 has parent g[1]=2
+g[56]=58 has parent g[1]=2
+g[57]=59 has parent g[1]=2
+g[58]=60 has parent g[1]=2
+g[59]=61 has parent g[1]=2
+g[60]=62 has parent g[1]=2
+g[61]=63 has parent g[1]=2
+g[62]=64 has parent g[1]=2
+g[63]=65 has parent g[1]=2
+g[64]=66 has parent g[1]=2
+g[65]=67 has parent g[1]=2
+g[66]=68 has parent g[1]=2
+g[67]=69 has parent g[1]=2
+g[68]=70 has parent g[1]=2
+g[69]=71 has parent g[1]=2
+g[70]=72 has parent g[1]=2
+g[71]=73 has parent g[1]=2
+g[72]=74 has parent g[1]=2
+g[73]=75 has parent g[1]=2
+g[74]=76 has parent g[1]=2
+g[75]=77 has parent g[1]=2
+g[76]=78 has parent g[1]=2
+g[77]=79 has parent g[1]=2
+g[78]=80 has parent g[1]=2
+g[79]=81 has parent g[1]=2
+g[80]=82 has parent g[1]=2
+g[81]=83 has parent g[1]=2
+g[82]=84 has parent g[1]=2
+g[83]=85 has parent g[1]=2
+g[84]=86 has parent g[1]=2
+g[85]=87 has parent g[1]=2
+g[86]=88 has parent g[1]=2
+g[87]=89 has parent g[1]=2
+g[88]=90 has parent g[1]=2
+g[89]=91 has parent g[1]=2
+g[90]=92 has parent g[1]=2
+g[91]=93 has parent g[1]=2
+g[92]=94 has parent g[1]=2
+g[93]=95 has parent g[1]=2
+g[94]=96 has parent g[1]=2
+g[95]=97 has parent g[1]=2
+g[96]=98 has parent g[1]=2
+g[97]=99 has parent g[1]=2
+g[98]=100 has parent g[1]=2
+g[99]=101 has parent g[1]=2
+g[100]=102 has parent g[1]=2
+g[101]=103 has parent g[1]=2
+g[102]=104 has parent g[1]=2
+g[103]=106 has parent g[1]=2
+g[104]=108 has parent g[1]=2
+g[105]=109 has parent g[1]=2
+g[106]=110 has parent g[1]=2
+g[107]=122 has parent g[1]=2
+g[108]=123 has parent g[1]=2
+g[109]=124 has parent g[1]=2
+g[110]=126 has parent g[1]=2
+g[111]=145 has parent g[1]=2
+g[112]=146 has parent g[1]=2
+g[113]=152 has parent g[1]=2
+g[114]=194 has parent g[1]=2
+g[115]=199 has parent g[1]=2
+g[116]=203 has parent g[1]=2
+g[117]=204 has parent g[1]=2
+g[118]=205 has parent g[1]=2
+g[119]=206 has parent g[1]=2
+g[120]=207 has parent g[1]=2
+g[121]=208 has parent g[1]=2
+g[122]=209 has parent g[1]=2
+g[123]=210 has parent g[1]=2
+g[124]=211 has parent g[1]=2
+g[125]=212 has parent g[1]=2
+g[126]=213 has parent g[1]=2
+g[127]=214 has parent g[1]=2
+g[128]=215 has parent g[1]=2
+g[129]=236 has parent g[1]=2
+g[130]=238 has parent g[1]=2
+g[131]=240 has parent g[1]=2
+g[132]=241 has parent g[1]=2
+g[133]=242 has parent g[1]=2
+g[134]=245 has parent g[1]=2
+g[135]=262 has parent g[1]=2
+g[136]=263 has parent g[1]=2
+g[137]=264 has parent g[1]=2
+g[138]=371 has parent g[0]=1
+g[139]=434 has parent g[0]=1
+g[140]=441 has parent g[1]=2
+g[141]=443 has parent g[0]=1
+g[142]=519 has parent g[1]=2
+g[143]=549 has parent g[1]=2
+g[144]=624 has parent g[0]=1
+g[145]=631 has parent g[0]=1
+g[146]=805 has parent g[0]=1
+g[147]=807 has parent g[0]=1
+g[148]=810 has parent g[0]=1
+g[149]=821 has parent g[0]=1
+g[150]=832 has parent g[1]=2
+g[151]=948 has parent g[0]=1
+g[152]=949 has parent g[151]=948
+g[153]=1010 has parent g[0]=1
+g[154]=1011 has parent g[0]=1
+g[155]=1012 has parent g[154]=1011
+g[156]=1118 has parent g[0]=1
+g[157]=1405 has parent g[0]=1
+g[158]=1409 has parent g[0]=1
+g[159]=1410 has parent g[0]=1
+g[160]=1418 has parent g[0]=1
+g[161]=1420 has parent g[0]=1
+g[162]=1421 has parent g[0]=1
+g[163]=1424 has parent g[0]=1
+g[164]=1431 has parent g[0]=1
+g[165]=1432 has parent g[0]=1
+g[166]=1467 has parent g[0]=1
+g[167]=1477 has parent g[0]=1
+g[168]=1507 has parent g[160]=1418
+g[169]=1512 has parent g[0]=1
+g[170]=1641 has parent g[0]=1
+g[171]=1683 has parent g[0]=1
+g[172]=1758 has parent g[0]=1
+g[173]=1853 has parent g[0]=1
+g[174]=1992 has parent g[1]=2
+g[175]=1997 has parent g[1]=2
+g[176]=2050 has parent g[0]=1
+g[177]=2061 has parent g[0]=1
+g[178]=2128 has parent g[0]=1
+g[179]=2139 has parent g[173]=1853
+g[180]=2162 has parent g[1]=2
+g[181]=2408 has parent g[160]=1418
+g[182]=2454 has parent g[181]=2408
+g[183]=2457 has parent g[0]=1
+g[184]=2458 has parent g[0]=1
+g[185]=2477 has parent g[0]=1
+g[186]=2487 has parent g[0]=1
+g[187]=2489 has parent g[0]=1
+g[188]=2560 has parent g[0]=1
+g[189]=8963 has parent g[181]=2408
+g[190]=8965 has parent g[189]=8963
+g[191]=22534 has parent g[1]=2
+g[192]=24772 has parent g[0]=1
+g[193]=27732 has parent g[1]=2
+g[194]=27985 has parent g[1]=2
+g[195]=30683 has parent g[1]=2
+g[196]=30913 has parent g[190]=8965
+g[197]=30915 has parent g[196]=30913
+g[198]=30945 has parent g[190]=8965
+g[199]=30947 has parent g[198]=30945
+g[200]=31073 has parent g[190]=8965
+g[201]=31075 has parent g[200]=31073
+g[202]=31077 has parent g[201]=31075
+g[203]=31079 has parent g[202]=31077
+g[204]=31099 has parent g[201]=31075
+g[205]=31101 has parent g[204]=31099
+g[206]=31102 has parent g[204]=31099
+g[207]=31103 has parent g[204]=31099
+g[208]=31104 has parent g[204]=31099
+g[209]=31114 has parent g[199]=30947
+g[210]=31133 has parent g[201]=31075
+g[211]=31134 has parent g[201]=31075
+g[212]=31136 has parent g[210]=31133
+g[213]=31138 has parent g[211]=31134
+Trying to controll all the PIDs.
+Exclusion list (13): 31073 8965 31073 31075 31073 31075 31077 31133 31075 31133 31075 31073 31134 
+Updating 214 children (en=1):
+1 has insufficient permissions to stop.
+Oops. 1 isn't stoppable.
+2 has insufficient permissions to stop.
+Oops. 2 isn't stoppable.
+3 has insufficient permissions to stop.
+Oops. 3 isn't stoppable.
+4 has insufficient permissions to stop.
+Oops. 4 isn't stoppable.
+5 has insufficient permissions to stop.
+Oops. 5 isn't stoppable.
+7 has insufficient permissions to stop.
+Oops. 7 isn't stoppable.
+8 has insufficient permissions to stop.
+Oops. 8 isn't stoppable.
+9 has insufficient permissions to stop.
+Oops. 9 isn't stoppable.
+10 has insufficient permissions to stop.
+Oops. 10 isn't stoppable.
+11 has insufficient permissions to stop.
+Oops. 11 isn't stoppable.
+12 has insufficient permissions to stop.
+Oops. 12 isn't stoppable.
+13 has insufficient permissions to stop.
+Oops. 13 isn't stoppable.
+14 has insufficient permissions to stop.
+Oops. 14 isn't stoppable.
+15 has insufficient permissions to stop.
+Oops. 15 isn't stoppable.
+16 has insufficient permissions to stop.
+Oops. 16 isn't stoppable.
+17 has insufficient permissions to stop.
+Oops. 17 isn't stoppable.
+18 has insufficient permissions to stop.
+Oops. 18 isn't stoppable.
+19 has insufficient permissions to stop.
+Oops. 19 isn't stoppable.
+20 has insufficient permissions to stop.
+Oops. 20 isn't stoppable.
+21 has insufficient permissions to stop.
+Oops. 21 isn't stoppable.
+22 has insufficient permissions to stop.
+Oops. 22 isn't stoppable.
+23 has insufficient permissions to stop.
+Oops. 23 isn't stoppable.
+24 has insufficient permissions to stop.
+Oops. 24 isn't stoppable.
+25 has insufficient permissions to stop.
+Oops. 25 isn't stoppable.
+26 has insufficient permissions to stop.
+Oops. 26 isn't stoppable.
+27 has insufficient permissions to stop.
+Oops. 27 isn't stoppable.
+28 has insufficient permissions to stop.
+Oops. 28 isn't stoppable.
+29 has insufficient permissions to stop.
+Oops. 29 isn't stoppable.
+30 has insufficient permissions to stop.
+Oops. 30 isn't stoppable.
+31 has insufficient permissions to stop.
+Oops. 31 isn't stoppable.
+32 has insufficient permissions to stop.
+Oops. 32 isn't stoppable.
+33 has insufficient permissions to stop.
+Oops. 33 isn't stoppable.
+34 has insufficient permissions to stop.
+Oops. 34 isn't stoppable.
+35 has insufficient permissions to stop.
+Oops. 35 isn't stoppable.
+36 has insufficient permissions to stop.
+Oops. 36 isn't stoppable.
+37 has insufficient permissions to stop.
+Oops. 37 isn't stoppable.
+38 has insufficient permissions to stop.
+Oops. 38 isn't stoppable.
+39 has insufficient permissions to stop.
+Oops. 39 isn't stoppable.
+40 has insufficient permissions to stop.
+Oops. 40 isn't stoppable.
+41 has insufficient permissions to stop.
+Oops. 41 isn't stoppable.
+42 has insufficient permissions to stop.
+Oops. 42 isn't stoppable.
+43 has insufficient permissions to stop.
+Oops. 43 isn't stoppable.
+44 has insufficient permissions to stop.
+Oops. 44 isn't stoppable.
+45 has insufficient permissions to stop.
+Oops. 45 isn't stoppable.
+46 has insufficient permissions to stop.
+Oops. 46 isn't stoppable.
+47 has insufficient permissions to stop.
+Oops. 47 isn't stoppable.
+48 has insufficient permissions to stop.
+Oops. 48 isn't stoppable.
+49 has insufficient permissions to stop.
+Oops. 49 isn't stoppable.
+50 has insufficient permissions to stop.
+Oops. 50 isn't stoppable.
+51 has insufficient permissions to stop.
+Oops. 51 isn't stoppable.
+52 has insufficient permissions to stop.
+Oops. 52 isn't stoppable.
+53 has insufficient permissions to stop.
+Oops. 53 isn't stoppable.
+54 has insufficient permissions to stop.
+Oops. 54 isn't stoppable.
+55 has insufficient permissions to stop.
+Oops. 55 isn't stoppable.
+56 has insufficient permissions to stop.
+Oops. 56 isn't stoppable.
+57 has insufficient permissions to stop.
+Oops. 57 isn't stoppable.
+58 has insufficient permissions to stop.
+Oops. 58 isn't stoppable.
+59 has insufficient permissions to stop.
+Oops. 59 isn't stoppable.
+60 has insufficient permissions to stop.
+Oops. 60 isn't stoppable.
+61 has insufficient permissions to stop.
+Oops. 61 isn't stoppable.
+62 has insufficient permissions to stop.
+Oops. 62 isn't stoppable.
+63 has insufficient permissions to stop.
+Oops. 63 isn't stoppable.
+64 has insufficient permissions to stop.
+Oops. 64 isn't stoppable.
+65 has insufficient permissions to stop.
+Oops. 65 isn't stoppable.
+66 has insufficient permissions to stop.
+Oops. 66 isn't stoppable.
+67 has insufficient permissions to stop.
+Oops. 67 isn't stoppable.
+68 has insufficient permissions to stop.
+Oops. 68 isn't stoppable.
+69 has insufficient permissions to stop.
+Oops. 69 isn't stoppable.
+70 has insufficient permissions to stop.
+Oops. 70 isn't stoppable.
+71 has insufficient permissions to stop.
+Oops. 71 isn't stoppable.
+72 has insufficient permissions to stop.
+Oops. 72 isn't stoppable.
+73 has insufficient permissions to stop.
+Oops. 73 isn't stoppable.
+74 has insufficient permissions to stop.
+Oops. 74 isn't stoppable.
+75 has insufficient permissions to stop.
+Oops. 75 isn't stoppable.
+76 has insufficient permissions to stop.
+Oops. 76 isn't stoppable.
+77 has insufficient permissions to stop.
+Oops. 77 isn't stoppable.
+78 has insufficient permissions to stop.
+Oops. 78 isn't stoppable.
+79 has insufficient permissions to stop.
+Oops. 79 isn't stoppable.
+80 has insufficient permissions to stop.
+Oops. 80 isn't stoppable.
+81 has insufficient permissions to stop.
+Oops. 81 isn't stoppable.
+82 has insufficient permissions to stop.
+Oops. 82 isn't stoppable.
+83 has insufficient permissions to stop.
+Oops. 83 isn't stoppable.
+84 has insufficient permissions to stop.
+Oops. 84 isn't stoppable.
+85 has insufficient permissions to stop.
+Oops. 85 isn't stoppable.
+86 has insufficient permissions to stop.
+Oops. 86 isn't stoppable.
+87 has insufficient permissions to stop.
+Oops. 87 isn't stoppable.
+88 has insufficient permissions to stop.
+Oops. 88 isn't stoppable.
+89 has insufficient permissions to stop.
+Oops. 89 isn't stoppable.
+90 has insufficient permissions to stop.
+Oops. 90 isn't stoppable.
+91 has insufficient permissions to stop.
+Oops. 91 isn't stoppable.
+92 has insufficient permissions to stop.
+Oops. 92 isn't stoppable.
+93 has insufficient permissions to stop.
+Oops. 93 isn't stoppable.
+94 has insufficient permissions to stop.
+Oops. 94 isn't stoppable.
+95 has insufficient permissions to stop.
+Oops. 95 isn't stoppable.
+96 has insufficient permissions to stop.
+Oops. 96 isn't stoppable.
+97 has insufficient permissions to stop.
+Oops. 97 isn't stoppable.
+98 has insufficient permissions to stop.
+Oops. 98 isn't stoppable.
+99 has insufficient permissions to stop.
+Oops. 99 isn't stoppable.
+100 has insufficient permissions to stop.
+Oops. 100 isn't stoppable.
+101 has insufficient permissions to stop.
+Oops. 101 isn't stoppable.
+102 has insufficient permissions to stop.
+Oops. 102 isn't stoppable.
+103 has insufficient permissions to stop.
+Oops. 103 isn't stoppable.
+104 has insufficient permissions to stop.
+Oops. 104 isn't stoppable.
+106 has insufficient permissions to stop.
+Oops. 106 isn't stoppable.
+108 has insufficient permissions to stop.
+Oops. 108 isn't stoppable.
+109 has insufficient permissions to stop.
+Oops. 109 isn't stoppable.
+110 has insufficient permissions to stop.
+Oops. 110 isn't stoppable.
+122 has insufficient permissions to stop.
+Oops. 122 isn't stoppable.
+123 has insufficient permissions to stop.
+Oops. 123 isn't stoppable.
+124 has insufficient permissions to stop.
+Oops. 124 isn't stoppable.
+126 has insufficient permissions to stop.
+Oops. 126 isn't stoppable.
+145 has insufficient permissions to stop.
+Oops. 145 isn't stoppable.
+146 has insufficient permissions to stop.
+Oops. 146 isn't stoppable.
+152 has insufficient permissions to stop.
+Oops. 152 isn't stoppable.
+194 has insufficient permissions to stop.
+Oops. 194 isn't stoppable.
+199 has insufficient permissions to stop.
+Oops. 199 isn't stoppable.
+203 has insufficient permissions to stop.
+Oops. 203 isn't stoppable.
+204 has insufficient permissions to stop.
+Oops. 204 isn't stoppable.
+205 has insufficient permissions to stop.
+Oops. 205 isn't stoppable.
+206 has insufficient permissions to stop.
+Oops. 206 isn't stoppable.
+207 has insufficient permissions to stop.
+Oops. 207 isn't stoppable.
+208 has insufficient permissions to stop.
+Oops. 208 isn't stoppable.
+209 has insufficient permissions to stop.
+Oops. 209 isn't stoppable.
+210 has insufficient permissions to stop.
+Oops. 210 isn't stoppable.
+211 has insufficient permissions to stop.
+Oops. 211 isn't stoppable.
+212 has insufficient permissions to stop.
+Oops. 212 isn't stoppable.
+213 has insufficient permissions to stop.
+Oops. 213 isn't stoppable.
+214 has insufficient permissions to stop.
+Oops. 214 isn't stoppable.
+215 has insufficient permissions to stop.
+Oops. 215 isn't stoppable.
+236 has insufficient permissions to stop.
+Oops. 236 isn't stoppable.
+238 has insufficient permissions to stop.
+Oops. 238 isn't stoppable.
+240 has insufficient permissions to stop.
+Oops. 240 isn't stoppable.
+241 has insufficient permissions to stop.
+Oops. 241 isn't stoppable.
+242 has insufficient permissions to stop.
+Oops. 242 isn't stoppable.
+245 has insufficient permissions to stop.
+Oops. 245 isn't stoppable.
+262 has insufficient permissions to stop.
+Oops. 262 isn't stoppable.
+263 has insufficient permissions to stop.
+Oops. 263 isn't stoppable.
+264 has insufficient permissions to stop.
+Oops. 264 isn't stoppable.
+371 has insufficient permissions to stop.
+Oops. 371 isn't stoppable.
+434 has insufficient permissions to stop.
+Oops. 434 isn't stoppable.
+441 has insufficient permissions to stop.
+Oops. 441 isn't stoppable.
+443 has insufficient permissions to stop.
+Oops. 443 isn't stoppable.
+519 has insufficient permissions to stop.
+Oops. 519 isn't stoppable.
+549 has insufficient permissions to stop.
+Oops. 549 isn't stoppable.
+624 has insufficient permissions to stop.
+Oops. 624 isn't stoppable.
+631 has insufficient permissions to stop.
+Oops. 631 isn't stoppable.
+805 has insufficient permissions to stop.
+Oops. 805 isn't stoppable.
+807 has insufficient permissions to stop.
+Oops. 807 isn't stoppable.
+810 has insufficient permissions to stop.
+Oops. 810 isn't stoppable.
+821 has insufficient permissions to stop.
+Oops. 821 isn't stoppable.
+832 has insufficient permissions to stop.
+Oops. 832 isn't stoppable.
+948 has insufficient permissions to stop.
+Oops. 948 isn't stoppable.
+949 has insufficient permissions to stop.
+Oops. 949 isn't stoppable.
+1010 has insufficient permissions to stop.
+Oops. 1010 isn't stoppable.
+1011 has insufficient permissions to stop.
+Oops. 1011 isn't stoppable.
+1012 has insufficient permissions to stop.
+Oops. 1012 isn't stoppable.
+1118 has insufficient permissions to stop.
+Oops. 1118 isn't stoppable.
+1405 has insufficient permissions to stop.
+Oops. 1405 isn't stoppable.
+1409 has insufficient permissions to stop.
+Oops. 1409 isn't stoppable.
+1410 has insufficient permissions to stop.
+Oops. 1410 isn't stoppable.
+1418 has insufficient permissions to stop.
+Oops. 1418 isn't stoppable.
+1420 has insufficient permissions to stop.
+Oops. 1420 isn't stoppable.
+1421 has insufficient permissions to stop.
+Oops. 1421 isn't stoppable.
+1424 has insufficient permissions to stop.
+Oops. 1424 isn't stoppable.
+1431 has insufficient permissions to stop.
+Oops. 1431 isn't stoppable.
+1432 has insufficient permissions to stop.
+Oops. 1432 isn't stoppable.
+1467 has insufficient permissions to stop.
+Oops. 1467 isn't stoppable.
+1477 has insufficient permissions to stop.
+Oops. 1477 isn't stoppable.
+1507 has insufficient permissions to stop.
+Oops. 1507 isn't stoppable.
+1512 has insufficient permissions to stop.
+Oops. 1512 isn't stoppable.
+1641 has insufficient permissions to stop.
+Oops. 1641 isn't stoppable.
+1683 has insufficient permissions to stop.
+Oops. 1683 isn't stoppable.
+1758 has insufficient permissions to stop.
+Oops. 1758 isn't stoppable.
+1853 has insufficient permissions to stop.
+Oops. 1853 isn't stoppable.
+1992 has insufficient permissions to stop.
+Oops. 1992 isn't stoppable.
+1997 has insufficient permissions to stop.
+Oops. 1997 isn't stoppable.
+2050 has insufficient permissions to stop.
+Oops. 2050 isn't stoppable.
+2061 has insufficient permissions to stop.
+Oops. 2061 isn't stoppable.
+2128 has insufficient permissions to stop.
+Oops. 2128 isn't stoppable.
+2139 is stoppable.
+Yes. 2139 is child.
+2162 has insufficient permissions to stop.
+Oops. 2162 isn't stoppable.
+2408 is stoppable.
+Yes. 2408 is child.
+2454 is stoppable.
+Yes. 2454 is child.
+2457 is stoppable.
+Yes. 2457 is child.
+2458 is stoppable.
+Yes. 2458 is child.
+2477 is stoppable.
+Yes. 2477 is child.
+2487 is stoppable.
+Yes. 2487 is child.
+2489 has insufficient permissions to stop.
+Oops. 2489 isn't stoppable.
+2560 is stoppable.
+Yes. 2560 is child.
+8963 is stoppable.
+Yes. 8963 is child.
+Oops. 8965 is on exclusion list.
+22534 has insufficient permissions to stop.
+Oops. 22534 isn't stoppable.
+24772 has insufficient permissions to stop.
+Oops. 24772 isn't stoppable.
+27732 has insufficient permissions to stop.
+Oops. 27732 isn't stoppable.
+27985 has insufficient permissions to stop.
+Oops. 27985 isn't stoppable.
+30683 has insufficient permissions to stop.
+Oops. 30683 isn't stoppable.
+30913 is stoppable.
+Yes. 30913 is child.
+30915 is stoppable.
+Yes. 30915 is child.
+30945 is stoppable.
+Yes. 30945 is child.
+30947 is stoppable.
+Yes. 30947 is child.
+Oops. 31073 is on exclusion list.
+Oops. 31075 is on exclusion list.
+Oops. 31077 is on exclusion list.
+31079 has insufficient permissions to stop.
+Oops. 31079 isn't stoppable.
+31099 is stoppable.
+Yes. 31099 is child.
+31101 is stoppable.
+Yes. 31101 is child.
+31102 is stoppable.
+Yes. 31102 is child.
+31103 is stoppable.
+Yes. 31103 is child.
+31104 is stoppable.
+Yes. 31104 is child.
+31114 is stoppable.
+Yes. 31114 is child.
+Oops. 31133 is on exclusion list.
+Oops. 31134 is on exclusion list.
+31136 is stoppable.
+Yes. 31136 is child.
+31138 is self.
+Oops. 31138 isn't stoppable.
+Found 20 children.
+Controllable list: (bash)(2139) (openbox)(2408) (ssh-agent)(2454) (dbus-launch)(2457) (dbus-daemon)(2458) (applet.py)(2477) (pulseaudio)(2487) (gconfd-2)(2560) (x-terminal-emul)(8963) (xterm)(30913) (bash)(30915) (xterm)(30945) (bash)(30947) (stress)(31099) (stress)(31101) (stress)(31102) (stress)(31103) (stress)(31104) (tail)(31114) (sleep)(31136) 
+Establishing handler for signal 34
+timer ID is 0x12263b0
+Unblocking signal 34
+Timer vals: 0, 100000000
+Period = 0.100000
+Duty = 0.500000
+Step to 0.0000 at 1434682654.394909311
+Duty = 0.010000
+Step to 0.9950 at 1434682669.397579139
+Duty = 0.990000
+Step to 0.0050 at 1434682684.400194124
+Duty = 0.010000
+Step to 0.9900 at 1434682699.421491757
+Duty = 0.990000
+Step to 0.0100 at 1434682714.435159099
+Duty = 0.010000
+Step to 0.9850 at 1434682729.452934725
+Duty = 0.985000
+Step to 0.0150 at 1434682744.467158949
+Duty = 0.015000
+Step to 0.9800 at 1434682759.481370692
+Duty = 0.980000
+Step to 0.0200 at 1434682774.495155709
+Duty = 0.020000
+Step to 0.9750 at 1434682789.509180554
+Duty = 0.975000
+Step to 0.0250 at 1434682804.526175925
+Duty = 0.025000
+Step to 0.9700 at 1434682819.548928341
+Duty = 0.970000
+Step to 0.0300 at 1434682834.567162429
+Duty = 0.030000
+Step to 0.9650 at 1434682849.599707543
+Duty = 0.965000
+Step to 0.0350 at 1434682864.619176224
+Duty = 0.035000
+Step to 0.9600 at 1434682879.637121176
+Duty = 0.960000
+Step to 0.0400 at 1434682894.659164746
+Duty = 0.040000
+Step to 0.9550 at 1434682909.684964564
+Duty = 0.955000
+Step to 0.0450 at 1434682924.696175442
+Duty = 0.045000
+Step to 0.9500 at 1434682939.698866091
+Duty = 0.950000
+Step to 0.0500 at 1434682954.715171096
+Duty = 0.050000
+Step to 0.9450 at 1434682969.724275235
+Duty = 0.945000
+Step to 0.0550 at 1434682984.747168111
+Duty = 0.055000
+Step to 0.9400 at 1434682999.760965068
+Duty = 0.940000
+Step to 0.0600 at 1434683014.779155855
+Duty = 0.060000
+Step to 0.9350 at 1434683029.807201466
+Duty = 0.935000
+Step to 0.0650 at 1434683044.827169286
+Duty = 0.065000
+Step to 0.9300 at 1434683059.844947307
+Duty = 0.930000
+Step to 0.0700 at 1434683074.859162239
+Duty = 0.070000
+Step to 0.9250 at 1434683089.884872546
+Duty = 0.925000
+Step to 0.0750 at 1434683104.893201627
+Duty = 0.075000
+Step to 0.9200 at 1434683119.895857720
+Duty = 0.920000
+Step to 0.0800 at 1434683134.898448750
+Duty = 0.080000
+Step to 0.9150 at 1434683149.909247938
+Duty = 0.915000
+Step to 0.0850 at 1434683164.927165574
+Duty = 0.085000
+Step to 0.9100 at 1434683179.948910042
+Duty = 0.910000
+Step to 0.0900 at 1434683194.963125401
+Duty = 0.090000
+Step to 0.9050 at 1434683209.976962316
+Duty = 0.905000
+Step to 0.0950 at 1434683224.991154308
+Duty = 0.095000
+Step to 0.9000 at 1434683239.993817604
+Duty = 0.900000
+Step to 0.1000 at 1434683254.996473208
+Duty = 0.100000
+Step to 0.8950 at 1434683269.999095598
+Duty = 0.895000
+Step to 0.1050 at 1434683285.015175804
+Duty = 0.105000
+Step to 0.8900 at 1434683300.028784323
+Duty = 0.890000
+Step to 0.1100 at 1434683315.047165390
+Duty = 0.110000
+Step to 0.8850 at 1434683330.064954345
+Duty = 0.885000
+Step to 0.1150 at 1434683345.087135429
+Duty = 0.115000
+Step to 0.8800 at 1434683360.090955171
+Duty = 0.880000
+Step to 0.1200 at 1434683375.093568791
+Duty = 0.120000
+Step to 0.8750 at 1434683390.096225666
+Duty = 0.875000
+Step to 0.1250 at 1434683405.098804110
+Duty = 0.125000
+Step to 0.8700 at 1434683420.111520215
+Duty = 0.870000
+Step to 0.1300 at 1434683435.135174453
+Duty = 0.130000
+Step to 0.8650 at 1434683450.150777152
+Duty = 0.865000
+Step to 0.1350 at 1434683465.167158646
+Duty = 0.135000
+Step to 0.8600 at 1434683480.181280217
+Duty = 0.860000
+Step to 0.1400 at 1434683495.186698064
+Duty = 0.140000
+Step to 0.8550 at 1434683510.189337371
+Duty = 0.855000
+Step to 0.1450 at 1434683525.192006661
+Duty = 0.145000
+Step to 0.8500 at 1434683540.194091813
+Duty = 0.850000
+Step to 0.1500 at 1434683555.196255157
+Duty = 0.150000
+Step to 0.8450 at 1434683570.198831128
+Duty = 0.845000
+Step to 0.1550 at 1434683585.219159939
+Duty = 0.155000
+Step to 0.8400 at 1434683600.244862075
+Duty = 0.840000
+Step to 0.1600 at 1434683615.254172216
+Duty = 0.160000
+Step to 0.8350 at 1434683630.256616792
+Duty = 0.835000
+Step to 0.1650 at 1434683645.275169770
+Duty = 0.165000
+Step to 0.8300 at 1434683660.285367119
+Duty = 0.830000
+Step to 0.1700 at 1434683675.287636047
+Duty = 0.170000
+Step to 0.8250 at 1434683690.289834042
+Duty = 0.825000
+Step to 0.1750 at 1434683705.291981357
+Duty = 0.175000
+Step to 0.8200 at 1434683720.294266716
+Duty = 0.820000
+Step to 0.1800 at 1434683735.296535255
+Duty = 0.180000
+Step to 0.8150 at 1434683750.298622833
+Duty = 0.815000
+Step to 0.1850 at 1434683765.311159061
+Duty = 0.185000
+Step to 0.8100 at 1434683780.332811603
+Duty = 0.810000
+Step to 0.1900 at 1434683795.351170220
+Duty = 0.190000
+Step to 0.8050 at 1434683810.364737236
+Duty = 0.805000
+Step to 0.1950 at 1434683825.380899214
+Duty = 0.195000
+Step to 0.8000 at 1434683840.383502167
+Duty = 0.800000
+Step to 0.2000 at 1434683855.386019325
+Duty = 0.200000
+Step to 0.7950 at 1434683870.387999661
+Duty = 0.795000
+Step to 0.2050 at 1434683885.389974034
+Duty = 0.205000
+Step to 0.7900 at 1434683900.392519494
+Duty = 0.790000
+Step to 0.2100 at 1434683915.395068961
+Duty = 0.210000
+Step to 0.7850 at 1434683930.397404442
+Duty = 0.785000
+Step to 0.2150 at 1434683945.399614601
+Duty = 0.215000
+Step to 0.7800 at 1434683960.444848207
+Duty = 0.780000
+Step to 0.2200 at 1434683975.463165907
+Duty = 0.220000
+Step to 0.7750 at 1434683990.476311216
+Duty = 0.775000
+Step to 0.2250 at 1434684005.478386808
+Duty = 0.225000
+Step to 0.7700 at 1434684020.480498790
+Duty = 0.770000
+Step to 0.2300 at 1434684035.482676602
+Duty = 0.230000
+Step to 0.7650 at 1434684050.484989479
+Duty = 0.765000
+Step to 0.2350 at 1434684065.487246947
+Duty = 0.235000
+Step to 0.7600 at 1434684080.489137554
+Duty = 0.760000
+Step to 0.2400 at 1434684095.491233070
+Duty = 0.240000
+Step to 0.7550 at 1434684110.493523255
+Duty = 0.755000
+Step to 0.2450 at 1434684125.495674722
+Duty = 0.245000
+Step to 0.7500 at 1434684140.498263157
+Duty = 0.750000
+Step to 0.2500 at 1434684155.515132164
+Duty = 0.250000
+Step to 0.7450 at 1434684170.532318627
+Duty = 0.745000
+Step to 0.2550 at 1434684185.547220431
+Duty = 0.255000
+Step to 0.7400 at 1434684200.569004265
+Duty = 0.740000
+Step to 0.2600 at 1434684215.574704241
+Duty = 0.260000
+Step to 0.7350 at 1434684230.577390366
+Duty = 0.735000
+Step to 0.2650 at 1434684245.580071671
+Duty = 0.265000
+Step to 0.7300 at 1434684260.582815755
+Duty = 0.730000
+Step to 0.2700 at 1434684275.585550169
+Duty = 0.270000
+Step to 0.7250 at 1434684290.588238000
+Duty = 0.725000
+Step to 0.2750 at 1434684305.590926183
+Duty = 0.275000
+Step to 0.7200 at 1434684320.593639072
+Duty = 0.720000
+Step to 0.2800 at 1434684335.596292803
+Duty = 0.280000
+Step to 0.7150 at 1434684350.598967673
+Duty = 0.715000
+Step to 0.2850 at 1434684365.619460456
+Duty = 0.285000
+Step to 0.7100 at 1434684380.644918618
+Duty = 0.710000
+Step to 0.2900 at 1434684395.663177266
+Duty = 0.290000
+Step to 0.7050 at 1434684410.673085913
+Duty = 0.705000
+Step to 0.2950 at 1434684425.675511658
+Duty = 0.295000
+Step to 0.7000 at 1434684440.678091932
+Duty = 0.700000
+Step to 0.3000 at 1434684455.680821277
+Duty = 0.300000
+Step to 0.6950 at 1434684470.683394918
+Duty = 0.695000
+Step to 0.3050 at 1434684485.686209268
+Duty = 0.305000
+Step to 0.6900 at 1434684500.688967362
+Duty = 0.690000
+Step to 0.3100 at 1434684515.691536859
+Duty = 0.310000
+Step to 0.6850 at 1434684530.693962326
+Duty = 0.685000
+Step to 0.3150 at 1434684545.696812774
+Duty = 0.315000
+Step to 0.6800 at 1434684560.699098534
+Duty = 0.680000
+Step to 0.3200 at 1434684575.715168388
+Duty = 0.320000
+Step to 0.6750 at 1434684590.752445972
+Duty = 0.675000
+Step to 0.3250 at 1434684605.768000636
+Duty = 0.325000
+Step to 0.6700 at 1434684620.770380770
+Duty = 0.670000
+Step to 0.3300 at 1434684635.772437653
+Duty = 0.330000
+Step to 0.6650 at 1434684650.774767230
+Duty = 0.665000
+Step to 0.3350 at 1434684665.777448340
+Duty = 0.335000
+Step to 0.6600 at 1434684680.779612986
+Duty = 0.660000
+Step to 0.3400 at 1434684695.781621573
+Duty = 0.340000
+Step to 0.6550 at 1434684710.783726981
+Duty = 0.655000
+Step to 0.3450 at 1434684725.785836754
+Duty = 0.345000
+Step to 0.6500 at 1434684740.788121613
+Duty = 0.650000
+Step to 0.3500 at 1434684755.790333059
+Duty = 0.350000
+Step to 0.6450 at 1434684770.792349438
+Duty = 0.645000
+Step to 0.3550 at 1434684785.794597335
+Duty = 0.355000
+Step to 0.6400 at 1434684800.797601216
+Duty = 0.640000
+Step to 0.3600 at 1434684815.811220718
+Duty = 0.360000
+Step to 0.6350 at 1434684830.836700460
+Duty = 0.635000
+Step to 0.3650 at 1434684845.853069357
+Duty = 0.365000
+Step to 0.6300 at 1434684860.865408831
+Duty = 0.630000
+Step to 0.3700 at 1434684875.867686041
+Duty = 0.370000
+Step to 0.6250 at 1434684890.869601690
+Duty = 0.625000
+Step to 0.3750 at 1434684905.871574541
+Duty = 0.375000
+Step to 0.6200 at 1434684920.873574130
+Duty = 0.620000
+Step to 0.3800 at 1434684935.875520686
+Duty = 0.380000
+Step to 0.6150 at 1434684950.877695727
+Duty = 0.615000
+Step to 0.3850 at 1434684965.879716275
+Duty = 0.385000
+Step to 0.6100 at 1434684980.881885802
+Duty = 0.610000
+Step to 0.3900 at 1434684995.883920407
+Duty = 0.390000
+Step to 0.6050 at 1434685010.886084904
+Duty = 0.605000
+Step to 0.3950 at 1434685025.888315675
+Duty = 0.395000
+Step to 0.6000 at 1434685040.890601038
+Duty = 0.600000
+Step to 0.4000 at 1434685055.893224663
+Duty = 0.400000
+Step to 0.5950 at 1434685070.895707053
+Duty = 0.595000
+Step to 0.4050 at 1434685085.898237233
+Duty = 0.405000
+Step to 0.5900 at 1434685100.927112704
+Duty = 0.590000
+Step to 0.4100 at 1434685115.943167054
+Duty = 0.410000
+Step to 0.5850 at 1434685130.960868457
+Duty = 0.585000
+Step to 0.4150 at 1434685145.963256102
+Duty = 0.415000
+Step to 0.5800 at 1434685160.965258541
+Duty = 0.580000
+Step to 0.4200 at 1434685175.967332210
+Duty = 0.420000
+Step to 0.5750 at 1434685190.969819795
+Duty = 0.575000
+Step to 0.4250 at 1434685205.972239150
+Duty = 0.425000
+Step to 0.5700 at 1434685220.974640437
+Duty = 0.570000
+Step to 0.4300 at 1434685235.977179287
+Duty = 0.430000
+Step to 0.5650 at 1434685250.979462501
+Duty = 0.565000
+Step to 0.4350 at 1434685265.981624413
+Duty = 0.435000
+Step to 0.5600 at 1434685280.983711358
+Duty = 0.560000
+Step to 0.4400 at 1434685295.985655873
+Duty = 0.440000
+Step to 0.5550 at 1434685310.988030757
+Duty = 0.555000
+Step to 0.4450 at 1434685325.990345275
+Duty = 0.445000
+Step to 0.5500 at 1434685340.993306973
+Duty = 0.550000
+Step to 0.4500 at 1434685355.996090287
+Duty = 0.450000
+Step to 0.5450 at 1434685370.998578862
+Duty = 0.545000
+Step to 0.4550 at 1434685386.023260585
+Duty = 0.455000
+Step to 0.5400 at 1434685401.046103843
+Duty = 0.540000
+Step to 0.4600 at 1434685416.054656491
+Duty = 0.460000
+Step to 0.5350 at 1434685431.056664833
+Duty = 0.535000
+Step to 0.4650 at 1434685446.058644327
+Duty = 0.465000
+Step to 0.5300 at 1434685461.060632493
+Duty = 0.530000
+Step to 0.4700 at 1434685476.062610275
+Duty = 0.470000
+Step to 0.5250 at 1434685491.064594881
+Duty = 0.525000
+Step to 0.4750 at 1434685506.067461497
+Duty = 0.475000
+Step to 0.5200 at 1434685521.070800588
+Duty = 0.520000
+Step to 0.4800 at 1434685536.073704969
+Duty = 0.480000
+Step to 0.5150 at 1434685551.076892669
+Duty = 0.515000
+Step to 0.4850 at 1434685566.080039409
+Duty = 0.485000
+Step to 0.5100 at 1434685581.083196065
+Duty = 0.510000
+Step to 0.4900 at 1434685596.086479816
+Duty = 0.490000
+Step to 0.5050 at 1434685611.089750407
+Duty = 0.505000
+Step to 0.4950 at 1434685626.092495298
+Duty = 0.495000
+Step to 0.5000 at 1434685641.095262748
+Duty = 0.500000
+Step to 0.5000 at 1434685656.098554607
+Duty = 0.500000
+Step to 0.4950 at 1434685671.131203090
+Duty = 0.495000
+Step to 0.5050 at 1434685686.150513740
+Duty = 0.505000
+Step to 0.4900 at 1434685701.153090047
+Duty = 0.490000
+Step to 0.5100 at 1434685716.155814121
+Duty = 0.510000
+Step to 0.4850 at 1434685731.158340506
+Duty = 0.485000
+Step to 0.5150 at 1434685746.160655539
+Duty = 0.515000
+Step to 0.4800 at 1434685761.162647236
+Duty = 0.480000
+Step to 0.5200 at 1434685776.164680884
+Duty = 0.520000
+Step to 0.4750 at 1434685791.167050359
+Duty = 0.475000
+Step to 0.5250 at 1434685806.169656606
+Duty = 0.525000
+Step to 0.4700 at 1434685821.172090057
+Duty = 0.470000
+Step to 0.5300 at 1434685836.174340144
+Duty = 0.530000
+Step to 0.4650 at 1434685851.176901606
+Duty = 0.465000
+Step to 0.5350 at 1434685866.179470817
+Duty = 0.535000
+Step to 0.4600 at 1434685881.181736792
+Duty = 0.460000
+Step to 0.5400 at 1434685896.184295262
+Duty = 0.540000
+Step to 0.4550 at 1434685911.186896108
+Duty = 0.455000
+Step to 0.5450 at 1434685926.189329894
+Duty = 0.545000
+Step to 0.4500 at 1434685941.191884607
+Duty = 0.450000
+Step to 0.5500 at 1434685956.194482905
+Duty = 0.550000
+Step to 0.4450 at 1434685971.196968718
+Duty = 0.445000
+Step to 0.5550 at 1434685986.199500034
+Duty = 0.555000
+Step to 0.4400 at 1434686001.231171067
+Duty = 0.440000
+Step to 0.5600 at 1434686016.252682862
+Duty = 0.560000
+Step to 0.4350 at 1434686031.256785242
+Duty = 0.435000
+Step to 0.5650 at 1434686046.258888328
+Duty = 0.565000
+Step to 0.4300 at 1434686061.260866267
+Duty = 0.430000
+Step to 0.5700 at 1434686076.262860535
+Duty = 0.570000
+Step to 0.4250 at 1434686091.264844734
+Duty = 0.425000
+Step to 0.5750 at 1434686106.267066267
+Duty = 0.575000
+Step to 0.4200 at 1434686121.269201303
+Duty = 0.420000
+Step to 0.5800 at 1434686136.271246217
+Duty = 0.580000
+Step to 0.4150 at 1434686151.273527340
+Duty = 0.415000
+Step to 0.5850 at 1434686166.275998072
+Duty = 0.585000
+Step to 0.4100 at 1434686181.278259217
+Duty = 0.410000
+Step to 0.5900 at 1434686196.280612862
+Duty = 0.590000
+Step to 0.4050 at 1434686211.283036173
+Duty = 0.405000
+Step to 0.5950 at 1434686226.285675734
+Duty = 0.595000
+Step to 0.4000 at 1434686241.287719600
+Duty = 0.400000
+Step to 0.6000 at 1434686256.290057576
+Duty = 0.600000
+Step to 0.3950 at 1434686271.292178880
+Duty = 0.395000
+Step to 0.6050 at 1434686286.294600329
+Duty = 0.605000
+Step to 0.3900 at 1434686301.297159441
+Duty = 0.390000
+Step to 0.6100 at 1434686316.299142648
+Duty = 0.610000
+Step to 0.3850 at 1434686331.311160936
+Duty = 0.385000
+Step to 0.6150 at 1434686346.335174703
+Duty = 0.615000
+Step to 0.3800 at 1434686361.355168173
+Duty = 0.380000
+Step to 0.6200 at 1434686376.363168112
+Duty = 0.620000
+Step to 0.3750 at 1434686391.365215454
+Duty = 0.375000
+Step to 0.6250 at 1434686406.367294561
+Duty = 0.625000
+Step to 0.3700 at 1434686421.369288154
+Duty = 0.370000
+Step to 0.6300 at 1434686436.371394151
+Duty = 0.630000
+Step to 0.3650 at 1434686451.373445259
+Duty = 0.365000
+Step to 0.6350 at 1434686466.375843612
+Duty = 0.635000
+Step to 0.3600 at 1434686481.378420982
+Duty = 0.360000
+Step to 0.6400 at 1434686496.380494475
+Duty = 0.640000
+Step to 0.3550 at 1434686511.382574205
+Duty = 0.355000
+Step to 0.6450 at 1434686526.384600684
+Duty = 0.645000
+Step to 0.3500 at 1434686541.386776505
+Duty = 0.350000
+Step to 0.6500 at 1434686556.388783199
+Duty = 0.650000
+Step to 0.3450 at 1434686571.390863680
+Duty = 0.345000
+Step to 0.6550 at 1434686586.393221884
+Duty = 0.655000
+Step to 0.3400 at 1434686601.395609592
+Duty = 0.340000
+Step to 0.6600 at 1434686616.398236599
+Duty = 0.660000
+Step to 0.3350 at 1434686631.415162765
+Duty = 0.335000
+Step to 0.6650 at 1434686646.436281232
+Duty = 0.665000
+Step to 0.3300 at 1434686661.451196439
+Duty = 0.330000
+Step to 0.6700 at 1434686676.468230395
+Duty = 0.670000
+Step to 0.3250 at 1434686691.470229828
+Duty = 0.325000
+Step to 0.6750 at 1434686706.472429164
+Duty = 0.675000
+Step to 0.3200 at 1434686721.474440954
+Duty = 0.320000
+Step to 0.6800 at 1434686736.476570119
+Duty = 0.680000
+Step to 0.3150 at 1434686751.478911043
+Duty = 0.315000
+Step to 0.6850 at 1434686766.480979379
+Duty = 0.685000
+Step to 0.3100 at 1434686781.483201801
+Duty = 0.310000
+Step to 0.6900 at 1434686796.485805052
+Duty = 0.690000
+Step to 0.3050 at 1434686811.488281201
+Duty = 0.305000
+Step to 0.6950 at 1434686826.490326880
+Duty = 0.695000
+Step to 0.3000 at 1434686841.492335652
+Duty = 0.300000
+Step to 0.7000 at 1434686856.494987051
+Duty = 0.700000
+Step to 0.2950 at 1434686871.498014498
+Duty = 0.295000
+Step to 0.7050 at 1434686886.519152313
+Duty = 0.705000
+Step to 0.2900 at 1434686901.547167868
+Duty = 0.290000
+Step to 0.7100 at 1434686916.560288350
+Duty = 0.710000
+Step to 0.2850 at 1434686931.571444283
+Duty = 0.285000
+Step to 0.7150 at 1434686946.573412557
+Duty = 0.715000
+Step to 0.2800 at 1434686961.575366602
+Duty = 0.280000
+Step to 0.7200 at 1434686976.577218332
+Duty = 0.720000
+Step to 0.2750 at 1434686991.579231364
+Duty = 0.275000
+Step to 0.7250 at 1434687006.581384246
+Duty = 0.725000
+Step to 0.2700 at 1434687021.583429557
+Duty = 0.270000
+Step to 0.7300 at 1434687036.585383905
+Duty = 0.730000
+Step to 0.2650 at 1434687051.587367700
+Duty = 0.265000
+Step to 0.7350 at 1434687066.590170589
+Duty = 0.735000
+Step to 0.2600 at 1434687081.593498834
+Duty = 0.260000
+Step to 0.7400 at 1434687096.596853971
+Duty = 0.740000
+Step to 0.2550 at 1434687111.610954124
+Duty = 0.255000
+Step to 0.7450 at 1434687126.628956145
+Duty = 0.745000
+Step to 0.2500 at 1434687141.655241206
+Duty = 0.250000
+Step to 0.7500 at 1434687156.676696979
+Duty = 0.750000
+Step to 0.2450 at 1434687171.679380891
+Duty = 0.245000
+Step to 0.7550 at 1434687186.681871786
+Duty = 0.755000
+Step to 0.2400 at 1434687201.684405192
+Duty = 0.240000
+Step to 0.7600 at 1434687216.686917017
+Duty = 0.760000
+Step to 0.2350 at 1434687231.689562659
+Duty = 0.235000
+Step to 0.7650 at 1434687246.691997155
+Duty = 0.765000
+Step to 0.2300 at 1434687261.694373537
+Duty = 0.230000
+Step to 0.7700 at 1434687276.696817658
+Duty = 0.770000
+Step to 0.2250 at 1434687291.699163022
+Duty = 0.225000
+Step to 0.7750 at 1434687306.719159920
+Duty = 0.775000
+Step to 0.2200 at 1434687321.743178403
+Duty = 0.220000
+Step to 0.7800 at 1434687336.760630439
+Duty = 0.780000
+Step to 0.2150 at 1434687351.778390388
+Duty = 0.215000
+Step to 0.7850 at 1434687366.780553121
+Duty = 0.785000
+Step to 0.2100 at 1434687381.782715894
+Duty = 0.210000
+Step to 0.7900 at 1434687396.785320905
+Duty = 0.790000
+Step to 0.2050 at 1434687411.787919223
+Duty = 0.205000
+Step to 0.7950 at 1434687426.790115143
+Duty = 0.795000
+Step to 0.2000 at 1434687441.792282965
+Duty = 0.200000
+Step to 0.8000 at 1434687456.794918491
+Duty = 0.800000
+Step to 0.1950 at 1434687471.797472695
+Duty = 0.195000
+Step to 0.8050 at 1434687486.799829441
+Duty = 0.805000
+Step to 0.1900 at 1434687501.823174674
+Duty = 0.190000
+Step to 0.8100 at 1434687516.842343572
+Duty = 0.810000
+Step to 0.1850 at 1434687531.863174713
+Duty = 0.185000
+Step to 0.8150 at 1434687546.876735580
+Duty = 0.815000
+Step to 0.1800 at 1434687561.882169493
+Duty = 0.180000
+Step to 0.8200 at 1434687576.884197088
+Duty = 0.820000
+Step to 0.1750 at 1434687591.886232905
+Duty = 0.175000
+Step to 0.8250 at 1434687606.888812631
+Duty = 0.825000
+Step to 0.1700 at 1434687621.891291621
+Duty = 0.170000
+Step to 0.8300 at 1434687636.893649293
+Duty = 0.830000
+Step to 0.1650 at 1434687651.895916309
+Duty = 0.165000
+Step to 0.8350 at 1434687666.898512824
+Duty = 0.835000
+Step to 0.1600 at 1434687681.901123168
+Duty = 0.160000
+Step to 0.8400 at 1434687696.916765423
+Duty = 0.840000
+Step to 0.1550 at 1434687711.935157087
+Duty = 0.155000
+Step to 0.8450 at 1434687726.952622695
+Duty = 0.845000
+Step to 0.1500 at 1434687741.975169807
+Duty = 0.150000
+Step to 0.8500 at 1434687756.986468140
+Duty = 0.850000
+Step to 0.1450 at 1434687771.988815801
+Duty = 0.145000
+Step to 0.8550 at 1434687786.991530218
+Duty = 0.855000
+Step to 0.1400 at 1434687801.994091148
+Duty = 0.140000
+Step to 0.8600 at 1434687816.996766134
+Duty = 0.860000
+Step to 0.1350 at 1434687831.999399025
+Duty = 0.135000
+Step to 0.8650 at 1434687847.015284148
+Duty = 0.865000
+Step to 0.1300 at 1434687862.035171567
+Duty = 0.130000
+Step to 0.8700 at 1434687877.052860965
+Duty = 0.870000
+Step to 0.1250 at 1434687892.075161848
+Duty = 0.125000
+Step to 0.8750 at 1434687907.088869263
+Duty = 0.875000
+Step to 0.1200 at 1434687922.091184836
+Duty = 0.120000
+Step to 0.8800 at 1434687937.093671390
+Duty = 0.880000
+Step to 0.1150 at 1434687952.096206297
+Duty = 0.115000
+Step to 0.8850 at 1434687967.098813694
+Duty = 0.885000
+Step to 0.1100 at 1434687982.107023120
+Duty = 0.110000
+Step to 0.8900 at 1434687997.140944370
+Duty = 0.890000
+Step to 0.1050 at 1434688012.159161314
+Duty = 0.105000
+Step to 0.8950 at 1434688027.172412642
+Duty = 0.895000
+Step to 0.1000 at 1434688042.189890719
+Duty = 0.100000
+Step to 0.9000 at 1434688057.192567966
+Duty = 0.900000
+Step to 0.0950 at 1434688072.195160618
+Duty = 0.095000
+Step to 0.9050 at 1434688087.197801920
+Duty = 0.905000
+Step to 0.0900 at 1434688102.215179522
+Duty = 0.090000
+Step to 0.9100 at 1434688117.225047634
+Duty = 0.910000
+Step to 0.0850 at 1434688132.239166008
+Duty = 0.085000
+Step to 0.9150 at 1434688147.256951404
+Duty = 0.915000
+Step to 0.0800 at 1434688162.275174505
+Duty = 0.080000
+Step to 0.9200 at 1434688177.292977462
+Duty = 0.920000
+Step to 0.0750 at 1434688192.295623748
+Duty = 0.075000
+Step to 0.9250 at 1434688207.298238427
+Duty = 0.925000
+Step to 0.0700 at 1434688222.315167302
+Duty = 0.070000
+Step to 0.9300 at 1434688237.328348697
+Duty = 0.930000
+Step to 0.0650 at 1434688252.343164437
+Duty = 0.065000
+Step to 0.9350 at 1434688267.355710523
+Duty = 0.935000
+Step to 0.0600 at 1434688282.375170209
+Duty = 0.060000
+Step to 0.9400 at 1434688297.384900814
+Duty = 0.940000
+Step to 0.0550 at 1434688312.394632562
+Duty = 0.055000
+Step to 0.9450 at 1434688327.397354703
+Duty = 0.945000
+Step to 0.0500 at 1434688342.410973990
+Duty = 0.050000
+Step to 0.9500 at 1434688357.424962559
+Duty = 0.950000
+Step to 0.0450 at 1434688372.439165085
+Duty = 0.045000
+Step to 0.9550 at 1434688387.452791038
+Duty = 0.955000
+Step to 0.0400 at 1434688402.463818135
+Duty = 0.040000
+Step to 0.9600 at 1434688417.480893632
+Duty = 0.960000
+Step to 0.0350 at 1434688432.496351599
+Duty = 0.035000
+Step to 0.9650 at 1434688447.499041530
+Duty = 0.965000
+Step to 0.0300 at 1434688462.523177570
+Duty = 0.030000
+Step to 0.9700 at 1434688477.536981251
+Duty = 0.970000
+Step to 0.0250 at 1434688492.551125176
+Duty = 0.025000
+Step to 0.9750 at 1434688507.559520548
+Duty = 0.975000
+Step to 0.0200 at 1434688522.575159295
+Duty = 0.020000
+Step to 0.9800 at 1434688537.588986312
+Duty = 0.980000
+Step to 0.0150 at 1434688552.598677842
+Duty = 0.015000
+Step to 0.9850 at 1434688567.603041932
+Duty = 0.985000
+Step to 0.0100 at 1434688582.617593023
+Duty = 0.010000
+Step to 0.9900 at 1434688597.628965029
+Duty = 0.990000
+Step to 0.0050 at 1434688612.647177730
+Duty = 0.010000
+Step to 0.9950 at 1434688627.668930327
+Duty = 0.990000
+Step to 0.0000 at 1434688642.684571607
+Duty = 0.010000
+Quitting at 1434688657.696972510
+Stopping stress at 1434688662.735152318
+stress: FAIL: [31099] (416) <-- worker 31104 got signal 15
+stress: WARN: [31099] (418) now reaping child worker processes
+stress: FAIL: [31099] (422) kill error: No such process
+stress: FAIL: [31099] (416) <-- worker 31101 got signal 15
+stress: WARN: [31099] (418) now reaping child worker processes
+stress: FAIL: [31099] (422) kill error: No such process
+stress: FAIL: [31099] (416) <-- worker 31102 got signal 15
+stress: WARN: [31099] (418) now reaping child worker processes
+stress: FAIL: [31099] (422) kill error: No such process
+stress: FAIL: [31099] (416) <-- worker 31103 got signal 15
+stress: WARN: [31099] (418) now reaping child worker processes
+stress: FAIL: [31099] (422) kill error: No such process
+stress: FAIL: [31099] (452) failed run completed in 6028s
+Stopping power gadget at 1434688667.836554365
+Done.
