@@ -1,5 +1,5 @@
-b=input('Type the name: ','s')
-%b='338766383_1435434847';
+%b=input('Type the name: ','s')
+b='338766383_1435434847';
 
 [status, output] = system(['cat ./' b '.log | grep "Starting power gadget at " | cut -d \  -f 5']);
 assert(status == 0);
