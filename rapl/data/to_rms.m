@@ -26,7 +26,7 @@ end
 prms = irms.*vrms;
 
 %ave_rms
-sa_per_ave=round(0.1*samplerate);
+sa_per_ave=round(0.3*samplerate);
 len_ave = round(length(iac)/sa_per_ave);
 prms_ave = zeros(round(length(iac)/sa_per_ave),1);
 t_ave = zeros(round(length(iac)/sa_per_ave),1);
@@ -34,46 +34,52 @@ for i=0:(length(prms_ave)-2) % -2 cause not enough elements sometimes
 	prms_ave(i+1)=mean(prms((1+i*sa_per_ave):((1+i)*sa_per_ave)));
 	t_ave(i+1)=t_iac((1+i)*sa_per_ave);
 end
+t_ave(end)=t_ave(end-1)+0.3;
 
 %ave_instpwr
-sa_per_ave=round(0.3*samplerate);
-instpwr = iac.*vac;
-instpwr_abs=abs(instpwr);
-pinst_ave = zeros(round(length(instpwr)/sa_per_ave),1);
-pinst_abs_ave = zeros(round(length(instpwr)/sa_per_ave),1);
-t_ave = zeros(round(length(instpwr)/sa_per_ave),1);
-for i=0:(length(pinst_ave)-2)
-	pinst_ave(i+1)=mean(instpwr((1+i*sa_per_ave):((1+i)*sa_per_ave)));
-	t_ave(i+1)=t_iac((1+i)*sa_per_ave);
-end
-
-for i=0:(length(pinst_abs_ave)-2)
-	pinst_abs_ave(i+1)=mean(instpwr_abs((1+i*sa_per_ave):((1+i)*sa_per_ave)));
-	t_ave(i+1)=t_iac((1+i)*sa_per_ave);
-end
+%sa_per_ave=round(0.3*samplerate);
+%instpwr = iac.*vac;
+%instpwr_abs=abs(instpwr);
+%pinst_ave = zeros(round(length(instpwr)/sa_per_ave),1);
+%pinst_abs_ave = zeros(round(length(instpwr)/sa_per_ave),1);
+%t_aveInst = zeros(round(length(instpwr)/sa_per_ave),1);
+%for i=0:(length(pinst_ave)-2)
+%	pinst_ave(i+1)=mean(instpwr((1+i*sa_per_ave):((1+i)*sa_per_ave)));
+%	t_ave(i+1)=t_iac((1+i)*sa_per_ave);
+%end
+%
+%for i=0:(length(pinst_abs_ave)-2)
+%	pinst_abs_ave(i+1)=mean(instpwr_abs((1+i*sa_per_ave):((1+i)*sa_per_ave)));
+%	t_ave(i+1)=t_iac((1+i)*sa_per_ave);
+%end
 
 
 	%get power_gadget data
 load data_pg.mat
-t_pg = data_pg(1:end,1)-60407.9;
+t_pg = data_pg(1:end,1)-44487.4;
 p_pg = data_pg(1:end,2);
+dram_pg = data_pg(1:end,3);
+tot_pg = p_pg+dram_pg;
 	%load data_sp.mat
 	%t_sp = data_sp(1:end,1);
 	%p_sp = data_sp(1:end,2);
 
 	%p_base=prms_ave-p_pg; %need to interpolate
 p_pg_interp=interp1(t_pg,p_pg,t_ave);
-p_base=pinst_ave-p_pg_interp;
+tot_interp=interp1(t_pg,tot_pg,t_ave);
+p_base=prms_ave-p_pg_interp;
+p_base2=prms_ave-tot_interp;
 
 	%plot data
-figure;
-h2=plot(t_iac,prms,'b','displayname','RMS Power (running period window)');
+fh=figure;
+%h2=plot(t_iac,prms,'b','displayname','RMS Power (running period window)');
 hold on;
-h1=plot(t_ave,prms_ave,':.r','linewidth',3,'displayname','RMS Average (0.1s) Power');
-h3=plot(t_pg,p_pg,':.g','linewidth',3,'displayname','Energy Counter Power Estimate');
-h4=plot(t_ave,pinst_ave,':.m','linewidth',3,'displayname','Instantaneous Average (0.1s) Power');
-
-h6=plot(t_ave,p_base,':.k','linewidth',3,'displayname','Baseline Idle Power = InstAvePwr-EngyCntrPwr');
+h1=plot(t_ave,prms_ave,':.r','linewidth',3,'displayname','RMS Average Power');
+%h3=plot(t_pg,p_pg,':.g','linewidth',3,'displayname','PKG MSR');
+%h4=plot(t_pg,tot_pg,':.b','displayname','PKG+DRAM MSR');
+%h5=plot(t_aveInst,pinst_ave,':.m','linewidth',3,'displayname','Instantaneous Average (0.1s) Power');
+h6=plot(t_ave,p_base,':.k','linewidth',3,'displayname','AveRMS-msrPKG');
+h7=plot(t_ave,p_base2,':.y','displayname','AveRMS-msrPKG-msrDRAM');
 legend();
    
 
