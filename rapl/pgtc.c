@@ -504,7 +504,7 @@ do_print_energy_info()
 					fprintf(fp, "%.4lf,",power_watt[i][domain]); // print to file
                 }
             }
-			fprintf(stdout,"%.4lf\n",power_watt[node][RAPL_PKG]); // print out PKG power to pipe
+			fprintf(stdout,"%.4lf\n",power_watt[node][RAPL_PKG]+power_watt[node][RAPL_DRAM]); // print out PKG power to pipe
         }
         get_CPU_temperature(thz0);
         fprintf(fp, "%s,",thz0);

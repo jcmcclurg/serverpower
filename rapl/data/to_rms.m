@@ -1,21 +1,8 @@
-%read_pwr_data.m
-close all;
-clear all;
-clc;
-
-% open file and get current data
-fid = fopen('scope_24_1.csv');
-data_iac = textscan(fid,'%f %f','Delimiter',',','HeaderLines',2);
-fclose(fid);
-t_iac = data_iac{1}; % time (seconds)
-iac = data_iac{2}/2.0; % voltage_measurement/gain = current (Amps)
-
-% open file and get voltage data
-fid = fopen('scope_24_2.csv');
-data_vac = textscan(fid,'%f %f','Delimiter',',','HeaderLines',2);
-fclose(fid);
-t_vac = data_vac{1}; % time (seconds)
-vac = data_vac{2}; % voltage_measurement
+load data_scope.mat
+t_iac = data_scope(1:end,1);
+iac = data_scope(1:end,2);
+t_vac = data_scope(1:end,3);
+vac = data_scope(1:end,4);
 
 instpwr = iac.*vac;
 
@@ -40,26 +27,27 @@ prms = irms.*vrms;
 
 %ave_rms
 sa_per_ave=round(0.1*samplerate);
+len_ave = round(length(iac)/sa_per_ave);
 prms_ave = zeros(round(length(iac)/sa_per_ave),1);
 t_ave = zeros(round(length(iac)/sa_per_ave),1);
-for i=0:length(prms_ave)-1
+for i=0:(length(prms_ave)-2) % -2 cause not enough elements sometimes
 	prms_ave(i+1)=mean(prms((1+i*sa_per_ave):((1+i)*sa_per_ave)));
 	t_ave(i+1)=t_iac((1+i)*sa_per_ave);
 end
 
 %ave_instpwr
-sa_per_ave=round(0.1*samplerate);
+sa_per_ave=round(0.3*samplerate);
 instpwr = iac.*vac;
 instpwr_abs=abs(instpwr);
 pinst_ave = zeros(round(length(instpwr)/sa_per_ave),1);
 pinst_abs_ave = zeros(round(length(instpwr)/sa_per_ave),1);
 t_ave = zeros(round(length(instpwr)/sa_per_ave),1);
-for i=0:length(pinst_ave)-1
+for i=0:(length(pinst_ave)-2)
 	pinst_ave(i+1)=mean(instpwr((1+i*sa_per_ave):((1+i)*sa_per_ave)));
 	t_ave(i+1)=t_iac((1+i)*sa_per_ave);
 end
 
-for i=0:length(pinst_abs_ave)-1
+for i=0:(length(pinst_abs_ave)-2)
 	pinst_abs_ave(i+1)=mean(instpwr_abs((1+i*sa_per_ave):((1+i)*sa_per_ave)));
 	t_ave(i+1)=t_iac((1+i)*sa_per_ave);
 end
@@ -67,7 +55,7 @@ end
 
 	%get power_gadget data
 load data_pg.mat
-t_pg = data_pg(1:end,1)-47062.291;
+t_pg = data_pg(1:end,1)-60407.9;
 p_pg = data_pg(1:end,2);
 	%load data_sp.mat
 	%t_sp = data_sp(1:end,1);
