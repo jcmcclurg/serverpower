@@ -1,8 +1,8 @@
-%load data_scope.mat
-%t_iac = data_scope(1:end,1);
-%iac = data_scope(1:end,2);
-%t_vac = data_scope(1:end,3);
-%vac = data_scope(1:end,4);
+load data_scope.mat
+t_iac = data_scope(1:end,1);
+iac = data_scope(1:end,2);
+t_vac = data_scope(1:end,3);
+vac = data_scope(1:end,4);
 
 instpwr = iac.*vac;
 
@@ -36,7 +36,7 @@ for i=0:(length(prms_ave)-2) % -2 cause not enough elements sometimes
 end
 
 %ave_instpwr
-sa_per_ave=round(0.1*samplerate);
+sa_per_ave=round(0.3*samplerate);
 instpwr = iac.*vac;
 instpwr_abs=abs(instpwr);
 pinst_ave = zeros(round(length(instpwr)/sa_per_ave),1);
