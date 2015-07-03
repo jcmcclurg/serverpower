@@ -1,0 +1,2022 @@
+Starting power gadget at 1435434847.342489405
+Clock resolution:
+	tv_sec: 0
+	tv_nsec: 1
+Current time:
+	tv_sec: 96421
+	tv_nsec: 446592907
+Current time (s): 96421.446593
+Total energy consumed: 3478.912201
+Time (s) Power (W)
+Starting stress at 1435434852.346012926
+Set duty to 0.999000
+Set duty to 0.999000
+Set duty to 0.999000
+Set duty to 0.999000
+Step to 0.0000 at 1435434867.367062696
+Set duty to 0.001 (previous sleeplen was 5.06892e-06)
+Set duty to 0.001 (previous sleeplen was 5.609e-06)
+Set duty to 0.001 (previous sleeplen was 5.25817e-06)
+Set duty to 0.001 (previous sleeplen was 5.16358e-06)
+Step to 0.9950 at 1435434882.371724911
+Set duty to 0.995 (previous sleeplen was 0.497055)
+Set duty to 0.995 (previous sleeplen was 0.497406)
+Set duty to 0.995 (previous sleeplen was 0.504956)
+Set duty to 0.995 (previous sleeplen was 0.510518)
+Step to 0.0050 at 1435434897.381714061
+Set duty to 0.005 (previous sleeplen was 2.54363e-05)
+Set duty to 0.005 (previous sleeplen was 2.54405e-05)
+Set duty to 0.005 (previous sleeplen was 2.61193e-05)
+Set duty to 0.005 (previous sleeplen was 2.54546e-05)
+Step to 0.9900 at 1435434912.390432140
+Set duty to 0.99 (previous sleeplen was 0.463734)
+Set duty to 0.99 (previous sleeplen was 0.465214)
+Set duty to 0.99 (previous sleeplen was 0.465576)
+Set duty to 0.99 (previous sleeplen was 0.465194)
+Step to 0.0100 at 1435434927.398517426
+Set duty to 0.01 (previous sleeplen was 5.11107e-05)
+Set duty to 0.01 (previous sleeplen was 5.11487e-05)
+Set duty to 0.01 (previous sleeplen was 5.1738e-05)
+Set duty to 0.01 (previous sleeplen was 7.12855e-05)
+Step to 0.9850 at 1435434942.406499978
+Set duty to 0.985 (previous sleeplen was 0.418882)
+Set duty to 0.985 (previous sleeplen was 0.421709)
+Set duty to 0.985 (previous sleeplen was 0.420436)
+Set duty to 0.985 (previous sleeplen was 0.42049)
+Step to 0.0150 at 1435434957.418708168
+Set duty to 0.015 (previous sleeplen was 7.76321e-05)
+Set duty to 0.015 (previous sleeplen was 7.86366e-05)
+Set duty to 0.015 (previous sleeplen was 7.71311e-05)
+Set duty to 0.015 (previous sleeplen was 7.72802e-05)
+Step to 0.9800 at 1435434972.427240483
+Set duty to 0.98 (previous sleeplen was 0.375604)
+Set duty to 0.98 (previous sleeplen was 0.375317)
+Set duty to 0.98 (previous sleeplen was 0.373703)
+Set duty to 0.98 (previous sleeplen was 0.378992)
+Step to 0.0200 at 1435434987.437429871
+Set duty to 0.02 (previous sleeplen was 0.000103246)
+Set duty to 0.02 (previous sleeplen was 0.000105324)
+Set duty to 0.02 (previous sleeplen was 0.000103539)
+Set duty to 0.02 (previous sleeplen was 0.000103248)
+Step to 0.9750 at 1435435002.448349131
+Set duty to 0.975 (previous sleeplen was 0.336572)
+Set duty to 0.975 (previous sleeplen was 0.336443)
+Set duty to 0.975 (previous sleeplen was 0.334194)
+Set duty to 0.975 (previous sleeplen was 0.33147)
+Step to 0.0250 at 1435435017.456578422
+Set duty to 0.025 (previous sleeplen was 0.000130078)
+Set duty to 0.025 (previous sleeplen was 0.000151074)
+Set duty to 0.025 (previous sleeplen was 0.000131001)
+Set duty to 0.025 (previous sleeplen was 0.000130842)
+Step to 0.9700 at 1435435032.464221169
+Set duty to 0.97 (previous sleeplen was 0.296978)
+Set duty to 0.97 (previous sleeplen was 0.297333)
+Set duty to 0.97 (previous sleeplen was 0.301683)
+Set duty to 0.97 (previous sleeplen was 0.30203)
+Step to 0.0300 at 1435435047.471103827
+Set duty to 0.03 (previous sleeplen was 0.000156724)
+Set duty to 0.03 (previous sleeplen was 0.000156448)
+Set duty to 0.03 (previous sleeplen was 0.000299749)
+Set duty to 0.03 (previous sleeplen was 0.000305536)
+Step to 0.9650 at 1435435062.473682163
+Set duty to 0.965 (previous sleeplen was 0.266983)
+Set duty to 0.965 (previous sleeplen was 0.268755)
+Set duty to 0.965 (previous sleeplen was 0.267742)
+Set duty to 0.965 (previous sleeplen was 0.268567)
+Step to 0.0350 at 1435435077.485433066
+Set duty to 0.035 (previous sleeplen was 0.000183992)
+Set duty to 0.035 (previous sleeplen was 0.000183821)
+Set duty to 0.035 (previous sleeplen was 0.000183464)
+Set duty to 0.035 (previous sleeplen was 0.000195292)
+Step to 0.9600 at 1435435092.496397736
+Set duty to 0.96 (previous sleeplen was 0.239584)
+Set duty to 0.96 (previous sleeplen was 0.238134)
+Set duty to 0.96 (previous sleeplen was 0.238238)
+Set duty to 0.96 (previous sleeplen was 0.2405)
+Step to 0.0400 at 1435435107.503027192
+Set duty to 0.04 (previous sleeplen was 0.000210948)
+Set duty to 0.04 (previous sleeplen was 0.000211872)
+Set duty to 0.04 (previous sleeplen was 0.000210787)
+Set duty to 0.04 (previous sleeplen was 0.000212771)
+Step to 0.9550 at 1435435122.512759292
+Set duty to 0.955 (previous sleeplen was 0.213377)
+Set duty to 0.955 (previous sleeplen was 0.214196)
+Set duty to 0.955 (previous sleeplen was 0.213259)
+Set duty to 0.955 (previous sleeplen was 0.214133)
+Step to 0.0450 at 1435435137.522314065
+Set duty to 0.045 (previous sleeplen was 0.000238809)
+Set duty to 0.045 (previous sleeplen was 0.000238559)
+Set duty to 0.045 (previous sleeplen was 0.000238854)
+Set duty to 0.045 (previous sleeplen was 0.000465692)
+Step to 0.9500 at 1435435152.524876816
+Set duty to 0.95 (previous sleeplen was 0.193773)
+Set duty to 0.95 (previous sleeplen was 0.192292)
+Set duty to 0.95 (previous sleeplen was 0.189837)
+Set duty to 0.95 (previous sleeplen was 0.190792)
+Step to 0.0500 at 1435435167.531098460
+Set duty to 0.05 (previous sleeplen was 0.000293951)
+Set duty to 0.05 (previous sleeplen was 0.000276278)
+Set duty to 0.05 (previous sleeplen was 0.00026688)
+Set duty to 0.05 (previous sleeplen was 0.000266423)
+Step to 0.9450 at 1435435182.540711567
+Set duty to 0.945 (previous sleeplen was 0.172985)
+Set duty to 0.945 (previous sleeplen was 0.169879)
+Set duty to 0.945 (previous sleeplen was 0.170555)
+Set duty to 0.945 (previous sleeplen was 0.172)
+Step to 0.0550 at 1435435197.548289490
+Set duty to 0.055 (previous sleeplen was 0.000294801)
+Set duty to 0.055 (previous sleeplen was 0.000305946)
+Set duty to 0.055 (previous sleeplen was 0.0002952)
+Set duty to 0.055 (previous sleeplen was 0.000304232)
+Step to 0.9400 at 1435435212.556037656
+Set duty to 0.94 (previous sleeplen was 0.15644)
+Set duty to 0.94 (previous sleeplen was 0.155893)
+Set duty to 0.94 (previous sleeplen was 0.152629)
+Set duty to 0.94 (previous sleeplen was 0.153675)
+Step to 0.0600 at 1435435227.558480543
+Set duty to 0.06 (previous sleeplen was 0.00032444)
+Set duty to 0.06 (previous sleeplen was 0.000351215)
+Set duty to 0.06 (previous sleeplen was 0.000323933)
+Set duty to 0.06 (previous sleeplen was 0.000323277)
+Step to 0.9350 at 1435435242.567639022
+Set duty to 0.935 (previous sleeplen was 0.140375)
+Set duty to 0.935 (previous sleeplen was 0.141313)
+Set duty to 0.935 (previous sleeplen was 0.143538)
+Set duty to 0.935 (previous sleeplen was 0.1444)
+Step to 0.0650 at 1435435257.578009063
+Set duty to 0.065 (previous sleeplen was 0.000352121)
+Set duty to 0.065 (previous sleeplen was 0.000352216)
+Set duty to 0.065 (previous sleeplen was 0.00035204)
+Set duty to 0.065 (previous sleeplen was 0.000352384)
+Step to 0.9300 at 1435435272.584882834
+Set duty to 0.93 (previous sleeplen was 0.128843)
+Set duty to 0.93 (previous sleeplen was 0.128831)
+Set duty to 0.93 (previous sleeplen was 0.129523)
+Set duty to 0.93 (previous sleeplen was 0.131686)
+Step to 0.0700 at 1435435287.596263339
+Set duty to 0.07 (previous sleeplen was 0.000381046)
+Set duty to 0.07 (previous sleeplen was 0.000382728)
+Set duty to 0.07 (previous sleeplen was 0.000381291)
+Set duty to 0.07 (previous sleeplen was 0.00038158)
+Step to 0.9250 at 1435435302.600647757
+Set duty to 0.925 (previous sleeplen was 0.123651)
+Set duty to 0.925 (previous sleeplen was 0.120189)
+Set duty to 0.925 (previous sleeplen was 0.120305)
+Set duty to 0.925 (previous sleeplen was 0.121276)
+Step to 0.0750 at 1435435317.605594592
+Set duty to 0.075 (previous sleeplen was 0.000411498)
+Set duty to 0.075 (previous sleeplen was 0.000411324)
+Set duty to 0.075 (previous sleeplen was 0.000411646)
+Set duty to 0.075 (previous sleeplen was 0.000413027)
+Step to 0.9200 at 1435435332.613798974
+Set duty to 0.92 (previous sleeplen was 0.113677)
+Set duty to 0.92 (previous sleeplen was 0.113377)
+Set duty to 0.92 (previous sleeplen was 0.11099)
+Set duty to 0.92 (previous sleeplen was 0.110671)
+Step to 0.0800 at 1435435347.621188967
+Set duty to 0.08 (previous sleeplen was 0.000441261)
+Set duty to 0.08 (previous sleeplen was 0.000441378)
+Set duty to 0.08 (previous sleeplen was 0.000441867)
+Set duty to 0.08 (previous sleeplen was 0.000442907)
+Step to 0.9150 at 1435435362.624533575
+Set duty to 0.915 (previous sleeplen was 0.103309)
+Set duty to 0.915 (previous sleeplen was 0.104292)
+Set duty to 0.915 (previous sleeplen was 0.103005)
+Set duty to 0.915 (previous sleeplen was 0.103553)
+Step to 0.0850 at 1435435377.634466753
+Set duty to 0.085 (previous sleeplen was 0.000473207)
+Set duty to 0.085 (previous sleeplen was 0.000471043)
+Set duty to 0.085 (previous sleeplen was 0.000471574)
+Set duty to 0.085 (previous sleeplen was 0.000473741)
+Step to 0.9100 at 1435435392.637005913
+Set duty to 0.91 (previous sleeplen was 0.0993035)
+Set duty to 0.91 (previous sleeplen was 0.0974061)
+Set duty to 0.91 (previous sleeplen was 0.0994338)
+Set duty to 0.91 (previous sleeplen was 0.0995149)
+Step to 0.0900 at 1435435407.644749484
+Set duty to 0.09 (previous sleeplen was 0.000501713)
+Set duty to 0.09 (previous sleeplen was 0.000504091)
+Set duty to 0.09 (previous sleeplen was 0.00050201)
+Set duty to 0.09 (previous sleeplen was 0.00050236)
+Step to 0.9050 at 1435435422.648983451
+Set duty to 0.905 (previous sleeplen was 0.0906288)
+Set duty to 0.905 (previous sleeplen was 0.0883757)
+Set duty to 0.905 (previous sleeplen was 0.0892632)
+Set duty to 0.905 (previous sleeplen was 0.0879443)
+Step to 0.0950 at 1435435437.653704399
+Set duty to 0.095 (previous sleeplen was 0.000532868)
+Set duty to 0.095 (previous sleeplen was 0.000534477)
+Set duty to 0.095 (previous sleeplen was 0.000544412)
+Set duty to 0.095 (previous sleeplen was 0.000536263)
+Step to 0.9000 at 1435435452.656235066
+Set duty to 0.9 (previous sleeplen was 0.0859876)
+Set duty to 0.9 (previous sleeplen was 0.0861105)
+Set duty to 0.9 (previous sleeplen was 0.0858442)
+Set duty to 0.9 (previous sleeplen was 0.0836307)
+Step to 0.1000 at 1435435467.659148207
+Set duty to 0.1 (previous sleeplen was 0.000563767)
+Set duty to 0.1 (previous sleeplen was 0.000589962)
+Set duty to 0.1 (previous sleeplen was 0.000563787)
+Set duty to 0.1 (previous sleeplen was 0.000565263)
+Step to 0.8950 at 1435435482.663245897
+Set duty to 0.895 (previous sleeplen was 0.0808568)
+Set duty to 0.895 (previous sleeplen was 0.0802513)
+Set duty to 0.895 (previous sleeplen was 0.0800654)
+Set duty to 0.895 (previous sleeplen was 0.0777598)
+Step to 0.1050 at 1435435497.667379490
+Set duty to 0.105 (previous sleeplen was 0.000595417)
+Set duty to 0.105 (previous sleeplen was 0.000595295)
+Set duty to 0.105 (previous sleeplen was 0.000596733)
+Set duty to 0.105 (previous sleeplen was 0.000601026)
+Step to 0.8900 at 1435435512.676557508
+Set duty to 0.89 (previous sleeplen was 0.0783443)
+Set duty to 0.89 (previous sleeplen was 0.0743075)
+Set duty to 0.89 (previous sleeplen was 0.0771602)
+Set duty to 0.89 (previous sleeplen was 0.0759246)
+Step to 0.1100 at 1435435527.679926202
+Set duty to 0.11 (previous sleeplen was 0.000626956)
+Set duty to 0.11 (previous sleeplen was 0.000627449)
+Set duty to 0.11 (previous sleeplen was 0.000632935)
+Set duty to 0.11 (previous sleeplen was 0.000657473)
+Step to 0.8850 at 1435435542.689131645
+Set duty to 0.885 (previous sleeplen was 0.0747071)
+Set duty to 0.885 (previous sleeplen was 0.073523)
+Set duty to 0.885 (previous sleeplen was 0.0737458)
+Set duty to 0.885 (previous sleeplen was 0.0735502)
+Step to 0.1150 at 1435435557.692703521
+Set duty to 0.115 (previous sleeplen was 0.00065973)
+Set duty to 0.115 (previous sleeplen was 0.000660807)
+Set duty to 0.115 (previous sleeplen was 0.000671075)
+Set duty to 0.115 (previous sleeplen was 0.000658754)
+Step to 0.8800 at 1435435572.695853472
+Set duty to 0.88 (previous sleeplen was 0.069191)
+Set duty to 0.88 (previous sleeplen was 0.0702596)
+Set duty to 0.88 (previous sleeplen was 0.0702942)
+Set duty to 0.88 (previous sleeplen was 0.0709597)
+Step to 0.1200 at 1435435587.699006703
+Set duty to 0.12 (previous sleeplen was 0.000692697)
+Set duty to 0.12 (previous sleeplen was 0.000692708)
+Set duty to 0.12 (previous sleeplen was 0.000693571)
+Set duty to 0.12 (previous sleeplen was 0.000696584)
+Step to 0.8750 at 1435435602.701532578
+Set duty to 0.875 (previous sleeplen was 0.0676332)
+Set duty to 0.875 (previous sleeplen was 0.0662957)
+Set duty to 0.875 (previous sleeplen was 0.0667463)
+Set duty to 0.875 (previous sleeplen was 0.0674032)
+Step to 0.1250 at 1435435617.708980231
+Set duty to 0.125 (previous sleeplen was 0.000725158)
+Set duty to 0.125 (previous sleeplen was 0.00073311)
+Set duty to 0.125 (previous sleeplen was 0.000732694)
+Set duty to 0.125 (previous sleeplen was 0.000732965)
+Step to 0.8700 at 1435435632.712469322
+Set duty to 0.87 (previous sleeplen was 0.0599686)
+Set duty to 0.87 (previous sleeplen was 0.0599858)
+Set duty to 0.87 (previous sleeplen was 0.0595829)
+Set duty to 0.87 (previous sleeplen was 0.062052)
+Step to 0.1300 at 1435435647.715998495
+Set duty to 0.13 (previous sleeplen was 0.000760738)
+Set duty to 0.13 (previous sleeplen was 0.000759319)
+Set duty to 0.13 (previous sleeplen was 0.000791713)
+Set duty to 0.13 (previous sleeplen was 0.000759937)
+Step to 0.8650 at 1435435662.718477940
+Set duty to 0.865 (previous sleeplen was 0.0599306)
+Set duty to 0.865 (previous sleeplen was 0.0579271)
+Set duty to 0.865 (previous sleeplen was 0.0591436)
+Set duty to 0.865 (previous sleeplen was 0.0591655)
+Step to 0.1350 at 1435435677.721474820
+Set duty to 0.135 (previous sleeplen was 0.000825614)
+Set duty to 0.135 (previous sleeplen was 0.000793813)
+Set duty to 0.135 (previous sleeplen was 0.000792026)
+Set duty to 0.135 (previous sleeplen was 0.000792355)
+Step to 0.8600 at 1435435692.724083906
+Set duty to 0.86 (previous sleeplen was 0.0571235)
+Set duty to 0.86 (previous sleeplen was 0.0571208)
+Set duty to 0.86 (previous sleeplen was 0.0551981)
+Set duty to 0.86 (previous sleeplen was 0.0569249)
+Step to 0.1400 at 1435435707.726389698
+Set duty to 0.14 (previous sleeplen was 0.000859627)
+Set duty to 0.14 (previous sleeplen was 0.000827084)
+Set duty to 0.14 (previous sleeplen was 0.000827367)
+Set duty to 0.14 (previous sleeplen was 0.00082732)
+Step to 0.8550 at 1435435722.732875007
+Set duty to 0.855 (previous sleeplen was 0.0524556)
+Set duty to 0.855 (previous sleeplen was 0.053965)
+Set duty to 0.855 (previous sleeplen was 0.0529075)
+Set duty to 0.855 (previous sleeplen was 0.052719)
+Step to 0.1450 at 1435435737.735329618
+Set duty to 0.145 (previous sleeplen was 0.00086195)
+Set duty to 0.145 (previous sleeplen was 0.000860801)
+Set duty to 0.145 (previous sleeplen was 0.00085917)
+Set duty to 0.145 (previous sleeplen was 0.00139258)
+Step to 0.8500 at 1435435752.737790673
+Set duty to 0.85 (previous sleeplen was 0.0526403)
+Set duty to 0.85 (previous sleeplen was 0.0531455)
+Set duty to 0.85 (previous sleeplen was 0.0533833)
+Set duty to 0.85 (previous sleeplen was 0.0523334)
+Step to 0.1500 at 1435435767.740386880
+Set duty to 0.15 (previous sleeplen was 0.000932327)
+Set duty to 0.15 (previous sleeplen was 0.000896884)
+Set duty to 0.15 (previous sleeplen was 0.000895361)
+Set duty to 0.15 (previous sleeplen was 0.000896368)
+Step to 0.8450 at 1435435782.742956799
+Set duty to 0.845 (previous sleeplen was 0.0499391)
+Set duty to 0.845 (previous sleeplen was 0.0499743)
+Set duty to 0.845 (previous sleeplen was 0.0499952)
+Set duty to 0.845 (previous sleeplen was 0.0514729)
+Step to 0.1550 at 1435435797.745316335
+Set duty to 0.155 (previous sleeplen was 0.000930719)
+Set duty to 0.155 (previous sleeplen was 0.00093249)
+Set duty to 0.155 (previous sleeplen was 0.000931127)
+Set duty to 0.155 (previous sleeplen was 0.000931509)
+Step to 0.8400 at 1435435812.747684335
+Set duty to 0.84 (previous sleeplen was 0.0470572)
+Set duty to 0.84 (previous sleeplen was 0.0470813)
+Set duty to 0.84 (previous sleeplen was 0.0491015)
+Set duty to 0.84 (previous sleeplen was 0.0490527)
+Step to 0.1600 at 1435435827.750012742
+Set duty to 0.16 (previous sleeplen was 0.000967769)
+Set duty to 0.16 (previous sleeplen was 0.000966856)
+Set duty to 0.16 (previous sleeplen was 0.000966707)
+Set duty to 0.16 (previous sleeplen was 0.0010043)
+Step to 0.8350 at 1435435842.753832116
+Set duty to 0.835 (previous sleeplen was 0.0481042)
+Set duty to 0.835 (previous sleeplen was 0.0464426)
+Set duty to 0.835 (previous sleeplen was 0.0464267)
+Set duty to 0.835 (previous sleeplen was 0.0471989)
+Step to 0.1650 at 1435435857.757059259
+Set duty to 0.165 (previous sleeplen was 0.00104375)
+Set duty to 0.165 (previous sleeplen was 0.00100152)
+Set duty to 0.165 (previous sleeplen was 0.00100245)
+Set duty to 0.165 (previous sleeplen was 0.00100542)
+Step to 0.8300 at 1435435872.759500398
+Set duty to 0.83 (previous sleeplen was 0.044645)
+Set duty to 0.83 (previous sleeplen was 0.0443703)
+Set duty to 0.83 (previous sleeplen was 0.0457712)
+Set duty to 0.83 (previous sleeplen was 0.0466004)
+Step to 0.1700 at 1435435887.761965388
+Set duty to 0.17 (previous sleeplen was 0.00103938)
+Set duty to 0.17 (previous sleeplen was 0.00103959)
+Set duty to 0.17 (previous sleeplen was 0.00104086)
+Set duty to 0.17 (previous sleeplen was 0.00103946)
+Step to 0.8250 at 1435435902.768438500
+Set duty to 0.825 (previous sleeplen was 0.0447003)
+Set duty to 0.825 (previous sleeplen was 0.0424805)
+Set duty to 0.825 (previous sleeplen was 0.0426333)
+Set duty to 0.825 (previous sleeplen was 0.0421361)
+Step to 0.1750 at 1435435917.770589913
+Set duty to 0.175 (previous sleeplen was 0.0011204)
+Set duty to 0.175 (previous sleeplen was 0.00109137)
+Set duty to 0.175 (previous sleeplen was 0.00107625)
+Set duty to 0.175 (previous sleeplen was 0.00107649)
+Step to 0.8200 at 1435435932.776607359
+Set duty to 0.82 (previous sleeplen was 0.0423047)
+Set duty to 0.82 (previous sleeplen was 0.0423479)
+Set duty to 0.82 (previous sleeplen was 0.0438568)
+Set duty to 0.82 (previous sleeplen was 0.0424058)
+Step to 0.1800 at 1435435947.779099470
+Set duty to 0.18 (previous sleeplen was 0.00111367)
+Set duty to 0.18 (previous sleeplen was 0.00111374)
+Set duty to 0.18 (previous sleeplen was 0.00111763)
+Set duty to 0.18 (previous sleeplen was 0.00111186)
+Step to 0.8150 at 1435435962.784675722
+Set duty to 0.815 (previous sleeplen was 0.0396838)
+Set duty to 0.815 (previous sleeplen was 0.039676)
+Set duty to 0.815 (previous sleeplen was 0.0410308)
+Set duty to 0.815 (previous sleeplen was 0.0413745)
+Step to 0.1850 at 1435435977.787899467
+Set duty to 0.185 (previous sleeplen was 0.00115248)
+Set duty to 0.185 (previous sleeplen was 0.00120089)
+Set duty to 0.185 (previous sleeplen was 0.00115362)
+Set duty to 0.185 (previous sleeplen was 0.0011537)
+Step to 0.8100 at 1435435992.792322855
+Set duty to 0.81 (previous sleeplen was 0.0386533)
+Set duty to 0.81 (previous sleeplen was 0.0389051)
+Set duty to 0.81 (previous sleeplen was 0.0391434)
+Set duty to 0.81 (previous sleeplen was 0.0392449)
+Step to 0.1900 at 1435436007.796049357
+Set duty to 0.19 (previous sleeplen was 0.00119126)
+Set duty to 0.19 (previous sleeplen was 0.00119052)
+Set duty to 0.19 (previous sleeplen was 0.00119211)
+Set duty to 0.19 (previous sleeplen was 0.00123608)
+Step to 0.8050 at 1435436022.798467029
+Set duty to 0.805 (previous sleeplen was 0.0376925)
+Set duty to 0.805 (previous sleeplen was 0.0377369)
+Set duty to 0.805 (previous sleeplen was 0.0376734)
+Set duty to 0.805 (previous sleeplen was 0.0368733)
+Step to 0.1950 at 1435436037.800616498
+Set duty to 0.195 (previous sleeplen was 0.0012304)
+Set duty to 0.195 (previous sleeplen was 0.00129162)
+Set duty to 0.195 (previous sleeplen was 0.00127693)
+Set duty to 0.195 (previous sleeplen was 0.00136832)
+Step to 0.8000 at 1435436052.804752894
+Set duty to 0.8 (previous sleeplen was 0.0362328)
+Set duty to 0.8 (previous sleeplen was 0.0362073)
+Set duty to 0.8 (previous sleeplen was 0.0365742)
+Set duty to 0.8 (previous sleeplen was 0.0374104)
+Step to 0.2000 at 1435436067.807010806
+Set duty to 0.2 (previous sleeplen was 0.00126866)
+Set duty to 0.2 (previous sleeplen was 0.00127068)
+Set duty to 0.2 (previous sleeplen was 0.00126923)
+Set duty to 0.2 (previous sleeplen was 0.00127045)
+Step to 0.7950 at 1435436082.812325318
+Set duty to 0.795 (previous sleeplen was 0.0227635)
+Set duty to 0.795 (previous sleeplen was 0.0227614)
+Set duty to 0.795 (previous sleeplen was 0.0292342)
+Set duty to 0.795 (previous sleeplen was 0.0292248)
+Step to 0.2050 at 1435436097.814940415
+Set duty to 0.205 (previous sleeplen was 0.00130815)
+Set duty to 0.205 (previous sleeplen was 0.00131017)
+Set duty to 0.205 (previous sleeplen was 0.00136292)
+Set duty to 0.205 (previous sleeplen was 0.00131629)
+Step to 0.7900 at 1435436112.817064825
+Set duty to 0.79 (previous sleeplen was 0.0210165)
+Set duty to 0.79 (previous sleeplen was 0.0209954)
+Set duty to 0.79 (previous sleeplen was 0.0210175)
+Set duty to 0.79 (previous sleeplen was 0.0297856)
+Step to 0.2100 at 1435436127.818928030
+Set duty to 0.21 (previous sleeplen was 0.00134815)
+Set duty to 0.21 (previous sleeplen was 0.00140103)
+Set duty to 0.21 (previous sleeplen was 0.00134896)
+Set duty to 0.21 (previous sleeplen was 0.00134936)
+Step to 0.7850 at 1435436142.824659238
+Set duty to 0.785 (previous sleeplen was 0.0316116)
+Set duty to 0.785 (previous sleeplen was 0.0316108)
+Set duty to 0.785 (previous sleeplen was 0.0326912)
+Set duty to 0.785 (previous sleeplen was 0.0335241)
+Step to 0.2150 at 1435436157.827105602
+Set duty to 0.215 (previous sleeplen was 0.00138967)
+Set duty to 0.215 (previous sleeplen was 0.00139153)
+Set duty to 0.215 (previous sleeplen was 0.00139317)
+Set duty to 0.215 (previous sleeplen was 0.00139029)
+Step to 0.7800 at 1435436172.831051104
+Set duty to 0.78 (previous sleeplen was 0.020372)
+Set duty to 0.78 (previous sleeplen was 0.0203924)
+Set duty to 0.78 (previous sleeplen was 0.0203914)
+Set duty to 0.78 (previous sleeplen was 0.0204303)
+Step to 0.2200 at 1435436187.835497037
+Set duty to 0.22 (previous sleeplen was 0.00144798)
+Set duty to 0.22 (previous sleeplen was 0.0014479)
+Set duty to 0.22 (previous sleeplen was 0.00145048)
+Set duty to 0.22 (previous sleeplen was 0.00150038)
+Step to 0.7750 at 1435436202.837428125
+Set duty to 0.775 (previous sleeplen was 0.0206062)
+Set duty to 0.775 (previous sleeplen was 0.0206104)
+Set duty to 0.775 (previous sleeplen was 0.0205964)
+Set duty to 0.775 (previous sleeplen was 0.0206187)
+Step to 0.2250 at 1435436217.840672655
+Set duty to 0.225 (previous sleeplen was 0.00154496)
+Set duty to 0.225 (previous sleeplen was 0.00154254)
+Set duty to 0.225 (previous sleeplen was 0.00154516)
+Set duty to 0.225 (previous sleeplen was 0.00155025)
+Step to 0.7700 at 1435436232.842538976
+Set duty to 0.77 (previous sleeplen was 0.0181075)
+Set duty to 0.77 (previous sleeplen was 0.0181161)
+Set duty to 0.77 (previous sleeplen was 0.0181266)
+Set duty to 0.77 (previous sleeplen was 0.0181079)
+Step to 0.2300 at 1435436247.844267474
+Set duty to 0.23 (previous sleeplen was 0.00151935)
+Set duty to 0.23 (previous sleeplen was 0.00151622)
+Set duty to 0.23 (previous sleeplen was 0.00151429)
+Set duty to 0.23 (previous sleeplen was 0.00154587)
+Step to 0.7650 at 1435436262.852357497
+Set duty to 0.765 (previous sleeplen was 0.0172605)
+Set duty to 0.765 (previous sleeplen was 0.017265)
+Set duty to 0.765 (previous sleeplen was 0.0172619)
+Set duty to 0.765 (previous sleeplen was 0.0174413)
+Step to 0.2350 at 1435436277.854069804
+Set duty to 0.235 (previous sleeplen was 0.00163207)
+Set duty to 0.235 (previous sleeplen was 0.00163296)
+Set duty to 0.235 (previous sleeplen was 0.001637)
+Set duty to 0.235 (previous sleeplen was 0.00163189)
+Step to 0.7600 at 1435436292.856711106
+Set duty to 0.76 (previous sleeplen was 0.0202279)
+Set duty to 0.76 (previous sleeplen was 0.0203278)
+Set duty to 0.76 (previous sleeplen was 0.0203875)
+Set duty to 0.76 (previous sleeplen was 0.0203859)
+Step to 0.2400 at 1435436307.858705637
+Set duty to 0.24 (previous sleeplen was 0.00168092)
+Set duty to 0.24 (previous sleeplen was 0.00167875)
+Set duty to 0.24 (previous sleeplen was 0.00167859)
+Set duty to 0.24 (previous sleeplen was 0.00168551)
+Step to 0.7550 at 1435436322.861607569
+Set duty to 0.755 (previous sleeplen was 0.0232993)
+Set duty to 0.755 (previous sleeplen was 0.0233466)
+Set duty to 0.755 (previous sleeplen was 0.0233284)
+Set duty to 0.755 (previous sleeplen was 0.0235712)
+Step to 0.2450 at 1435436337.864730642
+Set duty to 0.245 (previous sleeplen was 0.00164887)
+Set duty to 0.245 (previous sleeplen was 0.00170577)
+Set duty to 0.245 (previous sleeplen was 0.00164722)
+Set duty to 0.245 (previous sleeplen was 0.00164689)
+Step to 0.7500 at 1435436352.868682973
+Set duty to 0.75 (previous sleeplen was 0.0161957)
+Set duty to 0.75 (previous sleeplen was 0.0162014)
+Set duty to 0.75 (previous sleeplen was 0.0162003)
+Set duty to 0.75 (previous sleeplen was 0.0163703)
+Step to 0.2500 at 1435436367.870415937
+Set duty to 0.25 (previous sleeplen was 0.00177118)
+Set duty to 0.25 (previous sleeplen was 0.00176978)
+Set duty to 0.25 (previous sleeplen was 0.00279465)
+Set duty to 0.25 (previous sleeplen was 0.00309601)
+Step to 0.7450 at 1435436382.878311148
+Set duty to 0.745 (previous sleeplen was 0.0166453)
+Set duty to 0.745 (previous sleeplen was 0.0166607)
+Set duty to 0.745 (previous sleeplen was 0.0166519)
+Set duty to 0.745 (previous sleeplen was 0.0168338)
+Step to 0.2550 at 1435436397.880218130
+Set duty to 0.255 (previous sleeplen was 0.00177108)
+Set duty to 0.255 (previous sleeplen was 0.00173949)
+Set duty to 0.255 (previous sleeplen was 0.00173957)
+Set duty to 0.255 (previous sleeplen was 0.00174986)
+Step to 0.7400 at 1435436412.886375627
+Set duty to 0.74 (previous sleeplen was 0.0153097)
+Set duty to 0.74 (previous sleeplen was 0.0153026)
+Set duty to 0.74 (previous sleeplen was 0.015316)
+Set duty to 0.74 (previous sleeplen was 0.0153089)
+Step to 0.2600 at 1435436427.888353019
+Set duty to 0.26 (previous sleeplen was 0.00184583)
+Set duty to 0.26 (previous sleeplen was 0.00178307)
+Set duty to 0.26 (previous sleeplen was 0.00178311)
+Set duty to 0.26 (previous sleeplen was 0.00178558)
+Step to 0.7350 at 1435436442.890124821
+Set duty to 0.735 (previous sleeplen was 0.0157403)
+Set duty to 0.735 (previous sleeplen was 0.0157408)
+Set duty to 0.735 (previous sleeplen was 0.0152896)
+Set duty to 0.735 (previous sleeplen was 0.0166531)
+Step to 0.2650 at 1435436457.891845744
+Set duty to 0.265 (previous sleeplen was 0.00183045)
+Set duty to 0.265 (previous sleeplen was 0.00183102)
+Set duty to 0.265 (previous sleeplen was 0.00182949)
+Set duty to 0.265 (previous sleeplen was 0.00183585)
+Step to 0.7300 at 1435436472.893870039
+Set duty to 0.73 (previous sleeplen was 0.0145991)
+Set duty to 0.73 (previous sleeplen was 0.0146121)
+Set duty to 0.73 (previous sleeplen was 0.0146121)
+Set duty to 0.73 (previous sleeplen was 0.0187745)
+Step to 0.2700 at 1435436487.895811703
+Set duty to 0.27 (previous sleeplen was 0.00187782)
+Set duty to 0.27 (previous sleeplen was 0.00187746)
+Set duty to 0.27 (previous sleeplen was 0.00188172)
+Set duty to 0.27 (previous sleeplen was 0.00188438)
+Step to 0.7250 at 1435436502.897558378
+Set duty to 0.725 (previous sleeplen was 0.0141551)
+Set duty to 0.725 (previous sleeplen was 0.014156)
+Set duty to 0.725 (previous sleeplen was 0.0141279)
+Set duty to 0.725 (previous sleeplen was 0.0141371)
+Step to 0.2750 at 1435436517.904168539
+Set duty to 0.275 (previous sleeplen was 0.00194083)
+Set duty to 0.275 (previous sleeplen was 0.00194781)
+Set duty to 0.275 (previous sleeplen was 0.00192909)
+Set duty to 0.275 (previous sleeplen was 0.00196408)
+Step to 0.7200 at 1435436532.905969468
+Set duty to 0.72 (previous sleeplen was 0.0135397)
+Set duty to 0.72 (previous sleeplen was 0.0135574)
+Set duty to 0.72 (previous sleeplen was 0.0135416)
+Set duty to 0.72 (previous sleeplen was 0.0135627)
+Step to 0.2800 at 1435436547.907747957
+Set duty to 0.28 (previous sleeplen was 0.00197461)
+Set duty to 0.28 (previous sleeplen was 0.00219372)
+Set duty to 0.28 (previous sleeplen was 0.0019781)
+Set duty to 0.28 (previous sleeplen was 0.00198113)
+Step to 0.7150 at 1435436562.909872522
+Set duty to 0.715 (previous sleeplen was 0.0138071)
+Set duty to 0.715 (previous sleeplen was 0.0131777)
+Set duty to 0.715 (previous sleeplen was 0.0131746)
+Set duty to 0.715 (previous sleeplen was 0.0131875)
+Step to 0.2850 at 1435436577.911642045
+Set duty to 0.285 (previous sleeplen was 0.00202288)
+Set duty to 0.285 (previous sleeplen was 0.00202538)
+Set duty to 0.285 (previous sleeplen was 0.00202294)
+Set duty to 0.285 (previous sleeplen was 0.00203157)
+Step to 0.7100 at 1435436592.913543457
+Set duty to 0.71 (previous sleeplen was 0.0128617)
+Set duty to 0.71 (previous sleeplen was 0.0128731)
+Set duty to 0.71 (previous sleeplen was 0.0130362)
+Set duty to 0.71 (previous sleeplen was 0.0131451)
+Step to 0.2900 at 1435436607.917166015
+Set duty to 0.29 (previous sleeplen was 0.00208432)
+Set duty to 0.29 (previous sleeplen was 0.00208394)
+Set duty to 0.29 (previous sleeplen was 0.0020783)
+Set duty to 0.29 (previous sleeplen was 0.00214789)
+Step to 0.7050 at 1435436622.919013423
+Set duty to 0.705 (previous sleeplen was 0.0125413)
+Set duty to 0.705 (previous sleeplen was 0.012541)
+Set duty to 0.705 (previous sleeplen was 0.0125408)
+Set duty to 0.705 (previous sleeplen was 0.0125479)
+Step to 0.2950 at 1435436637.920730670
+Set duty to 0.295 (previous sleeplen was 0.00212478)
+Set duty to 0.295 (previous sleeplen was 0.00212574)
+Set duty to 0.295 (previous sleeplen was 0.00212588)
+Set duty to 0.295 (previous sleeplen was 0.00220231)
+Step to 0.7000 at 1435436652.926995875
+Set duty to 0.7 (previous sleeplen was 0.012233)
+Set duty to 0.7 (previous sleeplen was 0.0122366)
+Set duty to 0.7 (previous sleeplen was 0.0122408)
+Set duty to 0.7 (previous sleeplen was 0.0124195)
+Step to 0.3000 at 1435436667.928682746
+Set duty to 0.3 (previous sleeplen was 0.00217497)
+Set duty to 0.3 (previous sleeplen was 0.00217516)
+Set duty to 0.3 (previous sleeplen was 0.00217777)
+Set duty to 0.3 (previous sleeplen was 0.00224399)
+Step to 0.6950 at 1435436682.932301095
+Set duty to 0.695 (previous sleeplen was 0.0119772)
+Set duty to 0.695 (previous sleeplen was 0.0120009)
+Set duty to 0.695 (previous sleeplen was 0.0119977)
+Set duty to 0.695 (previous sleeplen was 0.0121501)
+Step to 0.3050 at 1435436697.934007317
+Set duty to 0.305 (previous sleeplen was 0.00222658)
+Set duty to 0.305 (previous sleeplen was 0.00222819)
+Set duty to 0.305 (previous sleeplen was 0.00222778)
+Set duty to 0.305 (previous sleeplen was 0.00225086)
+Step to 0.6900 at 1435436712.935831262
+Set duty to 0.69 (previous sleeplen was 0.0116751)
+Set duty to 0.69 (previous sleeplen was 0.0116763)
+Set duty to 0.69 (previous sleeplen was 0.0117093)
+Set duty to 0.69 (previous sleeplen was 0.0116282)
+Step to 0.3100 at 1435436727.937533514
+Set duty to 0.31 (previous sleeplen was 0.00227999)
+Set duty to 0.31 (previous sleeplen was 0.00228128)
+Set duty to 0.31 (previous sleeplen was 0.00227948)
+Set duty to 0.31 (previous sleeplen was 0.00228022)
+Step to 0.6850 at 1435436742.939301460
+Set duty to 0.685 (previous sleeplen was 0.0114369)
+Set duty to 0.685 (previous sleeplen was 0.0114382)
+Set duty to 0.685 (previous sleeplen was 0.0114285)
+Set duty to 0.685 (previous sleeplen was 0.011525)
+Step to 0.3150 at 1435436757.941045570
+Set duty to 0.315 (previous sleeplen was 0.00242056)
+Set duty to 0.315 (previous sleeplen was 0.0023368)
+Set duty to 0.315 (previous sleeplen was 0.00233584)
+Set duty to 0.315 (previous sleeplen was 0.00233391)
+Step to 0.6800 at 1435436772.946995266
+Set duty to 0.68 (previous sleeplen was 0.0111334)
+Set duty to 0.68 (previous sleeplen was 0.0111816)
+Set duty to 0.68 (previous sleeplen was 0.0111798)
+Set duty to 0.68 (previous sleeplen was 0.0112649)
+Step to 0.3200 at 1435436787.948791600
+Set duty to 0.32 (previous sleeplen was 0.0023879)
+Set duty to 0.32 (previous sleeplen was 0.00239646)
+Set duty to 0.32 (previous sleeplen was 0.00241356)
+Set duty to 0.32 (previous sleeplen was 0.00245862)
+Step to 0.6750 at 1435436802.955448708
+Set duty to 0.675 (previous sleeplen was 0.0108996)
+Set duty to 0.675 (previous sleeplen was 0.0107939)
+Set duty to 0.675 (previous sleeplen was 0.0108697)
+Set duty to 0.675 (previous sleeplen was 0.0108091)
+Step to 0.3250 at 1435436817.957125377
+Set duty to 0.325 (previous sleeplen was 0.00244706)
+Set duty to 0.325 (previous sleeplen was 0.00244965)
+Set duty to 0.325 (previous sleeplen was 0.00252052)
+Set duty to 0.325 (previous sleeplen was 0.00244647)
+Step to 0.6700 at 1435436832.962675265
+Set duty to 0.67 (previous sleeplen was 0.0106023)
+Set duty to 0.67 (previous sleeplen was 0.0106404)
+Set duty to 0.67 (previous sleeplen was 0.0106416)
+Set duty to 0.67 (previous sleeplen was 0.0107846)
+Step to 0.3300 at 1435436847.964378983
+Set duty to 0.33 (previous sleeplen was 0.00250377)
+Set duty to 0.33 (previous sleeplen was 0.00250314)
+Set duty to 0.33 (previous sleeplen was 0.00254052)
+Set duty to 0.33 (previous sleeplen was 0.00275296)
+Step to 0.6650 at 1435436862.966146800
+Set duty to 0.665 (previous sleeplen was 0.0104101)
+Set duty to 0.665 (previous sleeplen was 0.0103652)
+Set duty to 0.665 (previous sleeplen was 0.0104035)
+Set duty to 0.665 (previous sleeplen was 0.0103534)
+Step to 0.3350 at 1435436877.967879090
+Set duty to 0.335 (previous sleeplen was 0.00255643)
+Set duty to 0.335 (previous sleeplen was 0.00255767)
+Set duty to 0.335 (previous sleeplen was 0.00255801)
+Set duty to 0.335 (previous sleeplen was 0.00255776)
+Step to 0.6600 at 1435436892.969665437
+Set duty to 0.66 (previous sleeplen was 0.0101821)
+Set duty to 0.66 (previous sleeplen was 0.0101803)
+Set duty to 0.66 (previous sleeplen was 0.0101948)
+Set duty to 0.66 (previous sleeplen was 0.0103203)
+Step to 0.3400 at 1435436907.971439090
+Set duty to 0.34 (previous sleeplen was 0.00261407)
+Set duty to 0.34 (previous sleeplen was 0.00261339)
+Set duty to 0.34 (previous sleeplen was 0.00261865)
+Set duty to 0.34 (previous sleeplen was 0.00261744)
+Step to 0.6550 at 1435436922.973220807
+Set duty to 0.655 (previous sleeplen was 0.00989572)
+Set duty to 0.655 (previous sleeplen was 0.00993187)
+Set duty to 0.655 (previous sleeplen was 0.00993348)
+Set duty to 0.655 (previous sleeplen was 0.00993397)
+Step to 0.3450 at 1435436937.974956456
+Set duty to 0.345 (previous sleeplen was 0.00270492)
+Set duty to 0.345 (previous sleeplen was 0.00267545)
+Set duty to 0.345 (previous sleeplen was 0.00267941)
+Set duty to 0.345 (previous sleeplen was 0.00267992)
+Step to 0.6500 at 1435436952.976621059
+Set duty to 0.65 (previous sleeplen was 0.0111344)
+Set duty to 0.65 (previous sleeplen was 0.00973657)
+Set duty to 0.65 (previous sleeplen was 0.00973667)
+Set duty to 0.65 (previous sleeplen was 0.00982032)
+Step to 0.3500 at 1435436967.978392079
+Set duty to 0.35 (previous sleeplen was 0.00274746)
+Set duty to 0.35 (previous sleeplen was 0.00274673)
+Set duty to 0.35 (previous sleeplen was 0.00274525)
+Set duty to 0.35 (previous sleeplen was 0.00273826)
+Step to 0.6450 at 1435436982.983509502
+Set duty to 0.645 (previous sleeplen was 0.00953135)
+Set duty to 0.645 (previous sleeplen was 0.00953143)
+Set duty to 0.645 (previous sleeplen was 0.00956415)
+Set duty to 0.645 (previous sleeplen was 0.0096816)
+Step to 0.3550 at 1435436997.985281011
+Set duty to 0.355 (previous sleeplen was 0.00281943)
+Set duty to 0.355 (previous sleeplen was 0.00281874)
+Set duty to 0.355 (previous sleeplen was 0.00281929)
+Set duty to 0.355 (previous sleeplen was 0.00282008)
+Step to 0.6400 at 1435437012.987114391
+Set duty to 0.64 (previous sleeplen was 0.0092886)
+Set duty to 0.64 (previous sleeplen was 0.00931366)
+Set duty to 0.64 (previous sleeplen was 0.00931813)
+Set duty to 0.64 (previous sleeplen was 0.00931584)
+Step to 0.3600 at 1435437027.988879028
+Set duty to 0.36 (previous sleeplen was 0.00288144)
+Set duty to 0.36 (previous sleeplen was 0.00285727)
+Set duty to 0.36 (previous sleeplen was 0.00291681)
+Set duty to 0.36 (previous sleeplen was 0.00286092)
+Step to 0.6350 at 1435437042.990664218
+Set duty to 0.635 (previous sleeplen was 0.00910796)
+Set duty to 0.635 (previous sleeplen was 0.00910807)
+Set duty to 0.635 (previous sleeplen was 0.00911004)
+Set duty to 0.635 (previous sleeplen was 0.009047)
+Step to 0.3650 at 1435437057.995628901
+Set duty to 0.365 (previous sleeplen was 0.00293989)
+Set duty to 0.365 (previous sleeplen was 0.00295191)
+Set duty to 0.365 (previous sleeplen was 0.00295627)
+Set duty to 0.365 (previous sleeplen was 0.00303727)
+Step to 0.6300 at 1435437072.997479118
+Set duty to 0.63 (previous sleeplen was 0.00891482)
+Set duty to 0.63 (previous sleeplen was 0.00892071)
+Set duty to 0.63 (previous sleeplen was 0.00892288)
+Set duty to 0.63 (previous sleeplen was 0.00891924)
+Step to 0.3700 at 1435437087.999300488
+Set duty to 0.37 (previous sleeplen was 0.00301094)
+Set duty to 0.37 (previous sleeplen was 0.00301156)
+Set duty to 0.37 (previous sleeplen was 0.00301272)
+Set duty to 0.37 (previous sleeplen was 0.0030122)
+Step to 0.6250 at 1435437103.001728996
+Set duty to 0.625 (previous sleeplen was 0.00874907)
+Set duty to 0.625 (previous sleeplen was 0.00864483)
+Set duty to 0.625 (previous sleeplen was 0.00879255)
+Set duty to 0.625 (previous sleeplen was 0.00866703)
+Step to 0.3750 at 1435437118.003607093
+Set duty to 0.375 (previous sleeplen was 0.00308205)
+Set duty to 0.375 (previous sleeplen was 0.00305806)
+Set duty to 0.375 (previous sleeplen was 0.00306726)
+Set duty to 0.375 (previous sleeplen was 0.00314554)
+Step to 0.6200 at 1435437133.005450272
+Set duty to 0.62 (previous sleeplen was 0.00855001)
+Set duty to 0.62 (previous sleeplen was 0.00855754)
+Set duty to 0.62 (previous sleeplen was 0.00855179)
+Set duty to 0.62 (previous sleeplen was 0.00855312)
+Step to 0.3800 at 1435437148.007258215
+Set duty to 0.38 (previous sleeplen was 0.00314252)
+Set duty to 0.38 (previous sleeplen was 0.00314573)
+Set duty to 0.38 (previous sleeplen was 0.00314471)
+Set duty to 0.38 (previous sleeplen was 0.00314458)
+Step to 0.6150 at 1435437163.011922737
+Set duty to 0.615 (previous sleeplen was 0.00836076)
+Set duty to 0.615 (previous sleeplen was 0.00835625)
+Set duty to 0.615 (previous sleeplen was 0.00832515)
+Set duty to 0.615 (previous sleeplen was 0.00849088)
+Step to 0.3850 at 1435437178.013823504
+Set duty to 0.385 (previous sleeplen was 0.00318301)
+Set duty to 0.385 (previous sleeplen was 0.00318394)
+Set duty to 0.385 (previous sleeplen was 0.0031767)
+Set duty to 0.385 (previous sleeplen was 0.00318812)
+Step to 0.6100 at 1435437193.015606658
+Set duty to 0.61 (previous sleeplen was 0.00820025)
+Set duty to 0.61 (previous sleeplen was 0.00819824)
+Set duty to 0.61 (previous sleeplen was 0.00820175)
+Set duty to 0.61 (previous sleeplen was 0.00823728)
+Step to 0.3900 at 1435437208.017761482
+Set duty to 0.39 (previous sleeplen was 0.00327857)
+Set duty to 0.39 (previous sleeplen was 0.00324533)
+Set duty to 0.39 (previous sleeplen was 0.00324643)
+Set duty to 0.39 (previous sleeplen was 0.00335206)
+Step to 0.6050 at 1435437223.019576985
+Set duty to 0.605 (previous sleeplen was 0.00801223)
+Set duty to 0.605 (previous sleeplen was 0.00801256)
+Set duty to 0.605 (previous sleeplen was 0.0080187)
+Set duty to 0.605 (previous sleeplen was 0.00795002)
+Step to 0.3950 at 1435437238.021793875
+Set duty to 0.395 (previous sleeplen was 0.00334783)
+Set duty to 0.395 (previous sleeplen was 0.00335351)
+Set duty to 0.395 (previous sleeplen was 0.00334175)
+Set duty to 0.395 (previous sleeplen was 0.00344331)
+Step to 0.6000 at 1435437253.023590115
+Set duty to 0.6 (previous sleeplen was 0.00784954)
+Set duty to 0.6 (previous sleeplen was 0.0078531)
+Set duty to 0.6 (previous sleeplen was 0.00785196)
+Set duty to 0.6 (previous sleeplen was 0.0079162)
+Step to 0.4000 at 1435437268.029159713
+Set duty to 0.4 (previous sleeplen was 0.00341364)
+Set duty to 0.4 (previous sleeplen was 0.00338679)
+Set duty to 0.4 (previous sleeplen was 0.00338649)
+Set duty to 0.4 (previous sleeplen was 0.00338077)
+Step to 0.5950 at 1435437283.033316541
+Set duty to 0.595 (previous sleeplen was 0.00769504)
+Set duty to 0.595 (previous sleeplen was 0.00761702)
+Set duty to 0.595 (previous sleeplen was 0.0076262)
+Set duty to 0.595 (previous sleeplen was 0.00776371)
+Step to 0.4050 at 1435437298.035136879
+Set duty to 0.405 (previous sleeplen was 0.00349247)
+Set duty to 0.405 (previous sleeplen was 0.00349126)
+Set duty to 0.405 (previous sleeplen was 0.00349229)
+Set duty to 0.405 (previous sleeplen was 0.00349539)
+Step to 0.5900 at 1435437313.037076433
+Set duty to 0.59 (previous sleeplen was 0.00753136)
+Set duty to 0.59 (previous sleeplen was 0.00753338)
+Set duty to 0.59 (previous sleeplen was 0.00757523)
+Set duty to 0.59 (previous sleeplen was 0.00746353)
+Step to 0.4100 at 1435437328.039828746
+Set duty to 0.41 (previous sleeplen was 0.00356248)
+Set duty to 0.41 (previous sleeplen was 0.0035641)
+Set duty to 0.41 (previous sleeplen was 0.00356299)
+Set duty to 0.41 (previous sleeplen was 0.00366494)
+Step to 0.5850 at 1435437343.041724644
+Set duty to 0.585 (previous sleeplen was 0.007382)
+Set duty to 0.585 (previous sleeplen was 0.00737258)
+Set duty to 0.585 (previous sleeplen was 0.00737219)
+Set duty to 0.585 (previous sleeplen was 0.00737266)
+Step to 0.4150 at 1435437358.047567145
+Set duty to 0.415 (previous sleeplen was 0.00363633)
+Set duty to 0.415 (previous sleeplen was 0.0036402)
+Set duty to 0.415 (previous sleeplen was 0.00363872)
+Set duty to 0.415 (previous sleeplen was 0.00373732)
+Step to 0.5800 at 1435437373.051370280
+Set duty to 0.58 (previous sleeplen was 0.00720679)
+Set duty to 0.58 (previous sleeplen was 0.0072238)
+Set duty to 0.58 (previous sleeplen was 0.00716436)
+Set duty to 0.58 (previous sleeplen was 0.00736462)
+Step to 0.4200 at 1435437388.053649597
+Set duty to 0.42 (previous sleeplen was 0.0037079)
+Set duty to 0.42 (previous sleeplen was 0.00371495)
+Set duty to 0.42 (previous sleeplen was 0.00380695)
+Set duty to 0.42 (previous sleeplen was 0.00370114)
+Step to 0.5750 at 1435437403.058605546
+Set duty to 0.575 (previous sleeplen was 0.00707122)
+Set duty to 0.575 (previous sleeplen was 0.00707808)
+Set duty to 0.575 (previous sleeplen was 0.00720936)
+Set duty to 0.575 (previous sleeplen was 0.00711504)
+Step to 0.4250 at 1435437418.061993238
+Set duty to 0.425 (previous sleeplen was 0.00378655)
+Set duty to 0.425 (previous sleeplen was 0.00379105)
+Set duty to 0.425 (previous sleeplen was 0.00389741)
+Set duty to 0.425 (previous sleeplen was 0.00377761)
+Step to 0.5700 at 1435437433.063869498
+Set duty to 0.57 (previous sleeplen was 0.00686739)
+Set duty to 0.57 (previous sleeplen was 0.00688216)
+Set duty to 0.57 (previous sleeplen was 0.00690645)
+Set duty to 0.57 (previous sleeplen was 0.00691771)
+Step to 0.4300 at 1435437448.069665522
+Set duty to 0.43 (previous sleeplen was 0.00386742)
+Set duty to 0.43 (previous sleeplen was 0.00386877)
+Set duty to 0.43 (previous sleeplen was 0.00386995)
+Set duty to 0.43 (previous sleeplen was 0.00386423)
+Step to 0.5650 at 1435437463.071462437
+Set duty to 0.565 (previous sleeplen was 0.00680891)
+Set duty to 0.565 (previous sleeplen was 0.00680891)
+Set duty to 0.565 (previous sleeplen was 0.00685395)
+Set duty to 0.565 (previous sleeplen was 0.00694332)
+Step to 0.4350 at 1435437478.073244922
+Set duty to 0.435 (previous sleeplen was 0.00390726)
+Set duty to 0.435 (previous sleeplen was 0.00390748)
+Set duty to 0.435 (previous sleeplen was 0.00390724)
+Set duty to 0.435 (previous sleeplen was 0.00392649)
+Step to 0.5600 at 1435437493.079626069
+Set duty to 0.56 (previous sleeplen was 0.0066645)
+Set duty to 0.56 (previous sleeplen was 0.00666022)
+Set duty to 0.56 (previous sleeplen was 0.00666108)
+Set duty to 0.56 (previous sleeplen was 0.00680088)
+Step to 0.4400 at 1435437508.085410822
+Set duty to 0.44 (previous sleeplen was 0.00399788)
+Set duty to 0.44 (previous sleeplen was 0.0040344)
+Set duty to 0.44 (previous sleeplen was 0.00398746)
+Set duty to 0.44 (previous sleeplen was 0.00409052)
+Step to 0.5550 at 1435437523.088325220
+Set duty to 0.555 (previous sleeplen was 0.00647315)
+Set duty to 0.555 (previous sleeplen was 0.00652435)
+Set duty to 0.555 (previous sleeplen was 0.00652351)
+Set duty to 0.555 (previous sleeplen was 0.0066621)
+Step to 0.4450 at 1435437538.093924352
+Set duty to 0.445 (previous sleeplen was 0.0041117)
+Set duty to 0.445 (previous sleeplen was 0.0041155)
+Set duty to 0.445 (previous sleeplen was 0.00407494)
+Set duty to 0.445 (previous sleeplen was 0.00422028)
+Step to 0.5500 at 1435437553.097450729
+Set duty to 0.55 (previous sleeplen was 0.00639364)
+Set duty to 0.55 (previous sleeplen was 0.00639889)
+Set duty to 0.55 (previous sleeplen was 0.00634571)
+Set duty to 0.55 (previous sleeplen was 0.00651871)
+Step to 0.4500 at 1435437568.100871226
+Set duty to 0.45 (previous sleeplen was 0.00418803)
+Set duty to 0.45 (previous sleeplen was 0.00418532)
+Set duty to 0.45 (previous sleeplen was 0.00418471)
+Set duty to 0.45 (previous sleeplen was 0.00427569)
+Step to 0.5450 at 1435437583.102622664
+Set duty to 0.545 (previous sleeplen was 0.00626197)
+Set duty to 0.545 (previous sleeplen was 0.00626115)
+Set duty to 0.545 (previous sleeplen was 0.0062674)
+Set duty to 0.545 (previous sleeplen was 0.00620289)
+Step to 0.4550 at 1435437598.106249405
+Set duty to 0.455 (previous sleeplen was 0.00427011)
+Set duty to 0.455 (previous sleeplen was 0.00427813)
+Set duty to 0.455 (previous sleeplen was 0.00437783)
+Set duty to 0.455 (previous sleeplen was 0.00424207)
+Step to 0.5400 at 1435437613.109354713
+Set duty to 0.54 (previous sleeplen was 0.00613119)
+Set duty to 0.54 (previous sleeplen was 0.0061355)
+Set duty to 0.54 (previous sleeplen was 0.0062697)
+Set duty to 0.54 (previous sleeplen was 0.00609597)
+Step to 0.4600 at 1435437628.111125605
+Set duty to 0.46 (previous sleeplen was 0.00620191)
+Set duty to 0.46 (previous sleeplen was 0.00436249)
+Set duty to 0.46 (previous sleeplen was 0.00436123)
+Set duty to 0.46 (previous sleeplen was 0.00436946)
+Step to 0.5350 at 1435437643.112877135
+Set duty to 0.535 (previous sleeplen was 0.00601555)
+Set duty to 0.535 (previous sleeplen was 0.00601828)
+Set duty to 0.535 (previous sleeplen was 0.00614326)
+Set duty to 0.535 (previous sleeplen was 0.00596256)
+Step to 0.4650 at 1435437658.114654119
+Set duty to 0.465 (previous sleeplen was 0.00441332)
+Set duty to 0.465 (previous sleeplen was 0.00444237)
+Set duty to 0.465 (previous sleeplen was 0.00444644)
+Set duty to 0.465 (previous sleeplen was 0.0044372)
+Step to 0.5300 at 1435437673.116398028
+Set duty to 0.53 (previous sleeplen was 0.00589369)
+Set duty to 0.53 (previous sleeplen was 0.00590044)
+Set duty to 0.53 (previous sleeplen was 0.00589404)
+Set duty to 0.53 (previous sleeplen was 0.00584473)
+Step to 0.4700 at 1435437688.120029508
+Set duty to 0.47 (previous sleeplen was 0.00454897)
+Set duty to 0.47 (previous sleeplen was 0.00455634)
+Set duty to 0.47 (previous sleeplen was 0.00455148)
+Set duty to 0.47 (previous sleeplen was 0.00466281)
+Step to 0.5250 at 1435437703.122224183
+Set duty to 0.525 (previous sleeplen was 0.00575401)
+Set duty to 0.525 (previous sleeplen was 0.00577543)
+Set duty to 0.525 (previous sleeplen was 0.0058806)
+Set duty to 0.525 (previous sleeplen was 0.00579515)
+Step to 0.4750 at 1435437718.124036124
+Set duty to 0.475 (previous sleeplen was 0.00464062)
+Set duty to 0.475 (previous sleeplen was 0.0046443)
+Set duty to 0.475 (previous sleeplen was 0.00464094)
+Set duty to 0.475 (previous sleeplen was 0.00467199)
+Step to 0.5200 at 1435437733.125783092
+Set duty to 0.52 (previous sleeplen was 0.00564322)
+Set duty to 0.52 (previous sleeplen was 0.0056627)
+Set duty to 0.52 (previous sleeplen was 0.00566801)
+Set duty to 0.52 (previous sleeplen was 0.00561249)
+Step to 0.4800 at 1435437748.127572417
+Set duty to 0.48 (previous sleeplen was 0.00472871)
+Set duty to 0.48 (previous sleeplen was 0.00471483)
+Set duty to 0.48 (previous sleeplen was 0.00473116)
+Set duty to 0.48 (previous sleeplen was 0.00468899)
+Step to 0.5150 at 1435437763.129392879
+Set duty to 0.515 (previous sleeplen was 0.00554881)
+Set duty to 0.515 (previous sleeplen was 0.0055511)
+Set duty to 0.515 (previous sleeplen was 0.00554204)
+Set duty to 0.515 (previous sleeplen was 0.00555187)
+Step to 0.4850 at 1435437778.131149785
+Set duty to 0.485 (previous sleeplen was 0.00482621)
+Set duty to 0.485 (previous sleeplen was 0.00481675)
+Set duty to 0.485 (previous sleeplen was 0.00482689)
+Set duty to 0.485 (previous sleeplen was 0.00478063)
+Step to 0.5100 at 1435437793.133007802
+Set duty to 0.51 (previous sleeplen was 0.00539726)
+Set duty to 0.51 (previous sleeplen was 0.00538848)
+Set duty to 0.51 (previous sleeplen was 0.00538895)
+Set duty to 0.51 (previous sleeplen was 0.00541618)
+Step to 0.4900 at 1435437808.134816451
+Set duty to 0.49 (previous sleeplen was 0.00488692)
+Set duty to 0.49 (previous sleeplen was 0.00492152)
+Set duty to 0.49 (previous sleeplen was 0.00492473)
+Set duty to 0.49 (previous sleeplen was 0.0049223)
+Step to 0.5050 at 1435437823.136591516
+Set duty to 0.505 (previous sleeplen was 0.00530544)
+Set duty to 0.505 (previous sleeplen was 0.00530692)
+Set duty to 0.505 (previous sleeplen was 0.00532125)
+Set duty to 0.505 (previous sleeplen was 0.00530654)
+Step to 0.4950 at 1435437838.138377605
+Set duty to 0.495 (previous sleeplen was 0.00502205)
+Set duty to 0.495 (previous sleeplen was 0.00502366)
+Set duty to 0.495 (previous sleeplen was 0.0050232)
+Set duty to 0.495 (previous sleeplen was 0.00500246)
+Step to 0.5000 at 1435437853.140070694
+Set duty to 0.5 (previous sleeplen was 0.00532865)
+Set duty to 0.5 (previous sleeplen was 0.00523453)
+Set duty to 0.5 (previous sleeplen was 0.00523536)
+Set duty to 0.5 (previous sleeplen was 0.00525814)
+Step to 0.5000 at 1435437868.146761787
+Set duty to 0.5 (previous sleeplen was 0.00511415)
+Set duty to 0.5 (previous sleeplen was 0.00512245)
+Set duty to 0.5 (previous sleeplen was 0.00512088)
+Set duty to 0.5 (previous sleeplen was 0.00522336)
+Step to 0.4950 at 1435437883.148990324
+Set duty to 0.495 (previous sleeplen was 0.00513325)
+Set duty to 0.495 (previous sleeplen was 0.00508332)
+Set duty to 0.495 (previous sleeplen was 0.00507494)
+Set duty to 0.495 (previous sleeplen was 0.00516436)
+Step to 0.5050 at 1435437898.153115359
+Set duty to 0.505 (previous sleeplen was 0.00523118)
+Set duty to 0.505 (previous sleeplen was 0.00521989)
+Set duty to 0.505 (previous sleeplen was 0.00522813)
+Set duty to 0.505 (previous sleeplen was 0.0053454)
+Step to 0.4900 at 1435437913.154983850
+Set duty to 0.49 (previous sleeplen was 0.00500209)
+Set duty to 0.49 (previous sleeplen was 0.00500845)
+Set duty to 0.49 (previous sleeplen was 0.00698014)
+Set duty to 0.49 (previous sleeplen was 0.00703313)
+Step to 0.5100 at 1435437928.161760223
+Set duty to 0.51 (previous sleeplen was 0.00534046)
+Set duty to 0.51 (previous sleeplen was 0.00534059)
+Set duty to 0.51 (previous sleeplen was 0.00533796)
+Set duty to 0.51 (previous sleeplen was 0.00545962)
+Step to 0.4850 at 1435437943.165739577
+Set duty to 0.485 (previous sleeplen was 0.00492354)
+Set duty to 0.485 (previous sleeplen was 0.00492699)
+Set duty to 0.485 (previous sleeplen was 0.00492701)
+Set duty to 0.485 (previous sleeplen was 0.00504467)
+Step to 0.5150 at 1435437958.167559593
+Set duty to 0.515 (previous sleeplen was 0.00544704)
+Set duty to 0.515 (previous sleeplen was 0.00544427)
+Set duty to 0.515 (previous sleeplen was 0.00548506)
+Set duty to 0.515 (previous sleeplen was 0.00539765)
+Step to 0.4800 at 1435437973.169381801
+Set duty to 0.48 (previous sleeplen was 0.00479036)
+Set duty to 0.48 (previous sleeplen was 0.00479697)
+Set duty to 0.48 (previous sleeplen was 0.00481076)
+Set duty to 0.48 (previous sleeplen was 0.00480148)
+Step to 0.5200 at 1435437988.172233497
+Set duty to 0.52 (previous sleeplen was 0.00554839)
+Set duty to 0.52 (previous sleeplen was 0.00556017)
+Set duty to 0.52 (previous sleeplen was 0.00567397)
+Set duty to 0.52 (previous sleeplen was 0.00560653)
+Step to 0.4750 at 1435438003.174166335
+Set duty to 0.475 (previous sleeplen was 0.00473158)
+Set duty to 0.475 (previous sleeplen was 0.00472429)
+Set duty to 0.475 (previous sleeplen was 0.00473262)
+Set duty to 0.475 (previous sleeplen was 0.00472553)
+Step to 0.5250 at 1435438018.175957667
+Set duty to 0.525 (previous sleeplen was 0.00566364)
+Set duty to 0.525 (previous sleeplen was 0.00566494)
+Set duty to 0.525 (previous sleeplen was 0.00566015)
+Set duty to 0.525 (previous sleeplen was 0.00566353)
+Step to 0.4700 at 1435438033.182322606
+Set duty to 0.47 (previous sleeplen was 0.00463252)
+Set duty to 0.47 (previous sleeplen was 0.004637)
+Set duty to 0.47 (previous sleeplen was 0.00463543)
+Set duty to 0.47 (previous sleeplen was 0.00472807)
+Step to 0.5300 at 1435438048.184107037
+Set duty to 0.53 (previous sleeplen was 0.00577774)
+Set duty to 0.53 (previous sleeplen was 0.00577871)
+Set duty to 0.53 (previous sleeplen was 0.00577834)
+Set duty to 0.53 (previous sleeplen was 0.00573297)
+Step to 0.4650 at 1435438063.188441788
+Set duty to 0.465 (previous sleeplen was 0.00454299)
+Set duty to 0.465 (previous sleeplen was 0.00455041)
+Set duty to 0.465 (previous sleeplen was 0.00465444)
+Set duty to 0.465 (previous sleeplen was 0.00457663)
+Step to 0.5350 at 1435438078.190259437
+Set duty to 0.535 (previous sleeplen was 0.00589461)
+Set duty to 0.535 (previous sleeplen was 0.00589572)
+Set duty to 0.535 (previous sleeplen was 0.00589521)
+Set duty to 0.535 (previous sleeplen was 0.0059525)
+Step to 0.4600 at 1435438093.192096763
+Set duty to 0.46 (previous sleeplen was 0.00445549)
+Set duty to 0.46 (previous sleeplen was 0.00445335)
+Set duty to 0.46 (previous sleeplen was 0.00445368)
+Set duty to 0.46 (previous sleeplen was 0.00445514)
+Step to 0.5400 at 1435438108.193944360
+Set duty to 0.54 (previous sleeplen was 0.00601701)
+Set duty to 0.54 (previous sleeplen was 0.00602619)
+Set duty to 0.54 (previous sleeplen was 0.00601931)
+Set duty to 0.54 (previous sleeplen was 0.00601854)
+Step to 0.4550 at 1435438123.196264837
+Set duty to 0.455 (previous sleeplen was 0.00437307)
+Set duty to 0.455 (previous sleeplen was 0.004373)
+Set duty to 0.455 (previous sleeplen was 0.0043726)
+Set duty to 0.455 (previous sleeplen was 0.00446995)
+Step to 0.5450 at 1435438138.201300129
+Set duty to 0.545 (previous sleeplen was 0.00614594)
+Set duty to 0.545 (previous sleeplen was 0.00611818)
+Set duty to 0.545 (previous sleeplen was 0.0062723)
+Set duty to 0.545 (previous sleeplen was 0.00628089)
+Step to 0.4500 at 1435438153.203126099
+Set duty to 0.45 (previous sleeplen was 0.00428179)
+Set duty to 0.45 (previous sleeplen was 0.00428215)
+Set duty to 0.45 (previous sleeplen was 0.00427136)
+Set duty to 0.45 (previous sleeplen was 0.00444228)
+Step to 0.5500 at 1435438168.204936174
+Set duty to 0.55 (previous sleeplen was 0.00622377)
+Set duty to 0.55 (previous sleeplen was 0.00627053)
+Set duty to 0.55 (previous sleeplen was 0.0062717)
+Set duty to 0.55 (previous sleeplen was 0.00627133)
+Step to 0.4450 at 1435438183.210956285
+Set duty to 0.445 (previous sleeplen was 0.00419336)
+Set duty to 0.445 (previous sleeplen was 0.00419872)
+Set duty to 0.445 (previous sleeplen was 0.00415642)
+Set duty to 0.445 (previous sleeplen was 0.00429218)
+Step to 0.5550 at 1435438198.212920236
+Set duty to 0.555 (previous sleeplen was 0.00635462)
+Set duty to 0.555 (previous sleeplen was 0.00637637)
+Set duty to 0.555 (previous sleeplen was 0.00636475)
+Set duty to 0.555 (previous sleeplen was 0.00740464)
+Step to 0.4400 at 1435438213.220968179
+Set duty to 0.44 (previous sleeplen was 0.00411001)
+Set duty to 0.44 (previous sleeplen was 0.00410949)
+Set duty to 0.44 (previous sleeplen was 0.00411264)
+Set duty to 0.44 (previous sleeplen was 0.00421975)
+Step to 0.5600 at 1435438228.222889421
+Set duty to 0.56 (previous sleeplen was 0.006521)
+Set duty to 0.56 (previous sleeplen was 0.00651922)
+Set duty to 0.56 (previous sleeplen was 0.00651551)
+Set duty to 0.56 (previous sleeplen was 0.00656665)
+Step to 0.4350 at 1435438243.224671080
+Set duty to 0.435 (previous sleeplen was 0.00398676)
+Set duty to 0.435 (previous sleeplen was 0.00399094)
+Set duty to 0.435 (previous sleeplen was 0.00399591)
+Set duty to 0.435 (previous sleeplen was 0.00398793)
+Step to 0.5650 at 1435438258.226456679
+Set duty to 0.565 (previous sleeplen was 0.00665054)
+Set duty to 0.565 (previous sleeplen was 0.00666332)
+Set duty to 0.565 (previous sleeplen was 0.00660419)
+Set duty to 0.565 (previous sleeplen was 0.00668702)
+Step to 0.4300 at 1435438273.233290386
+Set duty to 0.43 (previous sleeplen was 0.00391543)
+Set duty to 0.43 (previous sleeplen was 0.00392774)
+Set duty to 0.43 (previous sleeplen was 0.00392388)
+Set duty to 0.43 (previous sleeplen was 0.00394945)
+Step to 0.5700 at 1435438288.235160769
+Set duty to 0.57 (previous sleeplen was 0.00678144)
+Set duty to 0.57 (previous sleeplen was 0.00675624)
+Set duty to 0.57 (previous sleeplen was 0.00675848)
+Set duty to 0.57 (previous sleeplen was 0.00676124)
+Step to 0.4250 at 1435438303.243002366
+Set duty to 0.425 (previous sleeplen was 0.0038717)
+Set duty to 0.425 (previous sleeplen was 0.00387353)
+Set duty to 0.425 (previous sleeplen was 0.00386938)
+Set duty to 0.425 (previous sleeplen was 0.00396718)
+Step to 0.5750 at 1435438318.244881285
+Set duty to 0.575 (previous sleeplen was 0.00692882)
+Set duty to 0.575 (previous sleeplen was 0.00686756)
+Set duty to 0.575 (previous sleeplen was 0.00686756)
+Set duty to 0.575 (previous sleeplen was 0.00686432)
+Step to 0.4200 at 1435438333.246981163
+Set duty to 0.42 (previous sleeplen was 0.0037737)
+Set duty to 0.42 (previous sleeplen was 0.00378831)
+Set duty to 0.42 (previous sleeplen was 0.00378745)
+Set duty to 0.42 (previous sleeplen was 0.00378754)
+Step to 0.5800 at 1435438348.254731375
+Set duty to 0.58 (previous sleeplen was 0.00899902)
+Set duty to 0.58 (previous sleeplen was 0.00900512)
+Set duty to 0.58 (previous sleeplen was 0.00901364)
+Set duty to 0.58 (previous sleeplen was 0.00926246)
+Step to 0.4150 at 1435438363.257359541
+Set duty to 0.415 (previous sleeplen was 0.00433123)
+Set duty to 0.415 (previous sleeplen was 0.00419351)
+Set duty to 0.415 (previous sleeplen was 0.0041527)
+Set duty to 0.415 (previous sleeplen was 0.00414903)
+Step to 0.5850 at 1435438378.259478312
+Set duty to 0.585 (previous sleeplen was 0.00815785)
+Set duty to 0.585 (previous sleeplen was 0.00815731)
+Set duty to 0.585 (previous sleeplen was 0.00815689)
+Set duty to 0.585 (previous sleeplen was 0.00801512)
+Step to 0.4100 at 1435438393.261703454
+Set duty to 0.41 (previous sleeplen was 0.0040509)
+Set duty to 0.41 (previous sleeplen was 0.00405436)
+Set duty to 0.41 (previous sleeplen was 0.00405192)
+Set duty to 0.41 (previous sleeplen was 0.0040538)
+Step to 0.5900 at 1435438408.263997283
+Set duty to 0.59 (previous sleeplen was 0.00902424)
+Set duty to 0.59 (previous sleeplen was 0.00929506)
+Set duty to 0.59 (previous sleeplen was 0.00929785)
+Set duty to 0.59 (previous sleeplen was 0.00930148)
+Step to 0.4050 at 1435438423.272658106
+Set duty to 0.405 (previous sleeplen was 0.00388344)
+Set duty to 0.405 (previous sleeplen was 0.00378844)
+Set duty to 0.405 (previous sleeplen was 0.00378912)
+Set duty to 0.405 (previous sleeplen was 0.00379981)
+Step to 0.5950 at 1435438438.282502515
+Set duty to 0.595 (previous sleeplen was 0.0107155)
+Set duty to 0.595 (previous sleeplen was 0.0106973)
+Set duty to 0.595 (previous sleeplen was 0.0106863)
+Set duty to 0.595 (previous sleeplen was 0.010881)
+Step to 0.4000 at 1435438453.290270688
+Set duty to 0.4 (previous sleeplen was 0.00416288)
+Set duty to 0.4 (previous sleeplen was 0.00416617)
+Set duty to 0.4 (previous sleeplen was 0.00412575)
+Set duty to 0.4 (previous sleeplen was 0.00427711)
+Step to 0.6000 at 1435438468.292466677
+Set duty to 0.6 (previous sleeplen was 0.00904107)
+Set duty to 0.6 (previous sleeplen was 0.00906497)
+Set duty to 0.6 (previous sleeplen was 0.00906086)
+Set duty to 0.6 (previous sleeplen was 0.00915501)
+Step to 0.3950 at 1435438483.295358608
+Set duty to 0.395 (previous sleeplen was 0.00345677)
+Set duty to 0.395 (previous sleeplen was 0.00346211)
+Set duty to 0.395 (previous sleeplen was 0.0034091)
+Set duty to 0.395 (previous sleeplen was 0.00350258)
+Step to 0.6050 at 1435438498.302201826
+Set duty to 0.605 (previous sleeplen was 0.00932536)
+Set duty to 0.605 (previous sleeplen was 0.00932185)
+Set duty to 0.605 (previous sleeplen was 0.00932033)
+Set duty to 0.605 (previous sleeplen was 0.00948633)
+Step to 0.3900 at 1435438513.304173737
+Set duty to 0.39 (previous sleeplen was 0.00338142)
+Set duty to 0.39 (previous sleeplen was 0.00334026)
+Set duty to 0.39 (previous sleeplen was 0.00333931)
+Set duty to 0.39 (previous sleeplen was 0.00332099)
+Step to 0.6100 at 1435438528.306060614
+Set duty to 0.61 (previous sleeplen was 0.0081475)
+Set duty to 0.61 (previous sleeplen was 0.0081347)
+Set duty to 0.61 (previous sleeplen was 0.00814356)
+Set duty to 0.61 (previous sleeplen was 0.00814751)
+Step to 0.3850 at 1435438543.308005536
+Set duty to 0.385 (previous sleeplen was 0.00326052)
+Set duty to 0.385 (previous sleeplen was 0.00325996)
+Set duty to 0.385 (previous sleeplen was 0.00324699)
+Set duty to 0.385 (previous sleeplen was 0.00326445)
+Step to 0.6150 at 1435438558.309901590
+Set duty to 0.615 (previous sleeplen was 0.00880701)
+Set duty to 0.615 (previous sleeplen was 0.00884584)
+Set duty to 0.615 (previous sleeplen was 0.00884619)
+Set duty to 0.615 (previous sleeplen was 0.00884711)
+Step to 0.3800 at 1435438573.317013007
+Set duty to 0.38 (previous sleeplen was 0.00341893)
+Set duty to 0.38 (previous sleeplen was 0.0034244)
+Set duty to 0.38 (previous sleeplen was 0.00343249)
+Set duty to 0.38 (previous sleeplen was 0.00340653)
+Step to 0.6200 at 1435438588.320327732
+Set duty to 0.62 (previous sleeplen was 0.00860223)
+Set duty to 0.62 (previous sleeplen was 0.00860317)
+Set duty to 0.62 (previous sleeplen was 0.00834634)
+Set duty to 0.62 (previous sleeplen was 0.0105079)
+Step to 0.3750 at 1435438603.322173969
+Set duty to 0.375 (previous sleeplen was 0.00315066)
+Set duty to 0.375 (previous sleeplen was 0.00314587)
+Set duty to 0.375 (previous sleeplen was 0.00315048)
+Set duty to 0.375 (previous sleeplen was 0.00315146)
+Step to 0.6250 at 1435438618.323992993
+Set duty to 0.625 (previous sleeplen was 0.00869919)
+Set duty to 0.625 (previous sleeplen was 0.00877779)
+Set duty to 0.625 (previous sleeplen was 0.00878974)
+Set duty to 0.625 (previous sleeplen was 0.00885211)
+Step to 0.3700 at 1435438633.328558439
+Set duty to 0.37 (previous sleeplen was 0.00307849)
+Set duty to 0.37 (previous sleeplen was 0.00307726)
+Set duty to 0.37 (previous sleeplen was 0.00309639)
+Set duty to 0.37 (previous sleeplen was 0.00313993)
+Step to 0.6300 at 1435438648.330438455
+Set duty to 0.63 (previous sleeplen was 0.00940319)
+Set duty to 0.63 (previous sleeplen was 0.0094736)
+Set duty to 0.63 (previous sleeplen was 0.0094719)
+Set duty to 0.63 (previous sleeplen was 0.00947833)
+Step to 0.3650 at 1435438663.332364409
+Set duty to 0.365 (previous sleeplen was 0.00301246)
+Set duty to 0.365 (previous sleeplen was 0.00301106)
+Set duty to 0.365 (previous sleeplen was 0.00302611)
+Set duty to 0.365 (previous sleeplen was 0.0031065)
+Step to 0.6350 at 1435438678.334238401
+Set duty to 0.635 (previous sleeplen was 0.00994192)
+Set duty to 0.635 (previous sleeplen was 0.00994393)
+Set duty to 0.635 (previous sleeplen was 0.00994021)
+Set duty to 0.635 (previous sleeplen was 0.00994621)
+Step to 0.3600 at 1435438693.336531928
+Set duty to 0.36 (previous sleeplen was 0.00292587)
+Set duty to 0.36 (previous sleeplen was 0.00293971)
+Set duty to 0.36 (previous sleeplen was 0.0030236)
+Set duty to 0.36 (previous sleeplen was 0.0029217)
+Step to 0.6400 at 1435438708.338317223
+Set duty to 0.64 (previous sleeplen was 0.0091912)
+Set duty to 0.64 (previous sleeplen was 0.00920926)
+Set duty to 0.64 (previous sleeplen was 0.00916981)
+Set duty to 0.64 (previous sleeplen was 0.00984495)
+Step to 0.3550 at 1435438723.340847887
+Set duty to 0.355 (previous sleeplen was 0.00285587)
+Set duty to 0.355 (previous sleeplen was 0.00285693)
+Set duty to 0.355 (previous sleeplen was 0.00286002)
+Set duty to 0.355 (previous sleeplen was 0.00294255)
+Step to 0.6450 at 1435438738.346343496
+Set duty to 0.645 (previous sleeplen was 0.0115973)
+Set duty to 0.645 (previous sleeplen was 0.0115873)
+Set duty to 0.645 (previous sleeplen was 0.011658)
+Set duty to 0.645 (previous sleeplen was 0.0118287)
+Step to 0.3500 at 1435438753.348411017
+Set duty to 0.35 (previous sleeplen was 0.00279647)
+Set duty to 0.35 (previous sleeplen was 0.00279382)
+Set duty to 0.35 (previous sleeplen was 0.00279399)
+Set duty to 0.35 (previous sleeplen was 0.00280299)
+Step to 0.6500 at 1435438768.350317620
+Set duty to 0.65 (previous sleeplen was 0.0112076)
+Set duty to 0.65 (previous sleeplen was 0.0111651)
+Set duty to 0.65 (previous sleeplen was 0.0111994)
+Set duty to 0.65 (previous sleeplen was 0.0111024)
+Step to 0.3450 at 1435438783.355078557
+Set duty to 0.345 (previous sleeplen was 0.00275891)
+Set duty to 0.345 (previous sleeplen was 0.00276092)
+Set duty to 0.345 (previous sleeplen was 0.00273765)
+Set duty to 0.345 (previous sleeplen was 0.00284743)
+Step to 0.6550 at 1435438798.356924120
+Set duty to 0.655 (previous sleeplen was 0.00977203)
+Set duty to 0.655 (previous sleeplen was 0.00976768)
+Set duty to 0.655 (previous sleeplen was 0.00975225)
+Set duty to 0.655 (previous sleeplen was 0.0104201)
+Step to 0.3400 at 1435438813.358678234
+Set duty to 0.34 (previous sleeplen was 0.00268477)
+Set duty to 0.34 (previous sleeplen was 0.00269554)
+Set duty to 0.34 (previous sleeplen was 0.0026944)
+Set duty to 0.34 (previous sleeplen was 0.00267676)
+Step to 0.6600 at 1435438828.360444022
+Set duty to 0.66 (previous sleeplen was 0.0100518)
+Set duty to 0.66 (previous sleeplen was 0.0100512)
+Set duty to 0.66 (previous sleeplen was 0.0100558)
+Set duty to 0.66 (previous sleeplen was 0.0109286)
+Step to 0.3350 at 1435438843.362222848
+Set duty to 0.335 (previous sleeplen was 0.00261427)
+Set duty to 0.335 (previous sleeplen was 0.00262279)
+Set duty to 0.335 (previous sleeplen was 0.00262079)
+Set duty to 0.335 (previous sleeplen was 0.00261754)
+Step to 0.6650 at 1435438858.363973949
+Set duty to 0.665 (previous sleeplen was 0.0103499)
+Set duty to 0.665 (previous sleeplen was 0.0103486)
+Set duty to 0.665 (previous sleeplen was 0.0103303)
+Set duty to 0.665 (previous sleeplen was 0.0103715)
+Step to 0.3300 at 1435438873.365725736
+Set duty to 0.33 (previous sleeplen was 0.00258571)
+Set duty to 0.33 (previous sleeplen was 0.00256033)
+Set duty to 0.33 (previous sleeplen was 0.00256119)
+Set duty to 0.33 (previous sleeplen was 0.00255635)
+Step to 0.6700 at 1435438888.367930646
+Set duty to 0.67 (previous sleeplen was 0.0104158)
+Set duty to 0.67 (previous sleeplen was 0.0104256)
+Set duty to 0.67 (previous sleeplen was 0.0104258)
+Set duty to 0.67 (previous sleeplen was 0.010577)
+Step to 0.3250 at 1435438903.371274424
+Set duty to 0.325 (previous sleeplen was 0.00252933)
+Set duty to 0.325 (previous sleeplen was 0.00251826)
+Set duty to 0.325 (previous sleeplen was 0.00252765)
+Set duty to 0.325 (previous sleeplen was 0.00261716)
+Step to 0.6750 at 1435438918.373211895
+Set duty to 0.675 (previous sleeplen was 0.0113395)
+Set duty to 0.675 (previous sleeplen was 0.0113475)
+Set duty to 0.675 (previous sleeplen was 0.0113421)
+Set duty to 0.675 (previous sleeplen was 0.0114114)
+Step to 0.3200 at 1435438933.375028504
+Set duty to 0.32 (previous sleeplen was 0.00244246)
+Set duty to 0.32 (previous sleeplen was 0.00244815)
+Set duty to 0.32 (previous sleeplen was 0.0024436)
+Set duty to 0.32 (previous sleeplen was 0.00244631)
+Step to 0.6800 at 1435438948.376837354
+Set duty to 0.68 (previous sleeplen was 0.0110712)
+Set duty to 0.68 (previous sleeplen was 0.0110684)
+Set duty to 0.68 (previous sleeplen was 0.0110763)
+Set duty to 0.68 (previous sleeplen was 0.0110742)
+Step to 0.3150 at 1435438963.378603744
+Set duty to 0.315 (previous sleeplen was 0.00238868)
+Set duty to 0.315 (previous sleeplen was 0.00238971)
+Set duty to 0.315 (previous sleeplen was 0.00246393)
+Set duty to 0.315 (previous sleeplen was 0.00239214)
+Step to 0.6850 at 1435438978.380413574
+Set duty to 0.685 (previous sleeplen was 0.0114021)
+Set duty to 0.685 (previous sleeplen was 0.011402)
+Set duty to 0.685 (previous sleeplen was 0.0114018)
+Set duty to 0.685 (previous sleeplen was 0.0114074)
+Step to 0.3100 at 1435438993.383182454
+Set duty to 0.31 (previous sleeplen was 0.00235692)
+Set duty to 0.31 (previous sleeplen was 0.00236169)
+Set duty to 0.31 (previous sleeplen was 0.00237835)
+Set duty to 0.31 (previous sleeplen was 0.00243368)
+Step to 0.6900 at 1435439008.385009888
+Set duty to 0.69 (previous sleeplen was 0.0114606)
+Set duty to 0.69 (previous sleeplen was 0.0114651)
+Set duty to 0.69 (previous sleeplen was 0.0114675)
+Set duty to 0.69 (previous sleeplen was 0.0114679)
+Step to 0.3050 at 1435439023.386798829
+Set duty to 0.305 (previous sleeplen was 0.00228015)
+Set duty to 0.305 (previous sleeplen was 0.00235287)
+Set duty to 0.305 (previous sleeplen was 0.00228193)
+Set duty to 0.305 (previous sleeplen was 0.0022831)
+Step to 0.6950 at 1435439038.388655959
+Set duty to 0.695 (previous sleeplen was 0.0126197)
+Set duty to 0.695 (previous sleeplen was 0.0126196)
+Set duty to 0.695 (previous sleeplen was 0.0126222)
+Set duty to 0.695 (previous sleeplen was 0.0126222)
+Step to 0.3000 at 1435439053.391953471
+Set duty to 0.3 (previous sleeplen was 0.00222946)
+Set duty to 0.3 (previous sleeplen was 0.00222723)
+Set duty to 0.3 (previous sleeplen was 0.00230016)
+Set duty to 0.3 (previous sleeplen was 0.00222907)
+Step to 0.7000 at 1435439068.393774067
+Set duty to 0.7 (previous sleeplen was 0.0120847)
+Set duty to 0.7 (previous sleeplen was 0.0120007)
+Set duty to 0.7 (previous sleeplen was 0.0120017)
+Set duty to 0.7 (previous sleeplen was 0.0120007)
+Step to 0.2950 at 1435439083.396401826
+Set duty to 0.295 (previous sleeplen was 0.00219294)
+Set duty to 0.295 (previous sleeplen was 0.00217529)
+Set duty to 0.295 (previous sleeplen was 0.00217828)
+Set duty to 0.295 (previous sleeplen was 0.00224733)
+Step to 0.7050 at 1435439098.398300463
+Set duty to 0.705 (previous sleeplen was 0.012478)
+Set duty to 0.705 (previous sleeplen was 0.0125474)
+Set duty to 0.705 (previous sleeplen was 0.0125495)
+Set duty to 0.705 (previous sleeplen was 0.0125365)
+Step to 0.2900 at 1435439113.400100780
+Set duty to 0.29 (previous sleeplen was 0.00214324)
+Set duty to 0.29 (previous sleeplen was 0.00212456)
+Set duty to 0.29 (previous sleeplen was 0.00212637)
+Set duty to 0.29 (previous sleeplen was 0.00212349)
+Step to 0.7100 at 1435439128.401895689
+Set duty to 0.71 (previous sleeplen was 0.0130354)
+Set duty to 0.71 (previous sleeplen was 0.013053)
+Set duty to 0.71 (previous sleeplen was 0.0131046)
+Set duty to 0.71 (previous sleeplen was 0.0130231)
+Step to 0.2850 at 1435439143.403911988
+Set duty to 0.285 (previous sleeplen was 0.0020754)
+Set duty to 0.285 (previous sleeplen was 0.00207494)
+Set duty to 0.285 (previous sleeplen was 0.00207373)
+Set duty to 0.285 (previous sleeplen was 0.00214388)
+Step to 0.7150 at 1435439158.405755430
+Set duty to 0.715 (previous sleeplen was 0.0130511)
+Set duty to 0.715 (previous sleeplen was 0.0130587)
+Set duty to 0.715 (previous sleeplen was 0.0130656)
+Set duty to 0.715 (previous sleeplen was 0.0130586)
+Step to 0.2800 at 1435439173.407579442
+Set duty to 0.28 (previous sleeplen was 0.00202262)
+Set duty to 0.28 (previous sleeplen was 0.00202426)
+Set duty to 0.28 (previous sleeplen was 0.00203196)
+Set duty to 0.28 (previous sleeplen was 0.00202941)
+Step to 0.7200 at 1435439188.412633077
+Set duty to 0.72 (previous sleeplen was 0.0131361)
+Set duty to 0.72 (previous sleeplen was 0.0131875)
+Set duty to 0.72 (previous sleeplen was 0.0132386)
+Set duty to 0.72 (previous sleeplen was 0.0135042)
+Step to 0.2750 at 1435439203.414570575
+Set duty to 0.275 (previous sleeplen was 0.00204075)
+Set duty to 0.275 (previous sleeplen was 0.00199569)
+Set duty to 0.275 (previous sleeplen was 0.00197426)
+Set duty to 0.275 (previous sleeplen was 0.00197581)
+Step to 0.7250 at 1435439218.419294165
+Set duty to 0.725 (previous sleeplen was 0.0144012)
+Set duty to 0.725 (previous sleeplen was 0.0135949)
+Set duty to 0.725 (previous sleeplen was 0.0135921)
+Set duty to 0.725 (previous sleeplen was 0.0137754)
+Step to 0.2700 at 1435439233.421029235
+Set duty to 0.27 (previous sleeplen was 0.00199696)
+Set duty to 0.27 (previous sleeplen was 0.00192775)
+Set duty to 0.27 (previous sleeplen was 0.00192447)
+Set duty to 0.27 (previous sleeplen was 0.00192239)
+Step to 0.7300 at 1435439248.422838303
+Set duty to 0.73 (previous sleeplen was 0.0145382)
+Set duty to 0.73 (previous sleeplen was 0.0145715)
+Set duty to 0.73 (previous sleeplen was 0.0145784)
+Set duty to 0.73 (previous sleeplen was 0.0147315)
+Step to 0.2650 at 1435439263.424502360
+Set duty to 0.265 (previous sleeplen was 0.00188058)
+Set duty to 0.265 (previous sleeplen was 0.00187881)
+Set duty to 0.265 (previous sleeplen was 0.00187865)
+Set duty to 0.265 (previous sleeplen was 0.00187588)
+Step to 0.7350 at 1435439278.426304934
+Set duty to 0.735 (previous sleeplen was 0.0170198)
+Set duty to 0.735 (previous sleeplen was 0.017025)
+Set duty to 0.735 (previous sleeplen was 0.0171953)
+Set duty to 0.735 (previous sleeplen was 0.0169277)
+Step to 0.2600 at 1435439293.430753460
+Set duty to 0.26 (previous sleeplen was 0.00183117)
+Set duty to 0.26 (previous sleeplen was 0.00183089)
+Set duty to 0.26 (previous sleeplen was 0.00182859)
+Set duty to 0.26 (previous sleeplen was 0.00182988)
+Step to 0.7400 at 1435439308.432640906
+Set duty to 0.74 (previous sleeplen was 0.0150963)
+Set duty to 0.74 (previous sleeplen was 0.0150945)
+Set duty to 0.74 (previous sleeplen was 0.0150035)
+Set duty to 0.74 (previous sleeplen was 0.016257)
+Step to 0.2550 at 1435439323.435708170
+Set duty to 0.255 (previous sleeplen was 0.00178535)
+Set duty to 0.255 (previous sleeplen was 0.00178518)
+Set duty to 0.255 (previous sleeplen was 0.00178291)
+Set duty to 0.255 (previous sleeplen was 0.00180648)
+Step to 0.7450 at 1435439338.437418070
+Set duty to 0.745 (previous sleeplen was 0.0159261)
+Set duty to 0.745 (previous sleeplen was 0.0153674)
+Set duty to 0.745 (previous sleeplen was 0.0153722)
+Set duty to 0.745 (previous sleeplen was 0.0153696)
+Step to 0.2500 at 1435439353.439246937
+Set duty to 0.25 (previous sleeplen was 0.00174125)
+Set duty to 0.25 (previous sleeplen was 0.00173619)
+Set duty to 0.25 (previous sleeplen was 0.0017343)
+Set duty to 0.25 (previous sleeplen was 0.00265249)
+Step to 0.7500 at 1435439368.441077292
+Set duty to 0.75 (previous sleeplen was 0.016816)
+Set duty to 0.75 (previous sleeplen was 0.0154398)
+Set duty to 0.75 (previous sleeplen was 0.0154408)
+Set duty to 0.75 (previous sleeplen was 0.0154498)
+Step to 0.2450 at 1435439383.442795829
+Set duty to 0.245 (previous sleeplen was 0.00177194)
+Set duty to 0.245 (previous sleeplen was 0.0017729)
+Set duty to 0.245 (previous sleeplen was 0.00177222)
+Set duty to 0.245 (previous sleeplen was 0.00177798)
+Step to 0.7550 at 1435439398.444627258
+Set duty to 0.755 (previous sleeplen was 0.0170981)
+Set duty to 0.755 (previous sleeplen was 0.0170953)
+Set duty to 0.755 (previous sleeplen was 0.0170944)
+Set duty to 0.755 (previous sleeplen was 0.0165528)
+Step to 0.2400 at 1435439413.446430558
+Set duty to 0.24 (previous sleeplen was 0.00172573)
+Set duty to 0.24 (previous sleeplen was 0.0017873)
+Set duty to 0.24 (previous sleeplen was 0.0017249)
+Set duty to 0.24 (previous sleeplen was 0.00172686)
+Step to 0.7600 at 1435439428.448793727
+Set duty to 0.76 (previous sleeplen was 0.0162884)
+Set duty to 0.76 (previous sleeplen was 0.0162928)
+Set duty to 0.76 (previous sleeplen was 0.0162863)
+Set duty to 0.76 (previous sleeplen was 0.0170866)
+Step to 0.2350 at 1435439443.455942960
+Set duty to 0.235 (previous sleeplen was 0.00168118)
+Set duty to 0.235 (previous sleeplen was 0.0016937)
+Set duty to 0.235 (previous sleeplen was 0.00167945)
+Set duty to 0.235 (previous sleeplen was 0.0016803)
+Step to 0.7650 at 1435439458.457667816
+Set duty to 0.765 (previous sleeplen was 0.0170494)
+Set duty to 0.765 (previous sleeplen was 0.0167293)
+Set duty to 0.765 (previous sleeplen was 0.016734)
+Set duty to 0.765 (previous sleeplen was 0.0167409)
+Step to 0.2300 at 1435439473.459440982
+Set duty to 0.23 (previous sleeplen was 0.00163208)
+Set duty to 0.23 (previous sleeplen was 0.0016346)
+Set duty to 0.23 (previous sleeplen was 0.00163523)
+Set duty to 0.23 (previous sleeplen was 0.00163803)
+Step to 0.7700 at 1435439488.465053333
+Set duty to 0.77 (previous sleeplen was 0.0176704)
+Set duty to 0.77 (previous sleeplen was 0.0176908)
+Set duty to 0.77 (previous sleeplen was 0.0176668)
+Set duty to 0.77 (previous sleeplen was 0.0176848)
+Step to 0.2250 at 1435439503.467066958
+Set duty to 0.225 (previous sleeplen was 0.00151678)
+Set duty to 0.225 (previous sleeplen was 0.00159092)
+Set duty to 0.225 (previous sleeplen was 0.00151671)
+Set duty to 0.225 (previous sleeplen was 0.00151603)
+Step to 0.7750 at 1435439518.469846421
+Set duty to 0.775 (previous sleeplen was 0.0183647)
+Set duty to 0.775 (previous sleeplen was 0.0183698)
+Set duty to 0.775 (previous sleeplen was 0.018374)
+Set duty to 0.775 (previous sleeplen was 0.0185872)
+Step to 0.2200 at 1435439533.476256894
+Set duty to 0.22 (previous sleeplen was 0.0015434)
+Set duty to 0.22 (previous sleeplen was 0.00154297)
+Set duty to 0.22 (previous sleeplen was 0.00154153)
+Set duty to 0.22 (previous sleeplen was 0.00154436)
+Step to 0.7800 at 1435439548.480739867
+Set duty to 0.78 (previous sleeplen was 0.0285167)
+Set duty to 0.78 (previous sleeplen was 0.0286068)
+Set duty to 0.78 (previous sleeplen was 0.0284993)
+Set duty to 0.78 (previous sleeplen was 0.0276905)
+Step to 0.2150 at 1435439563.483178520
+Set duty to 0.215 (previous sleeplen was 0.00149914)
+Set duty to 0.215 (previous sleeplen was 0.00150154)
+Set duty to 0.215 (previous sleeplen was 0.00150032)
+Set duty to 0.215 (previous sleeplen was 0.0015588)
+Step to 0.7850 at 1435439578.485075017
+Set duty to 0.785 (previous sleeplen was 0.0210998)
+Set duty to 0.785 (previous sleeplen was 0.0188265)
+Set duty to 0.785 (previous sleeplen was 0.0188267)
+Set duty to 0.785 (previous sleeplen was 0.0188298)
+Step to 0.2100 at 1435439593.486830241
+Set duty to 0.21 (previous sleeplen was 0.00145577)
+Set duty to 0.21 (previous sleeplen was 0.00145793)
+Set duty to 0.21 (previous sleeplen was 0.00145577)
+Set duty to 0.21 (previous sleeplen was 0.00145617)
+Step to 0.7900 at 1435439608.492095535
+Set duty to 0.79 (previous sleeplen was 0.0208395)
+Set duty to 0.79 (previous sleeplen was 0.025432)
+Set duty to 0.79 (previous sleeplen was 0.0197556)
+Set duty to 0.79 (previous sleeplen was 0.0197563)
+Step to 0.2050 at 1435439623.493872317
+Set duty to 0.205 (previous sleeplen was 0.00134979)
+Set duty to 0.205 (previous sleeplen was 0.00134709)
+Set duty to 0.205 (previous sleeplen was 0.00134818)
+Set duty to 0.205 (previous sleeplen was 0.00138505)
+Step to 0.7950 at 1435439638.496651240
+Set duty to 0.795 (previous sleeplen was 0.0201885)
+Set duty to 0.795 (previous sleeplen was 0.0201909)
+Set duty to 0.795 (previous sleeplen was 0.0201883)
+Set duty to 0.795 (previous sleeplen was 0.0216639)
+Step to 0.2000 at 1435439653.499290317
+Set duty to 0.2 (previous sleeplen was 0.00131142)
+Set duty to 0.2 (previous sleeplen was 0.00130925)
+Set duty to 0.2 (previous sleeplen was 0.00130782)
+Set duty to 0.2 (previous sleeplen was 0.00130729)
+Step to 0.8000 at 1435439668.501841154
+Set duty to 0.8 (previous sleeplen was 0.0369771)
+Set duty to 0.8 (previous sleeplen was 0.0346506)
+Set duty to 0.8 (previous sleeplen was 0.0346812)
+Set duty to 0.8 (previous sleeplen was 0.0349355)
+Step to 0.1950 at 1435439683.504878862
+Set duty to 0.195 (previous sleeplen was 0.00127064)
+Set duty to 0.195 (previous sleeplen was 0.00127015)
+Set duty to 0.195 (previous sleeplen was 0.00132052)
+Set duty to 0.195 (previous sleeplen was 0.00126902)
+Step to 0.8050 at 1435439698.508148390
+Set duty to 0.805 (previous sleeplen was 0.0267383)
+Set duty to 0.805 (previous sleeplen was 0.0267464)
+Set duty to 0.805 (previous sleeplen was 0.0272002)
+Set duty to 0.805 (previous sleeplen was 0.0294449)
+Step to 0.1900 at 1435439713.510993168
+Set duty to 0.19 (previous sleeplen was 0.00124305)
+Set duty to 0.19 (previous sleeplen was 0.00123882)
+Set duty to 0.19 (previous sleeplen was 0.00123469)
+Set duty to 0.19 (previous sleeplen was 0.00123046)
+Step to 0.8100 at 1435439728.516937137
+Set duty to 0.81 (previous sleeplen was 0.0374363)
+Set duty to 0.81 (previous sleeplen was 0.0377124)
+Set duty to 0.81 (previous sleeplen was 0.0387419)
+Set duty to 0.81 (previous sleeplen was 0.0381772)
+Step to 0.1850 at 1435439743.519682840
+Set duty to 0.185 (previous sleeplen was 0.00119279)
+Set duty to 0.185 (previous sleeplen was 0.00119073)
+Set duty to 0.185 (previous sleeplen was 0.00125471)
+Set duty to 0.185 (previous sleeplen was 0.00119022)
+Step to 0.8150 at 1435439758.522655438
+Set duty to 0.815 (previous sleeplen was 0.0397424)
+Set duty to 0.815 (previous sleeplen was 0.0397607)
+Set duty to 0.815 (previous sleeplen was 0.0397587)
+Set duty to 0.815 (previous sleeplen was 0.0390826)
+Step to 0.1800 at 1435439773.527360571
+Set duty to 0.18 (previous sleeplen was 0.00115837)
+Set duty to 0.18 (previous sleeplen was 0.00116299)
+Set duty to 0.18 (previous sleeplen was 0.00115647)
+Set duty to 0.18 (previous sleeplen was 0.00115331)
+Step to 0.8200 at 1435439788.529816913
+Set duty to 0.82 (previous sleeplen was 0.0406402)
+Set duty to 0.82 (previous sleeplen was 0.0409381)
+Set duty to 0.82 (previous sleeplen was 0.0406335)
+Set duty to 0.82 (previous sleeplen was 0.0403719)
+Step to 0.1750 at 1435439803.534941713
+Set duty to 0.175 (previous sleeplen was 0.00111345)
+Set duty to 0.175 (previous sleeplen was 0.00113609)
+Set duty to 0.175 (previous sleeplen was 0.00111533)
+Set duty to 0.175 (previous sleeplen was 0.0011134)
+Step to 0.8250 at 1435439818.537265557
+Set duty to 0.825 (previous sleeplen was 0.042126)
+Set duty to 0.825 (previous sleeplen was 0.0425822)
+Set duty to 0.825 (previous sleeplen was 0.0403368)
+Set duty to 0.825 (previous sleeplen was 0.0421478)
+Step to 0.1700 at 1435439833.539598704
+Set duty to 0.17 (previous sleeplen was 0.00107815)
+Set duty to 0.17 (previous sleeplen was 0.00107615)
+Set duty to 0.17 (previous sleeplen was 0.00107864)
+Set duty to 0.17 (previous sleeplen was 0.00107541)
+Step to 0.8300 at 1435439848.544585796
+Set duty to 0.83 (previous sleeplen was 0.0420907)
+Set duty to 0.83 (previous sleeplen was 0.042112)
+Set duty to 0.83 (previous sleeplen was 0.0420904)
+Set duty to 0.83 (previous sleeplen was 0.0412733)
+Step to 0.1650 at 1435439863.547058473
+Set duty to 0.165 (previous sleeplen was 0.00104132)
+Set duty to 0.165 (previous sleeplen was 0.00103972)
+Set duty to 0.165 (previous sleeplen was 0.00104146)
+Set duty to 0.165 (previous sleeplen was 0.00104544)
+Step to 0.8350 at 1435439878.549485585
+Set duty to 0.835 (previous sleeplen was 0.0454322)
+Set duty to 0.835 (previous sleeplen was 0.0453934)
+Set duty to 0.835 (previous sleeplen was 0.0457446)
+Set duty to 0.835 (previous sleeplen was 0.0458935)
+Step to 0.1600 at 1435439893.551934787
+Set duty to 0.16 (previous sleeplen was 0.00104306)
+Set duty to 0.16 (previous sleeplen was 0.00100393)
+Set duty to 0.16 (previous sleeplen was 0.00100233)
+Set duty to 0.16 (previous sleeplen was 0.00100297)
+Step to 0.8400 at 1435439908.556859931
+Set duty to 0.84 (previous sleeplen was 0.047005)
+Set duty to 0.84 (previous sleeplen was 0.0470426)
+Set duty to 0.84 (previous sleeplen was 0.0468998)
+Set duty to 0.84 (previous sleeplen was 0.0467984)
+Step to 0.1550 at 1435439923.560015663
+Set duty to 0.155 (previous sleeplen was 0.000966948)
+Set duty to 0.155 (previous sleeplen was 0.00101028)
+Set duty to 0.155 (previous sleeplen was 0.000976385)
+Set duty to 0.155 (previous sleeplen was 0.000968574)
+Step to 0.8450 at 1435439938.564845284
+Set duty to 0.845 (previous sleeplen was 0.0496795)
+Set duty to 0.845 (previous sleeplen was 0.0491184)
+Set duty to 0.845 (previous sleeplen was 0.0491016)
+Set duty to 0.845 (previous sleeplen was 0.0488295)
+Step to 0.1500 at 1435439953.567373643
+Set duty to 0.15 (previous sleeplen was 0.000932938)
+Set duty to 0.15 (previous sleeplen was 0.000930981)
+Set duty to 0.15 (previous sleeplen was 0.000928007)
+Set duty to 0.15 (previous sleeplen was 0.000954003)
+Step to 0.8500 at 1435439968.570064079
+Set duty to 0.85 (previous sleeplen was 0.0505362)
+Set duty to 0.85 (previous sleeplen was 0.0503914)
+Set duty to 0.85 (previous sleeplen was 0.0507078)
+Set duty to 0.85 (previous sleeplen was 0.0518282)
+Step to 0.1450 at 1435439983.575087315
+Set duty to 0.145 (previous sleeplen was 0.00089652)
+Set duty to 0.145 (previous sleeplen was 0.000894573)
+Set duty to 0.145 (previous sleeplen was 0.000897242)
+Set duty to 0.145 (previous sleeplen was 0.000897288)
+Step to 0.8550 at 1435439998.580378162
+Set duty to 0.855 (previous sleeplen was 0.0522955)
+Set duty to 0.855 (previous sleeplen was 0.0523863)
+Set duty to 0.855 (previous sleeplen was 0.0534094)
+Set duty to 0.855 (previous sleeplen was 0.0534027)
+Step to 0.1400 at 1435440013.587250727
+Set duty to 0.14 (previous sleeplen was 0.000862045)
+Set duty to 0.14 (previous sleeplen was 0.000862865)
+Set duty to 0.14 (previous sleeplen was 0.000863225)
+Set duty to 0.14 (previous sleeplen was 0.000860117)
+Step to 0.8600 at 1435440028.589762904
+Set duty to 0.86 (previous sleeplen was 0.0557557)
+Set duty to 0.86 (previous sleeplen was 0.0556948)
+Set duty to 0.86 (previous sleeplen was 0.0557224)
+Set duty to 0.86 (previous sleeplen was 0.0565296)
+Step to 0.1350 at 1435440043.593198678
+Set duty to 0.135 (previous sleeplen was 0.000827213)
+Set duty to 0.135 (previous sleeplen was 0.000869195)
+Set duty to 0.135 (previous sleeplen was 0.000829594)
+Set duty to 0.135 (previous sleeplen was 0.000825736)
+Step to 0.8650 at 1435440058.595632492
+Set duty to 0.865 (previous sleeplen was 0.0575385)
+Set duty to 0.865 (previous sleeplen was 0.0575989)
+Set duty to 0.865 (previous sleeplen was 0.0550718)
+Set duty to 0.865 (previous sleeplen was 0.0559057)
+Step to 0.1300 at 1435440073.597998597
+Set duty to 0.13 (previous sleeplen was 0.000824746)
+Set duty to 0.13 (previous sleeplen was 0.000793137)
+Set duty to 0.13 (previous sleeplen was 0.000792753)
+Set duty to 0.13 (previous sleeplen was 0.000791847)
+Step to 0.8700 at 1435440088.607451654
+Set duty to 0.87 (previous sleeplen was 0.0594721)
+Set duty to 0.87 (previous sleeplen was 0.0612968)
+Set duty to 0.87 (previous sleeplen was 0.0611337)
+Set duty to 0.87 (previous sleeplen was 0.0607432)
+Step to 0.1250 at 1435440103.609942286
+Set duty to 0.125 (previous sleeplen was 0.000759406)
+Set duty to 0.125 (previous sleeplen was 0.000758342)
+Set duty to 0.125 (previous sleeplen was 0.000759401)
+Set duty to 0.125 (previous sleeplen was 0.000757564)
+Step to 0.8750 at 1435440118.614455239
+Set duty to 0.875 (previous sleeplen was 0.0638554)
+Set duty to 0.875 (previous sleeplen was 0.0637965)
+Set duty to 0.875 (previous sleeplen was 0.0616601)
+Set duty to 0.875 (previous sleeplen was 0.0625815)
+Step to 0.1200 at 1435440133.619032976
+Set duty to 0.12 (previous sleeplen was 0.000724648)
+Set duty to 0.12 (previous sleeplen was 0.000725744)
+Set duty to 0.12 (previous sleeplen was 0.000727495)
+Set duty to 0.12 (previous sleeplen was 0.000725137)
+Step to 0.8800 at 1435440148.625050215
+Set duty to 0.88 (previous sleeplen was 0.0655082)
+Set duty to 0.88 (previous sleeplen was 0.0661819)
+Set duty to 0.88 (previous sleeplen was 0.0662762)
+Set duty to 0.88 (previous sleeplen was 0.0656593)
+Step to 0.1150 at 1435440163.628915851
+Set duty to 0.115 (previous sleeplen was 0.000722321)
+Set duty to 0.115 (previous sleeplen was 0.000691932)
+Set duty to 0.115 (previous sleeplen was 0.000692511)
+Set duty to 0.115 (previous sleeplen was 0.00069205)
+Step to 0.8850 at 1435440178.631373149
+Set duty to 0.885 (previous sleeplen was 0.0685112)
+Set duty to 0.885 (previous sleeplen was 0.0690783)
+Set duty to 0.885 (previous sleeplen was 0.0694837)
+Set duty to 0.885 (previous sleeplen was 0.0694884)
+Step to 0.1100 at 1435440193.634216797
+Set duty to 0.11 (previous sleeplen was 0.000659653)
+Set duty to 0.11 (previous sleeplen was 0.000660689)
+Set duty to 0.11 (previous sleeplen was 0.000661475)
+Set duty to 0.11 (previous sleeplen was 0.00066042)
+Step to 0.8900 at 1435440208.637259869
+Set duty to 0.89 (previous sleeplen was 0.0750447)
+Set duty to 0.89 (previous sleeplen was 0.0726656)
+Set duty to 0.89 (previous sleeplen was 0.0731748)
+Set duty to 0.89 (previous sleeplen was 0.073294)
+Step to 0.1050 at 1435440223.643058861
+Set duty to 0.105 (previous sleeplen was 0.000678909)
+Set duty to 0.105 (previous sleeplen was 0.000627323)
+Set duty to 0.105 (previous sleeplen was 0.00062717)
+Set duty to 0.105 (previous sleeplen was 0.000625904)
+Step to 0.8950 at 1435440238.648011434
+Set duty to 0.895 (previous sleeplen was 0.0766673)
+Set duty to 0.895 (previous sleeplen was 0.0768851)
+Set duty to 0.895 (previous sleeplen was 0.0768504)
+Set duty to 0.895 (previous sleeplen was 0.0777012)
+Step to 0.1000 at 1435440253.651695726
+Set duty to 0.1 (previous sleeplen was 0.000595648)
+Set duty to 0.1 (previous sleeplen was 0.000607588)
+Set duty to 0.1 (previous sleeplen was 0.000595633)
+Set duty to 0.1 (previous sleeplen was 0.000594967)
+Step to 0.9000 at 1435440268.660918754
+Set duty to 0.9 (previous sleeplen was 0.082992)
+Set duty to 0.9 (previous sleeplen was 0.0803772)
+Set duty to 0.9 (previous sleeplen was 0.0803743)
+Set duty to 0.9 (previous sleeplen was 0.0803807)
+Step to 0.0950 at 1435440283.667560719
+Set duty to 0.095 (previous sleeplen was 0.00056386)
+Set duty to 0.095 (previous sleeplen was 0.000564883)
+Set duty to 0.095 (previous sleeplen was 0.0005654)
+Set duty to 0.095 (previous sleeplen was 0.000563095)
+Step to 0.9050 at 1435440298.670045145
+Set duty to 0.905 (previous sleeplen was 0.0879412)
+Set duty to 0.905 (previous sleeplen was 0.0868297)
+Set duty to 0.905 (previous sleeplen was 0.0868191)
+Set duty to 0.905 (previous sleeplen was 0.0874731)
+Step to 0.0900 at 1435440313.676371210
+Set duty to 0.09 (previous sleeplen was 0.000533321)
+Set duty to 0.09 (previous sleeplen was 0.000558377)
+Set duty to 0.09 (previous sleeplen was 0.000532127)
+Set duty to 0.09 (previous sleeplen was 0.00053405)
+Step to 0.9100 at 1435440328.678922599
+Set duty to 0.91 (previous sleeplen was 0.093513)
+Set duty to 0.91 (previous sleeplen was 0.0908344)
+Set duty to 0.91 (previous sleeplen was 0.0909345)
+Set duty to 0.91 (previous sleeplen was 0.092889)
+Step to 0.0850 at 1435440343.687253724
+Set duty to 0.085 (previous sleeplen was 0.000503754)
+Set duty to 0.085 (previous sleeplen was 0.000502118)
+Set duty to 0.085 (previous sleeplen was 0.000502233)
+Set duty to 0.085 (previous sleeplen was 0.000501987)
+Step to 0.9150 at 1435440358.689796935
+Set duty to 0.915 (previous sleeplen was 0.0988562)
+Set duty to 0.915 (previous sleeplen was 0.0971175)
+Set duty to 0.915 (previous sleeplen was 0.0972204)
+Set duty to 0.915 (previous sleeplen was 0.0990477)
+Step to 0.0800 at 1435440373.697293714
+Set duty to 0.08 (previous sleeplen was 0.000471709)
+Set duty to 0.08 (previous sleeplen was 0.000471536)
+Set duty to 0.08 (previous sleeplen was 0.000473699)
+Set duty to 0.08 (previous sleeplen was 0.000472421)
+Step to 0.9200 at 1435440388.700455773
+Set duty to 0.92 (previous sleeplen was 0.103835)
+Set duty to 0.92 (previous sleeplen was 0.101552)
+Set duty to 0.92 (previous sleeplen was 0.101651)
+Set duty to 0.92 (previous sleeplen was 0.101707)
+Step to 0.0750 at 1435440403.705975663
+Set duty to 0.075 (previous sleeplen was 0.00044121)
+Set duty to 0.075 (previous sleeplen was 0.000442067)
+Set duty to 0.075 (previous sleeplen was 0.000442047)
+Set duty to 0.075 (previous sleeplen was 0.000443068)
+Step to 0.9250 at 1435440418.712868512
+Set duty to 0.925 (previous sleeplen was 0.110961)
+Set duty to 0.925 (previous sleeplen was 0.110918)
+Set duty to 0.925 (previous sleeplen was 0.112294)
+Set duty to 0.925 (previous sleeplen was 0.113487)
+Step to 0.0700 at 1435440433.719088464
+Set duty to 0.07 (previous sleeplen was 0.000412225)
+Set duty to 0.07 (previous sleeplen was 0.000411483)
+Set duty to 0.07 (previous sleeplen was 0.000453529)
+Set duty to 0.07 (previous sleeplen was 0.000426565)
+Step to 0.9300 at 1435440448.724450930
+Set duty to 0.93 (previous sleeplen was 0.119863)
+Set duty to 0.93 (previous sleeplen was 0.119858)
+Set duty to 0.93 (previous sleeplen was 0.120835)
+Set duty to 0.93 (previous sleeplen was 0.122122)
+Step to 0.0650 at 1435440463.732317211
+Set duty to 0.065 (previous sleeplen was 0.000381652)
+Set duty to 0.065 (previous sleeplen was 0.000381512)
+Set duty to 0.065 (previous sleeplen was 0.000382097)
+Set duty to 0.065 (previous sleeplen was 0.000384024)
+Step to 0.9350 at 1435440478.740705838
+Set duty to 0.935 (previous sleeplen was 0.133909)
+Set duty to 0.935 (previous sleeplen was 0.132445)
+Set duty to 0.935 (previous sleeplen was 0.131823)
+Set duty to 0.935 (previous sleeplen was 0.131344)
+Step to 0.0600 at 1435440493.746439078
+Set duty to 0.06 (previous sleeplen was 0.000352106)
+Set duty to 0.06 (previous sleeplen was 0.000351662)
+Set duty to 0.06 (previous sleeplen was 0.000352163)
+Set duty to 0.06 (previous sleeplen was 0.000353801)
+Step to 0.9400 at 1435440508.756726482
+Set duty to 0.94 (previous sleeplen was 0.143144)
+Set duty to 0.94 (previous sleeplen was 0.142534)
+Set duty to 0.94 (previous sleeplen was 0.142567)
+Set duty to 0.94 (previous sleeplen was 0.144184)
+Step to 0.0550 at 1435440523.764310799
+Set duty to 0.055 (previous sleeplen was 0.000324036)
+Set duty to 0.055 (previous sleeplen was 0.000323687)
+Set duty to 0.055 (previous sleeplen was 0.000323994)
+Set duty to 0.055 (previous sleeplen was 0.000324362)
+Step to 0.9450 at 1435440538.771848495
+Set duty to 0.945 (previous sleeplen was 0.157548)
+Set duty to 0.945 (previous sleeplen was 0.157071)
+Set duty to 0.945 (previous sleeplen was 0.155576)
+Set duty to 0.945 (previous sleeplen was 0.15558)
+Step to 0.0500 at 1435440553.782445988
+Set duty to 0.05 (previous sleeplen was 0.000295507)
+Set duty to 0.05 (previous sleeplen was 0.000295762)
+Set duty to 0.05 (previous sleeplen was 0.000295271)
+Set duty to 0.05 (previous sleeplen was 0.000294897)
+Step to 0.9500 at 1435440568.790610536
+Set duty to 0.95 (previous sleeplen was 0.173978)
+Set duty to 0.95 (previous sleeplen was 0.173468)
+Set duty to 0.95 (previous sleeplen was 0.172041)
+Set duty to 0.95 (previous sleeplen was 0.172035)
+Step to 0.0450 at 1435440583.799089145
+Set duty to 0.045 (previous sleeplen was 0.00026646)
+Set duty to 0.045 (previous sleeplen was 0.000267)
+Set duty to 0.045 (previous sleeplen was 0.000266604)
+Set duty to 0.045 (previous sleeplen was 0.000267739)
+Step to 0.9550 at 1435440598.808784060
+Set duty to 0.955 (previous sleeplen was 0.190641)
+Set duty to 0.955 (previous sleeplen was 0.192651)
+Set duty to 0.955 (previous sleeplen was 0.187873)
+Set duty to 0.955 (previous sleeplen was 0.191326)
+Step to 0.0400 at 1435440613.815679161
+Set duty to 0.04 (previous sleeplen was 0.000239107)
+Set duty to 0.04 (previous sleeplen was 0.000238462)
+Set duty to 0.04 (previous sleeplen was 0.000239256)
+Set duty to 0.04 (previous sleeplen was 0.000239381)
+Step to 0.9600 at 1435440628.825785582
+Set duty to 0.96 (previous sleeplen was 0.209984)
+Set duty to 0.96 (previous sleeplen was 0.210363)
+Set duty to 0.96 (previous sleeplen was 0.214586)
+Set duty to 0.96 (previous sleeplen was 0.212998)
+Step to 0.0350 at 1435440643.837737528
+Set duty to 0.035 (previous sleeplen was 0.000211646)
+Set duty to 0.035 (previous sleeplen was 0.000211175)
+Set duty to 0.035 (previous sleeplen was 0.000211448)
+Set duty to 0.035 (previous sleeplen was 0.000210965)
+Step to 0.9650 at 1435440658.843708362
+Set duty to 0.965 (previous sleeplen was 0.23705)
+Set duty to 0.965 (previous sleeplen was 0.236959)
+Set duty to 0.965 (previous sleeplen was 0.236883)
+Set duty to 0.965 (previous sleeplen was 0.237497)
+Step to 0.0300 at 1435440673.854515118
+Set duty to 0.03 (previous sleeplen was 0.000183581)
+Set duty to 0.03 (previous sleeplen was 0.00018381)
+Set duty to 0.03 (previous sleeplen was 0.000183615)
+Set duty to 0.03 (previous sleeplen was 0.000183869)
+Step to 0.9700 at 1435440688.858776713
+Set duty to 0.97 (previous sleeplen was 0.266365)
+Set duty to 0.97 (previous sleeplen was 0.26629)
+Set duty to 0.97 (previous sleeplen was 0.269118)
+Set duty to 0.97 (previous sleeplen was 0.269806)
+Step to 0.0250 at 1435440703.871076604
+Set duty to 0.025 (previous sleeplen was 0.000173035)
+Set duty to 0.025 (previous sleeplen was 0.000156427)
+Set duty to 0.025 (previous sleeplen was 0.000156579)
+Set duty to 0.025 (previous sleeplen was 0.000162387)
+Step to 0.9750 at 1435440718.880078999
+Set duty to 0.975 (previous sleeplen was 0.302317)
+Set duty to 0.975 (previous sleeplen was 0.299029)
+Set duty to 0.975 (previous sleeplen was 0.299122)
+Set duty to 0.975 (previous sleeplen was 0.301699)
+Step to 0.0200 at 1435440733.888975013
+Set duty to 0.02 (previous sleeplen was 0.00012975)
+Set duty to 0.02 (previous sleeplen was 0.000130036)
+Set duty to 0.02 (previous sleeplen was 0.00012997)
+Set duty to 0.02 (previous sleeplen was 0.000129808)
+Step to 0.9800 at 1435440748.896543810
+Set duty to 0.98 (previous sleeplen was 0.334317)
+Set duty to 0.98 (previous sleeplen was 0.335701)
+Set duty to 0.98 (previous sleeplen was 0.340382)
+Set duty to 0.98 (previous sleeplen was 0.336969)
+Step to 0.0150 at 1435440763.903160001
+Set duty to 0.015 (previous sleeplen was 0.000118925)
+Set duty to 0.015 (previous sleeplen was 0.000103212)
+Set duty to 0.015 (previous sleeplen was 0.000103818)
+Set duty to 0.015 (previous sleeplen was 0.000116959)
+Step to 0.9850 at 1435440778.914103536
+Set duty to 0.985 (previous sleeplen was 0.376668)
+Set duty to 0.985 (previous sleeplen was 0.379331)
+Set duty to 0.985 (previous sleeplen was 0.37505)
+Set duty to 0.985 (previous sleeplen was 0.377782)
+Step to 0.0100 at 1435440793.923029806
+Set duty to 0.01 (previous sleeplen was 7.80838e-05)
+Set duty to 0.01 (previous sleeplen was 7.70231e-05)
+Set duty to 0.01 (previous sleeplen was 7.84779e-05)
+Set duty to 0.01 (previous sleeplen was 7.70398e-05)
+Step to 0.9900 at 1435440808.928396514
+Set duty to 0.99 (previous sleeplen was 0.410309)
+Set duty to 0.99 (previous sleeplen was 0.412679)
+Set duty to 0.99 (previous sleeplen was 0.412702)
+Set duty to 0.99 (previous sleeplen was 0.420293)
+Step to 0.0050 at 1435440823.935980139
+Set duty to 0.005 (previous sleeplen was 5.12301e-05)
+Set duty to 0.005 (previous sleeplen was 5.21392e-05)
+Set duty to 0.005 (previous sleeplen was 5.91635e-05)
+Set duty to 0.005 (previous sleeplen was 5.11217e-05)
+Step to 0.9950 at 1435440838.944727471
+Set duty to 0.995 (previous sleeplen was 0.462957)
+Set duty to 0.995 (previous sleeplen was 0.462702)
+Set duty to 0.995 (previous sleeplen was 0.462735)
+Set duty to 0.995 (previous sleeplen was 0.465361)
+Step to 0.0000 at 1435440853.950262840
+Set duty to 0.001 (previous sleeplen was 2.95962e-05)
+Set duty to 0.001 (previous sleeplen was 2.5564e-05)
+Set duty to 0.001 (previous sleeplen was 2.54285e-05)
+Set duty to 0.001 (previous sleeplen was 2.54166e-05)
+Quitting at 1435440868.963909971
+Quitting
+Quitting
+Quitting
+Quitting
+Stopping power gadget at 1435440873.968290969
+Done.

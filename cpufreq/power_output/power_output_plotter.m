@@ -37,7 +37,7 @@ end
 
 plotI = i;
 plotV = v;
-boxplot(windows(plotI));
+boxplot(windows(plotI),1,['+','o'],1,4);
 
 ticks = [1:2:length(plotI)];
 set(gca(),'xtick', ticks, 'xticklabel', plotV(ticks)/1e6 );

@@ -1,0 +1,821 @@
+Starting power gadget at 1434669946.864908042
+Clock resolution:
+	tv_sec: 0
+	tv_nsec: 1
+Current time:
+	tv_sec: 14747
+	tv_nsec: 132111728
+Current time (s): 14747.132112
+Total energy consumed: 15744.165359
+Time (s) Power (W)
+Starting vm at 1434669951.874887993
+Welcome to the hypervisor cpu limiter.
+Type the limiting values. Press CTRL+C or q to exit.
+The range is 0-400. See xl sched-credit -c for details
+Set credits to 400
+Step to 0 at 1434669975.172186193
+Set credits to 1
+Step to 398 at 1434669990.211449692
+Set credits to 398
+Step to 2 at 1434670005.218427220
+Set credits to 2
+Step to 396 at 1434670020.248066680
+Set credits to 396
+Step to 4 at 1434670035.256348621
+Set credits to 4
+Step to 394 at 1434670050.275869129
+Set credits to 394
+Step to 6 at 1434670065.285522963
+Set credits to 6
+Step to 392 at 1434670080.316501313
+Set credits to 392
+Step to 8 at 1434670095.325525310
+Set credits to 8
+Step to 390 at 1434670110.394517911
+Set credits to 390
+Step to 10 at 1434670125.425323488
+Set credits to 10
+Step to 388 at 1434670140.432597486
+Set credits to 388
+Step to 12 at 1434670155.440140320
+Set credits to 12
+Step to 386 at 1434670170.450542353
+Set credits to 386
+Step to 14 at 1434670185.458979827
+Set credits to 14
+Step to 384 at 1434670200.465925967
+Set credits to 384
+Step to 16 at 1434670215.487190988
+Set credits to 16
+Step to 382 at 1434670230.495240058
+Set credits to 382
+Step to 18 at 1434670245.511604892
+Set credits to 18
+Step to 380 at 1434670260.534459839
+Set credits to 380
+Step to 20 at 1434670275.555217339
+Set credits to 20
+Step to 378 at 1434670290.588868882
+Set credits to 378
+Step to 22 at 1434670305.595616738
+Set credits to 22
+Step to 376 at 1434670320.603533577
+Set credits to 376
+Step to 24 at 1434670335.610793964
+Set credits to 24
+Step to 374 at 1434670350.647105123
+Set credits to 374
+Step to 26 at 1434670365.674631481
+Set credits to 26
+Step to 372 at 1434670380.689522686
+Set credits to 372
+Step to 28 at 1434670395.709241727
+Set credits to 28
+Step to 370 at 1434670410.731711400
+Set credits to 370
+Step to 30 at 1434670425.739506178
+Set credits to 30
+Step to 368 at 1434670440.758328466
+Set credits to 368
+Step to 32 at 1434670455.780038577
+Set credits to 32
+Step to 366 at 1434670470.806670246
+Set credits to 366
+Step to 34 at 1434670485.817583274
+Set credits to 34
+Step to 364 at 1434670500.834573724
+Set credits to 364
+Step to 36 at 1434670515.842664075
+Set credits to 36
+Step to 362 at 1434670530.864238051
+Set credits to 362
+Step to 38 at 1434670545.881013197
+Set credits to 38
+Step to 360 at 1434670560.897637743
+Set credits to 360
+Step to 40 at 1434670575.914333310
+Set credits to 40
+Step to 358 at 1434670590.922297459
+Set credits to 358
+Step to 42 at 1434670605.933585911
+Set credits to 42
+Step to 356 at 1434670620.951742824
+Set credits to 356
+Step to 44 at 1434670636.017435056
+Set credits to 44
+Step to 354 at 1434670651.051093963
+Set credits to 354
+Step to 46 at 1434670666.058329224
+Set credits to 46
+Step to 352 at 1434670681.093895774
+Set credits to 352
+Step to 48 at 1434670696.119036345
+Set credits to 48
+Step to 350 at 1434670711.155009036
+Set credits to 350
+Step to 50 at 1434670726.162438956
+Set credits to 50
+Step to 348 at 1434670741.192834742
+Set credits to 348
+Step to 52 at 1434670756.200101498
+Set credits to 52
+Step to 346 at 1434670771.207933646
+Set credits to 346
+Step to 54 at 1434670786.214836282
+Set credits to 54
+Step to 344 at 1434670801.222314928
+Set credits to 344
+Step to 56 at 1434670816.230517474
+Set credits to 56
+Step to 342 at 1434670831.238360521
+Set credits to 342
+Step to 58 at 1434670846.245324961
+Set credits to 58
+Step to 340 at 1434670861.260594184
+Set credits to 340
+Step to 60 at 1434670876.301859441
+Set credits to 60
+Step to 338 at 1434670891.339973666
+Set credits to 338
+Step to 62 at 1434670906.347812624
+Set credits to 62
+Step to 336 at 1434670921.358316477
+Set credits to 336
+Step to 64 at 1434670936.372733775
+Set credits to 64
+Step to 334 at 1434670951.379959280
+Set credits to 334
+Step to 66 at 1434670966.387977381
+Set credits to 66
+Step to 332 at 1434670981.409859950
+Set credits to 332
+Step to 68 at 1434670996.436823560
+Set credits to 68
+Step to 330 at 1434671011.444769461
+Set credits to 330
+Step to 70 at 1434671026.454459189
+Set credits to 70
+Step to 328 at 1434671041.467754817
+Set credits to 328
+Step to 72 at 1434671056.475490434
+Set credits to 72
+Step to 326 at 1434671071.510540565
+Set credits to 326
+Step to 74 at 1434671086.526554823
+Set credits to 74
+Step to 324 at 1434671101.534340577
+Set credits to 324
+Step to 76 at 1434671116.551367317
+Set credits to 76
+Step to 322 at 1434671131.559033881
+Set credits to 322
+Step to 78 at 1434671146.567524191
+Set credits to 78
+Step to 320 at 1434671161.583715516
+Set credits to 320
+Step to 80 at 1434671176.590619221
+Set credits to 80
+Step to 318 at 1434671191.597953986
+Set credits to 318
+Step to 82 at 1434671206.609539495
+Set credits to 82
+Step to 316 at 1434671221.629784195
+Set credits to 316
+Step to 84 at 1434671236.653205565
+Set credits to 84
+Step to 314 at 1434671251.668627418
+Set credits to 314
+Step to 86 at 1434671266.698587004
+Set credits to 86
+Step to 312 at 1434671281.734234155
+Set credits to 312
+Step to 88 at 1434671296.741445146
+Set credits to 88
+Step to 310 at 1434671311.749123039
+Set credits to 310
+Step to 90 at 1434671326.807467043
+Set credits to 90
+Step to 308 at 1434671341.818463771
+Set credits to 308
+Step to 92 at 1434671356.874187474
+Set credits to 92
+Step to 306 at 1434671371.894164524
+Set credits to 306
+Step to 94 at 1434671386.925363203
+Set credits to 94
+Step to 304 at 1434671401.933485495
+Set credits to 304
+Step to 96 at 1434671416.942169221
+Set credits to 96
+Step to 302 at 1434671431.980936720
+Set credits to 302
+Step to 98 at 1434671446.991102365
+Set credits to 98
+Step to 300 at 1434671462.000506874
+Set credits to 300
+Step to 100 at 1434671477.039526989
+Set credits to 100
+Step to 298 at 1434671492.078859177
+Set credits to 298
+Step to 102 at 1434671507.118409968
+Set credits to 102
+Step to 296 at 1434671522.128654120
+Set credits to 296
+Step to 104 at 1434671537.139031586
+Set credits to 104
+Step to 294 at 1434671552.173352686
+Set credits to 294
+Step to 106 at 1434671567.186151019
+Set credits to 106
+Step to 292 at 1434671582.195704697
+Set credits to 292
+Step to 108 at 1434671597.210718971
+Set credits to 108
+Step to 290 at 1434671612.220164786
+Set credits to 290
+Step to 110 at 1434671627.247413171
+Set credits to 110
+Step to 288 at 1434671642.257986241
+Set credits to 288
+Step to 112 at 1434671657.266177370
+Set credits to 112
+Step to 286 at 1434671672.294117357
+Set credits to 286
+Step to 114 at 1434671687.306362623
+Set credits to 114
+Step to 284 at 1434671702.380227857
+Set credits to 284
+Step to 116 at 1434671717.389740187
+Set credits to 116
+Step to 282 at 1434671732.400091611
+Set credits to 282
+Step to 118 at 1434671747.409664024
+Set credits to 118
+Step to 280 at 1434671762.432679100
+Set credits to 280
+Step to 120 at 1434671777.470448638
+Set credits to 120
+Step to 278 at 1434671792.482683955
+Set credits to 278
+Step to 122 at 1434671807.492224357
+Set credits to 122
+Step to 276 at 1434671822.523647862
+Set credits to 276
+Step to 124 at 1434671837.542870418
+Set credits to 124
+Step to 274 at 1434671852.574940279
+Set credits to 274
+Step to 126 at 1434671867.609218448
+Set credits to 126
+Step to 272 at 1434671882.617824819
+Set credits to 272
+Step to 128 at 1434671897.627006715
+Set credits to 128
+Step to 270 at 1434671912.642466960
+Set credits to 270
+Step to 130 at 1434671927.653555353
+Set credits to 130
+Step to 268 at 1434671942.679103229
+Set credits to 268
+Step to 132 at 1434671957.690866856
+Set credits to 132
+Step to 266 at 1434671972.702667091
+Set credits to 266
+Step to 134 at 1434671987.723632638
+Set credits to 134
+Step to 264 at 1434672002.731011647
+Set credits to 264
+Step to 136 at 1434672017.739699327
+Set credits to 136
+Step to 262 at 1434672032.763297882
+Set credits to 262
+Step to 138 at 1434672047.770964130
+Set credits to 138
+Step to 260 at 1434672062.778508633
+Set credits to 260
+Step to 140 at 1434672077.809234541
+Set credits to 140
+Step to 258 at 1434672092.818838336
+Set credits to 258
+Step to 142 at 1434672107.826652274
+Set credits to 142
+Step to 256 at 1434672122.851950484
+Set credits to 256
+Step to 144 at 1434672137.862147044
+Set credits to 144
+Step to 254 at 1434672152.878185435
+Set credits to 254
+Step to 146 at 1434672167.890985648
+Set credits to 146
+Step to 252 at 1434672182.910674337
+Set credits to 252
+Step to 148 at 1434672197.927962163
+Set credits to 148
+Step to 250 at 1434672212.962823650
+Set credits to 250
+Step to 150 at 1434672227.973104913
+Set credits to 150
+Step to 248 at 1434672242.998134235
+Set credits to 248
+Step to 152 at 1434672258.007507384
+Set credits to 152
+Step to 246 at 1434672273.016610377
+Set credits to 246
+Step to 154 at 1434672288.025702375
+Set credits to 154
+Step to 244 at 1434672303.037618625
+Set credits to 244
+Step to 156 at 1434672318.054391198
+Set credits to 156
+Step to 242 at 1434672333.082126945
+Set credits to 242
+Step to 158 at 1434672348.115533568
+Set credits to 158
+Step to 240 at 1434672363.127404720
+Set credits to 240
+Step to 160 at 1434672378.136352775
+Set credits to 160
+Step to 238 at 1434672393.145927774
+Set credits to 238
+Step to 162 at 1434672408.162669613
+Set credits to 162
+Step to 236 at 1434672423.186486308
+Set credits to 236
+Step to 164 at 1434672438.196774847
+Set credits to 164
+Step to 234 at 1434672453.232770718
+Set credits to 234
+Step to 166 at 1434672468.276124838
+Set credits to 166
+Step to 232 at 1434672483.300016890
+Set credits to 232
+Step to 168 at 1434672498.333186429
+Set credits to 168
+Step to 230 at 1434672513.372989760
+Set credits to 230
+Step to 170 at 1434672528.382481741
+Set credits to 170
+Step to 228 at 1434672543.422095811
+Set credits to 228
+Step to 172 at 1434672558.432608564
+Set credits to 172
+Step to 226 at 1434672573.513821166
+Set credits to 226
+Step to 174 at 1434672588.537120869
+Set credits to 174
+Step to 224 at 1434672603.547552874
+Set credits to 224
+Step to 176 at 1434672618.568768232
+Set credits to 176
+Step to 222 at 1434672633.577901045
+Set credits to 222
+Step to 178 at 1434672648.604413015
+Set credits to 178
+Step to 220 at 1434672663.615657131
+Set credits to 220
+Step to 180 at 1434672678.625159165
+Set credits to 180
+Step to 218 at 1434672693.634314664
+Set credits to 218
+Step to 182 at 1434672708.644919349
+Set credits to 182
+Step to 216 at 1434672723.668051996
+Set credits to 216
+Step to 184 at 1434672738.693699010
+Set credits to 184
+Step to 214 at 1434672753.711509500
+Set credits to 214
+Step to 186 at 1434672768.725256650
+Set credits to 186
+Step to 212 at 1434672783.764314120
+Set credits to 212
+Step to 188 at 1434672798.801122323
+Set credits to 188
+Step to 210 at 1434672813.841786468
+Set credits to 210
+Step to 190 at 1434672828.851675645
+Set credits to 190
+Step to 208 at 1434672843.860767871
+Set credits to 208
+Step to 192 at 1434672858.870274489
+Set credits to 192
+Step to 206 at 1434672873.883299329
+Set credits to 206
+Step to 194 at 1434672888.892276661
+Set credits to 194
+Step to 204 at 1434672903.901635957
+Set credits to 204
+Step to 196 at 1434672918.911480025
+Set credits to 196
+Step to 202 at 1434672933.920248318
+Set credits to 202
+Step to 198 at 1434672948.927014080
+Set credits to 198
+Step to 200 at 1434672963.955216192
+Set credits to 200
+Step to 200 at 1434672978.965575456
+Set credits to 200
+Step to 198 at 1434672993.991344830
+Set credits to 198
+Step to 202 at 1434673009.024035174
+Set credits to 202
+Step to 196 at 1434673024.055649869
+Set credits to 196
+Step to 204 at 1434673039.063467239
+Set credits to 204
+Step to 194 at 1434673054.070411814
+Set credits to 194
+Step to 206 at 1434673069.099205722
+Set credits to 206
+Step to 192 at 1434673084.158925076
+Set credits to 192
+Step to 208 at 1434673099.184003715
+Set credits to 208
+Step to 190 at 1434673114.191195285
+Set credits to 190
+Step to 210 at 1434673129.199266929
+Set credits to 210
+Step to 188 at 1434673144.233187771
+Set credits to 188
+Step to 212 at 1434673159.267812631
+Set credits to 212
+Step to 186 at 1434673174.277000227
+Set credits to 186
+Step to 214 at 1434673189.285953592
+Set credits to 214
+Step to 184 at 1434673204.293210126
+Set credits to 184
+Step to 216 at 1434673219.300434105
+Set credits to 216
+Step to 182 at 1434673234.317557143
+Set credits to 182
+Step to 218 at 1434673249.327816763
+Set credits to 218
+Step to 180 at 1434673264.337510913
+Set credits to 180
+Step to 220 at 1434673279.357868999
+Set credits to 220
+Step to 178 at 1434673294.370279595
+Set credits to 178
+Step to 222 at 1434673309.409900740
+Set credits to 222
+Step to 176 at 1434673324.419031892
+Set credits to 176
+Step to 224 at 1434673339.428060778
+Set credits to 224
+Step to 174 at 1434673354.437309325
+Set credits to 174
+Step to 226 at 1434673369.446889226
+Set credits to 226
+Step to 172 at 1434673384.456185071
+Set credits to 172
+Step to 228 at 1434673399.466129059
+Set credits to 228
+Step to 170 at 1434673414.507369011
+Set credits to 170
+Step to 230 at 1434673429.518003699
+Set credits to 230
+Step to 168 at 1434673444.541586870
+Set credits to 168
+Step to 232 at 1434673459.553581926
+Set credits to 232
+Step to 166 at 1434673474.584044830
+Set credits to 166
+Step to 234 at 1434673489.617028198
+Set credits to 234
+Step to 164 at 1434673504.643785728
+Set credits to 164
+Step to 236 at 1434673519.653027462
+Set credits to 236
+Step to 162 at 1434673534.695269715
+Set credits to 162
+Step to 238 at 1434673549.722010068
+Set credits to 238
+Step to 160 at 1434673564.731001453
+Set credits to 160
+Step to 240 at 1434673579.759951504
+Set credits to 240
+Step to 158 at 1434673594.769865845
+Set credits to 158
+Step to 242 at 1434673609.778837476
+Set credits to 242
+Step to 156 at 1434673624.801526705
+Set credits to 156
+Step to 244 at 1434673639.810869049
+Set credits to 244
+Step to 154 at 1434673654.820071463
+Set credits to 154
+Step to 246 at 1434673669.864806104
+Set credits to 246
+Step to 152 at 1434673684.910391760
+Set credits to 152
+Step to 248 at 1434673699.920436966
+Set credits to 248
+Step to 150 at 1434673714.937919014
+Set credits to 150
+Step to 250 at 1434673729.948529126
+Set credits to 250
+Step to 148 at 1434673744.958002590
+Set credits to 148
+Step to 252 at 1434673759.980227443
+Set credits to 252
+Step to 146 at 1434673775.021460330
+Set credits to 146
+Step to 254 at 1434673790.034773998
+Set credits to 254
+Step to 144 at 1434673805.043886364
+Set credits to 144
+Step to 256 at 1434673820.112356016
+Set credits to 256
+Step to 142 at 1434673835.144613501
+Set credits to 142
+Step to 258 at 1434673850.155368728
+Set credits to 258
+Step to 140 at 1434673865.191675847
+Set credits to 140
+Step to 260 at 1434673880.224192170
+Set credits to 260
+Step to 138 at 1434673895.234170782
+Set credits to 138
+Step to 262 at 1434673910.245219158
+Set credits to 262
+Step to 136 at 1434673925.256511355
+Set credits to 136
+Step to 264 at 1434673940.297143106
+Set credits to 264
+Step to 134 at 1434673955.305991289
+Set credits to 134
+Step to 266 at 1434673970.315028869
+Set credits to 266
+Step to 132 at 1434673985.353732536
+Set credits to 132
+Step to 268 at 1434674000.364348914
+Set credits to 268
+Step to 130 at 1434674015.374423030
+Set credits to 130
+Step to 270 at 1434674030.388951070
+Set credits to 270
+Step to 128 at 1434674045.411945500
+Set credits to 128
+Step to 272 at 1434674060.420810049
+Set credits to 272
+Step to 126 at 1434674075.430256832
+Set credits to 126
+Step to 274 at 1434674090.439790205
+Set credits to 274
+Step to 124 at 1434674105.447958908
+Set credits to 124
+Step to 276 at 1434674120.463673577
+Set credits to 276
+Step to 122 at 1434674135.473786333
+Set credits to 122
+Step to 278 at 1434674150.503343183
+Set credits to 278
+Step to 120 at 1434674165.517940232
+Set credits to 120
+Step to 280 at 1434674180.526332597
+Set credits to 280
+Step to 118 at 1434674195.533627888
+Set credits to 118
+Step to 282 at 1434674210.542604326
+Set credits to 282
+Step to 116 at 1434674225.581348825
+Set credits to 116
+Step to 284 at 1434674240.613069985
+Set credits to 284
+Step to 114 at 1434674255.623314465
+Set credits to 114
+Step to 286 at 1434674270.632310373
+Set credits to 286
+Step to 112 at 1434674285.646225244
+Set credits to 112
+Step to 288 at 1434674300.673421772
+Set credits to 288
+Step to 110 at 1434674315.691043869
+Set credits to 110
+Step to 290 at 1434674330.702197208
+Set credits to 290
+Step to 108 at 1434674345.741342851
+Set credits to 108
+Step to 292 at 1434674360.807750679
+Set credits to 292
+Step to 106 at 1434674375.816743766
+Set credits to 106
+Step to 294 at 1434674390.832632238
+Set credits to 294
+Step to 104 at 1434674405.841559751
+Set credits to 104
+Step to 296 at 1434674420.850644932
+Set credits to 296
+Step to 102 at 1434674435.860546739
+Set credits to 102
+Step to 298 at 1434674450.873076518
+Set credits to 298
+Step to 100 at 1434674465.883888852
+Set credits to 100
+Step to 300 at 1434674480.924418209
+Set credits to 300
+Step to 98 at 1434674495.947897650
+Set credits to 98
+Step to 302 at 1434674510.988073096
+Set credits to 302
+Step to 96 at 1434674526.028168821
+Set credits to 96
+Step to 304 at 1434674541.099671128
+Set credits to 304
+Step to 94 at 1434674556.110046376
+Set credits to 94
+Step to 306 at 1434674571.120564394
+Set credits to 306
+Step to 92 at 1434674586.129652513
+Set credits to 92
+Step to 308 at 1434674601.138747542
+Set credits to 308
+Step to 90 at 1434674616.146780667
+Set credits to 90
+Step to 310 at 1434674631.164528884
+Set credits to 310
+Step to 88 at 1434674646.171392594
+Set credits to 88
+Step to 312 at 1434674661.202324595
+Set credits to 312
+Step to 86 at 1434674676.210702889
+Set credits to 86
+Step to 314 at 1434674691.248289032
+Set credits to 314
+Step to 84 at 1434674706.256238623
+Set credits to 84
+Step to 316 at 1434674721.278127815
+Set credits to 316
+Step to 82 at 1434674736.285467898
+Set credits to 82
+Step to 318 at 1434674751.294125666
+Set credits to 318
+Step to 80 at 1434674766.309561766
+Set credits to 80
+Step to 320 at 1434674781.334317639
+Set credits to 320
+Step to 78 at 1434674796.365715293
+Set credits to 78
+Step to 322 at 1434674811.393165346
+Set credits to 322
+Step to 76 at 1434674826.410366240
+Set credits to 76
+Step to 324 at 1434674841.427558568
+Set credits to 324
+Step to 74 at 1434674856.434595649
+Set credits to 74
+Step to 326 at 1434674871.472427813
+Set credits to 326
+Step to 72 at 1434674886.479826254
+Set credits to 72
+Step to 328 at 1434674901.500771087
+Set credits to 328
+Step to 70 at 1434674916.512699836
+Set credits to 70
+Step to 330 at 1434674931.521083183
+Set credits to 330
+Step to 68 at 1434674946.552649280
+Set credits to 68
+Step to 332 at 1434674961.590586515
+Set credits to 332
+Step to 66 at 1434674976.605837138
+Set credits to 66
+Step to 334 at 1434674991.622593371
+Set credits to 334
+Step to 64 at 1434675006.629405526
+Set credits to 64
+Step to 336 at 1434675021.665562644
+Set credits to 336
+Step to 62 at 1434675036.696029822
+Set credits to 62
+Step to 338 at 1434675051.712774636
+Set credits to 338
+Step to 60 at 1434675066.721343794
+Set credits to 60
+Step to 340 at 1434675081.730174859
+Set credits to 340
+Step to 58 at 1434675096.737322531
+Set credits to 58
+Step to 342 at 1434675111.748690054
+Set credits to 342
+Step to 56 at 1434675126.790890467
+Set credits to 56
+Step to 344 at 1434675141.829327795
+Set credits to 344
+Step to 54 at 1434675156.854662040
+Set credits to 54
+Step to 346 at 1434675171.888892713
+Set credits to 346
+Step to 52 at 1434675186.896084898
+Set credits to 52
+Step to 348 at 1434675201.910059402
+Set credits to 348
+Step to 50 at 1434675216.917028449
+Set credits to 50
+Step to 350 at 1434675231.924936834
+Set credits to 350
+Step to 48 at 1434675246.937554759
+Set credits to 48
+Step to 352 at 1434675261.945479679
+Set credits to 352
+Step to 46 at 1434675276.968997487
+Set credits to 46
+Step to 354 at 1434675291.981074741
+Set credits to 354
+Step to 44 at 1434675306.991374015
+Set credits to 44
+Step to 356 at 1434675321.998987612
+Set credits to 356
+Step to 42 at 1434675337.029816419
+Set credits to 42
+Step to 358 at 1434675352.042474822
+Set credits to 358
+Step to 40 at 1434675367.049639490
+Set credits to 40
+Step to 360 at 1434675382.056986919
+Set credits to 360
+Step to 38 at 1434675397.065531438
+Set credits to 38
+Step to 362 at 1434675412.104068853
+Set credits to 362
+Step to 36 at 1434675427.112050960
+Set credits to 36
+Step to 364 at 1434675442.120093584
+Set credits to 364
+Step to 34 at 1434675457.127990974
+Set credits to 34
+Step to 366 at 1434675472.136240463
+Set credits to 366
+Step to 32 at 1434675487.143534572
+Set credits to 32
+Step to 368 at 1434675502.168617190
+Set credits to 368
+Step to 30 at 1434675517.175569089
+Set credits to 30
+Step to 370 at 1434675532.182881119
+Set credits to 370
+Step to 28 at 1434675547.213906602
+Set credits to 28
+Step to 372 at 1434675562.222434088
+Set credits to 372
+Step to 26 at 1434675577.229842602
+Set credits to 26
+Step to 374 at 1434675592.237222605
+Set credits to 374
+Step to 24 at 1434675607.246593122
+Set credits to 24
+Step to 376 at 1434675622.268874664
+Set credits to 376
+Step to 22 at 1434675637.276807136
+Set credits to 22
+Step to 378 at 1434675652.285601121
+Set credits to 378
+Step to 20 at 1434675667.320747088
+Set credits to 20
+Step to 380 at 1434675682.333242596
+Set credits to 380
+Step to 18 at 1434675697.341199345
+Set credits to 18
+Step to 382 at 1434675712.349375015
+Set credits to 382
+Step to 16 at 1434675727.356786253
+Set credits to 16
+Step to 384 at 1434675742.395828913
+Set credits to 384
+Step to 14 at 1434675757.407900823
+Set credits to 14
+Step to 386 at 1434675772.422072268
+Set credits to 386
+Step to 12 at 1434675787.440519027
+Set credits to 12
+Step to 388 at 1434675802.452134364
+Set credits to 388
+Step to 10 at 1434675817.477749223
+Set credits to 10
+Step to 390 at 1434675832.516591739
+Set credits to 390
+Step to 8 at 1434675847.525766935
+Set credits to 8
+Step to 392 at 1434675862.539273890
+Set credits to 392
+Step to 6 at 1434675877.548114576
+Set credits to 6
+Step to 394 at 1434675892.557021723
+Set credits to 394
+Step to 4 at 1434675907.576100274
+Set credits to 4
+Step to 396 at 1434675922.613431710
+Set credits to 396
+Step to 2 at 1434675937.622618048
+Set credits to 2
+Step to 398 at 1434675952.630924467
+Set credits to 398
+Step to 0 at 1434675967.637873257
+Set credits to 1
+Quitting at 1434675982.660578000
+Done
+Stopping vm at 1434675987.671353354
+Shutting down domain 8
+Stopping power gadget at 1434675992.729597627
+Done.
