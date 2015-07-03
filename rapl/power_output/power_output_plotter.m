@@ -1,5 +1,5 @@
-b=input('Type the name: ','s')
-%b='355660772_1434773393';
+%b=input('Type the name: ','s')
+b='355660772_1434773393';
 
 [status, output] = system(['cat ./' b '.log | grep "Starting power gadget at " | cut -d \  -f 5']);
 assert(status == 0);
@@ -37,14 +37,25 @@ end
 
 [v,i] = sort(stepValues);
 
-plotI = i(1:10:numSteps);
-plotV = v(1:10:numSteps);
-boxplot(windows(plotI));
+plotI = i(1:5:numSteps);
+plotV = v(1:5:numSteps);
+[s,h] = boxplot(windows(plotI),1,['x','o'],1,10);
+mx = -Inf;
+mn = Inf;
+for i = 1:length(h.whisker)
+  if(max(get(h.whisker(i),'ydata')) > mx)
+    mx = max(get(h.whisker(i),'ydata'));
+  end
+  if(min(get(h.whisker(i),'ydata')) < mn)
+    mn = min(get(h.whisker(i),'ydata'));
+  end
+end
+axis([0 length(plotI)+1 mn mx])
 ticks = unique([1:5:length(plotI) length(plotI)]);
 
 set(gca(),'xtick', ticks, 'xticklabel', plotV(ticks) );
 title('RAPL package limit vs average power')
 ylabel('Power (W) ')
 xlabel('RAPL package limit (W)')
-print([b '.png'],'-S1280x1024')
-print('rapl.png','-S1280x1024')
+print([b '.pdf'],'-S1280x1024')
+print('rapl.pdf','-S1280x1024')
