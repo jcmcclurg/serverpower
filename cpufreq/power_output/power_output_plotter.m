@@ -1,5 +1,5 @@
-b=input('Type the name: ','s')
-%b='731046106_1435688014';
+%b=input('Type the name: ','s')
+b='731046106_1435688014';
 
 [status, output] = system(['cat ./' b '.log | grep "Starting power gadget at " | cut -d \  -f 5']);
 assert(status == 0);
@@ -37,12 +37,22 @@ end
 
 plotI = i;
 plotV = v;
-boxplot(windows(plotI),1,['+','o'],1,4);
-
+[s,h] = boxplot(windows(plotI),1,['x','o'],1,10);
+mx = -Inf;
+mn = Inf;
+for i = 1:length(h.whisker)
+  if(max(get(h.whisker(i),'ydata')) > mx)
+    mx = max(get(h.whisker(i),'ydata'));
+  end
+  if(min(get(h.whisker(i),'ydata')) < mn)
+    mn = min(get(h.whisker(i),'ydata'));
+  end
+end
+axis([0 length(plotI)+1 mn mx])
 ticks = [1:2:length(plotI)];
 set(gca(),'xtick', ticks, 'xticklabel', plotV(ticks)/1e6 );
 title('CPU frequency vs average power')
 ylabel('Power (W) ')
 xlabel('CPU frequency (GHz)')
-print([b '.png'],'-S1280x1024')
-print('cpufreq.png','-S1280x1024')
+print([b '.pdf'],'-S1280x1024')
+print('cpufreq.pdf','-S1280x1024')

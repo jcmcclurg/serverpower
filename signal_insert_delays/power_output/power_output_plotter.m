@@ -1,5 +1,5 @@
-b=input('Type the name: ','s')
-%b='244991366_1434682629';
+%b=input('Type the name: ','s')
+b='244991366_1434682629';
 
 [status, output] = system(['cat ./' b '.log | grep "Starting power gadget at " | cut -d \  -f 5']);
 assert(status == 0);
@@ -34,14 +34,25 @@ for i = 1:numSteps
 end
 
 [v,i] = sort(stepValues);
-plotI = i(1:10:numSteps);
-plotV = v(1:10:numSteps);
-boxplot(windows(plotI));
+plotI = i(1:5:numSteps);
+plotV = v(1:5:numSteps);
+[s,h] = boxplot(windows(plotI),1,['x','o'],1,10);
+mx = -Inf;
+mn = Inf;
+for i = 1:length(h.whisker)
+  if(max(get(h.whisker(i),'ydata')) > mx)
+    mx = max(get(h.whisker(i),'ydata'));
+  end
+  if(min(get(h.whisker(i),'ydata')) < mn)
+    mn = min(get(h.whisker(i),'ydata'));
+  end
+end
+axis([0 length(plotI)+1 mn mx])
 ticks = unique([1:5:length(plotI) length(plotI)]);
 
 set(gca(),'xtick', ticks, 'xticklabel', 100*plotV(ticks) );
 title('CPU duty cycle vs average power')
 ylabel('Power (W) ')
 xlabel('Duty cycle (percent)')
-print([b '.png'],'-S1280x1024')
-print('insert_delays.png','-S1280x1024')
+print([b '.pdf'],'-S1280x1024')
+print('insert_delays.pdf','-S1280x1024')
