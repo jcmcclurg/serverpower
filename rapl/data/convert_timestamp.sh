@@ -1,6 +1,7 @@
 #!/bin/bash
 awk -F [::.,] '{printf("%.16G\n",($1*3600+$2*60+$3+$4/1000))}' data.csv | tee time_pg.csv #> /dev/null
 cut -d, -f3 data.csv | tee power_pg.csv #> /dev/null
+awk -F [,] '{printf("%.5G\n",$3+$5)}' data.csv | tee pkg_dram_pg.csv
 # convert labview data to csv
 awk '{printf("%s,%s\n",$1,$2)}' data_lv.txt | tee data_lv.csv #> /dev/null
 awk -F [::.,] '{printf("%.16G\n",($1*3600+$2*60+$3+$4/1000000))}' data_lv.csv | tee time_lv.csv #> /dev/null
@@ -12,7 +13,7 @@ cut -d, -f2 setpoint.csv | tee power_sp.csv #> /dev/null
 
 # now paste together with:
 
-paste -d ',' time_lv.csv power_lv.csv time_pg.csv power_pg.csv thermalzns.csv > pver.csv #> /dev/null
+paste -d ',' time_lv.csv power_lv.csv time_pg.csv pkg_dram_pg.csv thermalzns.csv > pver.csv #> /dev/null
 paste -d ',' time_sp.csv power_sp.csv > setpt.csv #> /dev/null
 
 octave ~/joe/serverpower/rapl/data/read_pwr_data.m
