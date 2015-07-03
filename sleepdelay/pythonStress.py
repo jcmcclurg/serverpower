@@ -19,9 +19,8 @@ def worker(ns,i):
     i = 3.427239
     while ns.running:
         time.sleep(ns.sleeplen)
-        i += np.sqrt(np.random.random())
-        #i += i
-        j += 1
+        i *= np.sqrt(np.random.random())/np.sqrt(np.random.random())
+        j += 100000/np.sqrt(np.random.random())
     fp = open(filename,'w+')
     fp.write("%d\n"%j)
     fp.close()
@@ -37,7 +36,7 @@ if __name__ == '__main__':
     ns = mgr.Namespace()
     ns.running = True
     ns.sleeplen = 0.1
-    n = 8
+    n = 20
     
 
     print "Opening delay.csv"

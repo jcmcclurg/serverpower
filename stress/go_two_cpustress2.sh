@@ -1,1 +1,1 @@
-tee >(./cpustress2) >(./cpustress2)
+tee >(./cpustress2) >(./cpustress2) >(./cpustress2) >(./cpustress2)
