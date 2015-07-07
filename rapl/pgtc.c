@@ -242,14 +242,14 @@ void do_set_power_limit(void)
 	pkg_plc.lock_enabled = 0;  
 
     pp0_rapl_power_limit_control_t pp0_plc;
-    pp0_plc.power_limit_watts = 50.0;
+    pp0_plc.power_limit_watts = 80.0;
     pp0_plc.limit_time_window_seconds = 0.0001;
     pp0_plc.limit_enabled = 1;
     pp0_plc.clamp_enabled = 1;
     pp0_plc.lock_enabled = 0;
 
 	dram_rapl_power_limit_control_t dram_plc;
-	dram_plc.power_limit_watts = 30.0;
+	dram_plc.power_limit_watts = 80.0;
     dram_plc.limit_time_window_seconds = 0.03;
     dram_plc.limit_enabled = 1;
     dram_plc.clamp_enabled = 1;
