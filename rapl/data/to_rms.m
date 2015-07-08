@@ -1,4 +1,4 @@
-load data_scope.mat
+%load data_scope.mat
 t_iac = data_scope(1:end,1);
 iac = data_scope(1:end,2);
 t_vac = data_scope(1:end,3);
@@ -8,7 +8,7 @@ instpwr = iac.*vac;
 
 % compute rms:
 % rms(iac(i:samplerate/60Hz)) in Matlab
-samplerate = 10000; %Sa/sec
+samplerate = 20000; %Sa/sec
 freq = 60;
 sa_per_cyc = samplerate/freq;
 start = round(sa_per_cyc/2);
@@ -26,7 +26,7 @@ end
 prms = irms.*vrms;
 
 %ave_rms
-sa_per_ave=round(0.3*samplerate);
+sa_per_ave=round(0.15*samplerate);
 len_ave = round(length(iac)/sa_per_ave);
 prms_ave = zeros(round(length(iac)/sa_per_ave),1);
 t_ave = zeros(round(length(iac)/sa_per_ave),1);
@@ -34,7 +34,7 @@ for i=0:(length(prms_ave)-2) % -2 cause not enough elements sometimes
 	prms_ave(i+1)=mean(prms((1+i*sa_per_ave):((1+i)*sa_per_ave)));
 	t_ave(i+1)=t_iac((1+i)*sa_per_ave);
 end
-t_ave(end)=t_ave(end-1)+0.3;
+t_ave(end)=t_ave(end-1)+0.15;
 
 %ave_instpwr
 %sa_per_ave=round(0.3*samplerate);
@@ -56,7 +56,7 @@ t_ave(end)=t_ave(end-1)+0.3;
 
 	%get power_gadget data
 load data_pg.mat
-t_pg = data_pg(1:end,1)-44487.4;
+t_pg = data_pg(1:end,1)-40455.;
 p_pg = data_pg(1:end,2);
 dram_pg = data_pg(1:end,3);
 tot_pg = p_pg+dram_pg;
@@ -73,13 +73,16 @@ p_base2=prms_ave-tot_interp;
 	%plot data
 fh=figure;
 %h2=plot(t_iac,prms,'b','displayname','RMS Power (running period window)');
+
+h1=plot(t_ave,prms_ave,'or','markersize',2,'displayname','RMS Average Power');
 hold on;
-h1=plot(t_ave,prms_ave,':.r','linewidth',3,'displayname','RMS Average Power');
-%h3=plot(t_pg,p_pg,':.g','linewidth',3,'displayname','PKG MSR');
-%h4=plot(t_pg,tot_pg,':.b','displayname','PKG+DRAM MSR');
-%h5=plot(t_aveInst,pinst_ave,':.m','linewidth',3,'displayname','Instantaneous Average (0.1s) Power');
-h6=plot(t_ave,p_base,':.k','linewidth',3,'displayname','AveRMS-msrPKG');
-h7=plot(t_ave,p_base2,':.y','displayname','AveRMS-msrPKG-msrDRAM');
+%h3=plot(t_pg,p_pg,.g','markersize',5,'displayname','PKG MSR');
+%h4=plot(t_pg,tot_pg,':.b','markersize',5,'displayname','PKG+DRAM MSR');
+%h5=plot(t_aveInst,pinst_ave,':.m','markersize',5,'displayname','Instantaneous Average (0.1s) Power');
+h6=plot(t_ave,p_base,'>b','markersize',2,'displayname','AveRMS-msrPKG');
+h7=plot(t_ave,p_base2,'sg','markersize',2,'displayname','AveRMS-msrPKG-msrDRAM');
+h8=plot(xlim,[mean(prms_ave(2:30)-p_pg_interp(2:30)) mean(prms_ave(end-30:end-1)-p_pg_interp(end-30:end-1))],'-b','displayname','mean of AveRMS-msrPKG');
+h9=plot(xlim,[mean(prms_ave(2:30)-tot_interp(2:30)) mean(prms_ave(end-30:end-1)-tot_interp(end-30:end-1))],'-g','displayname','mean of AveRMS-msrPKG-msrDRAM');
 legend();
    
 
