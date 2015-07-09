@@ -70,6 +70,13 @@ tot_interp=interp1(t_pg,tot_pg,t_ave);
 p_base=prms_ave-p_pg_interp;
 p_base2=prms_ave-tot_interp;
 
+ave_base=mean(prms_ave(end-30:end-1)-p_pg_interp(end-30:end-1));
+ave_base2=mean(prms_ave(end-30:end-1)-tot_interp(end-30:end-1));
+ave_base_intrpl=interp1([t_ave(2) t_ave(end-1)],[ave_base ave_base],t_ave);
+ave_base2_intrpl=interp1([t_ave(2) t_ave(end-1)],[ave_base2 ave_base2],t_ave);
+pcnt_err=(prms_ave-p_pg_interp-ave_base)./prms_ave*100;
+pcnt_err2=(prms_ave-tot_interp-ave_base2)./prms_ave*100;
+
 	%plot data
 fh=figure;
 %h2=plot(t_iac,prms,'b','displayname','RMS Power (running period window)');
@@ -83,6 +90,8 @@ h6=plot(t_ave,p_base,'>b','markersize',2,'displayname','AveRMS-msrPKG');
 h7=plot(t_ave,p_base2,'sg','markersize',2,'displayname','AveRMS-msrPKG-msrDRAM');
 h8=plot(xlim,[mean(prms_ave(2:30)-p_pg_interp(2:30)) mean(prms_ave(end-30:end-1)-p_pg_interp(end-30:end-1))],'-b','displayname','mean of AveRMS-msrPKG');
 h9=plot(xlim,[mean(prms_ave(2:30)-tot_interp(2:30)) mean(prms_ave(end-30:end-1)-tot_interp(end-30:end-1))],'-g','displayname','mean of AveRMS-msrPKG-msrDRAM');
+h10=plot(t_ave,pcnt_err2,'-.g','markersize',5,'displayname','pcentErr2');
+h11=plot(t_ave,pcnt_err,'-.b','markersize',5,'displayname','pcentErr1');
 legend();
    
 
