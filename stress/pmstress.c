@@ -44,13 +44,13 @@ main(int argc, char **argv)
 		
 		//clock_gettime(CLOCK_MONOTONIC, &tv_start);
 		//retval = cpu_worker(num_iter, &delay);
-		retval = mem_worker(bytes,touch_bytes, &delay);
+		//retval = mem_worker(bytes,touch_bytes, &delay);
 		//clock_gettime(CLOCK_MONOTONIC, &tv_stop);
 		//usleep(delay_us);
 		//t_start = convert_time_to_sec(tv_start);
 		//t_stop = convert_time_to_sec(tv_stop);
 		//printf("seconds elapsed while running worker: %.18f\n",(t_stop-t_start));
-		
+		usleep(10000);
 		rcvd = get_usr_input(buff, &bytes_so_far); // get stdin input
 		if (rcvd==1) {
 			cmd_type = interpret_command(buff, &cmd_data);

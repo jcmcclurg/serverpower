@@ -14,6 +14,7 @@ char interpret_command(char *input, double *output); // interpret stdin
 float cpu_worker(int num_iter, struct timespec *delay_ptr);
 char mem_worker(long num_bytes, long touch, struct timespec *delay_ptr);
 double convert_time_to_sec(struct timespec tv);
+void convert_time_to_string(struct timespec tv, char* time_buf);
 
 int
 main(int argc, char **argv)
@@ -34,23 +35,51 @@ main(int argc, char **argv)
 	int num_iter = 0;
     long touch_bytes = 0;
 	long counter = 0;
-	
 	delay.tv_sec = 0;
 	delay.tv_nsec = 0;
+	
+	/* test variables */
+	FILE	*fp = NULL; 
+	fp=fopen("data/pmstresstest_setpoint.csv", "w");
+	long bytesArray[]={250000000 500000000 750000000 1000000000 2000000000 
+						3000000000 4000000000 5000000000 6000000000};
+	int pcntTouchArray[]={1 20 40 60 80 100};
+    int i = 0;
+	int j = 0;
+	double timestamp;
+	struct timespec t_setpoint;
+		
+
 	/* don't buffer if piped */
     setbuf(stdout, NULL);
 	
 	while (running == 1) {
+
+	for (i=0; i<((int)(sizeof(bytesArray)/sizeof(bytesArray[0])); i++) {
+		fprintf(stdout,"t0\nm%l\n",bytesArray[i]);
+		for (j=0; j<((int)(sizeof(pcntTouchArray)/sizeof(pcntTouchArray[0])); j++) {
+			clock_gettime(CLOCK_REALTIME, &t_setpoint);		
+			fprintf(stdout,"t%l\n",((long)(pcntTouchArray[j]*bytesArray[i]/100)));
+			timestamp=convert_time_to_sec(t_setpoint);				
+			sleep(2);
+			fprintf(fp,"%s,%l,%l,\n",timestamp,bytesArray[i],pcntTouchArray[i]);
+			
+		}
 		
+
+	}		
+
+
 		//clock_gettime(CLOCK_MONOTONIC, &tv_start);
 		//retval = cpu_worker(num_iter, &delay);
-		retval = mem_worker(bytes,touch_bytes, &delay);
+//		retval = mem_worker(bytes,touch_bytes, &delay);
 		//clock_gettime(CLOCK_MONOTONIC, &tv_stop);
 		//usleep(delay_us);
 		//t_start = convert_time_to_sec(tv_start);
 		//t_stop = convert_time_to_sec(tv_stop);
 		//printf("seconds elapsed while running worker: %.18f\n",(t_stop-t_start));
 		
+/*		
 		rcvd = get_usr_input(buff, &bytes_so_far); // get stdin input
 		if (rcvd==1) {
 			cmd_type = interpret_command(buff, &cmd_data);
@@ -75,6 +104,7 @@ main(int argc, char **argv)
 					break;
 			}
 		}
+*/
 	}
 	return EXIT_SUCCESS;
 }
@@ -189,4 +219,18 @@ convert_time_to_sec(struct timespec tv) {
 	return elapsed_time;
 }
 
+void
+convert_time_to_string(struct timespec tv, char* time_buf)
+{
+    time_t sec;
+    int msec;
+    struct tm *timeinfo;
+    char tmp_buf[9];
 
+    sec = tv.tv_sec;
+    timeinfo = localtime(&sec);
+    msec = tv.tv_nsec/1000000;
+
+    strftime(tmp_buf, 9, "%H:%M:%S", timeinfo);
+    sprintf(time_buf, "%s:%d",tmp_buf,msec);
+}
