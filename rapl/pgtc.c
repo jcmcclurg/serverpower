@@ -152,16 +152,16 @@ void
 convert_time_to_string(struct timespec tv, char* time_buf)
 {
     time_t sec;
-    int msec;
+    long nsec;
     struct tm *timeinfo;
-    char tmp_buf[9];
+    char tmp_buf[15];
 
     sec = tv.tv_sec;
     timeinfo = localtime(&sec);
-    msec = tv.tv_nsec/1000000;
+    nsec = tv.tv_nsec;
 
-    strftime(tmp_buf, 9, "%H:%M:%S", timeinfo);
-    sprintf(time_buf, "%s:%d",tmp_buf,msec);
+    strftime(tmp_buf, 15, "%H:%M:%S", timeinfo);
+    sprintf(time_buf, "%s:%9ld",tmp_buf,nsec);
 }
 
 /*
