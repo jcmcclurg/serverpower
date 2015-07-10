@@ -9,3 +9,8 @@ C:\Users\AWynos\Desktop\Oscilloscope Program\Oscilloscope Program\Oscilloscope P
 C:\Users\AWynos\Desktop\Oscilloscope Program\Oscilloscope Program\Oscilloscope Program\obj\Debug\Oscilloscope Program.xml
 C:\Users\AWynos\Desktop\Oscilloscope Program\Oscilloscope Program\Oscilloscope Program\obj\Debug\Oscilloscope Program.pdb
 C:\Users\AWynos\Desktop\Oscilloscope Program\Oscilloscope Program\Oscilloscope Program\obj\Debug\Oscilloscope Program.vbproj.ResolveComReference.cache
+C:\Users\AWynos\Documents\GitHub\serverpower\scope_VB\Single Channel Acquistion Agilent Scope\Oscilloscope Program\Oscilloscope Program\Oscilloscope Program\bin\Debug\Oscilloscope Program.exe.config
+C:\Users\AWynos\Documents\GitHub\serverpower\scope_VB\Single Channel Acquistion Agilent Scope\Oscilloscope Program\Oscilloscope Program\Oscilloscope Program\obj\Debug\Oscilloscope Program.vbproj.ResolveComReference.cache
+C:\Users\AWynos\Documents\GitHub\serverpower\scope_VB\Single Channel Acquistion Agilent Scope\Oscilloscope Program\Oscilloscope Program\Oscilloscope Program\obj\Debug\Oscilloscope Program.exe
+C:\Users\AWynos\Documents\GitHub\serverpower\scope_VB\Single Channel Acquistion Agilent Scope\Oscilloscope Program\Oscilloscope Program\Oscilloscope Program\obj\Debug\Oscilloscope Program.xml
+C:\Users\AWynos\Documents\GitHub\serverpower\scope_VB\Single Channel Acquistion Agilent Scope\Oscilloscope Program\Oscilloscope Program\Oscilloscope Program\obj\Debug\Oscilloscope Program.pdb
