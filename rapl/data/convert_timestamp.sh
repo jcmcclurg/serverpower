@@ -1,5 +1,5 @@
 #!/bin/bash
-awk -F [::.,] '{printf("%.16G\n",($1*3600+$2*60+$3+$4/1000))}' data.csv | tee time_pg.csv #> /dev/null
+awk -F [::.,] '{printf("%.16G\n",($1*3600+$2*60+$3+$4/1000000000))}' data.csv | tee time_pg.csv #> /dev/null
 cut -d, -f3 data.csv | tee pkg_pg.csv #> /dev/null
 awk -F [,] '{printf("%.5G\n",$5)}' data.csv | tee dram_pg.csv
 # convert labview data to csv
