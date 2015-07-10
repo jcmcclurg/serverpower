@@ -152,16 +152,16 @@ void
 convert_time_to_string(struct timespec tv, char* time_buf)
 {
     time_t sec;
-    int msec;
+    long nsec;
     struct tm *timeinfo;
-    char tmp_buf[9];
+    char tmp_buf[15];
 
     sec = tv.tv_sec;
     timeinfo = localtime(&sec);
-    msec = tv.tv_nsec/1000000;
+    nsec = tv.tv_nsec;
 
-    strftime(tmp_buf, 9, "%H:%M:%S", timeinfo);
-    sprintf(time_buf, "%s:%d",tmp_buf,msec);
+    strftime(tmp_buf, 15, "%H:%M:%S", timeinfo);
+    sprintf(time_buf, "%s:%9ld",tmp_buf,nsec);
 }
 
 /*
@@ -242,14 +242,14 @@ void do_set_power_limit(void)
 	pkg_plc.lock_enabled = 0;  
 
     pp0_rapl_power_limit_control_t pp0_plc;
-    pp0_plc.power_limit_watts = 50.0;
+    pp0_plc.power_limit_watts = 80.0;
     pp0_plc.limit_time_window_seconds = 0.0001;
     pp0_plc.limit_enabled = 1;
     pp0_plc.clamp_enabled = 1;
     pp0_plc.lock_enabled = 0;
 
 	dram_rapl_power_limit_control_t dram_plc;
-	dram_plc.power_limit_watts = 30.0;
+	dram_plc.power_limit_watts = 80.0;
     dram_plc.limit_time_window_seconds = 0.03;
     dram_plc.limit_enabled = 1;
     dram_plc.clamp_enabled = 1;
