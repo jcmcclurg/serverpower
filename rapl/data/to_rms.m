@@ -1,4 +1,4 @@
-%load data_scope.mat
+load data_scope.mat
 t_iac = data_scope(1:end,1);
 iac = data_scope(1:end,2);
 t_vac = data_scope(1:end,3);
@@ -56,7 +56,8 @@ t_ave(end)=t_ave(end-1)+0.15;
 
 	%get power_gadget data
 load data_pg.mat
-t_pg = data_pg(1:end,1)-40455.;
+t_pg = data_pg(1:end,1);
+t_pg = data_pg(1:end,1)-t_pg(1);
 p_pg = data_pg(1:end,2);
 dram_pg = data_pg(1:end,3);
 tot_pg = p_pg+dram_pg;
@@ -83,16 +84,15 @@ fh=figure;
 
 h1=plot(t_ave,prms_ave,'or','markersize',2,'displayname','RMS Average Power');
 hold on;
-%h3=plot(t_pg,p_pg,.g','markersize',5,'displayname','PKG MSR');
+h3=plot(t_pg,p_pg,'.g','markersize',5,'displayname','PKG MSR');
 %h4=plot(t_pg,tot_pg,':.b','markersize',5,'displayname','PKG+DRAM MSR');
 %h5=plot(t_aveInst,pinst_ave,':.m','markersize',5,'displayname','Instantaneous Average (0.1s) Power');
 h6=plot(t_ave,p_base,'>b','markersize',2,'displayname','AveRMS-msrPKG');
 h7=plot(t_ave,p_base2,'sg','markersize',2,'displayname','AveRMS-msrPKG-msrDRAM');
 h8=plot(xlim,[mean(prms_ave(2:30)-p_pg_interp(2:30)) mean(prms_ave(end-30:end-1)-p_pg_interp(end-30:end-1))],'-b','displayname','mean of AveRMS-msrPKG');
 h9=plot(xlim,[mean(prms_ave(2:30)-tot_interp(2:30)) mean(prms_ave(end-30:end-1)-tot_interp(end-30:end-1))],'-g','displayname','mean of AveRMS-msrPKG-msrDRAM');
-h10=plot(t_ave,pcnt_err2,'-.g','markersize',5,'displayname','pcentErr2');
-h11=plot(t_ave,pcnt_err,'-.b','markersize',5,'displayname','pcentErr1');
+h10=plot(t_ave,pcnt_err2,'.g','markersize',5,'displayname','pcentErr2');
+h11=plot(t_ave,pcnt_err,'.b','markersize',5,'displayname','pcentErr1');
 legend();
-   
 
 	
