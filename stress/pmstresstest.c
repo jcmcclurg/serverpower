@@ -36,15 +36,17 @@ main(int argc, char **argv)
     long touch_bytes = 0;
 	long counter = 0;
 	delay.tv_sec = 0;
-	delay.tv_nsec = 0;
+	delay.tv_nsec = 10000000;
 	
 	/* test variables */
 	FILE	*fp = NULL; 
 	fp=fopen("pmstresstest_setpoint.csv", "w");
-	long bytesArray[]={250000000, 500000000, 750000000, 1000000000, 2000000000};
-	double pcntTouchArray[]={0.1, 0.2, 0.4, 0.8, 1.0, 1.2};
+	long bytesArray[]={500000000};
+	double pcntTouchArray[]={0.01, 0.05, 0.1, 0.15, 0.2, 0.25};
+	long delay_ns_array[]={10000000, 50000000, 10000000, 7000000, 5000000, 3000000, 2000000, 1000000, 500000, 100000};
     int i = 0;
 	int j = 0;
+    int k = 0;
 	double timestamp;
 	struct timespec t_setpoint;
 	int mem_iterations;
@@ -64,15 +66,15 @@ main(int argc, char **argv)
 			//fprintf(stdout,"t0\n");
 			fprintf(stdout,"m%ld\n",bytesArray[i]);
 			for (j=0; j<touch_iterations; j++) {
-				clock_gettime(CLOCK_REALTIME, &t_setpoint);		
 				fprintf(stdout,"t%ld\n",((long)(pcntTouchArray[j]*bytesArray[i]/100.0)));
-				convert_time_to_string(t_setpoint, time_buffer);			
-				sleep(3);
-				fprintf(fp,"%s,%ld,%ld,\n",time_buffer,bytesArray[i],((long)(pcntTouchArray[j]*bytesArray[i]/100.0)));
-			
+				for (k=0; k<10; k++) {
+					clock_gettime(CLOCK_REALTIME, &t_setpoint);		
+					fprintf(stdout, "d%ld\n", delay_ns_array[k]);
+					convert_time_to_string(t_setpoint, time_buffer);			
+					usleep(1500000);
+					fprintf(fp,"%s,%ld,%ld,%ld\n",time_buffer,bytesArray[i],((long)(pcntTouchArray[j]*bytesArray[i]/100.0)),delay_ns_array[k] );
+				}
 			}
-		
-
 		}
 		fprintf(stdout,"q\n");		
 		running = 0;

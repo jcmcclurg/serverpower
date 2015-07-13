@@ -10,7 +10,7 @@
 #include <math.h>
 
 int get_usr_input(char *buff, int *bytes_so_far); // get stdin input
-char interpret_command(char *input, double *output); // interpret stdin
+char interpret_command(char *input, long double *output); // interpret stdin
 float cpu_worker(int num_iter, struct timespec *delay_ptr);
 char mem_worker(long num_bytes, long touch, struct timespec *delay_ptr);
 double convert_time_to_sec(struct timespec tv);
@@ -24,7 +24,7 @@ main(int argc, char **argv)
     long bytes = 0;
 	int delay_us = 1000000.0;
 	char cmd_type;
-	double cmd_data;
+	long double cmd_data;
 	double retval;
 	int rcvd = 0;
 	int running = 1;
@@ -59,7 +59,8 @@ main(int argc, char **argv)
 					bytes = (long)cmd_data;
 					break;
 				case ('d'):
-					delay.tv_nsec = (long)cmd_data;
+					delay.tv_sec = (int)(cmd_data/1000000000);
+					delay.tv_nsec = (long)((cmd_data/1000000000-delay.tv_sec)*1000000000);
 					break;
 				case ('i'):
 					num_iter = (int)cmd_data;
@@ -102,12 +103,12 @@ char mem_worker(long num_bytes, long touch, struct timespec *delay_ptr)
 	str = (char*)malloc(num_bytes);
 	if (num_bytes >= touch) {
 		memset(str,0xFF,touch);
-		//nanosleep(delay_ptr, NULL);
+		nanosleep(delay_ptr, NULL);
 		memset(str,0x00,touch);
 	}
 	else {
 		memset(str,0xFF,num_bytes);
-		//nanosleep(delay_ptr, NULL);
+		nanosleep(delay_ptr, NULL);
 		memset(str,0x00,num_bytes);
 	}
 	free(str);
@@ -158,7 +159,7 @@ int get_usr_input(char *buff, int *bytes_so_far) {
 	}
 }	
 
-char interpret_command(char *input, double *output) {	
+char interpret_command(char *input, long double *output) {	
 	switch (input[0]) {
 		case ('m'):
 			*output = atof(input+1);
