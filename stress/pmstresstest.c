@@ -42,7 +42,7 @@ main(int argc, char **argv)
 	FILE	*fp = NULL; 
 	fp=fopen("pmstresstest_setpoint.csv", "w");
 	long bytesArray[]={250000000, 500000000, 750000000, 1000000000, 2000000000};
-	long pcntTouchArray[]={1, 2, 4, 8, 16, 32};
+	double pcntTouchArray[]={0.1, 0.2, 0.4, 0.8, 1.0, 1.2};
     int i = 0;
 	int j = 0;
 	double timestamp;
@@ -61,14 +61,14 @@ main(int argc, char **argv)
 		//fprintf(stdout,"m1000000000\n");
 		//sleep(2);
 		for (i=0; i<mem_iterations; i++) {
-			fprintf(stdout,"t0\n");
+			//fprintf(stdout,"t0\n");
 			fprintf(stdout,"m%ld\n",bytesArray[i]);
 			for (j=0; j<touch_iterations; j++) {
 				clock_gettime(CLOCK_REALTIME, &t_setpoint);		
-				fprintf(stdout,"t%ld\n",((long)(pcntTouchArray[j]*bytesArray[i]/100)));
+				fprintf(stdout,"t%ld\n",((long)(pcntTouchArray[j]*bytesArray[i]/100.0)));
 				convert_time_to_string(t_setpoint, time_buffer);			
 				sleep(3);
-				fprintf(fp,"%s,%ld,%ld,\n",time_buffer,bytesArray[i],((long)(pcntTouchArray[j]*bytesArray[i]/100)));
+				fprintf(fp,"%s,%ld,%ld,\n",time_buffer,bytesArray[i],((long)(pcntTouchArray[j]*bytesArray[i]/100.0)));
 			
 			}
 		
