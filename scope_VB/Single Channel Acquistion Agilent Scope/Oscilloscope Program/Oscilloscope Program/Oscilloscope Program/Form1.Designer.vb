@@ -36,18 +36,18 @@ Partial Class FRM1
         Me.BTN8 = New System.Windows.Forms.Button()
         Me.LBL2 = New System.Windows.Forms.Label()
         Me.BTN9 = New System.Windows.Forms.Button()
-        Me.BTN10 = New System.Windows.Forms.Button()
         Me.BTN11 = New System.Windows.Forms.Button()
-        Me.BTN12 = New System.Windows.Forms.Button()
         Me.BTN13 = New System.Windows.Forms.Button()
+        Me.BTN14 = New System.Windows.Forms.Button()
+        Me.BTN2 = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'BTN1
         '
-        Me.BTN1.Location = New System.Drawing.Point(82, 351)
+        Me.BTN1.Location = New System.Drawing.Point(342, 151)
         Me.BTN1.Margin = New System.Windows.Forms.Padding(5)
         Me.BTN1.Name = "BTN1"
-        Me.BTN1.Size = New System.Drawing.Size(222, 54)
+        Me.BTN1.Size = New System.Drawing.Size(140, 44)
         Me.BTN1.TabIndex = 2
         Me.BTN1.Text = "Auto Scale"
         Me.BTN1.UseVisualStyleBackColor = True
@@ -107,7 +107,7 @@ Partial Class FRM1
         'BTN7
         '
         Me.BTN7.Font = New System.Drawing.Font("Times New Roman", 13.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.BTN7.Location = New System.Drawing.Point(204, 484)
+        Me.BTN7.Location = New System.Drawing.Point(206, 525)
         Me.BTN7.Name = "BTN7"
         Me.BTN7.Size = New System.Drawing.Size(47, 39)
         Me.BTN7.TabIndex = 11
@@ -117,7 +117,7 @@ Partial Class FRM1
         'BTN5
         '
         Me.BTN5.Font = New System.Drawing.Font("Times New Roman", 13.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.BTN5.Location = New System.Drawing.Point(158, 439)
+        Me.BTN5.Location = New System.Drawing.Point(158, 480)
         Me.BTN5.Name = "BTN5"
         Me.BTN5.Size = New System.Drawing.Size(47, 39)
         Me.BTN5.TabIndex = 12
@@ -127,7 +127,7 @@ Partial Class FRM1
         'BTN6
         '
         Me.BTN6.Font = New System.Drawing.Font("Times New Roman", 13.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.BTN6.Location = New System.Drawing.Point(158, 529)
+        Me.BTN6.Location = New System.Drawing.Point(158, 570)
         Me.BTN6.Name = "BTN6"
         Me.BTN6.Size = New System.Drawing.Size(47, 39)
         Me.BTN6.TabIndex = 13
@@ -137,7 +137,7 @@ Partial Class FRM1
         'BTN8
         '
         Me.BTN8.Font = New System.Drawing.Font("Times New Roman", 13.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.BTN8.Location = New System.Drawing.Point(112, 484)
+        Me.BTN8.Location = New System.Drawing.Point(110, 525)
         Me.BTN8.Name = "BTN8"
         Me.BTN8.Size = New System.Drawing.Size(47, 39)
         Me.BTN8.TabIndex = 14
@@ -163,16 +163,6 @@ Partial Class FRM1
         Me.BTN9.Text = "Capture"
         Me.BTN9.UseVisualStyleBackColor = True
         '
-        'BTN10
-        '
-        Me.BTN10.Font = New System.Drawing.Font("Times New Roman", 13.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.BTN10.Location = New System.Drawing.Point(471, 451)
-        Me.BTN10.Name = "BTN10"
-        Me.BTN10.Size = New System.Drawing.Size(264, 72)
-        Me.BTN10.TabIndex = 17
-        Me.BTN10.Text = "Save to File"
-        Me.BTN10.UseVisualStyleBackColor = True
-        '
         'BTN11
         '
         Me.BTN11.Location = New System.Drawing.Point(431, 607)
@@ -182,34 +172,43 @@ Partial Class FRM1
         Me.BTN11.Text = "Save and Exit"
         Me.BTN11.UseVisualStyleBackColor = True
         '
-        'BTN12
-        '
-        Me.BTN12.Font = New System.Drawing.Font("Times New Roman", 13.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.BTN12.Location = New System.Drawing.Point(82, 607)
-        Me.BTN12.Name = "BTN12"
-        Me.BTN12.Size = New System.Drawing.Size(91, 44)
-        Me.BTN12.TabIndex = 19
-        Me.BTN12.Text = "Run"
-        Me.BTN12.UseVisualStyleBackColor = True
-        '
         'BTN13
         '
-        Me.BTN13.Location = New System.Drawing.Point(191, 607)
+        Me.BTN13.Font = New System.Drawing.Font("Times New Roman", 13.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.BTN13.Location = New System.Drawing.Point(473, 451)
         Me.BTN13.Name = "BTN13"
-        Me.BTN13.Size = New System.Drawing.Size(91, 44)
+        Me.BTN13.Size = New System.Drawing.Size(264, 72)
         Me.BTN13.TabIndex = 20
-        Me.BTN13.Text = "Stop"
+        Me.BTN13.Text = "Save to File"
         Me.BTN13.UseVisualStyleBackColor = True
+        '
+        'BTN14
+        '
+        Me.BTN14.Location = New System.Drawing.Point(94, 351)
+        Me.BTN14.Name = "BTN14"
+        Me.BTN14.Size = New System.Drawing.Size(222, 54)
+        Me.BTN14.TabIndex = 21
+        Me.BTN14.Text = "Initialize"
+        Me.BTN14.UseVisualStyleBackColor = True
+        '
+        'BTN2
+        '
+        Me.BTN2.Location = New System.Drawing.Point(279, 289)
+        Me.BTN2.Name = "BTN2"
+        Me.BTN2.Size = New System.Drawing.Size(249, 42)
+        Me.BTN2.TabIndex = 22
+        Me.BTN2.Text = "Return to prev. state"
+        Me.BTN2.UseVisualStyleBackColor = True
         '
         'FRM1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(13.0!, 26.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(824, 690)
+        Me.Controls.Add(Me.BTN2)
+        Me.Controls.Add(Me.BTN14)
         Me.Controls.Add(Me.BTN13)
-        Me.Controls.Add(Me.BTN12)
         Me.Controls.Add(Me.BTN11)
-        Me.Controls.Add(Me.BTN10)
         Me.Controls.Add(Me.BTN9)
         Me.Controls.Add(Me.LBL2)
         Me.Controls.Add(Me.BTN8)
@@ -246,9 +245,9 @@ Partial Class FRM1
     Friend WithEvents BTN8 As System.Windows.Forms.Button
     Friend WithEvents LBL2 As System.Windows.Forms.Label
     Friend WithEvents BTN9 As System.Windows.Forms.Button
-    Friend WithEvents BTN10 As System.Windows.Forms.Button
     Friend WithEvents BTN11 As System.Windows.Forms.Button
-    Friend WithEvents BTN12 As System.Windows.Forms.Button
     Friend WithEvents BTN13 As System.Windows.Forms.Button
+    Friend WithEvents BTN14 As System.Windows.Forms.Button
+    Friend WithEvents BTN2 As System.Windows.Forms.Button
 
 End Class

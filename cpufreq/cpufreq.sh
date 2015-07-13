@@ -9,10 +9,10 @@ echo "intel_pstate=disable) on your kernel options". >&2
 echo "The range is $freqVals. The value is the CPU frequency." >&2
 echo "The voltage is controlled by the processor." >&2
 
-trap "sudo cpufreq-set -g ondemand; echo 'Reset cpufreq on exit.' >&2; exit;" SIGINT SIGTERM
+trap "sudo cpupower frequency-set -g ondemand; echo 'Reset cpufreq on exit.' >&2; exit;" SIGINT SIGTERM
 
 limitVal=$rangeMax
-sudo cpufreq-set -g userspace
+sudo cpupower frequency-set -g userspace
 echo "Set to governor to userspace (returned $?)." >&2
 
 while [[ "$limitVal" != "q" ]]; do
@@ -21,10 +21,11 @@ while [[ "$limitVal" != "q" ]]; do
 	elif [ $(echo "$limitVal > $rangeMax" | bc) == 1 ]; then
 		limitVal=$rangeMax
 	fi
-	sudo cpufreq-set -f $limitVal
+	#sudo cpufreq-set -f $limitVal
+	sudo cpupower frequency-set -f $limitVal
 	echo "Set to $limitVal" >&2
 	read limitVal
 done
-sudo cpufreq-set -g ondemand
+sudo cpupower frequency-set -g ondemand
 echo 'Reset cpufreq' >&2;
 echo "Done" >&2
