@@ -16,6 +16,10 @@ fclose(fid);
 fid = fopen('setpt.csv');
 data2=textscan(fid,'%f %f','Delimiter',',','HeaderLines',0);
 fclose(fid);
+fid = fopen('stress_setpoint.csv');
+data3=textscan(fid,'%f %f','Delimiter',',','HeaderLines',0);
+fclose(fid);
+
 % save data as readable variables
 t_lv=data{1};
 p_lv=data{2}*200.; % I*20V*10(gain-scaling)
@@ -25,6 +29,10 @@ dram_pg=data{5};
 tmp0_pg=data{6};
 t_sp=data2{1};
 p_sp=data2{2};
+time_pmsp=data3{1};
+mem_pmsp=data3{2};
+touch_pmsp=data3{3};
+
 data_pg = [t_pg p_pg dram_pg];
 data_sp = [t_sp p_sp];
 save data_pg.mat data_pg;
