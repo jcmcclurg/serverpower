@@ -13,6 +13,7 @@ cut -d, -f2 setpoint.csv > power_sp.csv #> /dev/null
 
 # get stress setpoints
 awk -F [::.,] '{printf("%.16G\n",($1*3600+$2*60+$3+$4/1000000000))}' pmstresstest_setpoint.csv > time_stress_sp.csv #> /dev/null
+#awk -F [,] '{printf("%G,%G,\n",$2,$3)}' pmstresstest_setpoint.csv > mem_touch_sp.csv
 cut -d, -f2,3 pmstresstest_setpoint.csv > mem_touch_sp.csv
 
 # now paste together with:
