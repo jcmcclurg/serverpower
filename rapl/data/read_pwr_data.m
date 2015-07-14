@@ -17,7 +17,7 @@ fid = fopen('setpt.csv');
 data2=textscan(fid,'%f %f','Delimiter',',','HeaderLines',0);
 fclose(fid);
 fid = fopen('stress_setpoint.csv');
-data3=textscan(fid,'%f %f','Delimiter',',','HeaderLines',0);
+data3=textscan(fid,'%f %f %f','Delimiter',',','HeaderLines',0);
 fclose(fid);
 
 % save data as readable variables
