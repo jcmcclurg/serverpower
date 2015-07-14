@@ -95,4 +95,17 @@ h10=plot(t_ave,pcnt_err2,'.g','markersize',5,'displayname','pcentErr2');
 h11=plot(t_ave,pcnt_err,'.b','markersize',5,'displayname','pcentErr1');
 legend();
 
-	
+fh2=figure;
+ha=plot(p_pg_interp,prms_ave,'sr','markerfacecolor','r','markersize',5,'displayname','RMS vs PKG');
+hold on;
+hb=plot(tot_interp,prms_ave,'>b','markerfacecolor','b','markersize',5,'displayname','RMS vs PKG+DRAM');
+L = legend('show');
+xlabel('RAPL Processor Power Estimate (W)');
+ylabel('Measured Server Power (W)');
+FS=findall(gca,'-property','Fontsize');
+set(FS, "fontsize", 12, "linewidth", 2);
+grid on;
+FL1= findall(L,'-property','FontSize');
+set(L,'FontSize',12,'location','northwest');
+
+
