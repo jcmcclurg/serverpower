@@ -84,7 +84,7 @@ fh=figure;
 
 h1=plot(t_ave,prms_ave,'or','markersize',2,'displayname','RMS Average Power');
 hold on;
-h3=plot(t_pg,p_pg,'.g','markersize',5,'displayname','PKG MSR');
+h3=plot(t_pg,p_pg,'.m','markersize',5,'displayname','PKG MSR');
 %h4=plot(t_pg,tot_pg,':.b','markersize',5,'displayname','PKG+DRAM MSR');
 %h5=plot(t_aveInst,pinst_ave,':.m','markersize',5,'displayname','Instantaneous Average (0.1s) Power');
 h6=plot(t_ave,p_base,'>b','markersize',2,'displayname','AveRMS-msrPKG');
@@ -93,19 +93,27 @@ h8=plot(xlim,[mean(prms_ave(2:30)-p_pg_interp(2:30)) mean(prms_ave(end-30:end-1)
 h9=plot(xlim,[mean(prms_ave(2:30)-tot_interp(2:30)) mean(prms_ave(end-30:end-1)-tot_interp(end-30:end-1))],'-g','displayname','mean of AveRMS-msrPKG-msrDRAM');
 h10=plot(t_ave,pcnt_err2,'.g','markersize',5,'displayname','pcentErr2');
 h11=plot(t_ave,pcnt_err,'.b','markersize',5,'displayname','pcentErr1');
-legend();
+L1 = legend('show');
+xlabel('Time (seconds)');
+ylabel('Power (W)');
+FS1=findall(gca,'-property','Fontsize');
+set(FS1, "fontsize", 12, "linewidth", 2);
+grid on;
+FL1= findall(L1,'-property','FontSize');
+set(FL1,'FontSize',12,'location','northwest');
 
 fh2=figure;
 ha=plot(p_pg_interp,prms_ave,'sr','markerfacecolor','r','markersize',5,'displayname','RMS vs PKG');
 hold on;
 hb=plot(tot_interp,prms_ave,'>b','markerfacecolor','b','markersize',5,'displayname','RMS vs PKG+DRAM');
-L = legend('show');
+L2 = legend('show');
 xlabel('RAPL Processor Power Estimate (W)');
 ylabel('Measured Server Power (W)');
-FS=findall(gca,'-property','Fontsize');
-set(FS, "fontsize", 12, "linewidth", 2);
+FS2=findall(gca,'-property','Fontsize');
+set(FS2, "fontsize", 12, "linewidth", 2);
 grid on;
-FL1= findall(L,'-property','FontSize');
-set(L,'FontSize',12,'location','northwest');
+FL2= findall(L2,'-property','FontSize');
+set(FL2,'FontSize',12,'location','northwest');
 
-
+X=[prms_ave p_pg_interp tot_interp];
+csvwrite('forLSfit.csv',X);
