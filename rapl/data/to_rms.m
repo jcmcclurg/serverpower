@@ -84,7 +84,7 @@ fh=figure;
 
 h1=plot(t_ave,prms_ave,'or','markersize',2,'displayname','RMS Average Power');
 hold on;
-h3=plot(t_pg,p_pg,'.m','markersize',5,'displayname','PKG MSR');
+h3=plot(t_ave,p_pg_interp,'.m','markersize',5,'displayname','PKG MSR');
 %h4=plot(t_pg,tot_pg,':.b','markersize',5,'displayname','PKG+DRAM MSR');
 %h5=plot(t_aveInst,pinst_ave,':.m','markersize',5,'displayname','Instantaneous Average (0.1s) Power');
 h6=plot(t_ave,p_base,'>b','markersize',2,'displayname','AveRMS-msrPKG');
