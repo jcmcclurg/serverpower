@@ -82,15 +82,15 @@ pcnt_err2=(prms_ave-tot_interp-ave_base2)./prms_ave*100;
 fh=figure;
 %h2=plot(t_iac,prms,'b','displayname','RMS Power (running period window)');
 
-h1=plot(t_ave,prms_ave,'or','markersize',2,'displayname','RMS Average Power');
+h1=plot(t_ave,prms_ave,'or','markersize',5,'displayname','RMS Average Power');
 hold on;
 h3=plot(t_ave,p_pg_interp,'.m','markersize',5,'displayname','PKG MSR');
 %h4=plot(t_pg,tot_pg,':.b','markersize',5,'displayname','PKG+DRAM MSR');
 %h5=plot(t_aveInst,pinst_ave,':.m','markersize',5,'displayname','Instantaneous Average (0.1s) Power');
 h6=plot(t_ave,p_base,'>b','markersize',2,'displayname','AveRMS-msrPKG');
 h7=plot(t_ave,p_base2,'sg','markersize',2,'displayname','AveRMS-msrPKG-msrDRAM');
-h8=plot(xlim,[mean(prms_ave(2:30)-p_pg_interp(2:30)) mean(prms_ave(end-30:end-1)-p_pg_interp(end-30:end-1))],'-b','displayname','mean of AveRMS-msrPKG');
-h9=plot(xlim,[mean(prms_ave(2:30)-tot_interp(2:30)) mean(prms_ave(end-30:end-1)-tot_interp(end-30:end-1))],'-g','displayname','mean of AveRMS-msrPKG-msrDRAM');
+%h8=plot(xlim,[mean(prms_ave(2:30)-p_pg_interp(2:30)) mean(prms_ave(end-30:end-1)-p_pg_interp(end-30:end-1))],'-b','displayname','mean of AveRMS-msrPKG');
+%h9=plot(xlim,[mean(prms_ave(2:30)-tot_interp(2:30)) mean(prms_ave(end-30:end-1)-tot_interp(end-30:end-1))],'-g','displayname','mean of AveRMS-msrPKG-msrDRAM');
 h10=plot(t_ave,pcnt_err2,'.g','markersize',5,'displayname','pcentErr2');
 h11=plot(t_ave,pcnt_err,'.b','markersize',5,'displayname','pcentErr1');
 L1 = legend('show');
@@ -100,7 +100,7 @@ FS1=findall(gca,'-property','Fontsize');
 set(FS1, "fontsize", 12, "linewidth", 2);
 grid on;
 FL1= findall(L1,'-property','FontSize');
-set(FL1,'FontSize',12,'location','northwest');
+set(L1,'FontSize',12,'location','northwest');
 
 fh2=figure;
 ha=plot(p_pg_interp,prms_ave,'sr','markerfacecolor','r','markersize',5,'displayname','RMS vs PKG');
