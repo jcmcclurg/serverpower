@@ -31,20 +31,20 @@ main(int argc, char **argv)
 	struct timespec tv_start, tv_stop;
 	struct timespec delay;
 	double t_start, t_stop;
-	int num_iter = 0;
+	int num_iter = 100000;
     long touch_bytes = 0;
 	long counter = 0;
 	
 	delay.tv_sec = 0;
-	delay.tv_nsec = 0;
+	delay.tv_nsec = 100000000;
 	/* don't buffer if piped */
     setbuf(stdin, NULL);
 	
 	while (running == 1) {
 		
 		//clock_gettime(CLOCK_MONOTONIC, &tv_start);
-		//retval = cpu_worker(num_iter, &delay);
-		retval = mem_worker(bytes,touch_bytes, &delay);
+		retval = cpu_worker(num_iter, &delay);
+		//retval = mem_worker(bytes,touch_bytes, &delay);
 		//clock_gettime(CLOCK_MONOTONIC, &tv_stop);
 		//usleep(delay_us);
 		//t_start = convert_time_to_sec(tv_start);
