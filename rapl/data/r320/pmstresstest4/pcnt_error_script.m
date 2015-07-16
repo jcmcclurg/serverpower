@@ -1,11 +1,11 @@
 % first run to_rms.m & msr_error_script.m
 
 fh3=figure;
-h11=plot(t_ave,pcnt_err,'>b','markersize',10,'displayname','Package Counter');
+h11=plot(prms_ave,pcnt_err,'>b','markersize',10,'displayname','Package Counter');
 hold on;
-h10=plot(t_ave,pcnt_err2,'sg','markersize',10,'displayname','Package+DRAM Counter');
+h10=plot(prms_ave,pcnt_err2,'sg','markersize',10,'displayname','Package+DRAM Counter');
 L3=legend;
-xlabel('Time (seconds)');
+xlabel('P(rms) (watts)');
 ylabel('% Error');
 T3=title({"% Error = 100*[P(rms)-dP(idle)-P(counter)]/P(rms)"});
 FS3=findall(gca,'-property','Fontsize');
