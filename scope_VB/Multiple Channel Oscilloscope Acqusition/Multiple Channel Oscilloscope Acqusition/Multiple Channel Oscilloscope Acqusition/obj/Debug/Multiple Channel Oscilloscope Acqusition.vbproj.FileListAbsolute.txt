@@ -1,0 +1,11 @@
+C:\Users\AWynos\Desktop\Oscilloscope Program\Multiple Channel Oscilloscope Acqusition\Multiple Channel Oscilloscope Acqusition\bin\Debug\Multiple Channel Oscilloscope Acqusition.exe.config
+C:\Users\AWynos\Desktop\Oscilloscope Program\Multiple Channel Oscilloscope Acqusition\Multiple Channel Oscilloscope Acqusition\bin\Debug\Multiple Channel Oscilloscope Acqusition.exe
+C:\Users\AWynos\Desktop\Oscilloscope Program\Multiple Channel Oscilloscope Acqusition\Multiple Channel Oscilloscope Acqusition\bin\Debug\Multiple Channel Oscilloscope Acqusition.pdb
+C:\Users\AWynos\Desktop\Oscilloscope Program\Multiple Channel Oscilloscope Acqusition\Multiple Channel Oscilloscope Acqusition\bin\Debug\Multiple Channel Oscilloscope Acqusition.xml
+C:\Users\AWynos\Desktop\Oscilloscope Program\Multiple Channel Oscilloscope Acqusition\Multiple Channel Oscilloscope Acqusition\obj\Debug\Multiple Channel Oscilloscope Acqusition.vbproj.ResolveComReference.cache
+C:\Users\AWynos\Desktop\Oscilloscope Program\Multiple Channel Oscilloscope Acqusition\Multiple Channel Oscilloscope Acqusition\obj\Debug\Multiple_Channel_Oscilloscope_Acqusition.FRM1.resources
+C:\Users\AWynos\Desktop\Oscilloscope Program\Multiple Channel Oscilloscope Acqusition\Multiple Channel Oscilloscope Acqusition\obj\Debug\Multiple_Channel_Oscilloscope_Acqusition.Resources.resources
+C:\Users\AWynos\Desktop\Oscilloscope Program\Multiple Channel Oscilloscope Acqusition\Multiple Channel Oscilloscope Acqusition\obj\Debug\Multiple Channel Oscilloscope Acqusition.vbproj.GenerateResource.Cache
+C:\Users\AWynos\Desktop\Oscilloscope Program\Multiple Channel Oscilloscope Acqusition\Multiple Channel Oscilloscope Acqusition\obj\Debug\Multiple Channel Oscilloscope Acqusition.exe
+C:\Users\AWynos\Desktop\Oscilloscope Program\Multiple Channel Oscilloscope Acqusition\Multiple Channel Oscilloscope Acqusition\obj\Debug\Multiple Channel Oscilloscope Acqusition.xml
+C:\Users\AWynos\Desktop\Oscilloscope Program\Multiple Channel Oscilloscope Acqusition\Multiple Channel Oscilloscope Acqusition\obj\Debug\Multiple Channel Oscilloscope Acqusition.pdb
