@@ -13,3 +13,5 @@ grid on;
 T2 = title({"Power (rms) vs Power (counter)"});
 FL2= findall(L2,'-property','FontSize');
 set(L2,'FontSize',12,'location','northwest');
+
+print -dpdf rmsVmsr.pdf
