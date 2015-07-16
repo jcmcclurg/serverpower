@@ -18,12 +18,12 @@ pcnt_err=(prms_ave-p_pg_interp-ave_base)./prms_ave*100;
 pcnt_err2=(prms_ave-tot_interp-ave_base2)./prms_ave*100;
 
 fh=figure;
-h6=plot(t_ave,p_base,'>b','markersize',10,'displayname','Package Counter');
+h6=plot(prms_ave,p_base,'>b','markersize',10,'displayname','Package Counter');
 hold on;
-h7=plot(t_ave,p_base2,'sg','markersize',10,'displayname','Package+DRAM Counters');
+h7=plot(prms_ave,p_base2,'sg','markersize',10,'displayname','Package+DRAM Counters');
 L1 = legend;
-xlabel('Time (seconds)');
-ylabel('Power (W)');
+xlabel('Power RMS (seconds)');
+ylabel('Error (Watts)');
 FS1=findall(gca,'-property','Fontsize');
 set(FS1, "fontsize", 12, "linewidth", 2);
 grid on;
@@ -31,6 +31,6 @@ FL1= findall(L1,'-property','FontSize');
 set(L1,'FontSize',12,'location','northwest');
 T1 = title({"Error = Power(rms) - Power(counter)"});
 
-%print msr_error.pdf
+print -dpdf msr_error.pdf
 %print -dpdflatexstandalone msr_error.pdf
 
