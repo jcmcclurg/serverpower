@@ -19,7 +19,7 @@ void terminateProgram(int signum) {
 // Exits the program if someone types more than BUFLEN characters in a line.
 char _readLine_buf[READLINE_BUFLEN];
 char* readLine(void){
-	char* str;
+	char* str = NULL;
 	int len;
 	_readLine_buf[READLINE_BUFLEN - 1] = 0;
 	str = fgets(_readLine_buf, READLINE_BUFLEN, stdin);
@@ -38,16 +38,14 @@ char* readLine(void){
 }
 
 // Returns true if stdin has stuff to read, false if not.
-int checkStdin(void){
+int checkStdin(double sec){
 	fd_set rfds;
-	struct timeval tv;
+	struct timeval tv = convert_sec_to_timeval(sec);
 	int retval;
 
 	/* Watch stdin (fd 0) for 0 seconds to see when it has input. */
 	FD_ZERO(&rfds);
 	FD_SET(0, &rfds);
-	tv.tv_sec = 0;
-	tv.tv_usec = 0;
 
 	/* check if stdin has input */
 	retval = select(1, &rfds, NULL, NULL, &tv);
@@ -57,6 +55,13 @@ int checkStdin(void){
 	}
 
 	return retval;
+}
+
+struct timeval convert_sec_to_timeval(double sec){
+	struct timeval tv;
+	tv.tv_sec = (long int) sec;
+	tv.tv_usec = (long int) ((sec - ((double) tv.tv_sec))*1.0e6);
+	return tv;
 }
 
 double convert_time_to_sec(struct timespec tv){
