@@ -12,9 +12,10 @@ void terminateProgram(int sigNum);
 // READLINE_BUFLEN characters per line.
 char* readLine(void);
 
-int checkStdin(void);
+int checkStdin(double sec);
 
 double convert_time_to_sec(struct timespec tv);
+struct timeval convert_sec_to_timeval(double sec);
 
 double getCurrentTime();
 double getDuration(double* prevTime);
