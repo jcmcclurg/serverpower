@@ -4,42 +4,93 @@
 #include <signal.h>
 #include <string.h>
 #include <math.h>
+#include <float.h>
 
 #include "commonFunctions.h"
 
 char verbose;
-double gain;
+double kvalue;
+double tvalue;
+double dvalue;
 char* progname;
+double setpoint;
+double input;
+double update_interval;
+double maximum_output;
+double minimum_output;
 
 void usage(){
-	fprintf(stdout, "\nIntegral controller\n");
+	fprintf(stdout, "\nIntegral controller prints a value proportional to the integral of the error.\n");
+	fprintf(stdout, "  The setpoint is changed by typing s[setpoint] on a line by itself.\n");
+	fprintf(stdout, "  The k value is changed by typing k[kvalue] on a line by itself.\n");
+	fprintf(stdout, "  The t value is changed by typing t[tvalue] on a line by itself.\n");
+	fprintf(stdout, "  The d value is changed by typing d[dvalue] on a line by itself.\n");
+	fprintf(stdout, "  The input is changed by typing [input] on a line by itself.\n");
 	fprintf(stdout, "\nUsage: \n");
-	fprintf(stdout, "%s [-f [frequency (Hz) ] optional] -r [samples per period] -n [minimum value] -x [maximum value] -p [prefix]\n", progname);
-	fprintf(stdout, "\nExample: %s -e 1000 -d 10\n", progname);
+	fprintf(stdout, "%s [option]\n",progname);
+	fprintf(stdout, "   -s [initial setpoint (default: 0.0)]\n");
+	fprintf(stdout, "   -i [initial input (default: 0.0)]\n");
+	fprintf(stdout, "   -u [update interval in seconds (default: 1.0)]\n");
+	fprintf(stdout, "   -k [k is the proportional gain (default: 1.0)]\n");
+	fprintf(stdout, "   -t [k/t is the integral gain (default: 1e37]\n");
+	fprintf(stdout, "   -d [k*d is the derivative gain (default: 0.0)]\n");
+	fprintf(stdout, "   -h [this help]\n");
+	fprintf(stdout, "   -v [verbose]\n");
+	fprintf(stdout, "   -n [minimum integral value (default:  1e37)]\n");
+	fprintf(stdout, "   -x [maximum integral value (default: -1e37)]\n");
 	fprintf(stdout, "\n");
 }
 
 int cmdline(int argc, char **argv){
 	int opt;
-	gain = 1.0;
+	kvalue = 1.0;
+	tvalue = DBL_MAX;
+	dvalue = 0.0;
+
 	verbose = 0;
 	progname = argv[0];
+	setpoint = 0.0;
+	input = 0.0;
+	update_interval = 1.0;
+	minimum_output = -DBL_MAX;
+	maximum_output = DBL_MAX;
 
-	while ((opt = getopt(argc, argv, "k:v")) != -1) {
+	while ((opt = getopt(argc, argv, "t:d:n:x:u:s:i:k:vh")) != -1) {
 		switch (opt) {
-		case 'k':
-			gain = atof(optarg);
-			break;
-		case 'h':
-			usage();
-			exit(EXIT_SUCCESS);
-			break;
-		case 'v':
-			verbose = 1;
-			break;
-		default:
-			usage();
-			return -1;
+			case 'n':
+				minimum_output = atof(optarg);
+				break;
+			case 'x':
+				maximum_output = atof(optarg);
+				break;
+			case 'u':
+				update_interval = atof(optarg);
+				break;
+			case 's':
+				setpoint = atof(optarg);
+				break;
+			case 'i':
+				input = atof(optarg);
+				break;
+			case 't':
+				tvalue = atof(optarg);
+				break;
+			case 'd':
+				dvalue = atof(optarg);
+				break;
+			case 'k':
+				kvalue = atof(optarg);
+				break;
+			case 'h':
+				usage();
+				exit(EXIT_SUCCESS);
+				break;
+			case 'v':
+				verbose = 1;
+				break;
+			default:
+				usage();
+				return -1;
 		}
 	}
 
@@ -53,60 +104,93 @@ int main(int argc, char* argv[]) {
 
 	char* str;
 	char verbose = 0;
-	double setpoint = NAN;
-	double input = NAN;
-	double error = NAN;
+
+	double prevInput;
+	double prevSetpoint = NAN;
+
+	double prevTime;
+	double currentTime;
+
 	double integral = 0.0;
-	double currentTime = NAN;
 
 	if(cmdline(argc,argv)){
 		exit(EXIT_FAILURE);
 	}
 
-	do {
-		str = readLine();
-		if(str != NULL){
-			double n;
-			double newError;
-			if(str[0] == 's'){
-				n = atof(str+1);
-				newError = n - input;
-				if(isnormal(n))
-					setpoint = n;
-			}
-			if(str[0] == 'q'){
-				exit(EXIT_SUCCESS);
-			}
-			else{
-				n = atof(str);
-				newError = setpoint - n;
-				if(isnormal(n))
-					input = n;
-			}
+	if(verbose){
+		fprintf(stderr,"Initial setpoint: %lf\n",setpoint);
+		fprintf(stderr,"Initial input: %lf\n",input);
+		fprintf(stderr,"Update interval: %lf\n",update_interval);
+	}
 
-			if(!isnan(newError)){
-				double prevTime = currentTime;
-				currentTime = getCurrentTime();
-				double timeDelta = currentTime - prevTime;
-				double integralDelta = timeDelta*error;
-				error = newError;
-
-				if(verbose)
-					fprintf(stderr,"Error is %f at time %f",error,currentTime);
-
-				if(isnormal(timeDelta)){
-					integral += integralDelta;
-					if(verbose)
-						fprintf(stderr," => integral + %f = %f\n",integralDelta,integral);
-					fprintf(stdout,"%f\n",gain*integral);
+	while(1) {
+		if(checkStdin(update_interval) > 0){
+			str = readLine();
+			if(str != NULL){
+				if(str[0] == 'q'){
+					exit(EXIT_SUCCESS);
+				}
+				else if(str[0] == 's'){
+					if(sscanf(str+1,"%lf",&setpoint) > 0 && prevSetpoint != setpoint){
+						if(verbose)
+							fprintf(stderr, "Setpoint updated from %g to %g\n",prevSetpoint, setpoint);
+					}
+				}
+				else if(str[0] == 'k'){
+					if(sscanf(str+1,"%lf",&setpoint) > 0 && prevSetpoint != setpoint){
+						if(verbose)
+							fprintf(stderr, "Setpoint updated from %g to %g\n",prevSetpoint, setpoint);
+					}
 				}
 				else{
-					if(verbose)
-						fprintf(stderr,"\n");
+					if(sscanf(str,"%lf",&input) > 0 && prevInput != input){
+						if(verbose)
+							fprintf(stderr, "Input updated from %g to %g\n",prevInput, input);
+					}
 				}
 			}
 		}
-	} while(str != NULL);
+
+		prevTime = currentTime;
+		currentTime = getCurrentTime();
+
+		double prevError = prevInput - setpoint;
+		double currentError = input - setpoint;
+		double timeDelta = currentTime - prevTime;
+
+		double derivative = (currentError - prevError)/timeDelta;
+		double integralDelta = timeDelta*((currentError + prevError)/2.0);
+
+		if(prevSetpoint == setpoint){
+			if(kvalue*(integral + integralDelta)/tvalue > maximum_output)
+				integral = tvalue*maximum_output/kvalue;
+			else if(kvalue*(integral + integralDelta)/tvalue < minimum_output)
+				integral = tvalue*minimum_output/kvalue;
+
+			double newOutput = kvalue*(currentError + integral/tvalue + dvalue*derivative);
+
+			if(newOutput > maximum_output){
+				fprintf(stdout,"%lf\n",maximum_output);
+
+				if(verbose)
+					fprintf(stderr, "output capped\n");
+			}
+			else if(newOutput < minimum_output){
+				fprintf(stdout,"%lf\n",minimum_output);
+				if(verbose)
+					fprintf(stderr, "output capped\n");
+			}
+			else {
+				fprintf(stdout,"%lf\n",newOutput);
+			}
+		}
+		else{
+			integral = 0.0;
+		}
+
+		prevSetpoint = setpoint;
+		prevInput = input;
+	}
 
 	exit(EXIT_SUCCESS);
 	return 0;
