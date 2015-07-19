@@ -103,9 +103,11 @@ int main(int argc, char* argv[]) {
 	setbuf(stdout,NULL);
 
 	char* str;
-	char verbose = 0;
 
-	double prevInput;
+	double prevInput = input;
+	double prevKValue = kvalue;
+	double prevTValue = tvalue;
+	double prevDValue = dvalue;
 	double prevSetpoint = NAN;
 
 	double prevTime;
@@ -136,10 +138,25 @@ int main(int argc, char* argv[]) {
 							fprintf(stderr, "Setpoint updated from %g to %g\n",prevSetpoint, setpoint);
 					}
 				}
-				else if(str[0] == 'k'){
-					if(sscanf(str+1,"%lf",&setpoint) > 0 && prevSetpoint != setpoint){
+				else if(str[0] == 'd'){
+					prevDValue = dvalue;
+					if(sscanf(str+1,"%lf",&dvalue) > 0 && prevDValue != dvalue){
 						if(verbose)
-							fprintf(stderr, "Setpoint updated from %g to %g\n",prevSetpoint, setpoint);
+							fprintf(stderr, "dvalue updated from %g to %g\n",prevDValue, dvalue);
+					}
+				}
+				else if(str[0] == 't'){
+					prevTValue = tvalue;
+					if(sscanf(str+1,"%lf",&tvalue) > 0 && prevTValue != tvalue){
+						if(verbose)
+							fprintf(stderr, "tvalue updated from %g to %g\n",prevTValue, tvalue);
+					}
+				}
+				else if(str[0] == 'k'){
+					prevKValue = kvalue;
+					if(sscanf(str+1,"%lf",&kvalue) > 0 && prevKValue != kvalue){
+						if(verbose)
+							fprintf(stderr, "kvalue updated from %g to %g\n",prevKValue, kvalue);
 					}
 				}
 				else{
@@ -154,8 +171,8 @@ int main(int argc, char* argv[]) {
 		prevTime = currentTime;
 		currentTime = getCurrentTime();
 
-		double prevError = prevInput - setpoint;
-		double currentError = input - setpoint;
+		double prevError = setpoint - prevInput;
+		double currentError = setpoint - input;
 		double timeDelta = currentTime - prevTime;
 
 		double derivative = (currentError - prevError)/timeDelta;
@@ -166,6 +183,8 @@ int main(int argc, char* argv[]) {
 				integral = tvalue*maximum_output/kvalue;
 			else if(kvalue*(integral + integralDelta)/tvalue < minimum_output)
 				integral = tvalue*minimum_output/kvalue;
+			else
+				integral += integralDelta;
 
 			double newOutput = kvalue*(currentError + integral/tvalue + dvalue*derivative);
 
