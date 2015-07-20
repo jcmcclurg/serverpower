@@ -31,6 +31,8 @@ void update_params(double f,int r,double mnv,double mxv){
 	res = (double )r;
 	minv = mnv;
 	maxv = mxv;
+	//v = (maxv+minv)/2.0;
+	v = minv;
 
 	deltav = dir*(maxv-minv)/res;
 	deltat = period/res;
