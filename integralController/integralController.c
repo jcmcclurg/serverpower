@@ -31,9 +31,9 @@ void usage(){
 	fprintf(stdout, "   -s [initial setpoint (default: 0.0)]\n");
 	fprintf(stdout, "   -i [initial input (default: 0.0)]\n");
 	fprintf(stdout, "   -u [update interval in seconds (default: 1.0)]\n");
-	fprintf(stdout, "   -k [k is the proportional gain (default: 1.0)]\n");
-	fprintf(stdout, "   -t [k/t is the integral gain (default: 1e37]\n");
-	fprintf(stdout, "   -d [k*d is the derivative gain (default: 0.0)]\n");
+	fprintf(stdout, "   -k [k is the proportional gain (default: 0.0)]\n");
+	fprintf(stdout, "   -t [t is the integral gain (default: 1.0]\n");
+	fprintf(stdout, "   -d [d is the derivative gain (default: 0.0)]\n");
 	fprintf(stdout, "   -h [this help]\n");
 	fprintf(stdout, "   -v [verbose]\n");
 	fprintf(stdout, "   -n [minimum integral value (default:  1e37)]\n");
@@ -43,8 +43,8 @@ void usage(){
 
 int cmdline(int argc, char **argv){
 	int opt;
-	kvalue = 1.0;
-	tvalue = DBL_MAX;
+	kvalue = 0.0;
+	tvalue = 1.0;
 	dvalue = 0.0;
 
 	verbose = 0;
@@ -179,32 +179,34 @@ int main(int argc, char* argv[]) {
 		double integralDelta = timeDelta*((currentError + prevError)/2.0);
 
 		if(prevSetpoint == setpoint){
-			if(kvalue*(integral + integralDelta)/tvalue > maximum_output)
-				integral = tvalue*maximum_output/kvalue;
-			else if(kvalue*(integral + integralDelta)/tvalue < minimum_output)
-				integral = tvalue*minimum_output/kvalue;
+			if(tvalue*(integral + integralDelta) > maximum_output)
+				integral = maximum_output/tvalue;
+			else if(tvalue*(integral + integralDelta) < minimum_output)
+				integral = minimum_output/tvalue;
 			else
 				integral += integralDelta;
 
-			double newOutput = kvalue*(currentError + integral/tvalue + dvalue*derivative);
+			double newOutput = kvalue*currentError + integral*tvalue + dvalue*derivative;
 
 			if(newOutput > maximum_output){
 				fprintf(stdout,"%lf\n",maximum_output);
 
 				if(verbose)
-					fprintf(stderr, "output capped\n");
+					fprintf(stderr, "output capped (max)\n");
 			}
 			else if(newOutput < minimum_output){
 				fprintf(stdout,"%lf\n",minimum_output);
 				if(verbose)
-					fprintf(stderr, "output capped\n");
+					fprintf(stderr, "output capped (min)\n");
 			}
 			else {
 				fprintf(stdout,"%lf\n",newOutput);
+				if(verbose)
+					fprintf(stderr, "output: %lf\n",newOutput);
 			}
 		}
 		else{
-			integral = 0.0;
+			//integral = 0.0;
 		}
 
 		prevSetpoint = setpoint;
