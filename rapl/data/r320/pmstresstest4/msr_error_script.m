@@ -22,7 +22,7 @@ h6=plot(prms_ave,p_base,'>b','markersize',10,'displayname','Package Counter');
 hold on;
 h7=plot(prms_ave,p_base2,'sg','markersize',10,'displayname','Package+DRAM Counters');
 L1 = legend;
-xlabel('Power RMS (seconds)');
+xlabel('Power RMS (watts)');
 ylabel('Error (Watts)');
 FS1=findall(gca,'-property','Fontsize');
 set(FS1, "fontsize", 12, "linewidth", 2);
