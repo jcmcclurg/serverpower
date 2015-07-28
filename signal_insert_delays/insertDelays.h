@@ -16,6 +16,9 @@
 #define MAX_DUTY 0.99
 #define MIN_DUTY 0.01
 
+#define DEFAULT_RECALCULATE_PERIOD 1.0
+#define DEFAULT_WORK_TIME 0.01
+
 // Called at the beginning. Sets the default values.
 void setup_insertDelays(void);
 

@@ -22,6 +22,8 @@ int numChildren;
 
 char* progname;
 
+char verbose;
+
 void setup_insertDelays(void){
 	/* don't buffer if piped */
 	setbuf(stdout, NULL);
@@ -87,9 +89,8 @@ void update_duty(double d){
 	twork.tv_sec = (long) ontime;
 	twork.tv_nsec = (long) ((ontime - ((double) twork.tv_sec))*1.0e9);
 	duty = d;
-	#ifdef DEBUG
-	fprintf(stderr,"Duty = %f\n",d);
-	#endif
+	if(verbose)
+		fprintf(stderr,"Duty = %f\n",d);
 }
 
 void do_work(void){
@@ -112,17 +113,15 @@ void update_period(double p, timer_t timerid){
 	its.it_value.tv_nsec = (long) ((p - ((double) its.it_value.tv_sec))*1.0e9);
 	its.it_interval.tv_sec = its.it_value.tv_sec;
 	its.it_interval.tv_nsec = its.it_value.tv_nsec;
-	#ifdef DEBUG
-	fprintf(stderr,"Timer vals: %ld, %ld\n", its.it_value.tv_sec, its.it_value.tv_nsec);
-	#endif
+	if(verbose)
+		fprintf(stderr,"Timer vals: %ld, %ld\n", its.it_value.tv_sec, its.it_value.tv_nsec);
 
 	if (timer_settime(timerid, 0, &its, NULL) == -1)
 		errExit("update period fail");
 
 	period = p;
-	#ifdef DEBUG
-	fprintf(stderr,"Period = %f\n",p);
-	#endif
+	if(verbose)
+		fprintf(stderr,"Period = %f\n",p);
 	update_duty(duty);
 }
 
@@ -161,6 +160,8 @@ int cmdline(int argc, char **argv){
 
 	char p_flag_pos = -1;
 	char e_flag_pos = -1;
+	verbose = 0;
+
 	j = 0;
 	for(i = 1; i < argc; i++){
 		if(argv[i][0] == '-'){
@@ -170,14 +171,17 @@ int cmdline(int argc, char **argv){
 			else if(argv[i][1] == 'e'){
 				e_flag_pos = i;
 			}
+			else if(argv[i][1] == 'v'){
+				verbose = 1;
+			}
+			else{
+				usage();
+				return -1;
+			}
 			j++;
 		}
 	}
 
-	if(j > 2){
-		usage();
-		return -1;
-	}
 
 	// User does not specify parent pid list. The default is to collect the modifyable processes.
 	if((e_flag_pos == 1 && p_flag_pos == -1) || argc == 1){
@@ -187,9 +191,9 @@ int cmdline(int argc, char **argv){
 		for(i = 0; i < len; i++){
 			ptree[i].class = NONCHILD_CLASS;
 		}
-		#ifdef DEBUG
-		fprintf(stderr,"Trying to controll all the PIDs.\n");
-		#endif
+
+		if(verbose)
+			fprintf(stderr,"Trying to controll all the PIDs.\n");
 	}
 	else{
 		if(p_flag_pos == -1){
@@ -213,18 +217,15 @@ int cmdline(int argc, char **argv){
 		}
 
 		parentList = (int*) malloc(sizeof(int)*numParents);
-		#ifdef DEBUG
-		fprintf(stderr,"Parent list (%d): ",numParents);
-		#endif
+		if(verbose)
+			fprintf(stderr,"Parent list (%d): ",numParents);
 		for(i = 0; i < numParents; i++){
 			parentList[i] = atoi(argv[i + p_flag_pos + 1]);
-			#ifdef DEBUG
-			fprintf(stderr,"%d ",parentList[i]);
-			#endif
+			if(verbose)
+				fprintf(stderr,"%d ",parentList[i]);
 		}
-		#ifdef DEBUG
-		fprintf(stderr,"\n");
-		#endif
+		if(verbose)
+			fprintf(stderr,"\n");
 		tag_proc_tree_children(parentList, numParents);
 		free(parentList);
 	}
@@ -243,27 +244,24 @@ int cmdline(int argc, char **argv){
 		}
 
 		nopeList = (int*) malloc(sizeof(int)*numNope);
-		#ifdef DEBUG
-		fprintf(stderr,"Exclusion list (%d): ",numNope);
-		#endif
+		if(verbose)
+			fprintf(stderr,"Exclusion list (%d): ",numNope);
 		for(i = 0; i < numNope; i++ ){
 			nopeList[i] = atoi(argv[i + e_flag_pos + 1]);
-			#ifdef DEBUG
-			fprintf(stderr,"%d ",nopeList[i]);
-			#endif
+			if(verbose)
+				fprintf(stderr,"%d ",nopeList[i]);
 		}
-		#ifdef DEBUG
-		fprintf(stderr,"\n");
-		#endif
+		if(verbose)
+			fprintf(stderr,"\n");
 	}
 	update_children(&children, &numChildren, nopeList, numNope, 1);
-	#ifdef DEBUG
-	fprintf(stderr,"Controllable list: ");
-	for(i = 0; i < numChildren; i++){
-		fprintf(stderr,"%s(%d) ", get_name_of(children[i]), children[i]);
+	if(verbose){
+		fprintf(stderr,"Controllable list: ");
+		for(i = 0; i < numChildren; i++){
+			fprintf(stderr,"%s(%d) ", get_name_of(children[i]), children[i]);
+		}
+		fprintf(stderr,"\n");
 	}
-	fprintf(stderr,"\n");
-	#endif
 
 	return 0;
 }
@@ -284,9 +282,8 @@ int main(int argc, char *argv[]) {
 		errExit("Couldn't get set up.");
 
 	/* Establish handler for timer signal */
-	#ifdef DEBUG
-	fprintf(stderr,"Establishing handler for signal %d\n", SIGRTMIN);
-	#endif
+	if(verbose)
+		fprintf(stderr,"Establishing handler for signal %d\n", SIGRTMIN);
 	sa.sa_flags = SA_SIGINFO;
 	sa.sa_sigaction = handler;
 	sigemptyset(&sa.sa_mask);
@@ -300,16 +297,14 @@ int main(int argc, char *argv[]) {
 	if (timer_create(CLOCK_BOOTTIME, &sev, &timerid) == -1)
 		errExit("timer_create");
 
-	#ifdef DEBUG
-	fprintf(stderr,"timer ID is 0x%lx\n", (long) timerid);
-	#endif
+	if(verbose)
+		fprintf(stderr,"timer ID is 0x%lx\n", (long) timerid);
 
 	/* Unlock the timer signal, so that timer notification
 	  can be delivered
 	*/
-	#ifdef DEBUG
-	fprintf(stderr,"Unblocking signal %d\n", SIGRTMIN);
-	#endif
+	if(verbose)
+		fprintf(stderr,"Unblocking signal %d\n", SIGRTMIN);
 	if (sigprocmask(SIG_UNBLOCK, &mask, NULL) == -1)
 		errExit("sigprocmask");
 
