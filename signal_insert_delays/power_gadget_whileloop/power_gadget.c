@@ -23,6 +23,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 #include <signal.h>
 
 #include "rapl.h"
+#define RETRY_US 100
+#define NUM_RETRIES 10
 
 char		 *progname;
 const char   *version = "2.2_josiah";
@@ -71,9 +73,14 @@ void do_print_energy_info(){
 	currentTime_sec = convert_time_to_sec(currentTime);
 	fprintf(stderr,"Current time (s): %f\n",currentTime_sec);
 
-	if(get_pkg_total_energy_consumed(node, &currentEnergy)){
-		perror("Problem with reading energy consumed");
-		exit(EXIT_FAILURE);
+	err = 0;
+	while(get_pkg_total_energy_consumed(node, &currentEnergy)){
+		usleep(RETRY_US);
+		err++;
+		if(err > NUM_RETRIES){
+			perror("Problem with reading energy consumed");
+			exit(EXIT_FAILURE);
+		}
 	}
 	fprintf(stderr,"Total energy consumed: %f\n", currentEnergy);
 	if(display_time)
@@ -88,7 +95,15 @@ void do_print_energy_info(){
 	while(1){
 		usleep(delay_us);
 		prevEnergy = currentEnergy;
-		get_pkg_total_energy_consumed(node, &currentEnergy);
+		err = 0;
+		while(get_pkg_total_energy_consumed(node, &currentEnergy)){
+			usleep(RETRY_US);
+			err++;
+			if(err > NUM_RETRIES){
+				perror("Problem with reading energy consumed");
+				exit(EXIT_FAILURE);
+			}
+		}
 		clock_gettime(CLOCK_BOOTTIME, &currentTime);
 
 		prevTime_sec = currentTime_sec;
