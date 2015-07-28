@@ -13,6 +13,7 @@ double kvalue;
 double tvalue;
 double dvalue;
 char* progname;
+char* prefix;
 double setpoint;
 double input;
 double update_interval;
@@ -38,6 +39,7 @@ void usage(){
 	fprintf(stdout, "   -v [verbose]\n");
 	fprintf(stdout, "   -n [minimum integral value (default:  1e37)]\n");
 	fprintf(stdout, "   -x [maximum integral value (default: -1e37)]\n");
+	fprintf(stdout, "   -p [prefix (default: (none) )]\n");
 	fprintf(stdout, "\n");
 }
 
@@ -54,8 +56,9 @@ int cmdline(int argc, char **argv){
 	update_interval = 1.0;
 	minimum_output = -DBL_MAX;
 	maximum_output = DBL_MAX;
+	prefix = NULL;
 
-	while ((opt = getopt(argc, argv, "t:d:n:x:u:s:i:k:vh")) != -1) {
+	while ((opt = getopt(argc, argv, "p:t:d:n:x:u:s:i:k:vh")) != -1) {
 		switch (opt) {
 			case 'n':
 				minimum_output = atof(optarg);
@@ -87,6 +90,9 @@ int cmdline(int argc, char **argv){
 				break;
 			case 'v':
 				verbose = 1;
+				break;
+			case 'p':
+				prefix = (char*) optarg;
 				break;
 			default:
 				usage();
@@ -187,6 +193,9 @@ int main(int argc, char* argv[]) {
 				integral += integralDelta;
 
 			double newOutput = kvalue*currentError + integral*tvalue + dvalue*derivative;
+
+			if(prefix != NULL)
+				fprintf(stdout,"%s",prefix);
 
 			if(newOutput > maximum_output){
 				fprintf(stdout,"%lf\n",maximum_output);
