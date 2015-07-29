@@ -22,30 +22,27 @@
 ## Author: U-Josiah-PC\Josiah <Josiah@Josiah-PC>
 ## Created: 2015-07-23
 
-%time='1438109760.520795816';
-%time='1438112901.436436378';
-time='1438176921.585749592';
+time='1438180108.343760234';
 
-[status,output] = system(['cat rapl.' time '.output | grep HadoopKmeans | tail -n 1 | tr -s \  | cut -d \  -f 4,5']);
+[status,output] = system(['cat no_power_control.' time '.output | grep HadoopKmeans | tail -n 1 | tr -s \  | cut -d \  -f 4,5']);
 [inputSize duration]=strread(output,'%f %f');
 fprintf(1,'Input size: %g GiB, Duration: %g min, Throughput: %g MiB/s\n', inputSize/(power(2,30)), duration/60, inputSize/(duration*power(2,20)))
 
-[status,output] = system(['cat rapl.' time '.output | grep Using | cut -d \  -f 2']);
+[status,output] = system(['cat no_power_control.' time '.output | grep Using | cut -d \  -f 2']);
 setpoint = dlmread(output(1:end-1),',');
 
-actual = dlmread(['rapl.' time '.power'],' ');
+actual = dlmread(['no_power_control.' time '.power'],' ');
 actual(:,1) = actual(:,1) - actual(1,1) - 5;
 actual(end-4:end,:) = [];
 
 avtime = block_average(actual(:,1),4);
 avactual = block_average(actual(:,2),4);
-
 setPointRange = setpoint(:,1) < max(actual(:,1));
 
 plot(actual(:,1),actual(:,2),'y',avtime,avactual,'c',setpoint(setPointRange,1),setpoint(setPointRange,2),'r')
-title('RAPL power vs setpoint.')
+title('Open-loop benchmark power vs setpoint.')
 legend('Actual (0.5s average)','Actual (2s average)','Setpoint')
 xlabel('Time (s)')
 ylabel('Power (W)')
 axis([0, max(actual(:,1)), 4, 40]);
-print('rapl.pdf')
+print('no_power_control.pdf')

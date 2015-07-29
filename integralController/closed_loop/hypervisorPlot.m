@@ -38,7 +38,7 @@ avtime = block_average(actual(:,1),4);
 avactual = block_average(actual(:,2),4);
 
 plot(actual(:,1),actual(:,2),'y',avtime,avactual,'c',[setpoint(:,1); actual(end,1)],[setpoint(:,2); setpoint(end,2)],'r')
-title('Hypservisor power vs setpoint.')
+title('Hypervisor power vs setpoint.')
 legend('Actual (0.5s average)','Actual (2s average)','Setpoint')
 xlabel('Time (s)')
 ylabel('Power (W)')
