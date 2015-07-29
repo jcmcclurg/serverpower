@@ -1,0 +1,16 @@
+These are the code edits done to get information for DR algorithm to standard output, stdout:
+
+Description: print duration of video: 	
+Edit: fprintf(stdout, "Duration: %d.%d\n",secs,us);	
+File & LineNumber: /libav-11.4/libavformat/dump.c 416
+Calling Function: transcode_init() in /libav-11.4/avconv.c line 1685
+
+Description: print transcoding-process-frames/sec | frame-number | output-file-frames/sec
+Edit: fprintf(stdout,"%3d,%d,%.1f\n",(t>1) ? (int)(frame_number/t+0.5) : 0,frame_number,(double)ost->frame_rate.num/(double)ost->frame_rate.den));
+File & LineNumber: /libav-11.4/avconv.c 922
+Calling Function: cmdline avconv
+
+Description: change frequency of print to stdout
+Edit:         if ((cur_time - last_time) < 500000)
+File & Linenumber: /libav-11.4/avconv.c 885
+Calling Function: cmdline avconv
