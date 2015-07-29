@@ -40,7 +40,9 @@ actual(end-4:end,:) = [];
 avtime = block_average(actual(:,1),4);
 avactual = block_average(actual(:,2),4);
 
-plot(actual(:,1),actual(:,2),'y',avtime,avactual,'c',setpoint(:,1),setpoint(:,2),'r')
+setPointRange = setpoint(:,1) < max(actual(:,1));
+
+plot(actual(:,1),actual(:,2),'y',avtime,avactual,'c',setpoint(setPointRange,1),setpoint(setPointRange,2),'r')
 title('RAPL power vs setpoint.')
 legend('Actual (0.5s average)','Actual (2s average)','Setpoint')
 xlabel('Time (s)')
