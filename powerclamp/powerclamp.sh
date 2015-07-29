@@ -1,12 +1,13 @@
 #!/bin/bash
 
 device=${1:-/sys/class/thermal/cooling_device4}
+
 rangeMax=`cat $device/max_state`
-rangeMin=0
+rangeMin=1
 
 echo Welcome to the powerclamp cpu limiter. Please make sure you have >&2
 echo the module loaded. Type the limiting values. Press CTRL+C or q to exit. >&2
-echo The range is $rangeMin-$rangeMax. The value is sleep injection percent. >&2
+echo "The range is $rangeMin-$rangeMax. The value is duty cycle in percent of work (100 - percent idle)." >&2
 
 limitVal=0
 
@@ -18,7 +19,7 @@ while [[ "$limitVal" != "q" ]]; do
 	elif [ $(echo "$limitVal > $rangeMax" | bc) == 1 ]; then
 		limitVal=$rangeMax
 	fi
-	echo "$limitVal" > $device/cur_state
+	echo "1 + $rangeMax - $limitVal" | bc > $device/cur_state
 	echo "Set to $limitVal" >&2
 	read limitVal
 done
