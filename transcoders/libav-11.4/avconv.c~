@@ -870,19 +870,20 @@ static void print_report(int is_last_report, int64_t timer_start)
     double bitrate, ti1, pts;
     static int64_t last_time = -1;
     static int qp_histogram[52];
+	static last_frame_number = 0;
 
     if (!print_stats && !is_last_report)
         return;
 
     if (!is_last_report) {
         int64_t cur_time;
-        /* display the report every 0.1 seconds */
+        /* display the report every 0.5 seconds */
         cur_time = av_gettime();
         if (last_time == -1) {
             last_time = cur_time;
             return;
         }
-        if ((cur_time - last_time) < 100000)
+        if ((cur_time - last_time) < 500000)
             return;
         last_time = cur_time;
     }
@@ -919,7 +920,8 @@ static void print_report(int is_last_report, int64_t timer_start)
             frame_number = ost->frame_number;
             snprintf(buf + strlen(buf), sizeof(buf) - strlen(buf), "frame=%5d fps=%3d q=%3.1f ",
                      frame_number, (t > 1) ? (int)(frame_number / t + 0.5) : 0, q);
-fprintf(stdout,"%3d,%d,%.1f\n",(int)(frame_number/t+0.5),frame_number,(double)ost->frame_rate.num/(double)ost->frame_rate.den);
+fprintf(stdout,"%3d,%d,%.1f\n",(int)((frame_number-last_frame_number)/t+0.5),frame_number,(double)ost->frame_rate.num/(double)ost->frame_rate.den);
+last_frame_number=frame_number;
             if (is_last_report)
                 snprintf(buf + strlen(buf), sizeof(buf) - strlen(buf), "L");
             if (qp_hist) {
