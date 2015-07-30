@@ -3,7 +3,7 @@ File: rs232ui.c
 Author: Joe Hall
 Date: 7/22/15
 Description: 
-	opens virtual COM port at /dev/ttyUSB0
+	opens virtual COM port at specified port
 	polls and prints (stdout) any bytes received from COM port
 	transmits user entered (stdin) bytes
 
@@ -188,9 +188,9 @@ int main(int argc, char *argv[])
 		}
 
 		#ifdef _WIN32
-    		Sleep(100);
+    		Sleep(1000);
 		#else
-    		usleep(100000);  /* sleep for 10 milliSecond */
+    		usleep(1000000);  /* sleep for 10 milliSecond */
 		#endif
 	}
 	return EXIT_SUCCESS;
