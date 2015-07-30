@@ -1,0 +1,21 @@
+@uthor: Joe Hall
+Date: 7/21/15
+
+Funduino Xbee Adapter has two possible Linux drivers, see www.ftdichip.com/FTDrivers.htm
+
+This implementation is for VCP; to use the D2XX driver see "FTDI Drivers Installation Guide for Linux".
+
+To ensure all FTDI devices have VCP driver support, FTDI recommends installing the latest kernel release on the Linux system. In Linux, the VCP drivers will appear as /dev/ttyUSBx. 
+How to verify the built-in COM port:
+- Plug in a FTDI based design/module/cable
+- Open a terminal window, and enter 
+	dmesg | grep FTDI  <ret>
+- Should output something like the following:
+	[10170.987708] USB Serial support registered for FTDI USB Serial Device 
+	[10170.987915] ftdi_sio 9-1:1.0: FTDI USB Serial Device converter detected 
+	[10170.991172] usb 9-1: FTDI USB Serial Device converter now attached to ttyUSB0 
+	[10170.991219] ftdi_sio: v1.6.0:USB FTDI Serial Converters Driver
+
+Now use the RS-232 libraries to use the Xbee as /dev/ttyUSB0
+
+rs232ui.c impliments a simple rs232 user interface which forwards standard input to the virtual COM port and also reads from the virtual COM port and prints this to stdout.
