@@ -22,7 +22,7 @@ while [[ "$limitVal" != "q" ]]; do
 		limitVal=$rangeMax
 	fi
 	#sudo cpufreq-set -f $limitVal
-	sudo cpupower frequency-set -f $limitVal
+	sudo cpupower frequency-set -f $limitVal > /dev/null
 	echo "Set to $limitVal" >&2
 	read limitVal
 done
