@@ -8,56 +8,48 @@
 #include "commonFunctions.h"
 #include "get_children.h"
 
-double period;
+#define MAX_DUTY 0.999
+#define MIN_DUTY 0.001
+#define DEFAULT_UPDATE_INTERVAL 1.0
+#define DEFAULT_WORK_INTERVAL 0.1
+#define DEFAULT_DUTY MAX_DUTY
+
+double update_interval;
+double work_interval;
 double duty;
+char verbose;
+int* parentList;
+char explicitParentList;
+int* exclusionList;
+char explicitExclusionList;
 
-int limiting_mode;
-int process_running;
-struct timespec twork;
-
-int* nopeList;
-int numNope;
-int* children;
-int numChildren;
+// Contains the list of processes specified by parentList and exclusionList
+int* currentPIDList;
 
 char* progname;
 
-char verbose;
-
-void setup_insertDelays(void){
-	/* don't buffer if piped */
-	setbuf(stdout, NULL);
-
-	children = NULL;
-	numChildren = 0;
-	nopeList = NULL;
-	numNope = 0;
-
-	process_running = 0;
-	limiting_mode = MODE_NO_PID;
-	period = INITIAL_PERIOD;
-	duty = INITIAL_DUTY;
-
-	init_children();
-}
-
 void close_insertDelays(void){
 	int f = 0;
-	if(!process_running && (limiting_mode & MODE_LIMIT)){
+	if(verbose)
+		fprintf(stderr,"Closing PIDs: ")
+	if(currentPIDList != NULL){
 		int i;
-		for(i = 0; i < numChildren; i++){
-			f += kill(children[i],SIGCONT);
+		while(currentPIDList[i] > 0){
+			if(verbose)
+				fprintf(stderr,"%d ",currentPIDList[i])
+			f -= kill(currentPIDList[i++],SIGCONT);
 		}
-		process_running = 1;
+		if(verbose)
+			fprintf(stderr,"\n")
 	}
 
 	if(f > 0)
 		errExit("Couldn't send SIGCONT");
 
-	numChildren = 0;
-	children = NULL;
-	free(nopeList);
-	close_children();
+	free(parentList);
+	free(exclusionList);
+	free(currentPIDList);
+	close_pstree();
 }
 
 void sig_handler(int signo){
@@ -70,108 +62,64 @@ void sig_handler(int signo){
 	}
 }
 
-static void handler(int sig, siginfo_t *si, void *uc) {
-	if(!process_running && (limiting_mode & MODE_LIMIT)){
-		int i;
-		int f = 0;
-		for(i = 0; i < numChildren; i++){
-			f += kill(children[i],SIGCONT);
-		}
-		process_running = 1;
-		if(f > 0)
-			limiting_mode |= MODE_PID_DIRTY;
-	}
-}
-
-void update_duty(double d){
-	double ontime = d*period;
-
-	twork.tv_sec = (long) ontime;
-	twork.tv_nsec = (long) ((ontime - ((double) twork.tv_sec))*1.0e9);
-	duty = d;
-	if(verbose)
-		fprintf(stderr,"Duty = %f\n",d);
-}
-
-void do_work(void){
-	if(process_running && (limiting_mode & MODE_LIMIT)){
-		nanosleep(&twork, NULL);
-		int i;
-		int f = 0;
-		for(i = 0; i < numChildren; i++){
-			f += kill(children[i],SIGSTOP);
-		}
-		process_running = 0;
-		if(f > 0)
-			limiting_mode |= MODE_PID_DIRTY;
-	}
-}
-
-void update_period(double p, timer_t timerid){
-	struct itimerspec its;
-	its.it_value.tv_sec = (long) p;
-	its.it_value.tv_nsec = (long) ((p - ((double) its.it_value.tv_sec))*1.0e9);
-	its.it_interval.tv_sec = its.it_value.tv_sec;
-	its.it_interval.tv_nsec = its.it_value.tv_nsec;
-	if(verbose)
-		fprintf(stderr,"Timer vals: %ld, %ld\n", its.it_value.tv_sec, its.it_value.tv_nsec);
-
-	if (timer_settime(timerid, 0, &its, NULL) == -1)
-		errExit("update period fail");
-
-	period = p;
-	if(verbose)
-		fprintf(stderr,"Period = %f\n",p);
-	update_duty(duty);
-}
-
-void stop_timer(timer_t timerid){
-	limiting_mode = MODE_NO_PID;
-
-	struct itimerspec its;
-	its.it_value.tv_sec = 0;
-	its.it_value.tv_nsec = 0;
-	its.it_interval.tv_sec = 0;
-	its.it_interval.tv_nsec = 0;
-
-	if(timer_settime(timerid, 0, &its, NULL) == -1)
-		errExit("stop timer fail");
-}
-
-void start_timer(timer_t timerid){
-	limiting_mode = MODE_LIMIT;
-	update_period(period,timerid);
-}
-
 void usage(){
 	fprintf(stdout, "\nInsert Delays\n");
 	fprintf(stdout, "\nUsage: \n");
-	fprintf(stdout, "%s [pid whose children to control] [pid list to exclude from control]\n", progname);
-	fprintf(stdout, "\nExample: %s -p 1 -e 1\n", progname);
+	fprintf(stdout, "%s   -p   [list of PIDs to control (default: all that this user has permissions to)]\n", progname);
+	fprintf(stdout, "     -o   Only control PIDs specified at the beginning. Leave their children alone. Does not require -p.\n");
+	fprintf(stdout, "     -e   [list of PIDs to exclude (default: none)]\n");
+	fprintf(stdout, "     -x   Only exclude specified PIDs. Allow their children to potentially be controlled. Requires -e.\n");
+	fprintf(stdout, "     -d   [Initial duty (default: %lf)]\n", DEFAULT_DUTY);
+	fprintf(stdout, "     -u   [Process tree update interval in seconds (default: %lf)]\n", DEFAULT_UPDATE_INTERVAL);
+	fprintf(stdout, "     -w   [Work interval in seconds (default: %lf)]\n", DEFAULT_WORK_INTERVAL);
+	fprintf(stdout, "     -v   Verbose mode\n");
 	fprintf(stdout, "\n");
 }
 
 int cmdline(int argc, char **argv){
-	int i,j;
-	int numParents;
-	int* parentList;
-
 	progname = argv[0];
 
+	int i,j;
 	char p_flag_pos = -1;
+	int parentListLen = -1;
 	char e_flag_pos = -1;
-	verbose = 0;
+	int exclusionListLen = -1;
 
+	update_interval = DEFAULT_UPDATE_INTERVAL;
+	work_interval = DEFAULT_WORK_INTERVAL;
+	duty = DEFAULT_DUTY;
+	verbose = 0;
+	explicitParentList = 0;
+	explicitExclusionList = 0;
+	parentList = NULL;
+	exclusionList = NULL;
+	
+	char opt = 0;
 	j = 0;
 	for(i = 1; i < argc; i++){
 		if(argv[i][0] == '-'){
-			if(argv[i][1] == 'p'){
+			opt = argv[i][1];
+
+			if(p_flag_pos > 0){
+				parentListLen = i - p_flag_pos - 1;
+			}
+			if(e_flag_pos > 0){
+				exclusionListLen = i - e_flag_pos - 1;
+			}
+
+			if(opt == 'p'){
 				p_flag_pos = i;
 			}
-			else if(argv[i][1] == 'e'){
+			else if(opt == 'o'){
+				explicitParentList = 1;
+			}
+			else if(opt == 'e'){
 				e_flag_pos = i;
 			}
-			else if(argv[i][1] == 'v'){
+			else if(opt = 'x'){
+				explicitExclusionList = 1;
+			}
+			else if(opt == 'v'){
 				verbose = 1;
 			}
 			else{
@@ -182,165 +130,189 @@ int cmdline(int argc, char **argv){
 		}
 	}
 
-
-	// User does not specify parent pid list. The default is to collect the modifyable processes.
-	if((e_flag_pos == 1 && p_flag_pos == -1) || argc == 1){
-		process_tree* ptree;
-		int i, len;
-		update_proc_tree(&ptree, &len);
-		for(i = 0; i < len; i++){
-			ptree[i].class = NONCHILD_CLASS;
+	if(e_flags_pos > 0){
+		if(exclusionListLen < 0){
+			exclusionListLen = i - e_flags_pos - 1;
 		}
 
-		if(verbose)
-			fprintf(stderr,"Trying to controll all the PIDs.\n");
-	}
-	else{
-		if(p_flag_pos == -1){
-			if(e_flag_pos == -1){
-				numParents = argc - 1;
-			}
-			else{
-				numParents = e_flag_pos - 1;
-			}
-			p_flag_pos = 0;
-		}
-		else if(p_flag_pos < e_flag_pos){
-			numParents = e_flag_pos - p_flag_pos - 1;
-		}
-		else if(p_flag_pos == 1){
-			numParents = argc - p_flag_pos - 1;
-		}
-		else{
+		if(exclusionListLen == 0){
 			usage();
 			return -1;
 		}
+	}
+	if(p_flags_pos > 0){
+		if(parentListLen < 0){
+			parentListLen = i - p_flags_pos - 1;
+		}
 
-		parentList = (int*) malloc(sizeof(int)*numParents);
+		if(parentListLen == 0){
+			usage();
+			return -1;
+		}
+	}
+
+	if(e_flags_pos < 0 && explicitExclusionList){
+		fprintf(stderr,"You have to specify an exclusion list to use the -x option.\n");
+		usage();
+		return -1;
+	}
+
+
+	if(e_flags_pos > 0){
+		exclusionList = (int*) malloc(sizeof(int)*exclusionListLen);
 		if(verbose)
-			fprintf(stderr,"Parent list (%d): ",numParents);
-		for(i = 0; i < numParents; i++){
+			fprintf(stderr,"Exclusion list (%d): ",exclusionListLen);
+		for(i = 0; i < exclusionListLen; i++){
+			exclusionList[i] = atoi(argv[i + e_flag_pos + 1]);
+			if(verbose)
+				fprintf(stderr,"%d ",exclusionList[i]);
+		}
+		if(verbose)
+			fprintf(stderr,"\n");
+	}
+
+	if(p_flags_pos > 0){
+		parentList = (int*) malloc(sizeof(int)*parentListLen);
+		if(verbose)
+			fprintf(stderr,"Parent list (%d): ",parentListLen);
+		for(i = 0; i < parentListLen; i++){
 			parentList[i] = atoi(argv[i + p_flag_pos + 1]);
 			if(verbose)
 				fprintf(stderr,"%d ",parentList[i]);
 		}
 		if(verbose)
 			fprintf(stderr,"\n");
-		tag_proc_tree_children(parentList, numParents);
-		free(parentList);
 	}
-
-	// There are excluded processes
-	if(e_flag_pos != -1){
-		if(p_flag_pos > e_flag_pos){
-			numNope = p_flag_pos - e_flag_pos - 1;
+	else if(explicitParentList){
+		int* plist;
+		int plistLen;
+		if(pstree_update(NULL, NULL) || pstree_mark_parents_all() || pstree_prune_unmodifyable() ){
+			perror("Problem with getting the modifyable processes.");
+			exit(EXIT_FAILURE);
 		}
-		else if(p_flag_pos == 1 || p_flag_pos == -1){
-			numNope = argc - e_flag_pos - 1;
-		}
-		else{
-			usage();
-			return -1;
+		if(get_modifyable_processes(&plist, &plistLen)){
 		}
 
-		nopeList = (int*) malloc(sizeof(int)*numNope);
-		if(verbose)
-			fprintf(stderr,"Exclusion list (%d): ",numNope);
-		for(i = 0; i < numNope; i++ ){
-			nopeList[i] = atoi(argv[i + e_flag_pos + 1]);
-			if(verbose)
-				fprintf(stderr,"%d ",nopeList[i]);
-		}
-		if(verbose)
-			fprintf(stderr,"\n");
-	}
-	update_children(&children, &numChildren, nopeList, numNope, 1);
-	if(verbose){
-		fprintf(stderr,"Controllable list: ");
-		for(i = 0; i < numChildren; i++){
-			fprintf(stderr,"%s(%d) ", get_name_of(children[i]), children[i]);
-		}
-		fprintf(stderr,"\n");
+		parentList = (int*) malloc(sizeof(int)*plistLen);
+		memcpy(parentList, plist, sizeof(int)*plistLen);
 	}
 
 	return 0;
 }
 
+// Returns the number of failures between telling the current PID list to start and to stop.
+int do_work(){
+	// Allow the other processes to do work.
+	int f = 0;
+	if(currentPIDList != NULL){
+		while(currentPIDList[i] > 0){
+			f -= kill(currentPIDList[i++],SIGCONT);
+		}
+	}
+
+	// Wait for them to do it.
+	usleep((useconds_t)(work_interval*1.0e6));
+
+	// Tell the other process to stop working.
+	if(currentPIDList != NULL){
+		while(currentPIDList[i] > 0){
+			f -= kill(currentPIDList[i++],SIGSTOP);
+		}
+	}
+	return f;
+}
 
 int main(int argc, char *argv[]) {
-	struct sigevent sev;
-	sigset_t mask;
-	struct sigaction sa;
-	timer_t timerid;
+	useconds_t sleeplen;
+	int num_readable;
+	long i;
+	double s;
+	int fd_stdin = fileno(stdin);
+	struct timeval tv;
+	tv.tv_sec = 0;
+	tv.tv_usec = 0;
+	double slen = 0;
+	char buf[128];
+	fd_set readfds;
+	double prevTime_sec, currentTime_sec, time_last_updated;
+	struct timespec currentTime;
+
+	// Clear output buffering on STDOUT
+	setbuf(stdout, NULL);
+	setbuf(stderr, NULL);
 
 	if(signal(SIGINT,sig_handler) == SIG_ERR)
 		errExit("Can't catch SIGINT.");
 
-	setup_insertDelays();
+	if(cmdline(argc,argv)){
+		errExit("Invalid command line arguments.");
+	}
 
-	if(cmdline(argc, argv))
-		errExit("Couldn't get set up.");
+	if(init_pstree()){
+		errExit("Couldn't initialize pstree interface.");
+	}
 
-	/* Establish handler for timer signal */
-	if(verbose)
-		fprintf(stderr,"Establishing handler for signal %d\n", SIGRTMIN);
-	sa.sa_flags = SA_SIGINFO;
-	sa.sa_sigaction = handler;
-	sigemptyset(&sa.sa_mask);
-	if (sigaction(SIGRTMIN, &sa, NULL) == -1)
-		errExit("sigaction");
+	if(verbose) fprintf(stderr,"Set duty to %lf\n",duty);
+	slen = 0;
+	sleeplen = 0;
+	if(clock_gettime(CLOCK_BOOTTIME, &currentTime)){
+		fprintf(stderr,"Problem with gettime\n");
+		exit(EXIT_FAILURE);
+	}
+	prevTime_sec = ((double)(currentTime.tv_sec)) + (((double)(currentTime.tv_nsec))/1.0e9);
 
-	/* Create the timer */
-	sev.sigev_notify = SIGEV_SIGNAL;
-	sev.sigev_signo = SIGRTMIN;
-	sev.sigev_value.sival_ptr = &timerid;
-	if (timer_create(CLOCK_BOOTTIME, &sev, &timerid) == -1)
-		errExit("timer_create");
+	// LEFT OFF HERE
+	time_last_updated = prevTime_sec;
 
-	if(verbose)
-		fprintf(stderr,"timer ID is 0x%lx\n", (long) timerid);
+	while(1) {
+		FD_ZERO(&readfds);
+		FD_SET(fd_stdin, &readfds);
+		num_readable = select(fd_stdin +1, &readfds, NULL, NULL, &tv);
 
-	/* Unlock the timer signal, so that timer notification
-	  can be delivered
-	*/
-	if(verbose)
-		fprintf(stderr,"Unblocking signal %d\n", SIGRTMIN);
-	if (sigprocmask(SIG_UNBLOCK, &mask, NULL) == -1)
-		errExit("sigprocmask");
+		// If the user has not typed something, do some work.
+		if (num_readable == 0) {
+			int errs = do_work();
+			if(errs && verbose)
+					fprintf(stderr,"There were %d errors\n",errs)
 
-	start_timer(timerid);
-	while(1){
-		char* str;
-		str = readLine();
-		if(str != NULL){
-			//else if(str[0] == 't'){
-			if(str[0] == 't'){
-				double t = atof(str + 1);
-				update_period(t, timerid);
+			if(clock_gettime(CLOCK_BOOTTIME, &currentTime)){
+				errExit("Problem with gettime");
 			}
-			else if(str[0] == 'q'){
-				normExit();
-			}
-			else{
-				if(str[0] == 'd'){
-					str++;
-				}
-
-				double d = atof(str);
-				if(d > MAX_DUTY)
-					d = MAX_DUTY;
-				else if(d < MIN_DUTY)
-					d = MIN_DUTY;
-
-				update_duty(d);
-			}
+			currentTime_sec = ((double)(currentTime.tv_sec)) + (((double)(currentTime.tv_nsec))/1.0e9);
+			slen = (1.0-duty)*(currentTime_sec - prevTime_sec);
+			sleeplen = (useconds_t)(slen*1.0e6);
+			usleep(sleeplen);
+			prevTime_sec = currentTime_sec;
 		}
 
-		do_work();
-
-		// If any of the signals didn't go through, we ought to update the list of children.
-		if((limiting_mode & MODE_PID_DIRTY)){
-			update_children(&children, &numChildren, nopeList, numNope, 1);
+		// If the user has typed something, process what the user has typed.
+		else if (num_readable == 1) {
+			if(scanf("%lf",&duty) > 0){
+				if(duty > MAXDUTY){
+					duty = MAXDUTY;
+				}
+				else if(duty < MINDUTY){
+					duty = MINDUTY;
+				}
+				if(verbose)
+					fprintf(stderr,"Set duty to %lg (previous sleeplen was %lg)\n",duty, slen);
+			}
+			else if(scanf("%s",buf) > 0 ){
+				if(buf[0] == 'q'){
+					if(verbose)
+						fprintf(stderr,"Quitting\n");
+					break;
+				}
+				else{
+					errExit("Quit on scanf");
+				}
+			}
+			else{
+				errExit("Failed on scanf");
+			}
+		}
+		else{
+			errExit("Quit on select");
 		}
 	}
 
