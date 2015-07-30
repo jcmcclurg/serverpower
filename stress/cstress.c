@@ -12,22 +12,27 @@
 
 #define MAXDUTY 0.999
 #define MINDUTY 0.001
+#define DEFAULT_NUM_ITERATIONS ((long) 2000000)
+#define DEFAULT_DUTY ((double) MAXDUTY)
 
+double duty;
 long num_iterations;
 char verbose;
 char* cmd_name;
 
 void usage(void){
 	fprintf(stdout,"%s -h   print help\n",cmd_name);
-	fprintf(stdout,"   -n [number of iterations (default 2000000]\n");
+	fprintf(stdout,"   -n   [number of iterations (default: %ld]\n", DEFAULT_NUM_ITERATIONS);
 	fprintf(stdout,"   -v   verbose\n");
+	fprintf(stdout,"   -d   [initial duty (default: %lf)]\n", DEFAULT_DUTY);
 }
 
 int cmdline(int argc, char** argv){
 	num_iterations = -1;
 	int i;
 	char opt = 0;
-	num_iterations = 2000000;
+	num_iterations = DEFAULT_NUM_ITERATIONS;
+	duty = DEFAULT_DUTY;
 	verbose = 0;
 	cmd_name = (char*) argv[0];
 
@@ -47,6 +52,9 @@ int cmdline(int argc, char** argv){
 				}
 				else if(opt == 'n' && i+1 < argc){
 					num_iterations = atol(argv[i+1]);
+				}
+				else if(opt == 'd' && i+1 < argc){
+					duty = atof(argv[i+1]);
 				}
 				else{
 					usage();
@@ -73,7 +81,6 @@ int main (int argc, char** argv) {
 	tv.tv_sec = 0;
 	tv.tv_usec = 0;
 	double slen = 0;
-	double duty = 0.999;
 	char buf[128];
 	fd_set readfds;
 	double prevTime_sec, currentTime_sec;
