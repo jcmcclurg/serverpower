@@ -1,0 +1,341 @@
+/**************************************************
+File: fmd2server.c 
+Author: Joe Hall
+Date: 7/23/15
+Description: 
+	opens virtual COM port at specified port 
+	establishes communication with FMD using cmdline args	
+	polls any bytes received from COM port
+	converts received freq deviation to a power setpoint and prints (stdout) result
+	prints freq and timestamp to file	
+	transmits user entered (stdin) bytes
+	
+compile with the command: gcc fmd2server.c rs232.c -Wall -Wextra -o2 -o fmd2server
+example run: sudo ./fmd2server -r 500 -p 16 -b 115200 -M 50 -m 10 -f 60.02 -o test.csv
+
+**************************************************/
+#include <stdlib.h>
+#include <stdio.h>
+
+#ifdef _WIN32
+#include <Windows.h>
+#else
+#include <unistd.h>
+#endif
+
+#include <time.h>
+#include "rs232.h"
+
+char* progname;
+int cport_nr=16,        /* ie /dev/ttyUSB0 (see doc.txt) */
+    bdrate=115200,      /* ie 115200 baud */
+	rate_ms = 1000,		/* milliseconds between transmissions of freq from FMD */
+	min_power,			/* maximum/minimum power setpoints to output to server */
+	max_power,
+	max_freq;			/* maximum expected magnitude freq deviation */
+char *filename;
+
+int get_usr_input(char *buff, int *bytes_so_far); // get stdin input
+int RS232_GetComCommand(int cport_nr, unsigned char *com_buf); // get COM input
+double convert_time_to_sec(struct timespec tv);
+
+void usage(){
+	fprintf(stdout, "\nOpens virtual COM port for RS232 at specified port & baudrate.\n");
+	fprintf(stdout, "Program is hardcoded to 8N1, but can be changed. See RS232-Lib/doc.txt.\n");
+	fprintf(stdout, "Prints input from COM port to stdout and sends stdin to COM port.\n");
+	fprintf(stdout, "Type 'q <rtn>' to exit program. (any stdin with leading 'q' will quit program).\n");
+	fprintf(stdout, "\nUsage: \n");
+	fprintf(stdout, "%s [options]\n\nOptions:\n",progname);
+	fprintf(stdout, "-r [milliseconds] (milliseconds b/n transmission of average freq by FMD)\n");
+	fprintf(stdout, "-M [max_power] (maximum allowed output setpoint)\n");
+	fprintf(stdout, "-m [min_power] (minimum allowed output setpoint)\n");
+	fprintf(stdout, "\n-p [port_number]\n");
+	fprintf(stdout, "Available port numbers:\n##  Linux   Windows\n");
+	fprintf(stdout, 
+		"0   ttyS0   COM1\n"
+		"1   ttyS1   COM2\n"
+		"2   ttyS2   COM3\n"
+		"3   ttyS3   COM4\n"
+		"4   ttyS4   COM5\n"
+		"5   ttyS5   COM6\n"
+		"6   ttyS6   COM7\n"
+		"7   ttyS7   COM8\n"
+		"8   ttyS8   COM9\n"
+		"9   ttyS9   COM10\n"
+		"10  ttyS10  COM11\n"
+		"11  ttyS11  COM12\n"
+		"12  ttyS12  COM13\n"
+		"13  ttyS13  COM14\n"
+		"14  ttyS14  COM15\n"
+		"15  ttyS15  COM16\n"
+		"16  ttyUSB0   n.a.\n"
+		"17  ttyUSB1   n.a.\n"
+		"18  ttyUSB2   n.a.\n"
+		"19  ttyUSB3   n.a.\n"
+		"20  ttyUSB4   n.a.\n"
+		"21  ttyUSB5   n.a.\n"
+		"22  ttyAMA0   n.a.\n"
+		"23  ttyAMA1   n.a.\n"
+		"24  ttyACM0   n.a.\n"
+		"25  ttyACM1   n.a.\n"
+		"26  rfcomm0   n.a.\n"
+		"27  rfcomm1   n.a.\n"
+		"28  ircomm0   n.a.\n"
+		"29  ircomm1   n.a.\n");
+	fprintf(stdout, "\n-b [baudrate]\n");
+	fprintf(stdout, "Available baudrates:\nLinux\tWindows\n");
+	fprintf(stdout,
+		"50  n.a.\n"
+		"75  n.a.\n"
+		"110   110\n"
+		"134   n.a.\n"
+		"150   n.a.\n"
+		"200   n.a.\n"
+		"300   300\n"
+		"600   600\n"
+		"1200  1200\n"
+		"1800  n.a.\n"
+		"2400  2400\n"
+		"4800  4800\n"
+		"9600  9600\n"
+		"19200   19200\n"
+		"38400   38400\n"
+		"57600   57600\n"
+		"115200  115200\n"
+		"230400  128000\n"
+		"460800  256000\n"
+		"500000  500000\n"
+		"576000  n.a.\n"
+		"921600  n.a.\n"
+		"1000000   1000000\n"
+		"1152000   n.a.\n"
+		"1500000   n.a.\n"
+		"2000000   n.a.\n"
+		"2500000   n.a.\n"
+		"3000000   n.a.\n"
+		"3500000   n.a.\n"
+		"4000000   n.a.\n");
+	fprintf(stdout, "\n-h [this help]\n");
+	fprintf(stdout, "Example usage:\n"
+		"    sudo ./fmd2server -r 500 -p 16 -b 115200 -M 50 -m 10 -f 60.02 -o test.csv");
+	fprintf(stdout, "\n");
+}
+
+int cmdline(int argc, char *argv[]){
+	int opt;
+	progname = argv[0];
+	while ((opt = getopt(argc, argv, "p:b:r:M:m:f:o:h")) != -1) {
+		switch (opt) {
+			case 'p':
+				cport_nr = (int)atof(optarg);
+				break;
+			case 'b':
+				bdrate = (int)atof(optarg);
+				break;
+			case 'r':
+				rate_ms = (int)atof(optarg);
+				break;
+			case 'M':
+				max_power = (int)atof(optarg);
+				break;
+			case 'm':
+				min_power = (int)atof(optarg);
+				break;
+			case 'f':
+				max_freq = (int)atof(optarg);
+				break;
+			case 'o':
+				filename=optarg;
+				break;
+			case 'h':
+				usage();
+				exit(EXIT_SUCCESS);
+				break;
+			default:
+				usage();
+				return -1;
+		}
+	}
+
+	return 0;
+}
+
+int main(int argc, char *argv[])
+{	
+	if(cmdline(argc,argv)){
+		exit(EXIT_FAILURE);
+	}
+	unsigned char msb = (rate_ms >> 8),
+				  lsb = (rate_ms & 0x00FF);
+	unsigned char setup_buf[]={'S','R',msb,lsb,'B'}; 
+	/* Stop, Rate=, (MSB), (LSB)ms, Begin */	
+
+	int i,n;
+  	unsigned char com_buf[4096]; /* COM port buffer */
+  	char mode[]={'8','N','1',0}; /* RS232 mode */
+	char stdin_buf[256]; /* stdin buffer for user input or pipe */
+	
+	struct timespec tv_time;
+	char quit = 0;
+	int	bytes_so_far = 0;
+	setbuf(stdin, NULL);
+	double time_sec;	
+	double dev; // frequency deviation
+	double pcnt; // percent of dev from maximum deviation
+	double setpoint;
+
+	FILE *fp;
+	if (filename!=NULL) {
+		fp = fopen(filename, "a");
+	}
+	else {
+		fprintf(stdout,"No output file path specified.\n"
+		"Using default: output.csv\n");
+		fp = fopen("output.csv","a");
+	}
+	if (fp==NULL) {
+		fprintf(stdout,"Error opening output file\n");
+	}
+
+	if(RS232_OpenComport(cport_nr, bdrate, mode)) /* Setup COM port */
+  	{
+   		printf("Can not open comport\n");
+		return(0);
+	}
+
+	/* setup FMD */
+	for (i=0;i<(int)(sizeof(setup_buf)/sizeof(setup_buf[0]));i++) {
+		RS232_SendByte(cport_nr, setup_buf[i]);
+
+		#ifdef _WIN32
+    		Sleep(1000);
+		#else
+    		usleep(1000000);  /* sleep for 100 milliSecond */
+		#endif
+
+		n=RS232_GetComCommand(cport_nr, com_buf);
+		if (n>0) {
+			if ((int)atof((char *)com_buf)!=setup_buf[i]) {
+				fprintf(stdout,"Failed to receive '%c' ACK from FMD\n"
+				"Received %c instead\n",setup_buf[i], (char)atof((char *)com_buf));
+				i--;
+			}
+		}
+		else {
+			fprintf(stdout, "Failed to receive '%c' ACK from FMD\n"
+			"Received no response from FMD\n",setup_buf[i]);
+			i--;
+		}
+	}
+	
+	while (quit!=1) {
+		/* get input from COM port, timestamp & print*/
+		n = RS232_GetComCommand(cport_nr, com_buf);
+		if (n > 0) {
+			clock_gettime(CLOCK_REALTIME, &tv_time);
+			time_sec = convert_time_to_sec(tv_time);
+			if (n==6) {
+				com_buf[5]='\0'; /* replace '\n' with '\0' in 6th byte */
+				dev = atof((char *)com_buf)-60000; /* freq deviation */
+				pcnt = dev/max_freq; /* percent deviation */
+				setpoint = (max_power-min_power)*pcnt+min_power+(max_power-min_power)/2;
+				fprintf(stdout,"s%f\n",setpoint);
+				if (fp != NULL)
+					fprintf(fp,"%f,%s,\n",time_sec,(char *)com_buf);
+			}			
+		}
+		/* get stdin or pipe input from user and transmit via COM port */
+		n = get_usr_input(stdin_buf,&bytes_so_far);
+		if (n==1) {
+			RS232_SendByte(cport_nr, (unsigned char)stdin_buf[0]);
+			printf("sent: %c\n", stdin_buf[0]);
+		}
+		if (stdin_buf[0]=='q') {			
+			//RS232_SendByte(cport_nr, 0x53); /* send 's' for stop FMD*/
+			//printf("sent: S to stop FMD\nExiting\n");
+			RS232_CloseComport(cport_nr);
+			if (fp!=NULL)
+				fclose(fp);
+			quit = 1;
+		}
+
+		#ifdef _WIN32
+    		Sleep(100);
+		#else
+    		usleep(100000);  /* sleep for 10 milliSecond */
+		#endif
+	}
+	return EXIT_SUCCESS;
+}
+
+
+int get_usr_input(char *buff, int *bytes_so_far) {
+    
+	fd_set rfds;
+    struct timeval tv;
+    int retval, len;
+
+    /* Watch stdin (fd 0) to see when it has input. */
+    FD_ZERO(&rfds);
+    FD_SET(0, &rfds);
+	/* Wait up to 1 useconds. */
+    tv.tv_sec = 0;
+    tv.tv_usec = 0;
+
+    /* check if stdin has input */
+    retval = select(1, &rfds, NULL, NULL, &tv);
+
+    if (retval == -1)
+    	return -1;
+    
+    else if (retval) {
+    	len = read(0,buff,255);
+        if (buff[len-1]=='\n') {
+            if (*bytes_so_far == 0) {
+		    	buff[len-1]='\0'; // replace '\n' with '\0'
+		    	//printf("Data received: %s\n",buff);
+				}		
+			else {
+		    	//printf("Data received: %s\n",buff-bytes_so_far);		    		
+		    	buff -= *bytes_so_far;
+				*bytes_so_far = 0;	
+			}
+			return 1;    	 
+	   	}
+		else {
+			*bytes_so_far += len;
+            buff += len;
+			return 0;
+	    }
+	}        
+	else {
+		return 0;
+   		//printf("No data within five seconds.\n");
+	}
+}
+
+double convert_time_to_sec(struct timespec tv) {
+	double elapsed_time = (double)(tv.tv_sec) + ((double)(tv.tv_nsec)/1000000000);
+	return elapsed_time;
+}
+
+int RS232_GetComCommand(int cport_nr, unsigned char *com_buf) {
+	int n;	
+	n = RS232_PollComport(cport_nr, com_buf, 4095);
+    if(n > 0)
+    {
+      com_buf[n] = 0;   /* always put a "null" at the end of a string! */
+
+/*  int i;    
+	for(i=0; i < n; i++)
+      {
+        if(com_buf[i] < 32)  // replace unreadable control-codes by dots 
+        {
+          com_buf[i] = '.';
+        }
+      }
+*/
+      //printf("received %i bytes: %s\n", n, (char *)buf);
+    }
+	return n;
+}
