@@ -870,6 +870,7 @@ static void print_report(int is_last_report, int64_t timer_start)
     double bitrate, ti1, pts;
     static int64_t last_time = -1;
     static int qp_histogram[52];
+	static int last_frame_number = 0;
 
     if (!print_stats && !is_last_report)
         return;
@@ -919,7 +920,8 @@ static void print_report(int is_last_report, int64_t timer_start)
             frame_number = ost->frame_number;
             snprintf(buf + strlen(buf), sizeof(buf) - strlen(buf), "frame=%5d fps=%3d q=%3.1f ",
                      frame_number, (t > 1) ? (int)(frame_number / t + 0.5) : 0, q);
-fprintf(stdout,"%3d,%d,%.1f\n",(int)(frame_number/t+0.5),frame_number,(double)ost->frame_rate.num/(double)ost->frame_rate.den);
+fprintf(stdout,"%3d,%d,%.1f\n",(int)((frame_number-last_frame_number)/t+0.5),frame_number,(double)ost->frame_rate.num/(double)ost->frame_rate.den);
+last_frame_number=frame_number;
             if (is_last_report)
                 snprintf(buf + strlen(buf), sizeof(buf) - strlen(buf), "L");
             if (qp_hist) {
