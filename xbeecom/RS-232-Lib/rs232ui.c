@@ -159,7 +159,11 @@ int main(int argc, char *argv[])
    		printf("Can not open comport\n");
 		return(0);
 	}
-	
+		#ifdef _WIN32
+    		Sleep(10000);
+		#else
+    		usleep(10000000);  /* sleep for 10 milliSecond */
+		#endif
 	while (quit!=1) {
 		/* get input from COM port, timestamp & print*/
 		n = RS232_GetComCommand(cport_nr, com_buf);
@@ -188,9 +192,9 @@ int main(int argc, char *argv[])
 		}
 
 		#ifdef _WIN32
-    		Sleep(100);
+    		Sleep(1000);
 		#else
-    		usleep(100000);  /* sleep for 10 milliSecond */
+    		usleep(1000000);  /* sleep for 10 milliSecond */
 		#endif
 	}
 	return EXIT_SUCCESS;
