@@ -875,7 +875,7 @@ static void print_powerControlParams(int64_t timer_start)
         last_time = cur_time;
         return;
     }
-    if ((cur_time - last_time) < 100000)
+    if ((cur_time - last_time) < 500000)
         return;
     last_time = cur_time;
 	vid = 0;

@@ -38,6 +38,7 @@ char *filename;
 int get_usr_input(char *buff); // get stdin input
 int RS232_GetComCommand(int cport_nr, unsigned char *com_buf); // get COM input
 double convert_time_to_sec(struct timespec tv);
+void convert_time_to_string(struct timespec tv, char* time_buf);
 
 void usage(){
 	fprintf(stdout, "\nOpens virtual COM port for RS232 at specified port & baudrate.\n");
@@ -170,10 +171,12 @@ int main(int argc, char *argv[])
 	char quit = 0;
 	setbuf(stdin, NULL);
 	double time_sec;	
+	char time_str[256];
+	static char last_str[6] = {0};
 
 	FILE *fp;
 	if (filename!=NULL) {
-		fp = fopen(filename, "a");
+		fp = fopen(filename, "w");
 	}
 	else {
 		fprintf(stdout,"No output file path specified.\n");
@@ -219,10 +222,17 @@ int main(int argc, char *argv[])
 		n = RS232_GetComCommand(cport_nr, com_buf);
 		if (n == 6) {
 			clock_gettime(CLOCK_REALTIME, &tv_time);
-			time_sec = convert_time_to_sec(tv_time);
-			if (fp != NULL)
-				fprintf(fp,"%f,%s,\n",time_sec,(char *)com_buf);
-			fprintf(stdout,"%s\n",(char *)com_buf);			
+			convert_time_to_string(tv_time, time_str);
+			//time_sec = convert_time_to_sec(tv_time);
+			fprintf(stdout,"%s\n",(char *)com_buf);
+			if (fp != NULL) {
+				/* only print data to file if it is different from last time */
+				if (strcmp(last_str,(char *)com_buf)!=0) {	
+					//fprintf(fp,"%f,%s,\n",time_sec,(char *)com_buf);
+					fprintf(fp,"%s,%s,\n",time_str,(char *)com_buf);
+				}		
+			}
+			strcpy(last_str,(char *)com_buf);			
 		}
 		/* get stdin or pipe input from user and transmit via COM port */
 		n = get_usr_input(stdin_buf);
@@ -304,6 +314,21 @@ int get_usr_input(char *buff) {
 double convert_time_to_sec(struct timespec tv) {
 	double elapsed_time = (double)(tv.tv_sec) + ((double)(tv.tv_nsec)/1000000000);
 	return elapsed_time;
+}
+
+void convert_time_to_string(struct timespec tv, char* time_buf)
+{
+    time_t sec;
+    long nsec;
+    struct tm *timeinfo;
+    char tmp_buf[15];
+
+    sec = tv.tv_sec;
+    timeinfo = localtime(&sec);
+    nsec = tv.tv_nsec;
+
+    strftime(tmp_buf, 15, "%H:%M:%S", timeinfo);
+    sprintf(time_buf, "%s.%9ld",tmp_buf,nsec);
 }
 
 int RS232_GetComCommand(int cport_nr, unsigned char *com_buf) {
