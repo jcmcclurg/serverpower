@@ -11,6 +11,7 @@ pgpid=$!
 trap 'echo "Got interrupt"; echo "Stopping power gadget at "`date +%s.%N` >> '$d'.out; sudo kill -s SIGINT '$pgid SIGINT SIGTERM
 
 ./go_hibench.sh | tee -a $d.out
+cp ../../HiBench/report/hibench.report $d.report
 
 echo "Stopping power gadget at "`date +%s.%N` >> $d.out
 sudo kill -s SIGINT $pgpid

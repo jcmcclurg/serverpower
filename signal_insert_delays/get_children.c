@@ -28,6 +28,12 @@
 #include <string.h>
 #include "get_children.h"
 
+// Returns the number of processes in the tree, and populates the process tree, or returns -1 on failure.
+
+process_tree* proc_tree_buffer;
+int proc_tree_buffer_size;
+int num_procs;
+
 static int check_proc(void) {
 	struct statfs mnt;
 	if (statfs("/proc", &mnt) < 0)
@@ -35,20 +41,6 @@ static int check_proc(void) {
 	if (mnt.f_type!=0x9fa0)
 		return 0;
 	return 1;
-}
-
-// Returns the int or -1 if it's not an int.
-static int parseStrAsUint(char* s){
-	char* s2 = s;
-	while(*s2 != 0){
-		if(*s2 >= '0' && *s2 <= '9'){
-			s2++;
-		}
-		else{
-			return -1;
-		}
-	}
-	return atoi(s);
 }
 
 pid_t get_ppid_of(pid_t pid) {
@@ -68,15 +60,14 @@ pid_t get_ppid_of(pid_t pid) {
 	return atoi(token);
 }
 
-char nameof_buff[1024];
-char* get_name_of(pid_t pid) {
+char* get_name_of(pid_t pid, char* nameof_buff, int size) {
 	char statfile[20];
 	sprintf(statfile, "/proc/%d/stat", pid);
 	FILE *fd = fopen(statfile, "r");
 	if (fd==NULL) return NULL;
-	if (fgets(nameof_buff, sizeof(nameof_buff), fd)==NULL) {
+	if (fgets(nameof_buff, size, fd)==NULL) {
 		fclose(fd);
-		return NULL;
+		return -1;
 	}
 	fclose(fd);
 
@@ -101,15 +92,6 @@ char get_status_of(pid_t pid){
 	for (i=0; i<2; i++) token = strtok(NULL, " ");
 	return token[0];
 }
-
-// Returns the number of processes in the tree, and populates the process tree, or returns -1 on failure.
-process_tree* proc_tree_buffer;
-int proc_tree_buffer_size;
-int num_procs;
-
-int* child_buffer;
-int child_buffer_size;
-int num_children;
 
 int tag_proc_tree_nonchildren(int* nonChildren, int numNonChildren){
 	process_tree* procTree = proc_tree_buffer;
@@ -138,6 +120,7 @@ int update_proc_tree(process_tree** procTree, int* numProcs){
 		perror("procfs is not mounted!\nAborting\n");
 		return -1;
 	}
+
 	//open a directory stream to /proc directory
 	DIR* procDir;
 	int i,j,k;
@@ -154,8 +137,7 @@ int update_proc_tree(process_tree** procTree, int* numProcs){
 
 	// Get number of processes
 	while( (ep = readdir(procDir)) ){
-		pid = parseStrAsUint(ep->d_name);
-		if(pid >= 0){
+		if(sscanf(ep->d_name,"%d",&pid) == 1 && pid > 0){
 			totalPIDs++;
 		}
 	}
@@ -171,8 +153,7 @@ int update_proc_tree(process_tree** procTree, int* numProcs){
 	rewinddir(procDir);
 	k = 0;
 	while ( (k < totalPIDs) && (ep = readdir(procDir)) ){
-		pid = parseStrAsUint(ep->d_name);
-		if(pid >= 0){
+		if(sscanf(ep->d_name,"%d",&pid) == 1 && pid > 0){
 			ppid = get_ppid_of(pid);
 			proc_tree_buffer[k].pid = pid;
 			proc_tree_buffer[k].ppid = ppid;
@@ -331,32 +312,10 @@ int tag_proc_tree_children(int* rootPIDs, int numRootPIDs) {
 	return 0;
 }
 
-pid_t my_pid;
-pid_t my_ppid;
-void init_children(void){
-	proc_tree_buffer = NULL;
-	proc_tree_buffer_size = 0;
-	num_procs = 0;
-	child_buffer = NULL;
-	child_buffer_size = 0;
-	num_children = 0;
-	my_pid = getpid();
-	my_ppid = getppid();
-	update_proc_tree(NULL,NULL);
-}
-
 void close_children(void){
-	proc_tree_buffer_size = 0;
-	child_buffer_size = 0;
-	num_children = 0;
-	num_procs = 0;
 	free(proc_tree_buffer);
 	free(child_buffer);
-	my_pid = -1;
-	my_ppid = -1;
 }
-
-
 
 int get_stoppable_status(pid_t pid){
 	if(pid == my_pid){

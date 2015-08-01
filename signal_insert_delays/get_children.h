@@ -12,34 +12,36 @@
 #include <time.h>
 #include "get_children.h"
 
-
 #define UNKNOWN_CLASS 0
 #define CHILD_CLASS 1
 #define NONCHILD_CLASS 2
 
 typedef struct process_tree_struct {
-	int class;
-	int parent;
-	int pid;
-	int ppid;
+	char marked;
+	int  parent;
+	int  pid;
+	int  ppid;
 } process_tree;
 
+// Check if the process tree is up-to-date (does not check parent-child relationships).
+int proc_tree_is_current(process_tree* ptree);
 
-pid_t get_ppid_of(pid_t pid);
+// Rebuild the process tree so that it contains all processes in /proc. Parent-child relationships are not linked.
+int update_proc_tree(process_tree** ptree);
+
+// Link the existing process tree to contain correct parent-child relationships.
+int link_proc_tree(process_tree* ptree);
+
+// Gets the status of the pid
 char get_status_of(pid_t pid);
-int tag_proc_tree_nonchildren(int* nonChildren, int numNonChildren);
-int update_proc_tree(process_tree** procTree, int* numProcs);
-int update_children(	int** childNodes, int* numChildNodes, int* exclusions, int numExclusions,	char exclude_nonstoppable);
-int tag_proc_tree_children(int* rootPIDs, int numRootPIDs);
-void init_children(void);
 
-void close_children(void);
-
-char get_status_of(pid_t pid);
+// Gets the parent PID of the pid
 pid_t get_ppid_of(pid_t pid);
 
-char* get_name_of(pid_t pid);
+// Gets the name of the pid
+char* get_name_of(pid_t pid, char* buff, int size);
 
+// Used to check whether the signal actually was accepted.
 #define CHECK_EXTERNAL_RESTART_WAITLEN_US 5000
 #define CHECK_CONT_WAITLEN_US 5000
 
