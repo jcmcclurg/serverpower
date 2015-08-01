@@ -23,14 +23,23 @@ typedef struct process_tree_struct {
 	int  ppid;
 } process_tree;
 
-// Check if the process tree is up-to-date (does not check parent-child relationships).
+// Check if the process tree is up-to-date with /proc.
+// Does not check parent-child relationships.
+// Does not check whether the marks are valid.
 int proc_tree_is_current(process_tree* ptree);
 
-// Rebuild the process tree so that it contains all processes in /proc. Parent-child relationships are not linked.
+// Rebuild the process tree so that it contains all processes in /proc.
+// Parent-child relationships are not linked.
+// All processes are unmarked.
 int update_proc_tree(process_tree** ptree);
 
 // Link the existing process tree to contain correct parent-child relationships.
+// Does not check /proc for new processes. (See update_proc_tree and proc_tree_is_current for that).
+// Does not check whether the marks are valid.
 int link_proc_tree(process_tree* ptree);
+
+int mark_proc_tree(int* parentList, char explicitParentList,
+						 int* excludeList, char explicitExcludeList);
 
 // Gets the status of the pid
 char get_status_of(pid_t pid);
