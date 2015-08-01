@@ -4,9 +4,12 @@
 #include <stdlib.h>
 #include <sys/time.h>
 #include <time.h>
-#include "insertDelays.h"
 #include "commonFunctions.h"
 #include "get_children.h"
+
+// Used for exiting
+#define errExit(msg)	do { close_insertDelays(); perror(msg); exit(EXIT_FAILURE); } while (0)
+#define normExit()	do { close_insertDelays(); exit(EXIT_SUCCESS); } while (0)
 
 #define MAX_DUTY 0.999
 #define MIN_DUTY 0.001
@@ -23,8 +26,13 @@ char explicitParentList;
 int* exclusionList;
 char explicitExclusionList;
 
+pid_t my_pid;
+pid_t my_ppid;
+
 // Contains the list of processes specified by parentList and exclusionList
-int* currentPIDList;
+process_tree* ptree;
+int ptree_len;
+int ptree_buffer_len;
 
 char* progname;
 
@@ -93,6 +101,8 @@ int cmdline(int argc, char **argv){
 	explicitExclusionList = 0;
 	parentList = NULL;
 	exclusionList = NULL;
+	my_pid = getpid();
+	my_ppid = getppid();
 	
 	char opt = 0;
 	j = 0;
