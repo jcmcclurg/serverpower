@@ -258,6 +258,56 @@ int RS232_PollComport(int comport_number, unsigned char *buf, int size)
   return(n);
 }
 
+/* added by Joe to try fgets() instead of read() */
+// checks for something in buffer; if so, returns len of string & string in char *buf
+int RS232_ReadComPortLine(int comport_number, char *buf, int size, FILE *fdp)
+{
+  int len = 0;
+  if (checkCOMport(comport_number)>0) {	
+
+	if (fgets(buf, size, fdp)!=NULL) {
+		len = (int)strlen(buf);
+		buf[len-1]=0; // replace '\n' with '\0'
+		//printf("rcvd: %s\n",buf);
+	}
+  }
+  return(len);
+}
+
+/* added by Joe to try fgets() instead of read() */
+// Returns true if comport has stuff to read, false if not.
+int checkCOMport(int comport_number){
+	fd_set rfds;
+	struct timeval tv = {.tv_sec=0, .tv_usec = 0};
+	int retval;
+	int max_fd;
+
+	/* Watch stdin (fd 0) for 0 seconds to see when it has input. */
+	FD_ZERO(&rfds);
+	FD_SET(Cport[comport_number], &rfds);
+	max_fd=Cport[comport_number];
+	//printf("max_fd = %d\n",max_fd);
+	/* check if stdin has input */
+	retval = select(max_fd+1, &rfds, NULL, NULL, &tv);
+	//printf("retval for select() = %d\n",retval);
+	if(retval == -1){
+		perror("checkCOMport() experienced error.");
+		exit(EXIT_FAILURE);
+	}
+
+	return retval;
+}
+
+FILE *RS232_OpenPortFILE(int comport_number) {
+	FILE *fdp = fdopen(Cport[comport_number], "r");
+	if (fdp == NULL)
+		printf("error opening FILE pointer from filedescriptor in RS232_ReadComPort\n");  	
+	return fdp; 		
+}
+
+void RS232_ClosePortFILE(FILE *fdp) {
+	fclose(fdp);
+}
 
 int RS232_SendByte(int comport_number, unsigned char byte)
 {
