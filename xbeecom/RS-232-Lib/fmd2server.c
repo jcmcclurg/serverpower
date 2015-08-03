@@ -30,10 +30,11 @@ char* progname;
 int cport_nr=16,        /* ie /dev/ttyUSB0 (see doc.txt) */
     bdrate=115200,      /* ie 115200 baud */
 	rate_ms = 1000,		/* milliseconds between transmissions of freq from FMD */
-	min_power,			/* maximum/minimum power setpoints to output to server */
-	max_power,
+	min_power=-1,			/* maximum/minimum power setpoints to output to server */
+	max_power=-1,
 	max_freq;			/* maximum expected magnitude freq deviation */
 char *filename;
+int pwr_algorithm = 0;
 
 int get_usr_input(char *buff); // get stdin input
 int RS232_GetComCommand(int cport_nr, unsigned char *com_buf); // get COM input
@@ -47,6 +48,7 @@ void usage(){
 	fprintf(stdout, "Type 'q <rtn>' to exit program. (any stdin with leading 'q' will quit program).\n");
 	fprintf(stdout, "\nUsage: \n");
 	fprintf(stdout, "%s [options]\n\nOptions:\n",progname);
+	fprintf(stdout, "-a [0,1] turns power algorithm output on (1) or off (0)\n");
 	fprintf(stdout, "-r [milliseconds] (milliseconds b/n transmission of average freq by FMD)\n");
 	fprintf(stdout, "-M [max_power] (maximum allowed output setpoint)\n");
 	fprintf(stdout, "-m [min_power] (minimum allowed output setpoint)\n");
@@ -125,8 +127,11 @@ void usage(){
 int cmdline(int argc, char *argv[]){
 	int opt;
 	progname = argv[0];
-	while ((opt = getopt(argc, argv, "p:b:r:o:h")) != -1) {
+	while ((opt = getopt(argc, argv, "a:p:b:r:M:m:o:h")) != -1) {
 		switch (opt) {
+			case 'a':
+				pwr_algorithm = (int)atof(optarg);
+				break;
 			case 'p':
 				cport_nr = (int)atof(optarg);
 				break;
@@ -135,6 +140,12 @@ int cmdline(int argc, char *argv[]){
 				break;
 			case 'r':
 				rate_ms = (int)atof(optarg);
+				break;
+			case 'M':
+				max_power = (int)atof(optarg);
+				break;
+			case 'm':
+				min_power = (int)atof(optarg);
 				break;
 			case 'o':
 				filename=optarg;
@@ -162,10 +173,17 @@ int main(int argc, char *argv[])
 	unsigned char setup_buf[]={'S','R',msb,lsb,'B'}; 
 	/* Stop, Rate=, (MSB), (LSB)ms, Begin */	
 
+	if (pwr_algorithm && (min_power==-1 ||max_power==-1)) {
+		printf("must specify power range with -M & -m\n");
+		usage();
+		return EXIT_SUCCESS;
+	}
+
 	int i,n;
-  	unsigned char com_buf[4096]; /* COM port buffer */
+  	char com_buf[4096]; /* COM port buffer */
   	char mode[]={'8','N','1',0}; /* RS232 mode */
 	char stdin_buf[256]; /* stdin buffer for user input or pipe */
+	double setpoint;
 	
 	struct timespec tv_time;
 	char quit = 0;
@@ -174,7 +192,7 @@ int main(int argc, char *argv[])
 	char time_str[256];
 	static char last_str[6] = {0};
 
-	FILE *fp;
+	FILE *fp, *fdp;
 	if (filename!=NULL) {
 		fp = fopen(filename, "w");
 	}
@@ -191,7 +209,8 @@ int main(int argc, char *argv[])
    		printf("Can not open comport\n");
 		return(0);
 	}
-
+	fdp = RS232_OpenPortFILE(cport_nr);
+	
 	/* setup FMD */
 	for (i=0;i<(int)(sizeof(setup_buf)/sizeof(setup_buf[0]));i++) {
 		RS232_SendByte(cport_nr, setup_buf[i]);
@@ -202,11 +221,12 @@ int main(int argc, char *argv[])
     		usleep(1000000);  /* sleep for 100 milliSecond */
 #endif
 
-		n=RS232_GetComCommand(cport_nr, com_buf);
+		//n=RS232_GetComCommand(cport_nr, com_buf);
+		n = RS232_ReadComPortLine(cport_nr,com_buf,4095,fdp);		
 		if (n>0) {
 			if ((int)atof((char *)com_buf)!=setup_buf[i]) {
 				fprintf(stdout,"Failed to receive '%c' ACK from FMD\n"
-				"Received '%c' instead\n",setup_buf[i], (char)atof((char *)com_buf));
+				"Received '%s' instead\n",setup_buf[i], (char *)com_buf);
 				i--;
 			}
 		}
@@ -219,17 +239,28 @@ int main(int argc, char *argv[])
 	
 	while (quit!=1) {
 		/* get input from COM port, timestamp & print*/
-		n = RS232_GetComCommand(cport_nr, com_buf);
+		//n = RS232_GetComCommand(cport_nr, com_buf);
+		n = RS232_ReadComPortLine(cport_nr,com_buf,4095,fdp);
 		if (n == 6) {
 			clock_gettime(CLOCK_REALTIME, &tv_time);
 			convert_time_to_string(tv_time, time_str);
 			//time_sec = convert_time_to_sec(tv_time);
-			fprintf(stdout,"%s\n",(char *)com_buf);
+			if (!pwr_algorithm) 
+				fprintf(stdout,"%s\n",(char *)com_buf);
+			else {
+				setpoint = (double)(max_power+min_power)/2+((max_power-min_power)/(60.02-59.98))*(atof((char*)com_buf)-60000)/1000;
+				fprintf(stdout,"p%.1f,%s\n",setpoint,com_buf);
+			}
 			if (fp != NULL) {
 				/* only print data to file if it is different from last time */
 				if (strcmp(last_str,(char *)com_buf)!=0) {	
 					//fprintf(fp,"%f,%s,\n",time_sec,(char *)com_buf);
-					fprintf(fp,"%s,%s,\n",time_str,(char *)com_buf);
+					if (pwr_algorithm) {
+						fprintf(fp,"%s,%s,%.1f,\n",time_str,(char *)com_buf,setpoint);
+					}
+					else {
+						fprintf(fp,"%s,%s,\n",time_str,(char *)com_buf);
+					}
 				}		
 			}
 			strcpy(last_str,(char *)com_buf);			
@@ -238,20 +269,26 @@ int main(int argc, char *argv[])
 		n = get_usr_input(stdin_buf);
 		if (n==1) {
 			RS232_SendByte(cport_nr, (unsigned char)stdin_buf[0]);
-			printf("sent: '%c'\n", stdin_buf[0]);
+			if (stdin_buf[0]!='q') {
+				printf("sent: '%c'\n", stdin_buf[0]);
+			}
 		}
 		if (stdin_buf[0]=='q') {			
 			RS232_SendByte(cport_nr, 'S'); /* send 's' for stop FMD*/
-			printf("sent: 'S' to stop FMD\nExiting\n");
+			//printf("sent: 'S' to stop FMD\nExiting\n");
 #ifdef _WIN32
 			Sleep(rate_ms);
 #else
-    		usleep(rate_ms*1000);  /* sleep for 10 milliSecond */
+   			usleep(rate_ms*1000);  /* sleep for 10 milliSecond */
 #endif
-			n = RS232_GetComCommand(cport_nr, com_buf);
+			//n = RS232_GetComCommand(cport_nr, com_buf);
+			n = RS232_ReadComPortLine(cport_nr,com_buf,4095,fdp);
+
 			RS232_CloseComport(cport_nr);
 			if (fp!=NULL)
 				fclose(fp);
+			if (fdp!=NULL)
+				RS232_ClosePortFILE(fdp);
 			quit = 1;
 		}
 
