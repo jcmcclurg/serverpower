@@ -3,8 +3,10 @@
 
 trie_root trie_new(void){
 	trie_root r;
-	r.next_one = NULL;
-	r.next_zero = NULL;
+	r.num_nodes	= 0;
+	r.next_one	= NULL;
+	r.next_zero	= NULL;
+	r.data		= NULL;
 	return r;
 }
 
@@ -16,7 +18,7 @@ trie_node_t* trie_node(void){
 	return n;
 }
 
-trie_node_t* trie_insert(int key, void* value, trie_root* root){
+void* trie_insert(int key, void* value, trie_root* root){
 	if(value == NULL){
 		return NULL;
 	}
@@ -67,11 +69,9 @@ trie_node_t* trie_insert(int key, void* value, trie_root* root){
 	
 	if(currentNode->value == NULL){
 		currentNode->value = value;
-		return currentNode;
+		(root->num_nodes)++;
 	}
-	else{
-		return NULL;
-	}
+	return currentNode->value;
 }
 
 // Returns 1 if the node was actually deleted from the tree.
@@ -132,6 +132,9 @@ void* trie_remove(int key, trie_root* root){
 
 	void* v = NULL;
 	trie_remove_recursive(k, currentNode, &v);
+	if(v != NULL)
+		(root->num_nodes)--;
+
 	return v;
 }
 
@@ -154,7 +157,6 @@ void* trie_value(int key, trie_root* root){
 			return NULL;
 		}
 	}
-
 	k = (k >> 1) & TRIE_BIT_MASK;
 	while(k){
 		if(k & 0x1){
@@ -177,4 +179,39 @@ void* trie_value(int key, trie_root* root){
 	}
 	
 	return currentNode->value;
+}
+
+int trie_iterate_recursive(int (*operate)(int key, void* value), trie_node_t* currentNode, int k){
+	int r = 0;
+	if(currentNode != NULL){
+		if(currentNode->value != NULL){
+			r += operate(k, currentNode->value);
+		}
+		r += trie_iterate_recursive(operate, currentNode->next_zero, (k<<1));
+		r += trie_iterate_recursive(operate, currentNode->next_one, (k<<1)+1);
+	}
+	return r;
+}
+
+int trie_iterate(int (*operate)(int key, void* value), trie_root* root){
+	int r = 0;
+	r += trie_iterate_recursive(operate, root->next_zero, 0);
+	r += trie_iterate_recursive(operate, root->next_one, 1);
+	return r;
+}
+
+int trie_node_free(int key, void* value, trie_root* root){
+	void* v = trie_remove(key, root);
+
+	if(v != NULL){
+		free(v);
+		return 1;
+	}
+	else{
+		return 0;
+	}
+}
+
+int trie_deallocate(trie_root* root){
+	return trie_iterate(&trie_node_free, root);
 }
