@@ -28,6 +28,12 @@
 #include <string.h>
 #include "get_children.h"
 
+char proc_tree_verbose = 0;
+
+void proc_tree_set_verbose(char v){
+	proc_tree_verbose = v;
+}
+
 //
 // Returns the number of processes in the tree, and populates the process tree, or returns -1 on failure.
 
@@ -64,7 +70,7 @@ char* get_name_of(pid_t pid, char* nameof_buff, int size) {
 	if (fd==NULL) return NULL;
 	if (fgets(nameof_buff, size, fd)==NULL) {
 		fclose(fd);
-		return -1;
+		return NULL;
 	}
 	fclose(fd);
 
@@ -92,8 +98,8 @@ char get_status_of(pid_t pid){
 
 proc_info* proc_info_new(pid_t ppid, char flags){
 	proc_info* proc = (proc_info*) malloc(sizeof(proc_info));
-	proc->flags = ppid;
-	proc->ppid = flags;
+	proc->flags = flags;
+	proc->ppid = ppid;
 	return proc;
 }
 
@@ -107,7 +113,7 @@ proc_tree_info* proc_tree_info_new(char explicitParentList, char explicitExclusi
 }
 
 void deallocate_proc_tree(trie_root* ptree){
-	proc_tree_info* ptree_info = (proc_tree_info*) ptree->value;
+	proc_tree_info* ptree_info = (proc_tree_info*) ptree->data;
 	free(ptree_info->stoppableList);
 	free(ptree_info);
 	trie_deallocate(ptree);
@@ -119,55 +125,81 @@ trie_root* create_proc_tree(int* parentList, char explicitParentList, int* exclu
 	if(ptree == NULL){
 		return NULL;
 	}
-	ptree->value = (void*) proc_tree_info_new(explicitParentList, explicitExclusionList);
+	ptree->data = (void*) proc_tree_info_new(explicitParentList, explicitExclusionList);
 
 	if(parentList != NULL){
-		while(parentList[i] != NULL){
+		if(proc_tree_verbose)
+			fprintf(stderr,"Creating proc tree...\n   Inserting parents ");
+		while(parentList[i] > 0){
+			if(proc_tree_verbose)
+				fprintf(stderr,"%d ",parentList[i]);
 			void* proc = (void*) proc_info_new(0, FLAG_PARENT);
-			void* v = trie_insert(ptree, parentList[i], &proc);
+			void* v = trie_insert(parentList[i], proc, ptree);
 
 			// Success at inserting
 			if(v == proc){
+				if(proc_tree_verbose)
+					fprintf(stderr,"(yes) ");
 				r++;
 			}
 			else{
+				if(proc_tree_verbose)
+					fprintf(stderr,"(no) ");
 				free(proc);
 			}
 			i++;
 		}
+		if(proc_tree_verbose)
+			fprintf(stderr,"\n");
 	}
 
 	if(exclusionList != NULL){
 		i = 0;
-		while(exclusionList[i] != NULL){
-			void* proc = (void*) proc_info_new(0, FLAG_EXCLUDE);
-			void* v = trie_insert(ptree,parentList[i], &proc);
+		if(proc_tree_verbose)
+			fprintf(stderr,"   Inserting exclusions ");
+		while(exclusionList[i] > 0){
+			if(proc_tree_verbose)
+				fprintf(stderr,"%d ",exclusionList[i]);
+			proc_info* proc = proc_info_new(0, FLAG_EXCLUDE);
+			void* v = trie_insert(exclusionList[i], proc, ptree);
 
 			// Failure at inserting
 			if(v != proc){
+				if(proc_tree_verbose)
+					fprintf(stderr,"(no) ");
 				free(proc);
-				v->flags = FLAG_EXCLUDE;
+				proc = (proc_info*) v;
+				proc->flags = FLAG_EXCLUDE;
 			}
 			else{
+				if(proc_tree_verbose)
+					fprintf(stderr,"(yes) ");
 				r++;
 			}
 			i++;
 		}
+		if(proc_tree_verbose)
+			fprintf(stderr,"\n");
 	}
 	return ptree;
 }
 
 int update_proc_tree_item(int pid, void* value, trie_root* ptree){
 	proc_info* pinfo = (proc_info*) value;
-	proc_tree_info* ptree_info = (proc_tree_info*) ptree->value;
+	proc_tree_info* ptree_info = (proc_tree_info*) ptree->data;
 
 	char explicitParentList = ptree_info->explicitParentList;
 	char explicitExclusionList = ptree_info->explicitExclusionList;
 
+	if(proc_tree_verbose)
+		fprintf(stderr,"Updating PID %d: ",pid);
+
 	if(pinfo->flags & FLAG_MARK_OK){
 		pinfo->flags &= ~(FLAG_MARK_OK);
+		if(proc_tree_verbose)
+			fprintf(stderr,"cleared_ok ");
 		if(pinfo->flags & FLAG_MARK_NEW){
-			if(!explicitExcludeList){
+			if(!explicitExclusionList){
 				// Navigate up until reaching a parent with FLAG_EXCLUDE
 				proc_info* currentNode = pinfo;
 				while(currentNode->ppid > 1 ){
@@ -175,22 +207,28 @@ int update_proc_tree_item(int pid, void* value, trie_root* ptree){
 					if(currentNode->flags & FLAG_EXCLUDE){
 						// If you found a parent node with FLAG_EXCLUDE, also exclude this node.
 						pinfo->flags |= FLAG_EXCLUDE;
+						if(proc_tree_verbose)
+							fprintf(stderr,"marked_exclude ");
 						break;
 					}
 				}
 			}
 			
 			// If you didn't find a parent with FLAG_EXCLUDE, navigate up until reaching a parent or a child node.
-			if(!explicitParentList && pinfo->flags & FLAG_EXCLUDE){
+			if(!explicitParentList && !(pinfo->flags & FLAG_EXCLUDE)){
 				proc_info* currentNode = pinfo;
 				while(currentNode->ppid > 1 ){
 					currentNode = (proc_info*) trie_value(currentNode->ppid, ptree);
 					if(currentNode->flags & (FLAG_PARENT | FLAG_CHILD)){
 						// If you found a parent or a child node, mark this as a child
 						pinfo->flags |= FLAG_CHILD;
+						if(proc_tree_verbose)
+							fprintf(stderr,"marked_child_status ");
 
 						// Check whether the child is stoppable.
 						if(get_stoppable_status(pid) == STOPPABLE){
+							if(proc_tree_verbose)
+								fprintf(stderr,"got_stoppable_status ");
 							pinfo->flags |= FLAG_STOPPABLE;
 						}
 						break;
@@ -199,23 +237,42 @@ int update_proc_tree_item(int pid, void* value, trie_root* ptree){
 			}
 
 			if(pinfo->flags & FLAG_STOPPABLE){
+				if(proc_tree_verbose)
+					fprintf(stderr,"add_too_stoppable_list ");
 				ptree_info->stoppableList[ptree_info->stoppableListIndex] = pid;
 				ptree_info->stoppableListIndex++;
 			}
 		}
 	}
 	else{
+		if(proc_tree_verbose)
+			fprintf(stderr,"removed ");
 		trie_remove(pid,ptree);
 	}
+	if(proc_tree_verbose)
+		fprintf(stderr,"\n");
+	return 1;
 }
 
 int update_proc_tree(trie_root* ptree){
-	if(ptree == NULL || ptree->num_nodes == 0 || ptree->next_one == NULL || ptree->next_zero == NULL || ptree->data == NULL){
-		perror("Tree is empty or invalid. You gotta create it first!");
+	if(ptree == NULL){
+		perror("Null ptree!");
+		return -1;
+	}
+	else if(ptree->num_nodes == 0){
+		perror("Number of nodes is zero!");
+		return -1;
+	}
+	else if(ptree->data == NULL){
+		perror("Null ptree data!");
+		return -1;
+	}
+	else if(ptree->next_one == NULL && ptree->next_zero == NULL){
+		perror("Empty ptree!");
 		return -1;
 	}
 	proc_tree_info* ptree_info = (proc_tree_info*) ptree->data;
-	char explicitExcludeList = ptree_info->explicitExcludeList;
+	char explicitExclusionList = ptree_info->explicitExclusionList;
 	char explicitParentList = ptree_info->explicitParentList;
 	ptree_info->stoppableListIndex = 0;
 
@@ -240,19 +297,29 @@ int update_proc_tree(trie_root* ptree){
 	// Get number of processes
 	while( (ep = readdir(procDir)) ){
 		if(sscanf(ep->d_name,"%d",&pid) == 1 && pid > 0){
+			if(proc_tree_verbose)
+				fprintf(stderr,"Inserting process %d",pid);
 
-			void* proc = (void*) proc_info_new(0, FLAG_MARK_OK | FLAG_MARK_NEW);
-			void* v = trie_insert(parentList[i], &proc);
+			proc_info* proc = (void*) proc_info_new(0, FLAG_MARK_OK | FLAG_MARK_NEW);
+			void* v = trie_insert(pid, proc, ptree);
 
 			// Failure at inserting
 			if(v != proc){
+				if(proc_tree_verbose)
+					fprintf(stderr,"   Already inserted.\n");
 				free(proc);
-				v->flags |= FLAG_MARK_OK;
+				proc = (proc_info*) v;
+				proc->flags |= FLAG_MARK_OK;
 			}
 			// Success at inserting
-			else if(!explicitExcludeList || !explicitParentList){
+			else if(!explicitExclusionList || !explicitParentList){
+				if(proc_tree_verbose)
+					fprintf(stderr,"   New! Getting ppid.\n");
 				ppid = get_ppid_of(pid);
 				proc->ppid = ppid;
+			}
+			else if(proc_tree_verbose){
+				fprintf(stderr,"   New!\n");
 			}
 			num_pids++;
 		}
@@ -261,65 +328,74 @@ int update_proc_tree(trie_root* ptree){
 
 	// Reallocate the stoppable list if necessary.
 	if(num_pids > ptree_info->stoppableListSize){
+		if(proc_tree_verbose)
+			fprintf(stderr,"Reallocating stoppable list buffer to size %d.\n",num_pids);
 		free(ptree_info->stoppableList);
+		ptree_info->stoppableListSize = num_pids;
 		ptree_info->stoppableList = (int*) malloc(sizeof(int)*num_pids);
 	}
 
 	// Iterate through the PIDs
 	trie_iterate(update_proc_tree_item, ptree);
-	ptree_info->stoppableList[ptree_info->stoppableListIndex] = NULL;
+	ptree_info->stoppableList[ptree_info->stoppableListIndex] = 0;
 	
 	return 0;
 }
 
+
+char proc_tree_name_buff[128];
+int print_proc_tree_node(int pid, void* value, trie_root* ptree){
+	proc_info* pinfo = (proc_info*) value;
+	fprintf(stderr,"PID: %d (%s), PPID: %d, Flags: ", pid, get_name_of(pid, proc_tree_name_buff, 128), pinfo->ppid);
+	if(pinfo->flags & FLAG_PARENT)
+		fprintf(stderr,"PARENT ");
+	if(pinfo->flags & FLAG_CHILD)
+		fprintf(stderr,"CHILD ");
+	if(pinfo->flags & FLAG_EXCLUDE)
+		fprintf(stderr,"EXCLUDE ");
+	if(pinfo->flags & FLAG_STOPPABLE)
+		fprintf(stderr,"STOPPABLE ");
+	if(pinfo->flags & FLAG_MARK_OK)
+		fprintf(stderr,"OK ");
+	if(pinfo->flags & FLAG_MARK_NEW)
+		fprintf(stderr,"NEW ");
+	fprintf(stderr,"\n");
+	return 1;
+}
+
+void print_proc_tree(trie_root* ptree){
+	trie_iterate(print_proc_tree_node,ptree);
+}
+
 int get_stoppable_status(pid_t pid){
-	if(pid == my_pid){
-		#ifdef DEBUG
-		fprintf(stderr,"%d is self.\n",pid);
-		#endif
-		return IS_SELF;
-	}
-	else if(pid == my_ppid){
-		#ifdef DEBUG
-		fprintf(stderr,"%d is parent.\n",pid);
-		#endif
-		return IS_PARENT;
+	if(kill(pid, SIGSTOP)){
+		if(proc_tree_verbose)
+			fprintf(stderr,"%d has insufficient permissions to stop.\n",pid);
+		return INSUFFICIENT_PERMISSIONS_STOP;
 	}
 	else{
-		if(kill(pid, SIGSTOP)){
-			#ifdef DEBUG
-			fprintf(stderr,"%d has insufficient permissions to stop.\n",pid);
-			#endif
-			return INSUFFICIENT_PERMISSIONS_STOP;
+		usleep(CHECK_EXTERNAL_RESTART_WAITLEN_US);
+		if( get_status_of(pid) != 'T'){
+			if(proc_tree_verbose)
+				fprintf(stderr,"%d is externally restarted.\n",pid);
+			return EXTERNALLY_RESTARTED;
+		}
+		else if(kill(pid, SIGCONT)){
+			if(proc_tree_verbose)
+				fprintf(stderr,"%d has insufficient permissions to continue.\n",pid);
+			return INSUFFICIENT_PERMISSIONS_CONT;
+		}
+
+		usleep(CHECK_CONT_WAITLEN_US);
+		if(get_status_of(pid) == 'T'){
+			if(proc_tree_verbose)
+				fprintf(stderr,"%d does not continue.\n",pid);
+			return DOES_NOT_CONTINUE;
 		}
 		else{
-			usleep(CHECK_EXTERNAL_RESTART_WAITLEN_US);
-			if( get_status_of(pid) != 'T'){
-				#ifdef DEBUG
-				fprintf(stderr,"%d is externally restarted.\n",pid);
-				#endif
-				return EXTERNALLY_RESTARTED;
-			}
-			else if(kill(pid, SIGCONT)){
-				#ifdef DEBUG
-				fprintf(stderr,"%d has insufficient permissions to continue.\n",pid);
-				#endif
-				return INSUFFICIENT_PERMISSIONS_CONT;
-			}
-
-			usleep(CHECK_CONT_WAITLEN_US);
-			if(get_status_of(pid) == 'T'){
-				#ifdef DEBUG
-				fprintf(stderr,"%d does not continue.\n",pid);
-				#endif
-				return DOES_NOT_CONTINUE;
-			}
-			else{
-				#ifdef DEBUG
+			if(proc_tree_verbose)
 				fprintf(stderr,"%d is stoppable.\n",pid);
-				#endif
-				return STOPPABLE;
-			}
+			return STOPPABLE;
 		}
 	}
 }

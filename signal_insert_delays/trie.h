@@ -16,6 +16,8 @@ typedef struct trie_struct {
 	struct trie_struct* next_zero;
 } trie_node_t;
 
+void trie_set_verbose(char v);
+
 // Tries to insert the value at key.
 // Returns the value inserted, or the current value if the key already exists.
 // You can't insert a null key.
@@ -32,12 +34,12 @@ void* trie_remove(int key, trie_root* root);
 void* trie_value(int key, trie_root* root);
 
 // Returns the sum of return values from the operate.
-int trie_iterate(int (*operate)(int key, void* value), trie_root* root);
+int trie_iterate(int (*operate)(int key, void* value, trie_root* trie), trie_root* root);
 
 // Deallocates the trie structure.
 int trie_deallocate(trie_root* root);
 
 // Allocates a new trie.
-trie_root trie_new(void);
+trie_root* trie_new(void);
 
 #endif

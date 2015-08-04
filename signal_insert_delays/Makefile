@@ -1,7 +1,7 @@
 CC?=gcc
 CFLAGS?=-Wall -g -D_GNU_SOURCE
 TARGETS=insertDelays
-LIBS=commonFunctions.o get_children.o
+LIBS=get_children.o trie.o
 
 UNAME := $(shell uname)
 
