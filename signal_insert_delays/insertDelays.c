@@ -4,7 +4,8 @@
 #include <stdlib.h>
 #include <sys/time.h>
 #include <time.h>
-#include "commonFunctions.h"
+
+#include "trie.h"
 #include "get_children.h"
 
 // Used for exiting
@@ -21,19 +22,14 @@ double update_interval;
 double work_interval;
 double duty;
 char verbose;
-int* parentList;
 char explicitParentList;
+int* parentList;
 int* exclusionList;
 char explicitExclusionList;
 
 pid_t my_pid;
-pid_t my_ppid;
 
-// Contains the list of processes specified by parentList and exclusionList
-process_tree* ptree;
-int ptree_len;
-int ptree_buffer_len;
-
+trie_root* proc_tree;
 char* progname;
 
 void close_insertDelays(void){
@@ -54,10 +50,8 @@ void close_insertDelays(void){
 	if(f > 0)
 		errExit("Couldn't send SIGCONT");
 
-	free(parentList);
-	free(exclusionList);
+	trie_deallocate(proc_tree);
 	free(currentPIDList);
-	close_pstree();
 }
 
 void sig_handler(int signo){
@@ -84,6 +78,16 @@ void usage(){
 	fprintf(stdout, "\n");
 }
 
+// Turn stoppable children of init (pid = 1) into parents.
+// Clear all the child flags, since this only gets called with explicitParentList set.
+int update_snapshot_pid(int pid, void* value){
+	proc_info* pinfo = (proc_info*) value;
+	if(pinfo->flags & FLAG_STOPPABLE){
+		pinfo->flags |= FLAG_PARENT;
+	}
+	pinfo->flags &= ~(FLAG_CHILD);
+}
+
 int cmdline(int argc, char **argv){
 	progname = argv[0];
 
@@ -102,8 +106,7 @@ int cmdline(int argc, char **argv){
 	parentList = NULL;
 	exclusionList = NULL;
 	my_pid = getpid();
-	my_ppid = getppid();
-	
+
 	char opt = 0;
 	j = 0;
 	for(i = 1; i < argc; i++){
@@ -150,6 +153,7 @@ int cmdline(int argc, char **argv){
 			return -1;
 		}
 	}
+
 	if(p_flags_pos > 0){
 		if(parentListLen < 0){
 			parentListLen = i - p_flags_pos - 1;
@@ -167,51 +171,84 @@ int cmdline(int argc, char **argv){
 		return -1;
 	}
 
-
 	if(e_flags_pos > 0){
-		exclusionList = (int*) malloc(sizeof(int)*exclusionListLen);
-		if(verbose)
-			fprintf(stderr,"Exclusion list (%d): ",exclusionListLen);
+		exclusionList = (int*) malloc(sizeof(int)*(exclusionListLen + 2));
 		for(i = 0; i < exclusionListLen; i++){
 			exclusionList[i] = atoi(argv[i + e_flag_pos + 1]);
-			if(verbose)
-				fprintf(stderr,"%d ",exclusionList[i]);
 		}
-		if(verbose)
-			fprintf(stderr,"\n");
+		exclusionList[i] = NULL;
+	}
+	else{
+		exclusionList = (int*) malloc(sizeof(int)*2);
+		exclusionList[0] = my_pid;
+		exclusionList[1] = NULL;
 	}
 
 	if(p_flags_pos > 0){
-		parentList = (int*) malloc(sizeof(int)*parentListLen);
-		if(verbose)
-			fprintf(stderr,"Parent list (%d): ",parentListLen);
+		parentList = (int*) malloc(sizeof(int)*(parentListLen + 1));
 		for(i = 0; i < parentListLen; i++){
 			parentList[i] = atoi(argv[i + p_flag_pos + 1]);
-			if(verbose)
-				fprintf(stderr,"%d ",parentList[i]);
 		}
-		if(verbose)
-			fprintf(stderr,"\n");
+		parentList[i] = NULL;
 	}
+
+	// Take a snapshot of the currently modifyable processes, and make that the parent list.
 	else if(explicitParentList){
-		int* plist;
-		int plistLen;
-		if(pstree_update(NULL, NULL) || pstree_mark_parents_all() || pstree_prune_unmodifyable() ){
-			perror("Problem with getting the modifyable processes.");
-			exit(EXIT_FAILURE);
+		parentList = (int*) malloc(sizeof(int)*2);
+		parentList[0] = 1;
+		// First, get a tree with all the children of init
+		proc_tree = create_proc_tree(parentList,0,exclusionList,explicitExclusionList);
+		update_proc_tree(proc_tree);
+		// Then, update all the stoppable nodes to be parent nodes
+		trie_iterate(update_snapshot_pid, proc_tree);
+
+		// Then, reset the info of the tree to be correct.
+		proc_tree_info* ptreeinf = (proc_tree_info*) proc_tree->data;
+		ptreeinf->explicitParentList = explicitParentList;
+		
+		
+		errExit("Not implemented yet.");
+	}
+
+	if(verbose){
+		fprintf(stderr,"Update interval: %g\n",update_interval);
+		fprintf(stderr,"Work interval: %g\n",work_interval);
+		fprintf(stderr,"Duty cycle: %g\n",duty);
+		fprintf(stderr,"Parent list (");
+		if(explicitParentList){
+			fprintf(stderr,"these and only these):\n");
 		}
-		if(get_modifyable_processes(&plist, &plistLen)){
+		else{
+			fprintf(stderr,"these and their children):\n");
+		}
+		i = 0;
+		while(parentList[i] != NULL){
+			fprintf(stderr,"   %d\n",parentList[i++]);
 		}
 
-		parentList = (int*) malloc(sizeof(int)*plistLen);
-		memcpy(parentList, plist, sizeof(int)*plistLen);
+		fprintf(stderr,"Exclusion list (");
+		if(explicitExclusionList){
+			fprintf(stderr,"these and only these):\n");
+		}
+		else{
+			fprintf(stderr,"these and their children):\n");
+		}
+		i = 0;
+		while(exclusionList[i] != NULL){
+			fprintf(stderr,"   %d\n",exclusionList[i++]);
+		}
 	}
+
+	if(proc_tree == NULL)
+		proc_tree = create_proc_tree(parentList, exclusionList);
+
+	update_proc_tree(proc_tree);
 
 	return 0;
 }
 
 // Returns the number of failures between telling the current PID list to start and to stop.
-int do_work(){
+int do_work(void){
 	// Allow the other processes to do work.
 	int f = 0;
 	if(currentPIDList != NULL){
@@ -258,20 +295,14 @@ int main(int argc, char *argv[]) {
 		errExit("Invalid command line arguments.");
 	}
 
-	if(init_pstree()){
-		errExit("Couldn't initialize pstree interface.");
-	}
-
-	if(verbose) fprintf(stderr,"Set duty to %lf\n",duty);
-	slen = 0;
-	sleeplen = 0;
 	if(clock_gettime(CLOCK_BOOTTIME, &currentTime)){
 		fprintf(stderr,"Problem with gettime\n");
 		exit(EXIT_FAILURE);
 	}
-	prevTime_sec = ((double)(currentTime.tv_sec)) + (((double)(currentTime.tv_nsec))/1.0e9);
+	slen = 0;
+	sleeplen = 0;
 
-	// LEFT OFF HERE
+	prevTime_sec = ((double)(currentTime.tv_sec)) + (((double)(currentTime.tv_nsec))/1.0e9);
 	time_last_updated = prevTime_sec;
 
 	while(1) {
@@ -289,6 +320,18 @@ int main(int argc, char *argv[]) {
 				errExit("Problem with gettime");
 			}
 			currentTime_sec = ((double)(currentTime.tv_sec)) + (((double)(currentTime.tv_nsec))/1.0e9);
+
+			// If the PID list hasn't been updated in a while, update it.
+			if(currentTime_sec - time_last_updated > update_interval){
+				// Update the PID list.
+				update_proc_tree(proc_tree);
+
+				if(clock_gettime(CLOCK_BOOTTIME, &currentTime)){
+					errExit("Problem with gettime");
+				}
+				currentTime_sec = ((double)(currentTime.tv_sec)) + (((double)(currentTime.tv_nsec))/1.0e9);
+				time_last_updated = currentTime_sec;
+			}
 			slen = (1.0-duty)*(currentTime_sec - prevTime_sec);
 			sleeplen = (useconds_t)(slen*1.0e6);
 			usleep(sleeplen);
