@@ -22,36 +22,34 @@ double update_interval;
 double work_interval;
 double duty;
 char verbose;
-char explicitParentList;
-int* parentList;
-int* exclusionList;
-char explicitExclusionList;
-
 pid_t my_pid;
 
+proc_tree_info* ptree_info;
 trie_root* proc_tree;
 char* progname;
 
 void close_insertDelays(void){
-	int f = 0;
-	if(verbose)
-		fprintf(stderr,"Closing PIDs: ")
-	if(currentPIDList != NULL){
-		int i;
-		while(currentPIDList[i] > 0){
-			if(verbose)
-				fprintf(stderr,"%d ",currentPIDList[i])
-			f -= kill(currentPIDList[i++],SIGCONT);
+	if(proc_tree != NULL){
+		int f = 0;
+		if(verbose)
+			fprintf(stderr,"Restarting PIDs: ");
+
+		if(ptree_info->stoppableList != NULL){
+			int i = 0;
+			while(ptree_info->stoppableList[i] > 0){
+				if(verbose)
+					fprintf(stderr,"%d ",ptree_info->stoppableList[i]);
+				f -= kill(ptree_info->stoppableList[i++],SIGCONT);
+			}
 		}
 		if(verbose)
-			fprintf(stderr,"\n")
+			fprintf(stderr,"\n");
+
+		if(f > 0)
+			errExit("Couldn't send SIGCONT");
+
+		trie_deallocate(proc_tree);
 	}
-
-	if(f > 0)
-		errExit("Couldn't send SIGCONT");
-
-	trie_deallocate(proc_tree);
-	free(currentPIDList);
 }
 
 void sig_handler(int signo){
@@ -67,7 +65,8 @@ void sig_handler(int signo){
 void usage(){
 	fprintf(stdout, "\nInsert Delays\n");
 	fprintf(stdout, "\nUsage: \n");
-	fprintf(stdout, "%s   -p   [list of PIDs to control (default: all that this user has permissions to)]\n", progname);
+	fprintf(stdout, "%s\n", progname);
+	fprintf(stdout, "     -p   [list of PIDs to control (default: all that this user has permissions to)]\n");
 	fprintf(stdout, "     -o   Only control PIDs specified at the beginning. Leave their children alone. Does not require -p.\n");
 	fprintf(stdout, "     -e   [list of PIDs to exclude (default: none)]\n");
 	fprintf(stdout, "     -x   Only exclude specified PIDs. Allow their children to potentially be controlled. Requires -e.\n");
@@ -80,16 +79,22 @@ void usage(){
 
 // Turn stoppable children of init (pid = 1) into parents.
 // Clear all the child flags, since this only gets called with explicitParentList set.
-int update_snapshot_pid(int pid, void* value){
+int update_snapshot_pid(int pid, void* value, trie_root* root){
 	proc_info* pinfo = (proc_info*) value;
 	if(pinfo->flags & FLAG_STOPPABLE){
 		pinfo->flags |= FLAG_PARENT;
 	}
 	pinfo->flags &= ~(FLAG_CHILD);
+	return 1;
 }
 
 int cmdline(int argc, char **argv){
 	progname = argv[0];
+
+	int* parentList;
+	char explicitParentList;
+	int* exclusionList;
+	char explicitExclusionList;
 
 	int i,j;
 	char p_flag_pos = -1;
@@ -105,6 +110,7 @@ int cmdline(int argc, char **argv){
 	explicitExclusionList = 0;
 	parentList = NULL;
 	exclusionList = NULL;
+	proc_tree = NULL;
 	my_pid = getpid();
 
 	char opt = 0;
@@ -129,11 +135,15 @@ int cmdline(int argc, char **argv){
 			else if(opt == 'e'){
 				e_flag_pos = i;
 			}
-			else if(opt = 'x'){
+			else if(opt == 'x'){
 				explicitExclusionList = 1;
 			}
 			else if(opt == 'v'){
 				verbose = 1;
+			}
+			else if(opt == 'h'){
+				usage();
+				normExit();
 			}
 			else{
 				usage();
@@ -142,10 +152,12 @@ int cmdline(int argc, char **argv){
 			j++;
 		}
 	}
+	//trie_set_verbose(verbose);
+	proc_tree_set_verbose(verbose);
 
-	if(e_flags_pos > 0){
+	if(e_flag_pos > 0){
 		if(exclusionListLen < 0){
-			exclusionListLen = i - e_flags_pos - 1;
+			exclusionListLen = i - e_flag_pos - 1;
 		}
 
 		if(exclusionListLen == 0){
@@ -154,9 +166,9 @@ int cmdline(int argc, char **argv){
 		}
 	}
 
-	if(p_flags_pos > 0){
+	if(p_flag_pos > 0){
 		if(parentListLen < 0){
-			parentListLen = i - p_flags_pos - 1;
+			parentListLen = i - p_flag_pos - 1;
 		}
 
 		if(parentListLen == 0){
@@ -165,49 +177,58 @@ int cmdline(int argc, char **argv){
 		}
 	}
 
-	if(e_flags_pos < 0 && explicitExclusionList){
+	if(e_flag_pos < 0 && explicitExclusionList){
 		fprintf(stderr,"You have to specify an exclusion list to use the -x option.\n");
 		usage();
 		return -1;
 	}
 
-	if(e_flags_pos > 0){
+	if(e_flag_pos > 0){
 		exclusionList = (int*) malloc(sizeof(int)*(exclusionListLen + 2));
 		for(i = 0; i < exclusionListLen; i++){
 			exclusionList[i] = atoi(argv[i + e_flag_pos + 1]);
 		}
-		exclusionList[i] = NULL;
+		exclusionList[i] = 0;
 	}
 	else{
 		exclusionList = (int*) malloc(sizeof(int)*2);
 		exclusionList[0] = my_pid;
-		exclusionList[1] = NULL;
+		exclusionList[1] = 0;
 	}
 
-	if(p_flags_pos > 0){
+	if(p_flag_pos > 0){
 		parentList = (int*) malloc(sizeof(int)*(parentListLen + 1));
 		for(i = 0; i < parentListLen; i++){
 			parentList[i] = atoi(argv[i + p_flag_pos + 1]);
 		}
-		parentList[i] = NULL;
+		parentList[i] = 0;
 	}
 
-	// Take a snapshot of the currently modifyable processes, and make that the parent list.
-	else if(explicitParentList){
+	else{
 		parentList = (int*) malloc(sizeof(int)*2);
 		parentList[0] = 1;
+		parentList[1] = 0;
 		// First, get a tree with all the children of init
 		proc_tree = create_proc_tree(parentList,0,exclusionList,explicitExclusionList);
-		update_proc_tree(proc_tree);
-		// Then, update all the stoppable nodes to be parent nodes
-		trie_iterate(update_snapshot_pid, proc_tree);
+		ptree_info = (proc_tree_info*) proc_tree->data;
+		if(update_proc_tree(proc_tree)){
+			perror("Failed to update proc tree (1).");
+			free(parentList);
+			free(exclusionList);
+			return -1;
+		}
 
-		// Then, reset the info of the tree to be correct.
-		proc_tree_info* ptreeinf = (proc_tree_info*) proc_tree->data;
-		ptreeinf->explicitParentList = explicitParentList;
-		
-		
-		errExit("Not implemented yet.");
+		// Take a snapshot of the currently modifyable processes, and make that the parent list.
+		if(explicitParentList){
+			// Then, update all the stoppable nodes to be parent nodes
+			trie_iterate(update_snapshot_pid, proc_tree);
+
+			// Then, reset the info of the tree to be correct.
+			ptree_info->explicitParentList = explicitParentList;
+			free(parentList);
+			parentList = (int*) malloc(sizeof(int)*(ptree_info->stoppableListSize));
+			memcpy(parentList,ptree_info->stoppableList,sizeof(int)*(ptree_info->stoppableListSize));
+		}
 	}
 
 	if(verbose){
@@ -222,7 +243,7 @@ int cmdline(int argc, char **argv){
 			fprintf(stderr,"these and their children):\n");
 		}
 		i = 0;
-		while(parentList[i] != NULL){
+		while(parentList[i] > 0){
 			fprintf(stderr,"   %d\n",parentList[i++]);
 		}
 
@@ -234,15 +255,35 @@ int cmdline(int argc, char **argv){
 			fprintf(stderr,"these and their children):\n");
 		}
 		i = 0;
-		while(exclusionList[i] != NULL){
+		while(exclusionList[i] > 0){
 			fprintf(stderr,"   %d\n",exclusionList[i++]);
+		}
+
+		fprintf(stderr,"Stoppable list: ");
+		if(ptree_info->stoppableList != NULL){
+			i = 0;
+			while(ptree_info->stoppableList[i] > 0){
+				fprintf(stderr,"%d ",ptree_info->stoppableList[i++]);
+			}
+		}
+		fprintf(stderr,"\n");
+	}
+
+	if(proc_tree == NULL){
+		proc_tree = create_proc_tree(parentList, explicitParentList, exclusionList, explicitExclusionList);
+		ptree_info = (proc_tree_info*) proc_tree->data;
+		if(update_proc_tree(proc_tree)){
+			perror("Failed to update proc tree (2).");
+			free(parentList);
+			free(exclusionList);
+			return -1;
 		}
 	}
 
-	if(proc_tree == NULL)
-		proc_tree = create_proc_tree(parentList, exclusionList);
+	free(parentList);
+	free(exclusionList);
 
-	update_proc_tree(proc_tree);
+	print_proc_tree(proc_tree);
 
 	return 0;
 }
@@ -251,9 +292,10 @@ int cmdline(int argc, char **argv){
 int do_work(void){
 	// Allow the other processes to do work.
 	int f = 0;
-	if(currentPIDList != NULL){
-		while(currentPIDList[i] > 0){
-			f -= kill(currentPIDList[i++],SIGCONT);
+	int i = 0;
+	if(ptree_info->stoppableList != NULL){
+		while(ptree_info->stoppableList[i] > 0){
+			f -= kill(ptree_info->stoppableList[i++],SIGCONT);
 		}
 	}
 
@@ -261,9 +303,9 @@ int do_work(void){
 	usleep((useconds_t)(work_interval*1.0e6));
 
 	// Tell the other process to stop working.
-	if(currentPIDList != NULL){
-		while(currentPIDList[i] > 0){
-			f -= kill(currentPIDList[i++],SIGSTOP);
+	if(ptree_info->stoppableList != NULL){
+		while(ptree_info->stoppableList[i] > 0){
+			f -= kill(ptree_info->stoppableList[i++],SIGSTOP);
 		}
 	}
 	return f;
@@ -272,8 +314,6 @@ int do_work(void){
 int main(int argc, char *argv[]) {
 	useconds_t sleeplen;
 	int num_readable;
-	long i;
-	double s;
 	int fd_stdin = fileno(stdin);
 	struct timeval tv;
 	tv.tv_sec = 0;
@@ -294,6 +334,9 @@ int main(int argc, char *argv[]) {
 	if(cmdline(argc,argv)){
 		errExit("Invalid command line arguments.");
 	}
+	// Left off here.
+	normExit();
+
 
 	if(clock_gettime(CLOCK_BOOTTIME, &currentTime)){
 		fprintf(stderr,"Problem with gettime\n");
@@ -314,7 +357,7 @@ int main(int argc, char *argv[]) {
 		if (num_readable == 0) {
 			int errs = do_work();
 			if(errs && verbose)
-					fprintf(stderr,"There were %d errors\n",errs)
+					fprintf(stderr,"There were %d errors\n",errs);
 
 			if(clock_gettime(CLOCK_BOOTTIME, &currentTime)){
 				errExit("Problem with gettime");
@@ -341,11 +384,11 @@ int main(int argc, char *argv[]) {
 		// If the user has typed something, process what the user has typed.
 		else if (num_readable == 1) {
 			if(scanf("%lf",&duty) > 0){
-				if(duty > MAXDUTY){
-					duty = MAXDUTY;
+				if(duty > MAX_DUTY){
+					duty = MAX_DUTY;
 				}
-				else if(duty < MINDUTY){
-					duty = MINDUTY;
+				else if(duty < MIN_DUTY){
+					duty = MIN_DUTY;
 				}
 				if(verbose)
 					fprintf(stderr,"Set duty to %lg (previous sleeplen was %lg)\n",duty, slen);
