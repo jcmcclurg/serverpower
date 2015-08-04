@@ -1,12 +1,19 @@
 #include "trie.h"
+#include <stdio.h>
 #include <stdlib.h>
 
-trie_root trie_new(void){
-	trie_root r;
-	r.num_nodes	= 0;
-	r.next_one	= NULL;
-	r.next_zero	= NULL;
-	r.data		= NULL;
+char trie_verbose = 0;
+
+void trie_set_verbose(char v){
+	trie_verbose = v;
+}
+
+trie_root* trie_new(void){
+	trie_root* r = (trie_root*) malloc(sizeof(trie_root));
+	r->num_nodes	= 0;
+	r->next_one	= NULL;
+	r->next_zero	= NULL;
+	r->data		= NULL;
 	return r;
 }
 
@@ -20,17 +27,24 @@ trie_node_t* trie_node(void){
 
 void* trie_insert(int key, void* value, trie_root* root){
 	if(value == NULL){
+		if(trie_verbose)
+			fprintf(stderr,"Can't insert a null value\n");
+
 		return NULL;
 	}
 
 	int k = key & TRIE_BIT_MASK;
 	trie_node_t* currentNode;
+	if(trie_verbose)
+		fprintf(stderr,"Inserting %d: %d",key,k & 1);
+
 	if(k & 0x1){
 		if(root->next_one != NULL){
 			currentNode = root->next_one;
 		}
 		else{
 			currentNode = trie_node();
+			root->next_one = currentNode;
 		}
 	}
 	else{
@@ -39,11 +53,15 @@ void* trie_insert(int key, void* value, trie_root* root){
 		}
 		else{
 			currentNode = trie_node();
+			root->next_zero = currentNode;
 		}
 	}
 
 	k = (k >> 1) & TRIE_BIT_MASK;
 	while(k){
+		if(trie_verbose)
+			fprintf(stderr,"->%d", k & 1);
+
 		if(k & 0x1){
 			if(currentNode->next_one != NULL){
 				currentNode = currentNode->next_one;
@@ -68,9 +86,13 @@ void* trie_insert(int key, void* value, trie_root* root){
 	}
 	
 	if(currentNode->value == NULL){
+		if(trie_verbose)
+			fprintf(stderr," NEW\n");
 		currentNode->value = value;
 		(root->num_nodes)++;
 	}
+	else if(trie_verbose)
+			fprintf(stderr," OLD\n");
 	return currentNode->value;
 }
 
@@ -181,22 +203,22 @@ void* trie_value(int key, trie_root* root){
 	return currentNode->value;
 }
 
-int trie_iterate_recursive(int (*operate)(int key, void* value), trie_node_t* currentNode, int k){
+int trie_iterate_recursive(int (*operate)(int key, void* value, trie_root* trie), trie_node_t* currentNode, int k, trie_root* root){
 	int r = 0;
 	if(currentNode != NULL){
 		if(currentNode->value != NULL){
-			r += operate(k, currentNode->value);
+			r += operate(k, currentNode->value, root);
 		}
-		r += trie_iterate_recursive(operate, currentNode->next_zero, (k<<1));
-		r += trie_iterate_recursive(operate, currentNode->next_one, (k<<1)+1);
+		r += trie_iterate_recursive(operate, currentNode->next_zero, (k<<1), root);
+		r += trie_iterate_recursive(operate, currentNode->next_one, (k<<1)+1, root);
 	}
 	return r;
 }
 
-int trie_iterate(int (*operate)(int key, void* value), trie_root* root){
+int trie_iterate(int (*operate)(int key, void* value, trie_root* rt), trie_root* root){
 	int r = 0;
-	r += trie_iterate_recursive(operate, root->next_zero, 0);
-	r += trie_iterate_recursive(operate, root->next_one, 1);
+	r += trie_iterate_recursive(operate, root->next_zero, 0, root);
+	r += trie_iterate_recursive(operate, root->next_one, 1, root);
 	return r;
 }
 
@@ -213,5 +235,10 @@ int trie_node_free(int key, void* value, trie_root* root){
 }
 
 int trie_deallocate(trie_root* root){
-	return trie_iterate(&trie_node_free, root);
+	int r = 0;
+	if(root != NULL){
+		r = trie_iterate(&trie_node_free, root);
+		free(root);
+	}
+	return r;
 }

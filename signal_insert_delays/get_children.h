@@ -10,6 +10,7 @@
 #include <signal.h>
 #include <unistd.h>
 #include <time.h>
+#include "trie.h"
 
 #define FLAG_PARENT		1
 #define FLAG_CHILD		2
@@ -46,6 +47,8 @@ returns the process tree
 trie_root* create_proc_tree(int* parentList, char explicitParentList, int* exclusionList, char explicitExcludeList);
 void deallocate_proc_tree(trie_root* ptree);
 
+void proc_tree_set_verbose(char v);
+
 /*
 1. Iterate through /proc:
 	If a node was inserted, mark it with FLAG_MARK_OK | FLAG_MARK_NEW
@@ -60,6 +63,8 @@ void deallocate_proc_tree(trie_root* ptree);
 Return 0 on success, -1 on error.
 */
 int update_proc_tree(trie_root* ptree);
+
+void print_proc_tree(trie_root* ptree);
 
 // Gets the status of the pid
 char get_status_of(pid_t pid);
@@ -80,8 +85,8 @@ char* get_name_of(pid_t pid, char* buff, int size);
 #define INSUFFICIENT_PERMISSIONS_CONT 4
 #define DOES_NOT_CONTINUE 8
 #define STOPPABLE 0
-#define IS_PARENT 16
-#define IS_SELF 32
+//#define IS_PARENT 16
+//#define IS_SELF 32
 
 // Checks whether pid is stoppable and restartable. See #defines above for return values.
 int get_stoppable_status(pid_t pid);
