@@ -43,6 +43,7 @@ extern "C" {
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 
 
@@ -64,6 +65,10 @@ extern "C" {
 
 int RS232_OpenComport(int, int, const char *);
 int RS232_PollComport(int, unsigned char *, int);
+int RS232_ReadComPortLine(int comport_number, char *buf, int size, FILE *fdp);
+int checkCOMport(int comport_number);
+FILE *RS232_OpenPortFILE(int comport_number);
+void RS232_ClosePortFILE(FILE *fdp);
 int RS232_SendByte(int, unsigned char);
 int RS232_SendBuf(int, unsigned char *, int);
 void RS232_CloseComport(int);
