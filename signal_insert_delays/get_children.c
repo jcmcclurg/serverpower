@@ -118,6 +118,7 @@ void deallocate_proc_tree(trie_root* ptree){
 	free(ptree_info);
 	trie_deallocate(ptree);
 }
+
 trie_root* create_proc_tree(int* parentList, char explicitParentList, int* exclusionList, char explicitExclusionList){
 	int i = 0;
 	int r = 0;
@@ -198,11 +199,16 @@ int update_proc_tree_item(int pid, void* value, trie_root* ptree){
 		pinfo->flags &= ~(FLAG_MARK_OK);
 		if(proc_tree_verbose)
 			fprintf(stderr,"cleared_ok ");
+
 		if(pinfo->flags & FLAG_MARK_NEW){
+			pinfo->flags &= ~(FLAG_MARK_NEW);
+			if(proc_tree_verbose)
+				fprintf(stderr,"cleared_new ");
+
 			if(!explicitExclusionList){
 				// Navigate up until reaching a parent with FLAG_EXCLUDE
 				proc_info* currentNode = pinfo;
-				while(currentNode->ppid > 1 ){
+				while(currentNode->ppid > 0 ){
 					currentNode = (proc_info*) trie_value(currentNode->ppid, ptree);
 					if(currentNode->flags & FLAG_EXCLUDE){
 						// If you found a parent node with FLAG_EXCLUDE, also exclude this node.
@@ -217,31 +223,34 @@ int update_proc_tree_item(int pid, void* value, trie_root* ptree){
 			// If you didn't find a parent with FLAG_EXCLUDE, navigate up until reaching a parent or a child node.
 			if(!explicitParentList && !(pinfo->flags & FLAG_EXCLUDE)){
 				proc_info* currentNode = pinfo;
-				while(currentNode->ppid > 1 ){
+				while(currentNode->ppid > 0 ){
+					if(proc_tree_verbose)
+						fprintf(stderr,"->%d",currentNode->ppid);
+
 					currentNode = (proc_info*) trie_value(currentNode->ppid, ptree);
 					if(currentNode->flags & (FLAG_PARENT | FLAG_CHILD)){
 						// If you found a parent or a child node, mark this as a child
 						pinfo->flags |= FLAG_CHILD;
 						if(proc_tree_verbose)
-							fprintf(stderr,"marked_child_status ");
+							fprintf(stderr," marked_child_status ");
 
 						// Check whether the child is stoppable.
 						if(get_stoppable_status(pid) == STOPPABLE){
 							if(proc_tree_verbose)
-								fprintf(stderr,"got_stoppable_status ");
+								fprintf(stderr," got_stoppable_status ");
 							pinfo->flags |= FLAG_STOPPABLE;
 						}
 						break;
 					}
 				}
 			}
+		}
 
-			if(pinfo->flags & FLAG_STOPPABLE){
-				if(proc_tree_verbose)
-					fprintf(stderr,"add_too_stoppable_list ");
-				ptree_info->stoppableList[ptree_info->stoppableListIndex] = pid;
-				ptree_info->stoppableListIndex++;
-			}
+		if(pinfo->flags & FLAG_STOPPABLE){
+			if(proc_tree_verbose)
+				fprintf(stderr,"add_too_stoppable_list ");
+			ptree_info->stoppableList[ptree_info->stoppableListIndex] = pid;
+			ptree_info->stoppableListIndex++;
 		}
 	}
 	else{
@@ -346,7 +355,7 @@ int update_proc_tree(trie_root* ptree){
 char proc_tree_name_buff[128];
 int print_proc_tree_node(int pid, void* value, trie_root* ptree){
 	proc_info* pinfo = (proc_info*) value;
-	fprintf(stderr,"PID: %d (%s), PPID: %d, Flags: ", pid, get_name_of(pid, proc_tree_name_buff, 128), pinfo->ppid);
+	fprintf(stderr,"PID: %d %s, PPID: %d, Flags: ", pid, get_name_of(pid, proc_tree_name_buff, 128), pinfo->ppid);
 	if(pinfo->flags & FLAG_PARENT)
 		fprintf(stderr,"PARENT ");
 	if(pinfo->flags & FLAG_CHILD)
