@@ -14,7 +14,7 @@
 
 #define MAX_DUTY 0.999
 #define MIN_DUTY 0.001
-#define DEFAULT_UPDATE_INTERVAL 1.0
+#define DEFAULT_UPDATE_INTERVAL 10
 #define DEFAULT_WORK_INTERVAL 0.1
 #define DEFAULT_DUTY MAX_DUTY
 
@@ -22,6 +22,7 @@ double update_interval;
 double work_interval;
 double duty;
 char verbose;
+char update_on_error;
 pid_t my_pid;
 
 proc_tree_info* ptree_info;
@@ -74,6 +75,7 @@ void usage(){
 	fprintf(stdout, "     -u   [Process tree update interval in seconds (default: %lf)]\n", DEFAULT_UPDATE_INTERVAL);
 	fprintf(stdout, "     -w   [Work interval in seconds (default: %lf)]\n", DEFAULT_WORK_INTERVAL);
 	fprintf(stdout, "     -v   Verbose mode\n");
+	fprintf(stdout, "     -U   Update on error\n");
 	fprintf(stdout, "\n");
 }
 
@@ -106,6 +108,7 @@ int cmdline(int argc, char **argv){
 	work_interval = DEFAULT_WORK_INTERVAL;
 	duty = DEFAULT_DUTY;
 	verbose = 0;
+	update_on_error = 0;
 	explicitParentList = 0;
 	explicitExclusionList = 0;
 	parentList = NULL;
@@ -141,11 +144,36 @@ int cmdline(int argc, char **argv){
 			else if(opt == 'v'){
 				verbose = 1;
 			}
+			else if(opt == 'U'){
+				update_on_error = 1;
+			}
 			else if(opt == 'h'){
 				usage();
 				normExit();
 			}
+			else if(opt == 'u'){
+				if(i+1 >= argc || sscanf(argv[i+1],"%lf",&update_interval) != 1) {
+					fprintf(stderr,"update: %d, %lf\n",i+1,update_interval);
+					usage();
+					return -1;
+				}
+			}
+			else if(opt == 'w'){
+				if(i+1 >= argc || sscanf(argv[i+1],"%lf",&work_interval) != 1) {
+					fprintf(stderr,"work: %d, %lf\n",i+1,work_interval);
+					usage();
+					return -1;
+				}
+			}
+			else if(opt == 'd'){
+				if(i+1 >= argc || sscanf(argv[i+1],"%lf",&duty) != 1 ){
+					fprintf(stderr,"duty: %d, %lf\n",i+1,duty);
+					usage();
+					return -1;
+				}
+			}
 			else{
+				fprintf(stderr,"Invalid command line argument -%c\n",opt);
 				usage();
 				return -1;
 			}
@@ -153,7 +181,7 @@ int cmdline(int argc, char **argv){
 		}
 	}
 	//trie_set_verbose(verbose);
-	proc_tree_set_verbose(verbose);
+	//proc_tree_set_verbose(verbose);
 
 	if(e_flag_pos > 0){
 		if(exclusionListLen < 0){
@@ -161,6 +189,7 @@ int cmdline(int argc, char **argv){
 		}
 
 		if(exclusionListLen == 0){
+			fprintf(stderr,"You have to specify an exclusion list.\n");
 			usage();
 			return -1;
 		}
@@ -172,6 +201,7 @@ int cmdline(int argc, char **argv){
 		}
 
 		if(parentListLen == 0){
+			fprintf(stderr,"You have to specify a parent list.\n");
 			usage();
 			return -1;
 		}
@@ -303,6 +333,7 @@ int do_work(void){
 	usleep((useconds_t)(work_interval*1.0e6));
 
 	// Tell the other process to stop working.
+	i = 0;
 	if(ptree_info->stoppableList != NULL){
 		while(ptree_info->stoppableList[i] > 0){
 			f -= kill(ptree_info->stoppableList[i++],SIGSTOP);
@@ -334,13 +365,9 @@ int main(int argc, char *argv[]) {
 	if(cmdline(argc,argv)){
 		errExit("Invalid command line arguments.");
 	}
-	// Left off here.
-	normExit();
-
 
 	if(clock_gettime(CLOCK_BOOTTIME, &currentTime)){
-		fprintf(stderr,"Problem with gettime\n");
-		exit(EXIT_FAILURE);
+		errExit("Problem with gettime.");
 	}
 	slen = 0;
 	sleeplen = 0;
@@ -356,8 +383,9 @@ int main(int argc, char *argv[]) {
 		// If the user has not typed something, do some work.
 		if (num_readable == 0) {
 			int errs = do_work();
-			if(errs && verbose)
-					fprintf(stderr,"There were %d errors\n",errs);
+			if(errs){
+				fprintf(stderr,"There were %d errors\n",errs);
+			}
 
 			if(clock_gettime(CLOCK_BOOTTIME, &currentTime)){
 				errExit("Problem with gettime");
@@ -365,18 +393,33 @@ int main(int argc, char *argv[]) {
 			currentTime_sec = ((double)(currentTime.tv_sec)) + (((double)(currentTime.tv_nsec))/1.0e9);
 
 			// If the PID list hasn't been updated in a while, update it.
-			if(currentTime_sec - time_last_updated > update_interval){
+			if(currentTime_sec - time_last_updated > update_interval || (errs && update_on_error)){
 				// Update the PID list.
-				update_proc_tree(proc_tree);
+				if(update_proc_tree(proc_tree)){
+					errExit("Couldn't update process tree.");
+				}
+				else if(verbose){
+					fprintf(stderr,"Updated process tree. ");
+					fprintf(stderr,"Stoppable list: ");
+					if(ptree_info->stoppableList != NULL){
+						int i = 0;
+						while(ptree_info->stoppableList[i] > 0){
+							fprintf(stderr,"%d ",ptree_info->stoppableList[i++]);
+						}
+					}
+					fprintf(stderr,"\n");
+				}
 
 				if(clock_gettime(CLOCK_BOOTTIME, &currentTime)){
 					errExit("Problem with gettime");
 				}
-				currentTime_sec = ((double)(currentTime.tv_sec)) + (((double)(currentTime.tv_nsec))/1.0e9);
-				time_last_updated = currentTime_sec;
+				time_last_updated = ((double)(currentTime.tv_sec)) + (((double)(currentTime.tv_nsec))/1.0e9);
+				//time_last_updated = currentTime_sec;
 			}
 			slen = (1.0-duty)*(currentTime_sec - prevTime_sec);
 			sleeplen = (useconds_t)(slen*1.0e6);
+			//if(verbose)
+			//	fprintf(stderr,"Sleeping for %g seconds\n",slen);
 			usleep(sleeplen);
 			prevTime_sec = currentTime_sec;
 		}
