@@ -203,22 +203,27 @@ void* trie_value(int key, trie_root* root){
 	return currentNode->value;
 }
 
-int trie_iterate_recursive(int (*operate)(int key, void* value, trie_root* trie), trie_node_t* currentNode, int k, trie_root* root){
+int trie_iterate_recursive(int (*operate)(int key, void* value, trie_root* trie), trie_node_t* currentNode, int k, int shift, trie_root* root){
 	int r = 0;
 	if(currentNode != NULL){
+		if(trie_verbose)
+			fprintf(stderr,">%d",(k >> shift) & 1);
+
 		if(currentNode->value != NULL){
+			if(trie_verbose)
+				fprintf(stderr,"(operating on %d)\n",k);
 			r += operate(k, currentNode->value, root);
 		}
-		r += trie_iterate_recursive(operate, currentNode->next_zero, (k<<1), root);
-		r += trie_iterate_recursive(operate, currentNode->next_one, (k<<1)+1, root);
+		r += trie_iterate_recursive(operate, currentNode->next_zero, k & TRIE_BIT_MASK, shift+1, root);
+		r += trie_iterate_recursive(operate, currentNode->next_one, ((1<<(shift+1)) | k ) & TRIE_BIT_MASK, shift+1, root);
 	}
 	return r;
 }
 
 int trie_iterate(int (*operate)(int key, void* value, trie_root* rt), trie_root* root){
 	int r = 0;
-	r += trie_iterate_recursive(operate, root->next_zero, 0, root);
-	r += trie_iterate_recursive(operate, root->next_one, 1, root);
+	r += trie_iterate_recursive(operate, root->next_zero, 0, 0, root);
+	r += trie_iterate_recursive(operate, root->next_one,  1, 0, root);
 	return r;
 }
 
