@@ -504,7 +504,8 @@ do_print_energy_info()
 					fprintf(fp, "%.4lf,",power_watt[i][domain]); // print to file
                 }
             }
-			fprintf(stdout,"%.4lf\n",power_watt[node][RAPL_PKG]+power_watt[node][RAPL_DRAM]); // print out PKG power to pipe
+			//fprintf(stdout,"%.4lf\n",power_watt[node][RAPL_PKG]+power_watt[node][RAPL_DRAM]); // print out PKG power to pipe
+			fprintf(stdout,"%.4lf\n",power_watt[node][RAPL_PKG]); 
         }
         get_CPU_temperature(thz0);
         fprintf(fp, "%s,",thz0);
@@ -528,6 +529,7 @@ do_print_energy_info()
 						if (pp=='p') {
 							pkg_plc.power_limit_watts_2 = setpoint;
 							ret = set_pkg_rapl_power_limit_control(i,&pkg_plc);
+							printf("setpoint = %.1f\n",setpoint);
 						}
 						else if (pp=='c') {
 							pp0_plc.power_limit_watts = setpoint;
