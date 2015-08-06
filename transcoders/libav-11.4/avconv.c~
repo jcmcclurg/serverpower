@@ -886,7 +886,7 @@ static void print_powerControlParams(int64_t timer_start)
 		enc = ost->enc_ctx;
         if (!vid && enc->codec_type == AVMEDIA_TYPE_VIDEO) {
 			time=av_gettime();
-            t = ((time/1000000) % 86400)-(5*60*60)+(time%1000000)/1000000; // from usec since epoch UTC to CST
+            t = ((time/1000000) % 86400)-(5*60*60)+(double)(time%1000000)/1000000.0; // from usec since epoch UTC to CST
 			frame_number = ost->frame_number;
 			fprintf(stdout,"%d,%.3f,%.3f,%d\n",frame_number,
 				(double)ost->frame_rate.num/(double)ost->frame_rate.den,t+0.0005,
