@@ -1,2 +1,2 @@
 # serverpower
-Code for the server power project
+Code for the server power project.
