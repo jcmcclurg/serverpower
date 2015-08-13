@@ -75,8 +75,8 @@ void print_rapl_control_info(uint64_t node)  // added by Joe Hall 4/25/15
    err += get_pp0_balance_policy(node, &pp0_priority_level);
    //err += get_pp1_rapl_power_limit_control(node, &pp1_plc);  //pp1 only on client systems
    //err += get_pp1_balance_policy(node, &pp1_priority_level);
-   //err += get_dram_rapl_power_limit_control(node, &dram_plc);  // dram only on server systems
-   //err += get_dram_rapl_parameters(node, &dram_param);
+   err += get_dram_rapl_power_limit_control(node, &dram_plc);  // dram only on server systems
+   err += get_dram_rapl_parameters(node, &dram_param);
 
    if (err > 0){
    		printf("%d error(s) getting RAPL info.\n", err);
@@ -300,7 +300,7 @@ void do_set_power_limit(void)
 							ret = set_dram_rapl_power_limit_control(i, &dram_plc);
 						}
 						//fprintf(stdout, "Setpoint = %f & char = %c\n", setpoint,pp);
-//						print_rapl_control_info(i);
+						print_rapl_control_info(i);
 						if (ret != 0)
 	    					fprintf(fp, "Error setting RAPL power limit controls\n");
 					} // end for(numnode)
@@ -540,7 +540,7 @@ do_print_energy_info()
 							ret = set_dram_rapl_power_limit_control(i, &dram_plc);
 						}
 						//fprintf(stdout, "Setpoint = %f & char = %c\n", setpoint,pp);
-//						print_rapl_control_info(i);
+						print_rapl_control_info(i);
 						if (ret != 0)
 	    					fprintf(fp, "Error setting RAPL power limit controls\n");
 					} // end for(numnode)
@@ -718,21 +718,21 @@ main(int argc, char **argv)
     for (i=0;i<num_node;i++) { // added by Joe Hall 4/25/15
 		//print_rapl_control_info(i);
 		// reset rapl power_limits to factory settings
-        ret = set_pp0_rapl_power_limit_control(i,&pp0_plc_orig);
+        //ret = set_pp0_rapl_power_limit_control(i,&pp0_plc_orig);
         if (ret > 0)
 	    	fprintf(stdout, "Error setting PP0 power limit controls\n");
-		ret = set_pkg_rapl_power_limit_control(i,&pkg_plc_orig);
+		//ret = set_pkg_rapl_power_limit_control(i,&pkg_plc_orig);
         if (ret > 0)
 	    	fprintf(stdout, "Error setting PKG power limit controls\n");
 	//	ret = set_dram_rapl_power_limit_control(i,&dram_plc_orig);
 		if (ret > 0)
 	    	fprintf(stdout, "Error setting DRAM power limit controls\n");
-	//	print_rapl_control_info(i);
+		print_rapl_control_info(i);
     }
     
 	// prints energy info from msr registers and also polls stdin for power_limiting commands
 	if(quiet){
-    do_set_power_limit();
+    //do_set_power_limit();
 	}
 	 else{
     do_print_energy_info();
