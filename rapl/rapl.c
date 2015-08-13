@@ -319,7 +319,11 @@ init_rapl()
     }
 
     err = read_rapl_units();
+	if (err != 0)
+		printf("%d errors from read_rapl_units()\n",err);
     err += build_topology();
+	if (err != 0)
+		printf("%d errors from build_topology()\n",err);
 
     /* 32 is the width of these fields when they are stored */
     MAX_ENERGY_STATUS_JOULES = (double)(RAPL_ENERGY_UNIT * (pow(2, 32) - 1));
