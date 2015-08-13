@@ -11,7 +11,8 @@ Description:
 	transmits user entered (stdin) bytes
 	
 compile with the command: gcc fmd2server.c rs232.c -Wall -Wextra -o2 -o fmd2server
-example run: sudo ./fmd2server -r 500 -p 16 -b 115200 -o test.csv
+example run to only get freq: sudo ./fmd2server -r 500 -p 16 -b 115200 -o test.csv
+example run to get freq & setpoint: sudo ./fmd2server -r 500 -p 16 -b 115200 -M 35 -m 24 -a 1 -o test.csv
 
 **************************************************/
 #include <stdlib.h>
@@ -120,7 +121,8 @@ void usage(){
 		"4000000   n.a.\n");
 	fprintf(stdout, "\n-h [this help]\n");
 	fprintf(stdout, "Example usage:\n"
-		"    sudo ./fmd2server -r 500 -p 16 -b 115200 -o test.csv");
+		"    sudo ./fmd2server -r 500 -p 16 -b 115200 -o test.csv\n"
+		"	 sudo ./fmd2server -r 500 -p 16 -b 115200 -M 35 -m 24 -a 1 -o test.csv\n");
 	fprintf(stdout, "\n");
 }
 
@@ -184,7 +186,8 @@ int main(int argc, char *argv[])
   	char mode[]={'8','N','1',0}; /* RS232 mode */
 	char stdin_buf[256]; /* stdin buffer for user input or pipe */
 	double setpoint;
-	
+	double last_freq, freq, freq_change = 0;
+
 	struct timespec tv_time;
 	char quit = 0;
 	setbuf(stdin, NULL);
@@ -245,11 +248,20 @@ int main(int argc, char *argv[])
 			clock_gettime(CLOCK_REALTIME, &tv_time);
 			convert_time_to_string(tv_time, time_str);
 			//time_sec = convert_time_to_sec(tv_time);
+			
+			/* add hysteresis */		
 			if (!pwr_algorithm) 
-				fprintf(stdout,"%s\n",(char *)com_buf);
+				fprintf(stdout,"%s\n",(char *)com_buf);	
 			else {
-				setpoint = (double)(max_power+min_power)/2+((max_power-min_power)/(60.02-59.98))*(atof((char*)com_buf)-60000)/1000;
-				fprintf(stdout,"p%.1f,%s\n",setpoint,com_buf);
+				freq = atof(com_buf);
+				freq_change = freq-last_freq;
+				if ((freq_change > 1.0) || (freq_change < -1.0)) {
+					setpoint = (double)(max_power+min_power)/2+((max_power-min_power)/(60.02-59.98))*(atof((char*)com_buf)-60000)/1000;
+					//fprintf(stdout,"p%.1f\n%s\n",setpoint,com_buf);
+					fprintf(stdout,"p%.1f\n",setpoint);
+					last_freq = freq;
+				}
+				
 			}
 			if (fp != NULL) {
 				/* only print data to file if it is different from last time */
