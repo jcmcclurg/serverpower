@@ -191,7 +191,7 @@ build_topology() {
 
     num_pkg_cores = num_pkg_threads / num_core_threads;
     num_nodes = max_pkg + 1;
-    printf("num nodes = %d\n", num_nodes); 
+    //printf("num nodes = %d\n", num_nodes); 
     // Construct a pkg map: pkg_map[pkg id][APIC_ID ... APIC_ID]
     pkg_map = (APIC_ID_t **) malloc(num_nodes * sizeof(APIC_ID_t*));
     for(i = 0; i < num_nodes; i++)
