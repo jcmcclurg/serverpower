@@ -186,7 +186,8 @@ int main(int argc, char *argv[])
   	char mode[]={'8','N','1',0}; /* RS232 mode */
 	char stdin_buf[256]; /* stdin buffer for user input or pipe */
 	double setpoint;
-	
+	double last_freq, freq, freq_change = 0;
+
 	struct timespec tv_time;
 	char quit = 0;
 	setbuf(stdin, NULL);
@@ -247,12 +248,20 @@ int main(int argc, char *argv[])
 			clock_gettime(CLOCK_REALTIME, &tv_time);
 			convert_time_to_string(tv_time, time_str);
 			//time_sec = convert_time_to_sec(tv_time);
+			
+			/* add hysteresis */		
 			if (!pwr_algorithm) 
-				fprintf(stdout,"%s\n",(char *)com_buf);
+				fprintf(stdout,"%s\n",(char *)com_buf);	
 			else {
-				setpoint = (double)(max_power+min_power)/2+((max_power-min_power)/(60.02-59.98))*(atof((char*)com_buf)-60000)/1000;
-				//fprintf(stdout,"p%.1f\n%s\n",setpoint,com_buf);
-				fprintf(stdout,"p%.1f\n",setpoint);
+				freq = atof(com_buf);
+				freq_change = freq-last_freq;
+				if ((freq_change > 1.0) || (freq_change < -1.0)) {
+					setpoint = (double)(max_power+min_power)/2+((max_power-min_power)/(60.02-59.98))*(atof((char*)com_buf)-60000)/1000;
+					//fprintf(stdout,"p%.1f\n%s\n",setpoint,com_buf);
+					fprintf(stdout,"p%.1f\n",setpoint);
+					last_freq = freq;
+				}
+				
 			}
 			if (fp != NULL) {
 				/* only print data to file if it is different from last time */
