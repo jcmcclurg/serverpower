@@ -29,6 +29,7 @@
 #include "get_children.h"
 
 char proc_tree_verbose = 0;
+char proc_tree_name_buff[128];
 
 void proc_tree_set_verbose(char v){
 	proc_tree_verbose = v;
@@ -134,7 +135,7 @@ trie_root* create_proc_tree(int* parentList, char explicitParentList, int* exclu
 		while(parentList[i] > 0){
 			if(proc_tree_verbose)
 				fprintf(stderr,"%d ",parentList[i]);
-			void* proc = (void*) proc_info_new(0, FLAG_PARENT);
+			void* proc = (void*) proc_info_new(0, FLAG_PARENT | FLAG_MARK_NEW);
 			void* v = trie_insert(parentList[i], proc, ptree);
 
 			// Success at inserting
@@ -193,7 +194,7 @@ int update_proc_tree_item(int pid, void* value, trie_root* ptree){
 	char explicitExclusionList = ptree_info->explicitExclusionList;
 
 	if(proc_tree_verbose)
-		fprintf(stderr,"Updating PID %d: ",pid);
+		fprintf(stderr,"Updating PID %d %s: ",pid, get_name_of(pid, proc_tree_name_buff, 128));
 
 	if(pinfo->flags & FLAG_MARK_OK){
 		pinfo->flags &= ~(FLAG_MARK_OK);
@@ -223,24 +224,24 @@ int update_proc_tree_item(int pid, void* value, trie_root* ptree){
 			// If you didn't find a parent with FLAG_EXCLUDE, navigate up until reaching a parent or a child node.
 			if(!explicitParentList && !(pinfo->flags & FLAG_EXCLUDE)){
 				proc_info* currentNode = pinfo;
-				while(currentNode->ppid > 0 ){
+				while(currentNode->ppid > 0 && !(currentNode->flags & (FLAG_PARENT | FLAG_CHILD))){
+					currentNode = (proc_info*) trie_value(currentNode->ppid, ptree);
 					if(proc_tree_verbose)
 						fprintf(stderr,"->%d",currentNode->ppid);
-
-					currentNode = (proc_info*) trie_value(currentNode->ppid, ptree);
-					if(currentNode->flags & (FLAG_PARENT | FLAG_CHILD)){
-						// If you found a parent or a child node, mark this as a child
+				}
+				// If you found a parent or a child node, mark this as a child
+				if(currentNode->flags & (FLAG_PARENT | FLAG_CHILD)){
+					if(pinfo != currentNode){
 						pinfo->flags |= FLAG_CHILD;
 						if(proc_tree_verbose)
 							fprintf(stderr," marked_child_status ");
+					}
 
-						// Check whether the child is stoppable.
-						if(get_stoppable_status(pid) == STOPPABLE){
-							if(proc_tree_verbose)
-								fprintf(stderr," got_stoppable_status ");
-							pinfo->flags |= FLAG_STOPPABLE;
-						}
-						break;
+					// Check whether the child is stoppable.
+					if(get_stoppable_status(pid) == STOPPABLE){
+						if(proc_tree_verbose)
+							fprintf(stderr," got_stoppable_status ");
+						pinfo->flags |= FLAG_STOPPABLE;
 					}
 				}
 			}
@@ -248,7 +249,7 @@ int update_proc_tree_item(int pid, void* value, trie_root* ptree){
 
 		if(pinfo->flags & FLAG_STOPPABLE){
 			if(proc_tree_verbose)
-				fprintf(stderr,"add_too_stoppable_list ");
+				fprintf(stderr,"add_to_stoppable_list ");
 			ptree_info->stoppableList[ptree_info->stoppableListIndex] = pid;
 			ptree_info->stoppableListIndex++;
 		}
@@ -319,6 +320,12 @@ int update_proc_tree(trie_root* ptree){
 				free(proc);
 				proc = (proc_info*) v;
 				proc->flags |= FLAG_MARK_OK;
+				if((!explicitExclusionList || !explicitParentList) && proc->ppid == 0 && pid != 1){
+					if(proc_tree_verbose)
+						fprintf(stderr,"   Getting ppid.\n");
+					ppid = get_ppid_of(pid);
+					proc->ppid = ppid;
+				}
 			}
 			// Success at inserting
 			else if(!explicitExclusionList || !explicitParentList){
@@ -336,12 +343,12 @@ int update_proc_tree(trie_root* ptree){
 	closedir(procDir);
 
 	// Reallocate the stoppable list if necessary.
-	if(num_pids > ptree_info->stoppableListSize){
+	if(num_pids+1 > ptree_info->stoppableListSize){
 		if(proc_tree_verbose)
 			fprintf(stderr,"Reallocating stoppable list buffer to size %d.\n",num_pids);
 		free(ptree_info->stoppableList);
-		ptree_info->stoppableListSize = num_pids;
-		ptree_info->stoppableList = (int*) malloc(sizeof(int)*num_pids);
+		ptree_info->stoppableListSize = num_pids+1;
+		ptree_info->stoppableList = (int*) malloc(sizeof(int)*(num_pids + 1));
 	}
 
 	// Iterate through the PIDs
@@ -352,7 +359,6 @@ int update_proc_tree(trie_root* ptree){
 }
 
 
-char proc_tree_name_buff[128];
 int print_proc_tree_node(int pid, void* value, trie_root* ptree){
 	proc_info* pinfo = (proc_info*) value;
 	fprintf(stderr,"PID: %d %s, PPID: %d, Flags: ", pid, get_name_of(pid, proc_tree_name_buff, 128), pinfo->ppid);
