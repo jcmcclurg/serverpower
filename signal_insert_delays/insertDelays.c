@@ -181,7 +181,7 @@ int cmdline(int argc, char **argv){
 		}
 	}
 	//trie_set_verbose(verbose);
-	//proc_tree_set_verbose(verbose);
+	proc_tree_set_verbose(verbose);
 
 	if(e_flag_pos > 0){
 		if(exclusionListLen < 0){
@@ -288,15 +288,6 @@ int cmdline(int argc, char **argv){
 		while(exclusionList[i] > 0){
 			fprintf(stderr,"   %d\n",exclusionList[i++]);
 		}
-
-		fprintf(stderr,"Stoppable list: ");
-		if(ptree_info->stoppableList != NULL){
-			i = 0;
-			while(ptree_info->stoppableList[i] > 0){
-				fprintf(stderr,"%d ",ptree_info->stoppableList[i++]);
-			}
-		}
-		fprintf(stderr,"\n");
 	}
 
 	if(proc_tree == NULL){
@@ -310,10 +301,22 @@ int cmdline(int argc, char **argv){
 		}
 	}
 
+	if(verbose){
+		fprintf(stderr,"Stoppable list (buffer size: %d, index: %d): ", ptree_info->stoppableListSize, ptree_info->stoppableListIndex);
+		if(ptree_info->stoppableList != NULL){
+			i = 0;
+			while(ptree_info->stoppableList[i] > 0){
+				fprintf(stderr,"%d ",ptree_info->stoppableList[i++]);
+			}
+		}
+		fprintf(stderr,"\n");
+	}
+
 	free(parentList);
 	free(exclusionList);
 
-	print_proc_tree(proc_tree);
+	if(verbose)
+		print_proc_tree(proc_tree);
 
 	return 0;
 }
