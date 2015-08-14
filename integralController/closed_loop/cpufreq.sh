@@ -20,10 +20,10 @@ t=$[ ($rangeMax-$rangeMin)/10 ]
 echo "Range is $rangeMin to $rangeMax, with gain set to $t" | tee -a $me.$d.output >&2
 
 # With tee and stress
-(sudo $powerGadgetCmd -e 150 & pgid2=$!; stress -c 4 & playbackid=$!; tee; sudo kill -s SIGINT $pgid2; pkill -P $playbackid; echo "q") | ($dir/../integralController -s 34 -n $rangeMin -x $rangeMax -t $t -k 0 -d 0 -u 10; sleep 1; echo "q") | sudo $dir/../../cpufreq/cpufreq.sh >> $me.$d.output 2>> $me.$d.output
+#(sudo $powerGadgetCmd -e 150 & pgid2=$!; stress -c 4 & playbackid=$!; tee; sudo kill -s SIGINT $pgid2; pkill -P $playbackid; echo "q") | ($dir/../integralController -s 34 -n $rangeMin -x $rangeMax -t $t -k 0 -d 0 -u 10; sleep 1; echo "q") | sudo $dir/../../cpufreq/cpufreq.sh >> $me.$d.output 2>> $me.$d.output
 
 # With integral controller
-#(sudo $powerGadgetCmd -e 150 & pgid2=$!; $dir/playback -f $powerProfile -p s & playbackid=$!; $dir/../../../HiBench/bin/run-all.sh >> $me.$d.remote 2>> $me.$d.remote; sudo kill -s SIGINT $pgid2 $playbackid; echo "q") | ($dir/../integralController -s 34 -n 1200000 -x 2500000 -t 130000 -k 0 -d 0 -u 10; sleep 1; echo "q") | sudo $dir/../../cpufreq/cpufreq.sh >> $me.$d.output 2>> $me.$d.output
+(sudo $powerGadgetCmd -e 150 & pgid2=$!; $dir/playback -f $powerProfile -p s & playbackid=$!; $dir/../../../HiBench/bin/run-all.sh >> $me.$d.remote 2>> $me.$d.remote; sudo kill -s SIGINT $pgid2 $playbackid; echo "q") | ($dir/../integralController -s 34 -n $rangeMin -x $rangeMax -t $t -k 0 -d 0 -u 10; sleep 1; echo "q") | sudo $dir/../../cpufreq/cpufreq.sh >> $me.$d.output 2>> $me.$d.output
 
 head -n 1 $dir/../../../HiBench/report/hibench.report | tee -a $me.$d.output >&2
 tail -n 1 $dir/../../../HiBench/report/hibench.report | tee -a $me.$d.output >&2
