@@ -885,6 +885,7 @@ static void print_powerControlParams(int64_t timer_start)
         ost = output_streams[i];
 		enc = ost->enc_ctx;
         if (!vid && enc->codec_type == AVMEDIA_TYPE_VIDEO) {
+			/*
 			time=av_gettime();
             t = ((time/1000000) % 86400)-(5*60*60)+(double)(time%1000000)/1000000.0; // from usec since epoch UTC to CST + fractional sec
 			frame_number = ost->frame_number;
@@ -893,7 +894,12 @@ static void print_powerControlParams(int64_t timer_start)
 				(int)((frame_number-last_frame_number)/(t-t_before)+0.5));
 			last_frame_number=frame_number;
 			t_before=t;
+			*/
+ 			t = (av_gettime() - timer_start) / 1000000.0;
+            frame_number = ost->frame_number;
+			fprintf(stdout,"%d\n",frame_number-(int)((double)ost->frame_rate.num/(double)ost->frame_rate.den*t)); // prints frames transcoded, but not yet watched
 			vid = 1;
+
 		}
 		
 	}
