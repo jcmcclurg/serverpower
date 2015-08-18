@@ -386,14 +386,19 @@ do_print_energy_info()
 
 	//open output file for setpoint
  	FILE	*fp_setpoint = NULL; 
-	fp_setpoint=fopen("data/setpoint.csv", "w");
+	fp_setpoint=fopen("/home/powerserver/joe/serverpower/rapl/data/setpoint.csv", "w");
+	if (fp_setpoint!=NULL)
+		setbuf(fp_setpoint,NULL);
 	
 	//open outpu file for msr data
-	fp=fopen("data/data.csv","w");
+	fp=fopen("/home/powerserver/joe/serverpower/rapl/data/data.csv","w");
     /* if output FILE pointer is not initiated in main(), let it be standard output (Joe)*/
     if (fp==NULL) {
 		fp = stdout;
     }
+	else {
+		setbuf(fp,NULL);
+	}
 	
     /* don't buffer if piped */
     setbuf(stdout, NULL);
