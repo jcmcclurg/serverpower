@@ -16,7 +16,7 @@ save data_pg.mat data_pg;
 
 %open fmd output data file and get data
 fid = fopen('fmd_data.csv');
-fmd_data = textscan(fid,'%f %f %f','Delimiter',',','Headerlines',0);
+fmd_data = textscan(fid,'%f %f %f %f','Delimiter',',','Headerlines',0);
 fclose(fid);
 % convert data and save to .mat
 t_fmd=fmd_data{1};
