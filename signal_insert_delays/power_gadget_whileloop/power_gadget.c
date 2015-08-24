@@ -128,8 +128,14 @@ void do_print_energy_info(){
 void usage(){
 	fprintf(stdout, "\nIntel(r) Power Gadget %s (Josiah version)\n", version);
 	fprintf(stdout, "\nUsage: \n");
-	fprintf(stdout, "%s [-e [sampling delay (ms) ] optional] -p [prefix string]\n", progname);
-	fprintf(stdout, "\nExample: %s -e 1000 -p s\n", progname);
+	fprintf(stdout, "%s\n", progname);
+	fprintf(stdout, " -e [sampling delay (ms) ]\n");
+	fprintf(stdout, " -p [prefix string]\n");
+	fprintf(stdout, " -c [column indicators, which can be: \n");
+	fprintf(stdout, "     t (time)\n");
+	fprintf(stdout, "     e (energy)\n");
+	fprintf(stdout, "     p (power)\n");
+	fprintf(stdout, "     For example: -c tp ]\n");
 	fprintf(stdout, "\n");
 }
 
