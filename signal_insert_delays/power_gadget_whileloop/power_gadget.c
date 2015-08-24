@@ -116,7 +116,7 @@ void do_print_energy_info(){
 		}
 
 		if(prefix_buffer != NULL)
-			fprintf(stdout,"%s",prefix_buffer)
+			fprintf(stdout,"%s",prefix_buffer);
 		if(display_time)
 			fprintf(stdout,"%f ",currentTime_sec);
 		if(display_energy)
