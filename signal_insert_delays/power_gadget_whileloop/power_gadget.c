@@ -115,12 +115,12 @@ void do_print_energy_info(){
 			energyConsumed += MAX_ENERGY_STATUS_JOULES;
 		}
 
-		if(prefix_buffer != NULL)
-			fprintf(stdout,"%s",prefix_buffer);
 		if(display_time)
 			fprintf(stdout,"%f ",currentTime_sec);
 		if(display_energy)
 			fprintf(stdout,"%f ",currentEnergy);
+		if(prefix_buffer != NULL)
+			fprintf(stdout,"%s",prefix_buffer);
 		if(display_power)
 			fprintf(stdout,"%f",energyConsumed/duration_sec);
 		fprintf(stdout,"\n");
