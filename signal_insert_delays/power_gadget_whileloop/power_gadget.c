@@ -64,7 +64,7 @@ void do_print_energy_info(){
 	setbuf(stdout, NULL);
 	
 	// CLOCK_BOOTTIME is CLOCK_MONOTONIC, but is suspend-aware.
-	if(clock_getres(CLOCK_BOOTTIME, &clockres) || clock_gettime(CLOCK_BOOTTIME, &currentTime)){
+	if(clock_getres(CLOCK_REALTIME, &clockres) || clock_gettime(CLOCK_REALTIME, &currentTime)){
 		perror("Problem with time.");
 		exit(EXIT_FAILURE);
 	}
@@ -104,7 +104,7 @@ void do_print_energy_info(){
 				exit(EXIT_FAILURE);
 			}
 		}
-		clock_gettime(CLOCK_BOOTTIME, &currentTime);
+		clock_gettime(CLOCK_REALTIME, &currentTime);
 
 		prevTime_sec = currentTime_sec;
 		currentTime_sec = convert_time_to_sec(currentTime);
