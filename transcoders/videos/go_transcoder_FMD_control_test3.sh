@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# single transcoder workload with throughput constraints
 #go_transcoder_FMD_control_test.sh
 #	avconv | fmd2server (using fps & freq to output pwr_set) | integralController | insertDelays (delaying avconv)
 dir="/home/powerserver/joe/serverpower"
