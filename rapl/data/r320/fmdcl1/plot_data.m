@@ -1,7 +1,12 @@
 %plot-data.m
+n = 13; % sample averaging window
+% average pkg over window n
+pkg_new = arrayfun(@(i) mean(pkg_pg(i:i+n-1)),1:n:length(pkg_pg)-n+1)';
+t_new = arrayfun(@(i) t_pg(i),1:n:length(pkg_pg)-n+1)';
 
 fh1=figure;
-h_pkg=plot(t_pg,pkg_pg,':r','markersize',10,'linewidth',2);
+%h_pkg=plot(t_pg,pkg_pg,':r','markersize',10,'linewidth',2);
+h_pkg=plot(t_new,pkg_new,'-.m','markersize',10,'linewidth',2);
 hold on;
 [x_sp,y_sp]=stairs(t_fmd,sp_fmd);
 [ax_yy,h_sp,h_freq]=plotyy(x_sp,y_sp,t_fmd,freq_fmd/1000-60.0);
@@ -29,7 +34,8 @@ legend boxoff;
 hold off;
 
 fh2=figure;
-h_pkg=plot(t_pg,pkg_pg,':r','markersize',10,'linewidth',2);
+%h_pkg=plot(t_pg,pkg_pg,':r','markersize',10,'linewidth',2);
+h_pkg=plot(t_new,pkg_new,'-.m','markersize',10,'linewidth',2);
 hold on;
 [x_sp,y_sp]=stairs(t_fmd,sp_fmd);
 [ax_yy,h_sp,h_frame]=plotyy(x_sp,y_sp,t_fmd,frame_fmd);
