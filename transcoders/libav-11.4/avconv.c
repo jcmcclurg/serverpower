@@ -2660,6 +2660,10 @@ int main(int argc, char **argv)
     int ret;
     int64_t ti;
 
+	setbuf(stdin, NULL);
+	setbuf(stderr, NULL);
+	setbuf(stdout, NULL);
+
     register_exit(avconv_cleanup);
 
     av_log_set_flags(AV_LOG_SKIP_REPEATED);
