@@ -19,6 +19,7 @@ run: 		./calcSetpoint
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #ifdef _WIN32
 	#include <Windows.h>
@@ -45,8 +46,10 @@ int main(int argc, char *argv[])
 
 	int quit = 0;
 	char stdin_buf[256]; /* stdin buffer for user input or pipe */
-	double setpoint;
-
+	double setpoint;	/* power setpoint (algorithm output) */
+	long freq = 60000, 	/* frequency [mHz] */
+		 frameNum = 1; 	/* number of frames in buffer */
+	
 	setbuf(stdin, NULL);
 	setbuf(stderr, NULL);
 	setbuf(stdout, NULL);
@@ -56,10 +59,22 @@ int main(int argc, char *argv[])
 		/* get stdin or pipe input from user and transmit via COM port */
 		if (get_usr_input(stdin_buf)) {
 			
-			printf("received %s\n", stdin_buf);
 
-			if (stdin_buf[0] == 'q') 
-				quit = 1;
+			switch (stdin_buf[0]) {
+				case 'q':
+					quit = 1;
+					break;
+				case 'f':
+					freq = (long)atof(stdin_buf+1);
+					break;
+				default:
+					if ((long)atof(stdin_buf)) {
+						frameNum = (long)atof(stdin_buf);
+					}
+			}
+
+			printf("received %s\n", stdin_buf);
+			printf("freq = %ld\tframeNum = %ld\n",freq,frameNum);
 
 		}	
 
@@ -151,3 +166,13 @@ int get_usr_input(char *buff) {
 		return 0;
 	}
 }
+
+/*
+char* parseString(char *buff) {
+	char output[256];
+	for (i=0;((buff[i] != '\n') && (buff[i] != '\0') && (i<255));i++) {
+		output[i] = buff[i];
+	}
+	if (buff
+}
+*/
