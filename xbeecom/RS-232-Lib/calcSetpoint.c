@@ -132,6 +132,10 @@ int main(int argc, char *argv[])
 		/* Send Setpoint*/
 		fprintf(stdout,"s%.2f\n",setpoint);
 	}
+	
+	if (fp != NULL)
+		fclose(fp);
+
 	return EXIT_SUCCESS;
 }
 
@@ -142,7 +146,7 @@ void usage(){
 int cmdline(int argc, char *argv[]){
 	int opt;
 	progname = argv[0];
-	while ((opt = getopt(argc, argv, "d:M:m:B:h")) != -1) {
+	while ((opt = getopt(argc, argv, "d:M:m:B:o:h")) != -1) {
 		switch (opt) {
 			case 'd':
 				deadlines = (int)atof(optarg);
@@ -158,6 +162,7 @@ int cmdline(int argc, char *argv[]){
 				break;
 			case 'o':
 				filepath = optarg;
+				break;
 			case 'h':
 				usage();
 				exit(EXIT_SUCCESS);
