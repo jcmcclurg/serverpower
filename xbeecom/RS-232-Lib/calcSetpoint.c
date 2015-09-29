@@ -12,6 +12,7 @@ Description:
 		-[M]axPower		[0, inf):	maximum allowed setpoint
 		-[m]inPower		[0, inf):	minimum allowed setpoint
 		-[B]ufferLength	[0, inf):	maximum frame buffer length
+		-[o]utputFile   [filepath]  filepath for data log
 
 compile:	gcc calcSetpoint.c -o calcSetpoint
 run: 		./calcSetpoint		
@@ -20,6 +21,7 @@ run: 		./calcSetpoint
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 
 #ifdef _WIN32
 	#include <Windows.h>
@@ -33,10 +35,12 @@ int deadlines = 0,
 	minPower = 0;
 long frameBufferLen = 0;
 int rate_ms = 500;
+char *filepath;
 
 void usage(void);
 int cmdline(int argc, char *argv[]);
 int get_usr_input(char *buff); // get stdin input
+void convert_time_to_string(struct timespec tv, char* time_buf);
 
 int main(int argc, char *argv[])
 {	
@@ -46,13 +50,21 @@ int main(int argc, char *argv[])
 
 	int quit = 0;
 	char stdin_buf[256]; /* stdin buffer for user input or pipe */
-	double setpoint,	/* power setpoint (algorithm output) */
-		   offset;
+	double setpoint = 0,	/* power setpoint (algorithm output) */
+		   offset = 0;
 	long freq = 60000, 	/* frequency [mHz] */
 		 frameNum = 1, 	/* number of frames in buffer */
 		 framesInBuffer = frameBufferLen/2,
 		 bufferSlope = frameBufferLen/10;
-	
+	struct timespec tv_time;
+	char time_str[256];
+
+	FILE* fp;
+	fp = fopen(filepath, "w");
+	if (fp!=NULL) {
+		setbuf(fp, NULL);
+	}	
+
 	setbuf(stdin, NULL);
 	setbuf(stderr, NULL);
 	setbuf(stdout, NULL);
@@ -61,7 +73,8 @@ int main(int argc, char *argv[])
 
 		/* get stdin or pipe input from user and transmit via COM port */
 		if (get_usr_input(stdin_buf)) {
-			
+			clock_gettime(CLOCK_REALTIME, &tv_time);
+			convert_time_to_string(tv_time, time_str);
 
 			switch (stdin_buf[0]) {
 				case 'q':
@@ -75,9 +88,16 @@ int main(int argc, char *argv[])
 						frameNum = (long)atof(stdin_buf);
 					}
 			}
+
 			/* for debug: print received info */
-			printf("received %s\n", stdin_buf);
-			printf("freq = %ld\tframeNum = %ld\n",freq,frameNum);
+			//printf("received %s\n", stdin_buf);
+			//printf("freq = %ld\tframeNum = %ld\n",freq,frameNum);
+
+			/* log data */
+			if (fp != NULL) {
+				fprintf(fp,"%s,%ld,%.2f,%ld,%.2f,\n",time_str,freq,setpoint,frameNum,offset);
+			}
+
 		}	
 
 /* sleep for a bit */
@@ -91,15 +111,16 @@ int main(int argc, char *argv[])
 		setpoint = (double)(maxPower+minPower)/2+((maxPower-minPower)/(60.03-59.97))*(freq-60000)/1000;
 		if (deadlines) {
 			if (frameNum > (frameBufferLen-bufferSlope)) {
-				offset = (bufferSlope-(frameBufferLen-frameNum))*(maxPower-minPower)/bufferSlope;
-				setpoint -= offset;				
-				//fprintf(stdout,"setpoint offset = -%.2f\n",offset);
+				offset = -(bufferSlope-(frameBufferLen-frameNum))*(maxPower-minPower)/bufferSlope;
 			}
 			else if (frameNum < bufferSlope) {
 				offset = (bufferSlope-frameNum)*(maxPower-minPower)/bufferSlope;
-				setpoint += offset;
-				//fprintf(stdout,"setpoint offset = %.2f\n",offset);
 			}
+			else {
+				offset = 0;
+			}
+			setpoint += offset;
+			//fprintf(stdout,"setpoint offset = %.2f\n",offset);
 		}
 		
 		/* Keep it in bounds */
@@ -135,6 +156,8 @@ int cmdline(int argc, char *argv[]){
 			case 'B':
 				frameBufferLen = (long)atof(optarg);
 				break;
+			case 'o':
+				filepath = optarg;
 			case 'h':
 				usage();
 				exit(EXIT_SUCCESS);
@@ -192,6 +215,22 @@ int get_usr_input(char *buff) {
 		return 0;
 	}
 }
+
+void convert_time_to_string(struct timespec tv, char* time_buf)
+{
+    time_t sec;
+    long nsec;
+    struct tm *timeinfo;
+    char tmp_buf[15];
+
+    sec = tv.tv_sec;
+    timeinfo = localtime(&sec);
+    nsec = tv.tv_nsec;
+
+    strftime(tmp_buf, 15, "%H:%M:%S", timeinfo);
+    sprintf(time_buf, "%s.%9ld",tmp_buf,nsec);
+}
+
 
 /*
 char* parseString(char *buff) {
