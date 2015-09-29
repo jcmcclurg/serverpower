@@ -32,7 +32,7 @@ int deadlines = 0,
 	maxPower = 0,
 	minPower = 0;
 long frameBufferLen = 0;
-int rate_ms = 10;
+int rate_ms = 500;
 
 void usage(void);
 int cmdline(int argc, char *argv[]);
@@ -46,9 +46,12 @@ int main(int argc, char *argv[])
 
 	int quit = 0;
 	char stdin_buf[256]; /* stdin buffer for user input or pipe */
-	double setpoint;	/* power setpoint (algorithm output) */
+	double setpoint,	/* power setpoint (algorithm output) */
+		   offset;
 	long freq = 60000, 	/* frequency [mHz] */
-		 frameNum = 1; 	/* number of frames in buffer */
+		 frameNum = 1, 	/* number of frames in buffer */
+		 framesInBuffer = frameBufferLen/2,
+		 bufferSlope = frameBufferLen/10;
 	
 	setbuf(stdin, NULL);
 	setbuf(stderr, NULL);
@@ -72,18 +75,41 @@ int main(int argc, char *argv[])
 						frameNum = (long)atof(stdin_buf);
 					}
 			}
-
+			/* for debug: print received info */
 			printf("received %s\n", stdin_buf);
 			printf("freq = %ld\tframeNum = %ld\n",freq,frameNum);
-
 		}	
 
+/* sleep for a bit */
 #ifdef _WIN32
     	Sleep(rate_ms);
 #else
     	usleep(rate_ms*1000);  /* sleep */
 #endif
-	
+		
+		/* Calculate Setpoint */
+		setpoint = (double)(maxPower+minPower)/2+((maxPower-minPower)/(60.03-59.97))*(freq-60000)/1000;
+		if (deadlines) {
+			if (frameNum > (frameBufferLen-bufferSlope)) {
+				offset = (bufferSlope-(frameBufferLen-frameNum))*(maxPower-minPower)/bufferSlope;
+				setpoint -= offset;				
+				//fprintf(stdout,"setpoint offset = -%.2f\n",offset);
+			}
+			else if (frameNum < bufferSlope) {
+				offset = (bufferSlope-frameNum)*(maxPower-minPower)/bufferSlope;
+				setpoint += offset;
+				//fprintf(stdout,"setpoint offset = %.2f\n",offset);
+			}
+		}
+		
+		/* Keep it in bounds */
+		if (setpoint > (double)maxPower)
+			setpoint = maxPower;
+		if (setpoint < (double)minPower)
+			setpoint = minPower;
+
+		/* Send Setpoint*/
+		fprintf(stdout,"s%.2f\n",setpoint);
 	}
 	return EXIT_SUCCESS;
 }
@@ -95,7 +121,7 @@ void usage(){
 int cmdline(int argc, char *argv[]){
 	int opt;
 	progname = argv[0];
-	while ((opt = getopt(argc, argv, "a:d:p:b:r:M:m:B:o:h")) != -1) {
+	while ((opt = getopt(argc, argv, "d:M:m:B:h")) != -1) {
 		switch (opt) {
 			case 'd':
 				deadlines = (int)atof(optarg);
