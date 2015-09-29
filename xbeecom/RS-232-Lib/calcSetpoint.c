@@ -34,7 +34,7 @@ int deadlines = 0,
 	maxPower = 0,
 	minPower = 0;
 long frameBufferLen = 0;
-int rate_ms = 500;
+int rate_ms = 10;
 char *filepath;
 
 void usage(void);
@@ -93,6 +93,31 @@ int main(int argc, char *argv[])
 			//printf("received %s\n", stdin_buf);
 			//printf("freq = %ld\tframeNum = %ld\n",freq,frameNum);
 
+			/* Calculate Setpoint */
+			setpoint = (double)(maxPower+minPower)/2+((maxPower-minPower)/(60.03-59.97))*(freq-60000)/1000;
+			if (deadlines) {
+				if (frameNum > (frameBufferLen-bufferSlope)) {
+					offset = -(bufferSlope-(frameBufferLen-frameNum))*(maxPower-minPower)/bufferSlope;
+				}
+				else if (frameNum < bufferSlope) {
+					offset = (bufferSlope-frameNum)*(maxPower-minPower)/bufferSlope;
+				}
+				else {
+					offset = 0;
+				}
+				setpoint += offset;
+				//fprintf(stdout,"setpoint offset = %.2f\n",offset);
+			}
+		
+			/* Keep it in bounds */
+			if (setpoint > (double)maxPower)
+				setpoint = maxPower;
+			if (setpoint < (double)minPower)
+				setpoint = minPower;
+
+			/* Send Setpoint*/
+			fprintf(stdout,"s%.2f\n",setpoint);
+
 			/* log data */
 			if (fp != NULL) {
 				fprintf(fp,"%s,%ld,%.2f,%ld,%.2f,\n",time_str,freq,setpoint,frameNum,offset);
@@ -107,30 +132,7 @@ int main(int argc, char *argv[])
     	usleep(rate_ms*1000);  /* sleep */
 #endif
 		
-		/* Calculate Setpoint */
-		setpoint = (double)(maxPower+minPower)/2+((maxPower-minPower)/(60.03-59.97))*(freq-60000)/1000;
-		if (deadlines) {
-			if (frameNum > (frameBufferLen-bufferSlope)) {
-				offset = -(bufferSlope-(frameBufferLen-frameNum))*(maxPower-minPower)/bufferSlope;
-			}
-			else if (frameNum < bufferSlope) {
-				offset = (bufferSlope-frameNum)*(maxPower-minPower)/bufferSlope;
-			}
-			else {
-				offset = 0;
-			}
-			setpoint += offset;
-			//fprintf(stdout,"setpoint offset = %.2f\n",offset);
-		}
-		
-		/* Keep it in bounds */
-		if (setpoint > (double)maxPower)
-			setpoint = maxPower;
-		if (setpoint < (double)minPower)
-			setpoint = minPower;
-
-		/* Send Setpoint*/
-		fprintf(stdout,"s%.2f\n",setpoint);
+			
 	}
 	
 	if (fp != NULL)
@@ -188,7 +190,7 @@ int get_usr_input(char *buff) {
     FD_SET(0, &rfds);
 	/* Wait up to 1 useconds. */
     tv.tv_sec = 0;
-    tv.tv_usec = 1;
+    tv.tv_usec = 0;
 
     /* check if stdin has input */
     retval = select(1, &rfds, NULL, NULL, &tv);
