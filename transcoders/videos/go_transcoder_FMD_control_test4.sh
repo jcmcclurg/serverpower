@@ -21,7 +21,7 @@ mkfifo toCalcSetpoint1 toCalcSetpoint2 toIController1 toIController2
 
 echo "begin test"
 sudo $getFreq | tee > toCalcSetpoint1 toCalcSetpoint2 &
-avconv -i $vIn -r 30 -y $vOut > toCalcSetpoint1 & echo $! > avconv1.pid
+(avconv -i $vIn -r 30 -y $vOut; echo "q") > toCalcSetpoint1 & echo $! > avconv1.pid
 avconv -i $vIn -r 30 -y $vOut > toCalcSetpoint2 & echo $! > avconv2.pid
 #cat < toCalcSetpoint1 | $calcSetpoint -d 1 -M 34 -m 10 -B 10000 > calc1 & 
 #cat < toCalcSetpoint2 | $calcSetpoint -d 0 -M 34 -m 10 > calc2 & 
@@ -29,7 +29,7 @@ cat < toCalcSetpoint1 | $calcSetpoint -d 1 -M 34 -m 10 -B 10000 | tee > toIContr
 cat < toCalcSetpoint2 | $calcSetpoint -d 0 -M 34 -m 10 | tee > toIController2 calc2 & 
 sudo $power_gadget -e 150 | tee > toIController1 toIController2 &
 cat < toIController1 | $integralController -s 28 -n 0 -x 1 -t 0.1 -k 0 -d 0 -u 10 | $insertDelays -U -d 0.5 -p $(cat avconv1.pid) &
-cat < toIController2 | $integraController -s 28 -n 0 -x 1 -t 0.1 -k 0 -d 0 -u 10 | $insertDelays -U -d 0.5 -p $(cat avconv2.pid) &
+cat < toIController2 | $integralController -s 28 -n 0 -x 1 -t 0.1 -k 0 -d 0 -u 10 | $insertDelays -U -d 0.5 -p $(cat avconv2.pid) &
 
 echo "started test programs"
 
