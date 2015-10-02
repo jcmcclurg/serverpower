@@ -23,8 +23,8 @@ t_fmd=fmd_data{1};
 freq_fmd=fmd_data{2};
 sp_fmd=fmd_data{3};
 frame_fmd=fmd_data{4};
-data_fmd = [t_fmd freq_fmd sp_fmd frame_fmd];
-save data_fmd1.mat data_fmd;
+data_fmd1 = [t_fmd freq_fmd sp_fmd frame_fmd];
+save data_fmd1.mat data_fmd1;
 
 %open fmd output data file and get data
 fid = fopen('formatedData2.csv');
@@ -35,7 +35,7 @@ t_fmd=fmd_data{1};
 freq_fmd=fmd_data{2};
 sp_fmd=fmd_data{3};
 frame_fmd=fmd_data{4};
-data_fmd = [t_fmd freq_fmd sp_fmd frame_fmd];
-save data_fmd2.mat data_fmd;
+data_fmd2 = [t_fmd freq_fmd sp_fmd frame_fmd];
+save data_fmd2.mat data_fmd2;
 
 
