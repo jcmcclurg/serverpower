@@ -51,11 +51,12 @@ int main(int argc, char *argv[])
 	int quit = 0;
 	char stdin_buf[256]; /* stdin buffer for user input or pipe */
 	double setpoint = 0,	/* power setpoint (algorithm output) */
-		   offset = 0;
+		   offset = 0,
+		   upperPercentile = 0,
+		   lowerPercentile = 0;
 	long freq = 60000, 	/* frequency [mHz] */
 		 frameNum = 1, 	/* number of frames in buffer */
-		 framesInBuffer = frameBufferLen/2,
-		 bufferSlope = frameBufferLen/10;
+		 bufferPercent = 10;
 	struct timespec tv_time;
 	char time_str[256];
 
@@ -94,13 +95,17 @@ int main(int argc, char *argv[])
 			//printf("freq = %ld\tframeNum = %ld\n",freq,frameNum);
 
 			/* Calculate Setpoint */
-			setpoint = (double)(maxPower+minPower)/2+((maxPower-minPower)/(60.03-59.97))*(freq-60000)/1000;
+			setpoint = (double)(maxPower+minPower)/2+((maxPower-minPower)/(60.03-59.97))*(freq-60000.0)/1000.0;
+
 			if (deadlines) {
-				if (frameNum > (frameBufferLen-bufferSlope)) {
-					offset = -(bufferSlope-(frameBufferLen-frameNum))*(maxPower-minPower)/bufferSlope;
+				upperPercentile = (frameBufferLen*(100-bufferPercent))/100.0;
+				lowerPercentile = (frameBufferLen*bufferPercent)/100.0;
+				printf("upperPercentile = %.2f, lowerPercentile = %.2f\n",upperPercentile,lowerPercentile);
+				if (frameNum > upperPercentile) {
+					offset = minPower-setpoint-(minPower-setpoint)*(frameBufferLen-frameNum)/upperPercentile;
 				}
-				else if (frameNum < bufferSlope) {
-					offset = (bufferSlope-frameNum)*(maxPower-minPower)/bufferSlope;
+				else if (frameNum < lowerPercentile) {
+					offset = maxPower-setpoint-(maxPower-setpoint)*frameNum/lowerPercentile;
 				}
 				else {
 					offset = 0;
