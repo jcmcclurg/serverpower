@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
 		   lowerPercentile = 0;
 	long freq = 60000, 	/* frequency [mHz] */
 		 frameNum = 1, 	/* number of frames in buffer */
-		 bufferPercent = 10;
+		 bufferPercent = 30;
 	struct timespec tv_time;
 	char time_str[256];
 
