@@ -1,20 +1,23 @@
 % plotData.m
-close all;
+clear all; clc; close all;
+source("~/Documents/research/serverpower/rapl/data/r320/twoJobs1/loadData.m");
 
-n = 7; % sample averaging window
+n = 14; % sample averaging window
 % average pkg over window n
 pkg_new = arrayfun(@(i) mean(pkg_pg(i:i+n-1)),1:n:length(pkg_pg)-n+1)';
 t_new = arrayfun(@(i) t_pg(i),1:n:length(pkg_pg)-n+1)';
 
+[x_sp1,y_sp1]=stairs(t_fmd1,sp_fmd1);
+[x_sp2,y_sp2]=stairs(t_fmd2,sp_fmd2);
+
+%{
 fh1 = figure();
 h_pkg=plot(t_new,pkg_new,'--*m','markersize',10,'linewidth',4);
 hold on;
-[x_sp1,y_sp1]=stairs(t_fmd1,sp_fmd1);
 [ax_yy,h_sp1,h_freq1]=plotyy(x_sp1,y_sp1,t_fmd1,freq_fmd1/1000-60.0);
-[x_sp2,y_sp2]=stairs(t_fmd2,sp_fmd2);
+
 h_sp2 = plot(ax_yy(1),x_sp2,y_sp2,'k','linewidth',4,'displayname','Setpoint (no deadline)');
 h_freq2 = plot(ax_yy(2),t_fmd2,freq_fmd2/1000-60.0,'displayname','Freq (no deadline)');
-%{
 set(h_sp1, 'linestyle','--','linewidth',4);
 set([h_pkg h_freq1],'linewidth',4);
 ax_sp1=ax_yy1(1);
@@ -32,7 +35,7 @@ FS=findall(ax_sp1,'-property','Fontsize');
 set(FS, "fontsize", 18, "linewidth", 2);
 FS=findall(ax_freq1,'-property','Fontsize');
 set(FS, "fontsize", 18, "linewidth", 2);
-%}
+
 legend boxoff;
 hold off;
 
@@ -45,7 +48,7 @@ hold on
 set(h_sp1, 'linestyle','--','linewidth',4);
 set([h_pkg h_frame1],'linewidth',4);
 [x_sp2,y_sp2]=stairs(t_fmd2,sp_fmd2);
-%{
+
 h_sp2 = plot(ax_yy(1),x_sp2,y_sp2,'k','linewidth',4,'displayname','Setpoint (no deadlines)'); hold on
 h_frame2 = plot(ax_yy(2),t_fmd2,frame_fmd2);
 %h_frame2 = plot(ax_yy(2),t_fmd2,frame_fmd2,'--k','linewidth',4,'displayname','Frame# (no deadlines)');
@@ -72,17 +75,41 @@ legend boxoff;
 hold off;
 %}
 figure;
-subplot(2,1,1);
+ax1 = subplot(2,1,1);
 h_pkg=plot(t_new,pkg_new,'--*m','markersize',10,'linewidth',4,'displayname','PKG Power'); hold on
 hsp1 = plot(x_sp1,y_sp1,'r','displayname','Setpoint w/ deadlines','linewidth', 4);
-hsp2 = plot(x_sp2,y_sp2,'--b','displayname','Setpoint w/o deadlines','linewidth',4);
-legend;
-subplot(2,1,2);
-h_frame1 = plot(t_fmd1,frame_fmd1,'r','displayname','Frames w/ deadlines','linewidth',4); hold on
-[ax_yy,h_frame2,h_freq] = plotyy(t_fmd2,frame_fmd2,t_fmd2,freq_fmd2/1000-60.0);
-set(h_frame2, 'linewidth',4,'displayname','Frames w/o deadlines','linestyle','--','color','blue');
+%hsp2 = plot(x_sp2,y_sp2,'--b','displayname','Setpoint w/o deadlines','linewidth',4);
+[ax_yy,h_sp2,h_freq] = plotyy(x_sp2,y_sp2,t_fmd2,freq_fmd2/1000-60.0);
+set(h_sp2,'linestyle','--','color','b','displayname','Setpoint w/o deadlines','linewidth',4);
 set(h_freq,'linewidth',4);
 xlabel('Time (seconds)');
-ylabel(ax_yy(1),'Frames in Buffer');
-ylabel(ax_yy(2),'Frequency Deviation [Hz]');
-legend;
+L = legend;
+legend(ax1,'boxoff');
+M = findobj(L,'type','line');
+set(M,'linewidth',4);
+FS=findall(ax1,'-property','fontsize');
+set(FS,'fontsize',18);
+FS=findall(ax_yy(1),'-property','fontsize');
+set(FS,'fontsize',18);
+FS=findall(ax_yy(2),'-property','fontsize');
+set(FS,'fontsize',18);
+
+%legend boxoff;
+ax2 = subplot(2,1,2);
+h_frame1 = plot(t_fmd1,frame_fmd1,'r','displayname','Frames in Buffer 1','linewidth',4); hold on
+%[ax_yy,h_frame2,h_freq] = plotyy(t_fmd2,frame_fmd2,t_fmd2,freq_fmd2/1000-60.0);
+%set(h_frame2, 'linewidth',4,'displayname','Frames w/o deadlines','linestyle','--','color','blue');
+%set(h_freq,'linewidth',4);
+ylabel(ax_yy(1),'Power (W)');
+ylabel(ax_yy(2),'Frequency Deviation (Hz)');
+h_frame2 = plot(t_fmd2,frame_fmd2,'--b','displayname','Frames in Buffer 2','linewidth',4)
+ylabel(ax2,'Frames in Buffer');
+xlabel('Time (seconds)');
+L = legend;
+legend(ax2,'boxoff');
+M = findobj(L,'type','line');
+set(M,'linewidth',4);
+linkprop([ax1,ax2,ax_yy(1),ax_yy(2)],"xlim");
+FS=findall(ax2,'-property','fontsize');
+set(FS,'fontsize',18);
+
