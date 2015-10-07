@@ -15,6 +15,19 @@ Can kill everything by:
 
 COMMENT
 
+maxPower=$1
+minPower=$2
+if [[ -n "$maxPower" ]]; then
+	:
+else
+	maxPower=34
+fi
+if [[ -n "$minPower" ]]; then
+	:
+else
+	minPower=18
+fi
+
 dir="/home/powerserver/joe/serverpower"
 vIn="$dir/transcoders/videos/cut.mp4"
 vOut="$dir/transcoders/videos/output10.avi"
@@ -26,9 +39,9 @@ insertDelays="$dir/signal_insert_delays/insertDelays"
 getFreq="$dir/xbeecom/RS-232-Lib/getFreq"
 
 while true; do
-	avconv -i $vIn -r 30 -y $vOut > output4 & pid=$!
+	avconv -i $vIn -r 30 -y $vOut > frames4 & pid=$!
 	#setpoint = $(echo "setpoint$pid")
-	(tail -f -q --pid=$pid freq; echo "q") | $calcSetpoint -d 0 -M 34 -m 18 > setpoint4 &
+	(tail -f -q --pid=$pid freq; echo "q") | $calcSetpoint -d 0 -M $maxPower -m $minPower -o $logPath/calcSet4Data.csv > setpoint4 &
 	(tail -f -q --pid=$pid setpoint4 power; echo "q") | $integralController -s 28 -n 0 -x 1 -t 0.1 -k 0 -d 0 -u 10 | $insertDelays -U -d 0.5 -p $pid &
 	echo $pid
 	wait $pid
