@@ -1,6 +1,6 @@
 % plotData.m
 clear all; clc; close all;
-source("~/Documents/research/serverpower/rapl/data/r320/twoJobs1/loadData.m");
+source("~/Documents/research/serverpower/rapl/data/r320/tJremotePower1/loadData.m");
 
 %{
 n = 14; % sample averaging window
@@ -81,7 +81,8 @@ hold off;
 figure;
 ax1 = subplot(2,1,1);
 h_pkg=plot(t_new,pkg_new,'--*m','markersize',10,'linewidth',4,'displayname','PKG Power'); hold on
-hsp1 = plot(x_sp1,y_sp1,'r','displayname','Setpoint w/ deadlines','linewidth', 4);
+h_rm =plot(t_rm,p_rm,'.k','linewidth',4,'displayname','remote power measurement');
+hsp1 = plot(x_sp1,y_sp1,'r','displayname','Setpoint1','linewidth', 4);
 %hsp2 = plot(x_sp2,y_sp2,'--b','displayname','Setpoint w/o deadlines','linewidth',4);
 [ax_yy,h_sp2,h_freq] = plotyy(x_sp2,y_sp2,t_fmd2,freq_fmd2/1000-60.0);
 set(h_sp2,'linestyle','--','color','b','displayname','Setpoint w/o deadlines','linewidth',4);
