@@ -2,10 +2,14 @@
 clear all; clc; close all;
 source("~/Documents/research/serverpower/rapl/data/r320/twoJobs1/loadData.m");
 
+%{
 n = 14; % sample averaging window
 % average pkg over window n
 pkg_new = arrayfun(@(i) mean(pkg_pg(i:i+n-1)),1:n:length(pkg_pg)-n+1)';
 t_new = arrayfun(@(i) t_pg(i),1:n:length(pkg_pg)-n+1)';
+%}
+pkg_new = pkg_pg;
+t_new = t_pg;
 
 [x_sp1,y_sp1]=stairs(t_fmd1,sp_fmd1);
 [x_sp2,y_sp2]=stairs(t_fmd2,sp_fmd2);
