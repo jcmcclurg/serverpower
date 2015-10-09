@@ -138,18 +138,36 @@ if __name__ == '__main__':
 					np.savetxt(s,b)
 					output = s.getvalue()
 				else:
+					defaultBlockLen = length
+					blockLen = int(cgi.escape(qs.get('b', [str(defaultBlockLen)])[0]))
+					blockLen = np.max([1 , np.min([blockLen, length])])
+					numBlocks = int(np.ceil(float(length)/float(blockLen)))
+
 					b[:,self.rackIndex] *= b[:,self.voltageIndex];
 					b[:,self.serverIndices[0]] *= b[:,self.voltageIndex];
 					b[:,self.serverIndices[1]] *= b[:,self.voltageIndex];
 					b[:,self.serverIndices[2]] *= b[:,self.voltageIndex];
 					b[:,self.serverIndices[3]] *= b[:,self.voltageIndex];
 					b[:,self.serverIndices[4]] *= b[:,self.voltageIndex];
-					r = np.mean(b,axis=0);
-					r[0] = b[0,0];
-					r[1] = b[-1,0];
+
+					r = np.zeros((numBlocks,8))
+					offset = 0
+					for i in range(0,numBlocks-1):
+						blockRange = np.arange(0,blockLen) + offset
+						r[i,2:] = np.mean(b[blockRange,2:],axis=0)
+						r[i,0] = b[blockRange[0],0]
+						r[i,1] = b[blockRange[-1],0]
+						offset += blockLen
+					r[-1,2:] = np.mean(b[offset:,2:],axis=0)
+					r[-1,0] = b[offset,0]
+					r[-1,1] = b[-1,0]
 
 					s = StringIO.StringIO()
-					np.savetxt(s,r.reshape([1,8]))
+					np.savetxt(s,r)
+
+					#s2 = StringIO.StringIO()
+					#np.savetxt(s2,b)
+					#output = s.getvalue()+"\n\n"+s2.getvalue()
 					output = s.getvalue()
 
 				response_headers = [('Cache-Control', 'no-cache, no-store, must-revalidate'),
