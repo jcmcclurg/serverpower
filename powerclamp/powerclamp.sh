@@ -1,6 +1,7 @@
 #!/bin/bash
 
-device=${1:-/sys/class/thermal/cooling_device4}
+defDevice=$(dirname $(grep -l intel_powerclamp $(ls /sys/class/thermal/*/type) ) )
+device=${1:-$defDevice}
 
 rangeMax=`cat $device/max_state`
 rangeMin=1
