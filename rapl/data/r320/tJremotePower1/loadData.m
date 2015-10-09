@@ -16,3 +16,15 @@ t_fmd2=data_fmd2(1:end,1);
 freq_fmd2=data_fmd2(1:end,2);
 sp_fmd2=data_fmd2(1:end,3);
 frame_fmd2=data_fmd2(1:end,4);
+
+load data_fmd3.mat;
+t_fmd3=data_fmd3(1:end,1);
+freq_fmd3=data_fmd3(1:end,2);
+sp_fmd3=data_fmd3(1:end,3);
+frame_fmd3=data_fmd3(1:end,4);
+
+load data_fmd4.mat;
+t_fmd4=data_fmd4(1:end,1);
+freq_fmd4=data_fmd4(1:end,2);
+sp_fmd4=data_fmd4(1:end,3);
+frame_fmd4=data_fmd4(1:end,4);
