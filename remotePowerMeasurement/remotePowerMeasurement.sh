@@ -1,3 +1,3 @@
 #!/bin/bash
 ( while true; do wget -O - -o /dev/null http://jjpowerserver2.ddns.net:18282/power?l=1666 | cut -d \  -f 2,4; sleep 0.150; done ) > powerLog.log & pid=$!;
-tail --pid=$pid -s 0.1 -f powerLog.log | awk -F [' '] '{printf("%.2f\n",$2)}'
+tail --pid=$pid -s 0.1 -f powerLog.log | unbuffer -p awk -F [' '] '{printf("%.2f\n",$2)}'

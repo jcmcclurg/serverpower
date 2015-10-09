@@ -1,7 +1,14 @@
 #!/bin/bash
 
 # get power_gadget output data
-awk -F [' '] '{printf("%.10f,%.2f,\n",$1,$2)}' powerLog.log > powerLogDecimated.csv
+awk -F [::.,] '{printf("%.16G\n",($1*3600+$2*60+$3+$4/1000000000))}' powerGadgetLog.csv > time_pg.csv #> /dev/null
+cut -d, -f3 powerGadgetLog.csv > pkg_pg.csv #> /dev/null
+awk -F [,] '{printf("%.5G\n",$5)}' powerGadgetLog.csv > dram_pg.csv
+paste -d ',' time_pg.csv pkg_pg.csv dram_pg.csv > pg_data.csv # final output file
+rm time_pg.csv pkg_pg.csv dram_pg.csv # clean up
+
+# get powerMeasurement output data
+awk -F [' '] '{printf("%.10f,%.2f,\n",$1,$2)}' powerMeasurementLog.log > powerLogDecimated.csv
 awk -F [,] '{system("date -d @"$1" +%T:%N")}' powerLogDecimated.csv > powerFormated.csv
 awk -F [:::,] '{printf("%.16G\n",($1*3600+$2*60+$3+$4/1000000000))}' powerFormated.csv > timeRemote.csv #> /dev/null
 cut -d, -f2 powerLogDecimated.csv > powerRemote.csv
