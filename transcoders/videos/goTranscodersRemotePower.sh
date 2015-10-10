@@ -60,8 +60,8 @@ tail -f -q setpoint1 power | $integralController -s 28 -n 0 -x 1 -t 0.1 -k 0 -d 
 
 echo "started test programs"
 
-#./goNoDeadlines.sh $maxPower $minPower &
-#./goNoDeadlines2.sh $maxPower $minPower &
+./goNoDeadlines.sh $maxPower $minPower &
+./goNoDeadlines2.sh $maxPower $minPower &
 
 echo "running goNoDeadlines"
 
@@ -71,6 +71,8 @@ while true; do
 	avconv -i $vIn -r 30 -y $vOut > output & pid=$!
 	(tail -f -q --pid=$pid freq; echo "q") | $calcSetpoint -d 0 -M 34 -m 18 > setpoint3 &
 	(tail -f -q --pid=$pid setpoint3 power; echo "q") | $integralController -s 28 -n 0 -x 1 -t 0.1 -k 0 -d 0 -u 10 | $insertDelays -U -d 0.5 -p $pid &
+
+
 	echo $pid
 	wait $pid
 done
