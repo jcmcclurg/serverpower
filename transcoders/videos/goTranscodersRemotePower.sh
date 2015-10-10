@@ -55,7 +55,7 @@ tail -f -q freq frames1 | $calcSetpoint -d 1 -M $maxPower -m $minPower -B 3000 -
 #tail -f -q freq frames2 | $calcSetpoint -d 1 -M $maxPower -m $minPower -B 3000 -o $logPath/calcSet2Data.csv > setpoint2 & 
 $powerMeasure > power &
 sudo $powerGadget -e 500 > /dev/null &
-tail -f -q setpoint1 power | $integralController -s 70 -n 0 -x 1 -t 0.1 -k 0 -d 0 -u 10 | $insertDelays -U -d 0.5 -p $(cat avconv1.pid) &
+tail -f -q setpoint1 power | $integralController -s $minPower -n 0 -x 1 -t 0.1 -k 0 -d 0 -u 10 | $insertDelays -U -d 0.5 -p $(cat avconv1.pid) &
 #tail -f -q setpoint2 power | $integralController -s 28 -n 0 -x 1 -t 0.1 -k 0 -d 0 -u 10 | $insertDelays -U -d 0.5 -p $(cat avconv2.pid) &
 
 echo "started test programs"
