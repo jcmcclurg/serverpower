@@ -13,7 +13,8 @@ t_new = t_pg;
 
 [x_sp1,y_sp1]=stairs(t_fmd1,sp_fmd1);
 [x_sp2,y_sp2]=stairs(t_fmd2,sp_fmd2);
-
+[x_sp3,y_sp3]=stairs(t_fmd3,sp_fmd3);
+[x_sp4,y_sp4]=stairs(t_fmd4,sp_fmd4);
 %{
 fh1 = figure();
 h_pkg=plot(t_new,pkg_new,'--*m','markersize',10,'linewidth',4);
@@ -80,11 +81,12 @@ hold off;
 %}
 figure;
 ax1 = subplot(2,1,1);
-h_pkg=plot(t_new,pkg_new,'--*m','markersize',10,'linewidth',4,'displayname','PKG Power'); hold on
-h_rm =plot(t_rm,p_rm,'.k','linewidth',4,'displayname','remote power measurement');
-hsp1 = plot(x_sp1,y_sp1,'r','displayname','Setpoint1','linewidth', 4);
+%h_pkg=plot(t_new,pkg_new,'--*m','markersize',10,'linewidth',4,'displayname','PKG Power'); hold on
+h_rm =plot(t_rm,p_rm,'.k','linewidth',4,'displayname','remote power measurement'); hold on;
+h_sp3 = plot(x_sp3,y_sp3,'.b','linewidth',4,'displayname','Setpoints 3 & 4'); 
+%hsp1 = plot(x_sp1,y_sp1,'r','displayname','Setpoint1','linewidth', 4);
 %hsp2 = plot(x_sp2,y_sp2,'--b','displayname','Setpoint w/o deadlines','linewidth',4);
-[ax_yy,h_sp2,h_freq] = plotyy(x_sp2,y_sp2,t_fmd2,freq_fmd2/1000-60.0);
+[ax_yy,h_sp2,h_freq] = plotyy(x_sp1,y_sp1,t_fmd1,freq_fmd1/1000-60.0);
 set(h_sp2,'linestyle','--','color','b','displayname','Setpoint w/o deadlines','linewidth',4);
 set(h_freq,'linewidth',4);
 xlabel('Time (seconds)');
@@ -98,7 +100,7 @@ FS=findall(ax_yy(1),'-property','fontsize');
 set(FS,'fontsize',18);
 FS=findall(ax_yy(2),'-property','fontsize');
 set(FS,'fontsize',18);
-
+%{
 %legend boxoff;
 ax2 = subplot(2,1,2);
 h_frame1 = plot(t_fmd1,frame_fmd1,'r','displayname','Frames in Buffer 1','linewidth',4); hold on
