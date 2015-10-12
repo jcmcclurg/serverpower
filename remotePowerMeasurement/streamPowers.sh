@@ -1,6 +1,6 @@
 #!/bin/bash
 
-addr="jjpowerserver2.ddns.net:18282"
+defAddr="jjpowerserver2.ddns.net:18282"
 #defDuration="0.150"
 defDuration="1"
 defConnectionDuration="60"
@@ -20,6 +20,8 @@ callsPerConnection=$( printf "%.0f" $callsPerConnection )
 defBlockLen=$( bc <<< "scale=1; $numSamples/10" | tr -d '[[:space:]]' )
 defBlockLen=$( printf "%.0f" $defBlockLen )
 blockLen=${3:-$defBlockLen}
+
+addr=${4:-$defAddr}
 
 echo "Time between downloads: $duration, TCP connection duration: $connectionDuration, Download is broken up into $blockLen-sample blocks." >&2
 echo "Number of samples per download: $numSamples = $numCycles cycles" >&2
