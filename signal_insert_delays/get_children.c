@@ -221,27 +221,37 @@ int update_proc_tree_item(int pid, void* value, trie_root* ptree){
 				}
 			}
 			
-			// If you didn't find a parent with FLAG_EXCLUDE, navigate up until reaching a parent or a child node.
-			if(!explicitParentList && !(pinfo->flags & FLAG_EXCLUDE)){
-				proc_info* currentNode = pinfo;
-				while(currentNode->ppid > 0 && !(currentNode->flags & (FLAG_PARENT | FLAG_CHILD))){
-					currentNode = (proc_info*) trie_value(currentNode->ppid, ptree);
-					if(proc_tree_verbose)
-						fprintf(stderr,"->%d",currentNode->ppid);
-				}
-				// If you found a parent or a child node, mark this as a child
-				if(currentNode->flags & (FLAG_PARENT | FLAG_CHILD)){
-					if(pinfo != currentNode){
-						pinfo->flags |= FLAG_CHILD;
-						if(proc_tree_verbose)
-							fprintf(stderr," marked_child_status ");
-					}
-
-					// Check whether the child is stoppable.
-					if(get_stoppable_status(pid) == STOPPABLE){
+			// If you didn't find a parent with FLAG_EXCLUDE
+			if( !(pinfo->flags & FLAG_EXCLUDE)){
+				if(explicitParentList){
+					if((pinfo->flags & FLAG_PARENT) && get_stoppable_status(pid) == STOPPABLE){
 						if(proc_tree_verbose)
 							fprintf(stderr," got_stoppable_status ");
 						pinfo->flags |= FLAG_STOPPABLE;
+					}
+				}
+				// navigate up until reaching a parent or a child node.
+				else{
+					proc_info* currentNode = pinfo;
+					while(currentNode->ppid > 0 && !(currentNode->flags & (FLAG_PARENT | FLAG_CHILD))){
+						currentNode = (proc_info*) trie_value(currentNode->ppid, ptree);
+						if(proc_tree_verbose)
+							fprintf(stderr,"->%d",currentNode->ppid);
+					}
+					// If you found a parent or a child node, mark this as a child
+					if(currentNode->flags & (FLAG_PARENT | FLAG_CHILD)){
+						if(pinfo != currentNode){
+							pinfo->flags |= FLAG_CHILD;
+							if(proc_tree_verbose)
+								fprintf(stderr," marked_child_status ");
+						}
+
+						// Check whether the child is stoppable.
+						if(get_stoppable_status(pid) == STOPPABLE){
+							if(proc_tree_verbose)
+								fprintf(stderr," got_stoppable_status ");
+							pinfo->flags |= FLAG_STOPPABLE;
+						}
 					}
 				}
 			}
