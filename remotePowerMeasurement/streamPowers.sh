@@ -24,11 +24,10 @@ blockLen=${3:-$defBlockLen}
 echo "Time between downloads: $duration, TCP connection duration: $connectionDuration, Download is broken up into $blockLen-sample blocks." >&2
 echo "Number of samples per download: $numSamples = $numCycles cycles" >&2
 echo "http://$addr/power?l=$numSamples&b=$blockLen" >&2
-while true; do
-	(
-		for i in $( seq $callsPerConnection ); do
-			echo "http://$addr/power?l=$numSamples&b=$blockLen"
-		done
-	) | wget -O - -i - --wait=$duration --quiet
+ret=0
+while (	for i in $( seq $callsPerConnection ); do
+		echo "http://$addr/power?l=$numSamples&b=$blockLen"
+	done
+	) | wget -O - -i - --wait=$duration --quiet ; do
 	sleep $duration;
 done
