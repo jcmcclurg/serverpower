@@ -222,7 +222,11 @@ int trie_iterate_recursive(int (*operate)(int key, void* value, trie_root* trie)
 
 int trie_iterate(int (*operate)(int key, void* value, trie_root* rt), trie_root* root){
 	int r = 0;
+	if(trie_verbose)
+		fprintf(stderr,"ROOT(0)");
 	r += trie_iterate_recursive(operate, root->next_zero, 0, 0, root);
+	if(trie_verbose)
+		fprintf(stderr,"ROOT(1)");
 	r += trie_iterate_recursive(operate, root->next_one,  1, 0, root);
 	return r;
 }
