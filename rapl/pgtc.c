@@ -386,14 +386,19 @@ do_print_energy_info()
 
 	//open output file for setpoint
  	FILE	*fp_setpoint = NULL; 
-	fp_setpoint=fopen("data/setpoint.csv", "w");
+	fp_setpoint=fopen("/home/powerserver/joe/serverpower/rapl/data/setpoint.csv", "w");
+	if (fp_setpoint!=NULL)
+		setbuf(fp_setpoint,NULL);
 	
 	//open outpu file for msr data
-	fp=fopen("data/data.csv","w");
+	fp=fopen("/home/powerserver/joe/serverpower/rapl/data/data.csv","w");
     /* if output FILE pointer is not initiated in main(), let it be standard output (Joe)*/
     if (fp==NULL) {
 		fp = stdout;
     }
+	else {
+		setbuf(fp,NULL);
+	}
 	
     /* don't buffer if piped */
     setbuf(stdout, NULL);
@@ -727,7 +732,7 @@ main(int argc, char **argv)
 	//	ret = set_dram_rapl_power_limit_control(i,&dram_plc_orig);
 		if (ret > 0)
 	    	fprintf(stdout, "Error setting DRAM power limit controls\n");
-		print_rapl_control_info(i);
+		//print_rapl_control_info(i);
     }
     
 	// prints energy info from msr registers and also polls stdin for power_limiting commands

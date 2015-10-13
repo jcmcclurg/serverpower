@@ -64,7 +64,7 @@ void do_print_energy_info(){
 	setbuf(stdout, NULL);
 	
 	// CLOCK_BOOTTIME is CLOCK_MONOTONIC, but is suspend-aware.
-	if(clock_getres(CLOCK_BOOTTIME, &clockres) || clock_gettime(CLOCK_BOOTTIME, &currentTime)){
+	if(clock_getres(CLOCK_REALTIME, &clockres) || clock_gettime(CLOCK_REALTIME, &currentTime)){
 		perror("Problem with time.");
 		exit(EXIT_FAILURE);
 	}
@@ -104,7 +104,7 @@ void do_print_energy_info(){
 				exit(EXIT_FAILURE);
 			}
 		}
-		clock_gettime(CLOCK_BOOTTIME, &currentTime);
+		clock_gettime(CLOCK_REALTIME, &currentTime);
 
 		prevTime_sec = currentTime_sec;
 		currentTime_sec = convert_time_to_sec(currentTime);
@@ -119,8 +119,10 @@ void do_print_energy_info(){
 			fprintf(stdout,"%f ",currentTime_sec);
 		if(display_energy)
 			fprintf(stdout,"%f ",currentEnergy);
+		if(prefix_buffer != NULL)
+			fprintf(stdout,"%s",prefix_buffer);
 		if(display_power)
-			fprintf(stdout,"%s%f",prefix_buffer,energyConsumed/duration_sec);
+			fprintf(stdout,"%f",energyConsumed/duration_sec);
 		fprintf(stdout,"\n");
 	}
 }
@@ -128,8 +130,14 @@ void do_print_energy_info(){
 void usage(){
 	fprintf(stdout, "\nIntel(r) Power Gadget %s (Josiah version)\n", version);
 	fprintf(stdout, "\nUsage: \n");
-	fprintf(stdout, "%s [-e [sampling delay (ms) ] optional] -p [prefix string]\n", progname);
-	fprintf(stdout, "\nExample: %s -e 1000 -p s\n", progname);
+	fprintf(stdout, "%s\n", progname);
+	fprintf(stdout, " -e [sampling delay (ms) ]\n");
+	fprintf(stdout, " -p [prefix string]\n");
+	fprintf(stdout, " -c [column indicators, which can be: \n");
+	fprintf(stdout, "     t (time)\n");
+	fprintf(stdout, "     e (energy)\n");
+	fprintf(stdout, "     p (power)\n");
+	fprintf(stdout, "     For example: -c tp ]\n");
 	fprintf(stdout, "\n");
 }
 
