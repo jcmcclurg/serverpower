@@ -116,6 +116,9 @@ int main(int argc, char* argv[]) {
 	double prevDValue = dvalue;
 	double prevSetpoint = NAN;
 
+double newOutput = 0.0;//Joe
+double limitedOutput = 0.0;//Joe
+
 	double prevTime;
 	double currentTime;
 
@@ -176,35 +179,38 @@ int main(int argc, char* argv[]) {
 
 		prevTime = currentTime;
 		currentTime = getCurrentTime();
-
 		double prevError = setpoint - prevInput;
 		double currentError = setpoint - input;
 		double timeDelta = currentTime - prevTime;
 
 		double derivative = (currentError - prevError)/timeDelta;
-		double integralDelta = timeDelta*((currentError + prevError)/2.0);
+//Joe	double integralDelta = timeDelta*((currentError + prevError)/2.0);
+double integralDelta = timeDelta*(currentError/2.0+(limitedOutput-newOutput));//Joe
+// limitedOutput-newOutput adds an "antiwindup" term, see p310 in Astrom's Computer Controlled Systems //Joe 
 
-		if(prevSetpoint == setpoint){
-			if(tvalue*(integral + integralDelta) > maximum_output)
-				integral = maximum_output/tvalue;
-			else if(tvalue*(integral + integralDelta) < minimum_output)
-				integral = minimum_output/tvalue;
-			else
+//Joe	if(prevSetpoint == setpoint){
+//Joe		if(tvalue*(integral + integralDelta) > maximum_output)
+//Joe			integral = maximum_output/tvalue;
+//Joe		else if(tvalue*(integral + integralDelta) < minimum_output)
+//Joe			integral = minimum_output/tvalue;
+//Joe		else
 				integral += integralDelta;
 
-			double newOutput = kvalue*currentError + integral*tvalue + dvalue*derivative;
+			newOutput = kvalue*currentError + integral*tvalue + dvalue*derivative;
+limitedOutput = newOutput;//Joe
 
 			if(prefix != NULL)
 				fprintf(stdout,"%s",prefix);
 
 			if(newOutput > maximum_output){
 				fprintf(stdout,"%lf\n",maximum_output);
-
+limitedOutput = maximum_output;//Joe
 				if(verbose)
 					fprintf(stderr, "output capped (max)\n");
 			}
 			else if(newOutput < minimum_output){
 				fprintf(stdout,"%lf\n",minimum_output);
+limitedOutput = minimum_output;//Joe
 				if(verbose)
 					fprintf(stderr, "output capped (min)\n");
 			}
@@ -213,10 +219,10 @@ int main(int argc, char* argv[]) {
 				if(verbose)
 					fprintf(stderr, "output: %lf\n",newOutput);
 			}
-		}
-		else{
+//		}
+//		else{
 			//integral = 0.0;
-		}
+//		}
 
 		prevSetpoint = setpoint;
 		prevInput = input;
