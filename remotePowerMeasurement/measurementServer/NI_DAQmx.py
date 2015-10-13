@@ -43,13 +43,14 @@ class MultiChannelAITask(Task):
 
 	The channels must be a list of AIChannelSpec objects.
 	"""
-	def __init__(self, channels, dataWindowLength=None, sampleRate=10000.0, bufferSize=None, sampleEvery=None, timeout=None, debug=0):
+	def __init__(self, channels, dataWindowLength=None, sampleRate=10000.0, bufferSize=None, sampleEvery=None, timeout=None,  data_updated_callback=None, debug=0):
 		Task.__init__(self)
 
 		self.debug = debug
 		self.numChans = len(channels)
 		self.timeStarted = -1
 		self.timeStopped = -1
+		self.data_updated_callback = data_updated_callback
 		devicesReset = []
 
 		for chan in channels:
@@ -127,6 +128,8 @@ class MultiChannelAITask(Task):
 		readPortion = self.buffer[0:numRead*self.numChans].reshape(numRead,self.numChans)
 
 		self.dataWindow.extend(np.concatenate((timeVector,readPortion),axis=1))
+		if not (self.data_updated_callback is None):
+			self.data_updated_callback(startTime,endTime,numRead)
 
 		return 0
 
