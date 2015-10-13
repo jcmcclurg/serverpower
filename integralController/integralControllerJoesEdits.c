@@ -107,7 +107,10 @@ int main(int argc, char* argv[]) {
 	// Register signal and signal handler
 	signal(SIGINT, terminateProgram);
 	setbuf(stdout,NULL);
-
+	setbuf(stderr,NULL);
+	FILE* fp;
+	fp = fopen("/home/powerserver/joe/serverpower/transcoders/videos/iCstderr.log", "w");
+	setbuf(fp,NULL);
 	char* str;
 
 	double prevInput = input;
@@ -185,7 +188,7 @@ double limitedOutput = 0.0;//Joe
 
 		double derivative = (currentError - prevError)/timeDelta;
 //Joe	double integralDelta = timeDelta*((currentError + prevError)/2.0);
-double integralDelta = timeDelta*(currentError/2.0+(limitedOutput-newOutput));//Joe
+double integralDelta = timeDelta*(currentError/2.0)+((limitedOutput-newOutput)/tvalue/2.0);//Joe
 // limitedOutput-newOutput adds an "antiwindup" term, see p310 in Astrom's Computer Controlled Systems //Joe 
 
 //Joe	if(prevSetpoint == setpoint){
@@ -219,6 +222,7 @@ limitedOutput = minimum_output;//Joe
 				if(verbose)
 					fprintf(stderr, "output: %lf\n",newOutput);
 			}
+fprintf(fp,"limited output: %.2f newOutput: %.2f\n",limitedOutput,newOutput);
 //		}
 //		else{
 			//integral = 0.0;
@@ -227,7 +231,7 @@ limitedOutput = minimum_output;//Joe
 		prevSetpoint = setpoint;
 		prevInput = input;
 	}
-
+	fclose(fp);
 	exit(EXIT_SUCCESS);
 	return 0;
 }
