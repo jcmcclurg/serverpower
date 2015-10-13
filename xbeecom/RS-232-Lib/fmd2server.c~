@@ -12,6 +12,7 @@ Description:
 	
 compile with the command: gcc fmd2server.c rs232.c -Wall -Wextra -o2 -o fmd2server
 example run to only get freq: sudo ./fmd2server -r 500 -p 16 -b 115200 -o test.csv
+example run to only get freq without setup: sudo ./fmd2server -r 500 -p 16 -b 115200 -s 0 -o test.csv
 example run to get freq & setpoint: sudo ./fmd2server -r 500 -p 16 -b 115200 -M 35 -m 24 -a 1 -o test.csv
 
 **************************************************/
@@ -36,6 +37,7 @@ int cport_nr=16,        /* ie /dev/ttyUSB0 (see doc.txt) */
 	max_freq;			/* maximum expected magnitude freq deviation */
 char *filename;
 int pwr_algorithm = 0;
+int setup = 1;
 
 int get_usr_input(char *buff); // get stdin input
 int RS232_GetComCommand(int cport_nr, unsigned char *com_buf); // get COM input
@@ -129,7 +131,7 @@ void usage(){
 int cmdline(int argc, char *argv[]){
 	int opt;
 	progname = argv[0];
-	while ((opt = getopt(argc, argv, "a:p:b:r:M:m:o:h")) != -1) {
+	while ((opt = getopt(argc, argv, "a:p:b:r:M:m:o:s:h")) != -1) {
 		switch (opt) {
 			case 'a':
 				pwr_algorithm = (int)atof(optarg);
@@ -151,6 +153,9 @@ int cmdline(int argc, char *argv[]){
 				break;
 			case 'o':
 				filename=optarg;
+				break;
+			case 's':
+				setup = (int)atof(optarg);
 				break;
 			case 'h':
 				usage();
@@ -214,32 +219,36 @@ int main(int argc, char *argv[])
 	}
 	fdp = RS232_OpenPortFILE(cport_nr);
 	
-	/* setup FMD */
-	for (i=0;i<(int)(sizeof(setup_buf)/sizeof(setup_buf[0]));i++) {
-		RS232_SendByte(cport_nr, setup_buf[i]);
 
-#ifdef _WIN32
-    		Sleep(1000);
-#else
-    		usleep(1000000);  /* sleep for 100 milliSecond */
-#endif
+    if (setup) {
+		/* setup FMD */
+		for (i=0;i<(int)(sizeof(setup_buf)/sizeof(setup_buf[0]));i++) {
+			RS232_SendByte(cport_nr, setup_buf[i]);
 
-		//n=RS232_GetComCommand(cport_nr, com_buf);
-		n = RS232_ReadComPortLine(cport_nr,com_buf,4095,fdp);		
-		if (n>0) {
-			if ((int)atof((char *)com_buf)!=setup_buf[i]) {
-				fprintf(stdout,"Failed to receive '%c' ACK from FMD\n"
-				"Received '%s' instead\n",setup_buf[i], (char *)com_buf);
+	#ifdef _WIN32
+				Sleep(1000);
+	#else
+				usleep(1000000);  /* sleep for 100 milliSecond */
+	#endif
+
+			//n=RS232_GetComCommand(cport_nr, com_buf);
+			n = RS232_ReadComPortLine(cport_nr,com_buf,4095,fdp);		
+			if (n>0) {
+				if ((int)atof((char *)com_buf)!=setup_buf[i]) {
+					fprintf(stdout,"Failed to receive '%c' ACK from FMD\n"
+					"Received '%s' instead\n",setup_buf[i], (char *)com_buf);
+					i--;
+				}
+			}
+			else {
+				fprintf(stdout, "Failed to receive '%c' ACK from FMD\n"
+				"Received no response from FMD\n",setup_buf[i]);
 				i--;
 			}
 		}
-		else {
-			fprintf(stdout, "Failed to receive '%c' ACK from FMD\n"
-			"Received no response from FMD\n",setup_buf[i]);
-			i--;
-		}
 	}
-	
+
+
 	while (quit!=1) {
 		/* get input from COM port, timestamp & print*/
 		//n = RS232_GetComCommand(cport_nr, com_buf);
@@ -255,7 +264,6 @@ int main(int argc, char *argv[])
 			else {
 				freq = atof(com_buf);
 				freq_change = freq-last_freq;
-				printf("freq_change = %.1f\n",freq_change);
 				if ((freq_change > 1.0) || (freq_change < -1.0)) {
 					setpoint = (double)(max_power+min_power)/2+((max_power-min_power)/(60.02-59.98))*(atof((char*)com_buf)-60000)/1000;
 					//fprintf(stdout,"p%.1f\n%s\n",setpoint,com_buf);

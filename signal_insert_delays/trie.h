@@ -1,8 +1,9 @@
 #ifndef trie_h
 #define trie_h
+#include <stdlib.h>
+//#define TRIE_BIT_MASK 0x7FFF
+#define TRIE_BIT_MASK ((int) -1)
 
-//
-#define TRIE_BIT_MASK 0x7FFF
 typedef struct trie_root_struct {
 	int num_nodes;
 	void* data;
