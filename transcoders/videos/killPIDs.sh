@@ -1,5 +1,7 @@
 #!/bin/bash
 # kill processes saved in go_transcoder_FMD_control_test4.sh
+./stopRemotes.sh
+sudo kill -KILL $(pgrep stress)
 sudo kill -KILL $(pgrep goNoDead)
 sudo kill -KILL $(pgrep goTranscoders)
 sudo kill -KILL $(pgrep remotePower)
