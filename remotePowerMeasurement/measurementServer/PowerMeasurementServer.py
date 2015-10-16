@@ -52,7 +52,7 @@ class PowerMeasurementServer(MeasurementServer):
 		channels.append(AIChannelSpec('JDAQ', 5, 'server2', termConf=DAQmx_Val_Diff, rangemin=-5, rangemax=5))
 		channels.append(AIChannelSpec('JDAQ', 6, 'server1', termConf=DAQmx_Val_Diff, rangemin=-5, rangemax=5))
 
-		m = MultiChannelAITask(channels,sampleRate=self.sampleRate,dataWindowLength=int(np.round(self.sampleRate*100.0)), data_updated_callback=self.data_updated)
+		m = MultiChannelAITask(channels,sampleRate=self.sampleRate,dataWindowLength=int(np.round(self.sampleRate*100.0)), sampleEvery=1000, data_updated_callback=self.data_updated)
 		if port is None:
 			super(PowerMeasurementServer, self).__init__(m)
 		else:
@@ -187,6 +187,7 @@ class PowerMeasurementServer(MeasurementServer):
 		numSamples = b.shape[0]
 		blockLen = np.max([10 , np.min([blockLen, numSamples])])
 		numBlocks = int(np.ceil(numSamples/float(blockLen)))
+		sampleRate = self.sampleRate
 		offset = 0
 
 		r = np.zeros((numBlocks,4))
@@ -315,7 +316,7 @@ class PowerMeasurementServer(MeasurementServer):
 <body>
 <table>
 """
-						for i in range(0,numBlocks):
+						for i in range(0,r.shape[0]):
 							output += "  <tr>"
 							for j in range(0,3):
 								output += "<td>%f</td>"%(r[i,j])
