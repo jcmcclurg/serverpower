@@ -102,10 +102,10 @@ int main(int argc, char *argv[])
 				lowerPercentile = (frameBufferLen*bufferPercent)/100.0;
 				//printf("upperPercentile = %.2f, lowerPercentile = %.2f\n",upperPercentile,lowerPercentile);
 				if (frameNum > upperPercentile) {
-					offset = minPower-setpoint-(minPower-setpoint)*(frameBufferLen-frameNum)/(lowerPercentile);
+					offset = (1-(frameBufferLen-frameNum)/(lowerPercentile));
 				}
 				else if (frameNum < lowerPercentile) {
-					offset = maxPower-setpoint-(maxPower-setpoint)*frameNum/lowerPercentile;
+					offset = (1-frameNum/lowerPercentile);
 				}
 				else {
 					offset = 0;
