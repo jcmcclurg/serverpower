@@ -21,8 +21,8 @@ if __name__ == "__main__":
 
 	debug=0
 	multicast_endpoint = Endpoint(port=args.port,hostname=args.address)
-	sys.stderr.write("Setting up listener (%s:%d)\n"%(multicast_endpoint.hostname,multicast_endpoint.port))
-	sys.stderr.write("Options are nonewline=%s size=%d\n"%(args.nonewline,args.size))
+	#sys.stderr.write("Setting up listener (%s:%d)\n"%(multicast_endpoint.hostname,multicast_endpoint.port))
+	#sys.stderr.write("Options are nonewline=%s size=%d\n"%(args.nonewline,args.size))
 	s = MulticastSocket(multicast_endpoint,bind_single=False,debug=debug)
 	running = True
 	while running:
