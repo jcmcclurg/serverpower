@@ -6,6 +6,7 @@ Created on Mon Oct 12 17:18:13 2015
 """
 
 import sys
+import time
 import argparse
 from MulticastSocket import *
 
@@ -15,6 +16,7 @@ if __name__ == "__main__":
 	parser.add_argument('-a', '--address', help='the address on which to listen', default='224.1.1.1')
 	parser.add_argument('-n', '--nonewline', help='do not print a newline after the packet data', action='store_true')
 	parser.add_argument('-s', '--size', type=int, help='maximum size of packets', default=1024)
+	parser.add_argument('-t', '--timestamp', help='print the timestamp before the data', action='store_true')
 	args = parser.parse_args()
 
 	debug=0
@@ -26,6 +28,8 @@ if __name__ == "__main__":
 	while running:
 		try:
 			p = s.readPacket(args.size)
+			if args.timestamp:
+				sys.stdout.write("%f:"%(time.time()))
 			if args.nonewline:
 				sys.stdout.write(p.data)
 			else:
