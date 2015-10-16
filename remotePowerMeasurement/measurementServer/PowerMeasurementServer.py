@@ -187,6 +187,7 @@ class PowerMeasurementServer(MeasurementServer):
 		numSamples = b.shape[0]
 		blockLen = np.max([10 , np.min([blockLen, numSamples])])
 		numBlocks = int(np.ceil(numSamples/float(blockLen)))
+		sampleRate = self.sampleRate
 		offset = 0
 
 		r = np.zeros((numBlocks,4))
@@ -315,7 +316,7 @@ class PowerMeasurementServer(MeasurementServer):
 <body>
 <table>
 """
-						for i in range(0,numBlocks):
+						for i in range(0,r.shape[0]):
 							output += "  <tr>"
 							for j in range(0,3):
 								output += "<td>%f</td>"%(r[i,j])

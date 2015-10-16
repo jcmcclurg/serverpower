@@ -33,4 +33,5 @@ if __name__ == "__main__":
 			s.sendPacket(p)
 		except (KeyboardInterrupt, ValueError) as e:
 			running = False
+	s.close()
 	sys.stderr.write("Goodbye.\n")
