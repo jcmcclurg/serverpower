@@ -30,12 +30,12 @@ run: 		./calcSetpoint
 #endif
 
 char* progname;
-int deadlines = 0,
-	maxPower = 0,
+int deadlines = 0;
+double 	maxPower = 0,
 	minPower = 0;
 long frameBufferLen = 0;
 int rate_ms = 10;
-char *filepath;
+char *filepath = NULL;
 
 void usage(void);
 int cmdline(int argc, char *argv[]);
@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
 			//printf("freq = %ld\tframeNum = %ld\n",freq,frameNum);
 
 			/* Calculate Setpoint */
-			setpoint = (double)(maxPower+minPower)/2+((maxPower-minPower)/(60.03-59.97))*(freq-60000.0)/1000.0;
+			setpoint = (maxPower+minPower)/2+((maxPower-minPower)/(60.03-59.97))*((double)(freq-60000.0))/1000.0;
 
 			if (deadlines) {
 				upperPercentile = (frameBufferLen*(100-bufferPercent))/100.0;
@@ -121,7 +121,7 @@ int main(int argc, char *argv[])
 				setpoint = minPower;
 
 			/* Send Setpoint*/
-			fprintf(stdout,"s%.2f\n",setpoint);
+			fprintf(stdout,"s%.3f\n",setpoint);
 
 			/* log data */
 			if (fp != NULL) {
@@ -159,10 +159,10 @@ int cmdline(int argc, char *argv[]){
 				deadlines = (int)atof(optarg);
 				break;
 			case 'M':
-				maxPower = (int)atof(optarg);
+				maxPower = (double)atof(optarg);
 				break;
 			case 'm':
-				minPower = (int)atof(optarg);
+				minPower = (double)atof(optarg);
 				break;
 			case 'B':
 				frameBufferLen = (long)atof(optarg);
