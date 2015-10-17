@@ -17,12 +17,12 @@ echo "pmid=$pmid"
 stress -c 1 & sid=$!
 
 COUNTER=0
-iterations=100
+iterations=1000
 sleepTime=$(bc <<< "scale=3; 10/$iterations")
 while [  $COUNTER -lt $iterations ]; do
 	bc <<< "scale=3; $COUNTER/$iterations"
 	let COUNTER=COUNTER+1 
-	sleep 1
+	sleep 0.1
 done | $insertDelays -U -d 0.5 -w 0.000001 -p $sid
 echo "loop finished"
 kill -KILL $(pgrep stress)
