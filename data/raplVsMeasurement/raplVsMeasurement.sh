@@ -14,7 +14,7 @@ echo "pgid=$pgid"
 $powerMeasure > powerMeasure.csv & pmid=$! 
 echo "pmid=$pmid"
 
-stress -m 6 & sid=$!
+stress -m 10 & sid=$!
 
 COUNTER=0
 iterations=1000
