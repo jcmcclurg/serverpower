@@ -2,6 +2,26 @@
 \usepackage{graphicx}
 \usepackage{amsmath}
 \usepackage[section]{placeins}
+\usepackage{courier}
+\usepackage{amsfonts} % for \mathbb{Z}
+\usepackage{tikz-timing}[2014/10/29]
+\usetikztiminglibrary[rising arrows]{clockarrows}
+\usepackage{xparse} % NewDocumentCommand, IfValueTF, IFBooleanTF
+% from http://nathantypanski.com/blog/2014-10-29-tikz-timing.html
+% Reference a bus.
+%
+% Usage:
+%
+%     \busref[3::0]{C/BE}    ->   C/BE[3::0]
+%     \busref*{AD}           ->   AD#
+%     \busref*[3::0]{C/BE}   ->   C/BE[3::0]#
+%
+\NewDocumentCommand{\busref}{som}{\texttt{%
+#3%
+\IfValueTF{#2}{[#2]}{}%
+\IfBooleanTF{#1}{\#}{}%
+}}
+
 \newcommand{\mref}[1]{Eq. (\ref{#1})}
 
 \begin{document}
@@ -16,10 +36,22 @@
 This report shows the importance of the size of the duty cycle period relative to the size of the power measurement window used for calculating the power.  If the period of the duty cycle is on the same order of magnitude as the power window, then the reported power has very large variance due to the fact that the computer will consume relatively large amounts of power during the pulse duration of the cycle.  When the window over which we estimate the power is of similar length as the pulse duration, that power estimate will be very large compared to the power estimate during the idle duration.
 \end{abstract}
 
-\section{Introduction}
-\emph{insertDelays.c} is program in C written by Josiah which takes an input $u[kh] \in (0, 1)$, where $k$ is the time index and $h$ is the nominal time period between samples.  The ouput of \emph{insertDelays.c} are Linux signals, SIGSTOP and SIGCONT, which are sent to a specified process (including all its children and threads). The value of $u[kh] \in (0, 1)$ can be thought of as a psuedo duty cycle for the process.  The actual duty cycle is $\frac{T_{work}}{T_{idle}+T_{work}}$. In \emph{insertDelays.c}, $T_{work}$, is fixed and can be specified as a commandline argument.  $u[kh]$ only changes $T_{idle}$.  Several functions are possible.  
+\section{Affect of the Duration of $T_{work}$ on Variance of Power Measurements}
+Note: $T_{work}=\texttt{work\_interval}$ in \texttt{insertDelay.c} \\
+\texttt{insertDelays.c} is program in C written by Josiah which takes an input $u[kh] \in (0, 1)$, where $k$ is the time index and $h$ is the nominal time period between samples.  The ouput of \texttt{insertDelays.c} are Linux signals, SIGSTOP and SIGCONT, which are sent to a specified process (including all its children and threads). \\
+Power is reported by two methods, \texttt{PKG} and \texttt{DAQ}: \\
+
+$\texttt{PKG[k]}=\frac{E[kh]-E[kh-h}{h}$, where $E[kh]$ is the value of the energy counter MSR (via the RAPL interface) since the last time is was read and $h$ is the time elapsed since it was last read.  The register is cleared when it is read, therefore $PKG$ is reported as an estimate of the average power consummed by the processor cores over the time period $h$.  $n \in \mathbb{Z}$.\\
+
+$\texttt{DAQ[k]}=\frac{1}{n_{w}}\displaystyle\sum\limits_{n=n_k}^{n_k+n_{w}}I(nT_s)V(nT_s)$, where $T_s$ is the sample rate, 10kSa/s, of the NI-DAQ, $n_w$ is the number of samples used in the averaging window, and $I(t)$ and $V(t)$ are the AC current and voltage applied to the servers power supply from the outlet. Lastly, $n_k = \texttt{k}n_w$ and $\texttt{k},n \in \mathbb{Z}$.  Therefore \texttt{DAQ[k]} is reported as the measured average power consummed by the total server over the time period $n_wT_s$.
+
+$T_{work}$ is the time which \texttt{insertDelays.c} allows to pass between sending \texttt{SIGCONT} and \texttt{SIGSTOP} signals.  To show why the maximum possible duration of $T_{work}$ is important, let us assume that $n_wT_s=h$ so that \texttt{DAQ[k]} and \texttt{PKG[k]} measure power over the same time intervals.  \textbf{NEED PLOT SHOWING IDLE CLOCK CYCLES AND NON-IDLE CYCLES WITH DIFFERENT DUTY-CYCLES AND DIFFERENT Tw RELATIVE TO NwTS AND H}
+
+\section{Affect of the Calculation of $T_{idle}$ on Variance of Power Measurements}
+Note: $T_{idle}=\texttt{slen}$ in \texttt{insertDelay.c} \\
+\texttt{insertDelays.c} is program in C written by Josiah which takes an input $u[kh] \in (0, 1)$, where $k$ is the time index and $h$ is the nominal time period between samples.  The ouput of \emph{insertDelays.c} are Linux signals, SIGSTOP and SIGCONT, which are sent to a specified process (including all its children and threads). The value of $u[kh] \in (0, 1)$ can be thought of as a psuedo duty cycle for the process.  The actual duty cycle is $\frac{T_{work}}{T_{idle}+T_{work}}$. In \emph{insertDelays.c}, $T_{work}$, is fixed and can be specified as a commandline argument.  $u[kh]$ only changes $T_{idle}$.  Several functions are possible.  
 \begin{equation} \label{eq:tIdle} T_{idle}=(1-u[kh])*X\text{, where $X$ is some value} \end{equation}
-In Josiah's original code, he used \mref{eq:tIdle}, where $X$ was the time elapsed since that particular point in the code loop. This effectively subsummed the time required to update states \emph{insertDelays.c} itself into $T_{work}$ and therefore into $T_{idle}$.  I have found that fixing $X$ as a constant produces power output with less variance at the when the psuedo-duty $\approx$ 50\%.  I have yet to determine a clear rationale for this difference. A second alternative produces the true duty cycle from $u[kh]$ by \mref{eq:trueDuty}:
+In Josiah's original code, he used \mref{eq:tIdle}, where $X$ was the time elapsed since that particular point in the code loop. This effectively subsummed the time required to update states \texttt{insertDelays.c} itself into $T_{work}$ and therefore into $T_{idle}$.  I have found that fixing $X$ as a constant produces power output with less variance at the when the psuedo-duty $\approx$ 50\%.  I have yet to determine a clear rationale for this difference. A second alternative produces the true duty cycle from $u[kh]$ by \mref{eq:trueDuty}:
 \begin{equation}  
 	\begin{aligned} 
 		D&=u[hk] \\
@@ -30,23 +62,7 @@ In Josiah's original code, he used \mref{eq:tIdle}, where $X$ was the time elaps
 	\label{eq:trueDuty}
 \end{equation}
 
-Best seems to be \mref{trueDuty} with $T_w=1ms$, because the $arg max_{u[kh]}(T_{idle})=0.999sec$ and $arg min_{u[kh]}(T_{idle})=1 \mu\text{sec}$
-
-\section{Definitions}
-Definitions in this document are as follows:
-
-Power consumed by the server at time, $t$, is reported as two different estimates $PKG$ and $DAQ$:
-\begin{itemize}
-	\item $PKG=\frac{E(t)}{T_w}$, where $E(t)$ is the value of the energy counter MSR (via the RAPL interface) since the last time is was read and $T_w$ is the time elapsed since it was last read.
-	\item $DAQ$ 
-\end{itemize}
-\begin{equation}
-    \label{simple_equation}
-    \alpha = \sqrt{ \beta }
-\end{equation}
-
-\subsection{Subsection Heading Here}
-Write your subsection text here.
+Best seems to be calculating $T_{idle}$ using \mref{eq:trueDuty} with $T_w=1ms$, because the $argmax_{u[kh]}\{T_{idle}\}=0.999sec$ and $argmin_{u[kh]}\{T_{idle}\}=1 \mu\text{s}$.  This is desireable because the maximum $T_{idle}$ is the worst-case response time and response time of $<1sec$ is acceptable.  textbf{Note: smaller values of $T_w<1ms$ could be used, but the \texttt{usleep()} function used would have to be changed to \texttt{nanosleep()} to accommodate smaller idle times, $T_{idle}<1\mu\text{s}$.
 
 \begin{figure}
     \centering
