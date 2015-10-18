@@ -7,6 +7,7 @@ stopPowerMeasure="$dir/remotePowerMeasurement/stopStreaming.sh"
 insertDelays="$dir/signal_insert_delays/insertDelays"
 
 mkfifo pipe
+rm powerMeasure.csv pg_data.csv remoteData.csv
 
 $initializePowerMeasure
 cat < pipe | sudo $powerGadget -e 100 > /dev/null & pgid=$! 
