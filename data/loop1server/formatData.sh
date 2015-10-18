@@ -15,4 +15,10 @@ cut -d, -f2 powerLogDecimated.csv > powerRemote.csv
 paste -d ',' timeRemote.csv powerRemote.csv > remoteData.csv # final output file
 rm powerLogDecimated.csv powerFormated.csv timeRemote.csv powerRemote.csv formatData.sh~  # clean up
 
-
+# get calcSetpoint1 output data
+awk -F [::.,] '{printf("%.16G\n",($1*3600+$2*60+$3+$4/1000000000))}' calcSet1Data.csv > time_fmd1.csv #> /dev/null
+cut -d, -f2 calcSet1Data.csv > freq1.csv
+cut -d, -f3 calcSet1Data.csv > fmd_sp1.csv
+cut -d, -f4 calcSet1Data.csv > frame1.csv
+paste -d ',' time_fmd1.csv freq1.csv fmd_sp1.csv frame1.csv > formatedData1.csv # final output file
+rm time_fmd1.csv freq1.csv fmd_sp1.csv frame1.csv # clean up
