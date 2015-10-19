@@ -39,7 +39,7 @@ stress -m 10 & sid=$!
 cat < pipe2 | $integralController -s $maxPower -n 0 -x 1 -t 0.1 -k 0 -d 0 -u 10 | $insertDelays -U -d 0.5 -w 0.001 -p $sid &
 
 echo "entering sleep"
-sleep 90
+sleep 240
 echo "test finished"
 kill -KILL $(pgrep stress)
 
