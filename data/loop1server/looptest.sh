@@ -21,6 +21,8 @@ if [[ -n "$minPower" ]]; then
 else
 	minPower=18
 fi
+echo "maxPower = $maxPower"
+echo "minPower = $minPower"
 
 mkfifo pipe pipe2
 rm powerMeasure.csv pg_data.csv remoteData.csv calcSet1Data.csv
@@ -34,10 +36,10 @@ $getFreq | $calcSetpoint -d 0 -M $maxPower -m $minPower -o calcSet1Data.csv > pi
 
 stress -m 10 & sid=$!
 
-cat < pipe2 | ($integralController -s $maxPower -n 0 -x 1 -t 0.1 -k 0 -d 0 -u 10; sleep 1; echo "q") | (sleep 1; $insertDelays -U -d 0.5 -w 0.001 -p $sid) &
+cat < pipe2 | $integralController -s $maxPower -n 0 -x 1 -t 0.1 -k 0 -d 0 -u 10 | $insertDelays -U -d 0.5 -w 0.001 -p $sid &
 
 echo "entering sleep"
-sleep 30
+sleep 90
 echo "test finished"
 kill -KILL $(pgrep stress)
 
