@@ -4,23 +4,9 @@
 \usepackage[section]{placeins}
 \usepackage{courier}
 \usepackage{amsfonts} % for \mathbb{Z}
+
 \usepackage{tikz-timing}[2014/10/29]
 \usetikztiminglibrary[rising arrows]{clockarrows}
-\usepackage{xparse} % NewDocumentCommand, IfValueTF, IFBooleanTF
-% from http://nathantypanski.com/blog/2014-10-29-tikz-timing.html
-% Reference a bus.
-%
-% Usage:
-%
-%     \busref[3::0]{C/BE}    ->   C/BE[3::0]
-%     \busref*{AD}           ->   AD#
-%     \busref*[3::0]{C/BE}   ->   C/BE[3::0]#
-%
-\NewDocumentCommand{\busref}{som}{\texttt{%
-#3%
-\IfValueTF{#2}{[#2]}{}%
-\IfBooleanTF{#1}{\#}{}%
-}}
 
 \newcommand{\mref}[1]{Eq. (\ref{#1})}
 
@@ -72,6 +58,11 @@ Best seems to be calculating $T_{idle}$ using \mref{eq:trueDuty} with $T_w=1ms$,
 \end{figure}
 
 \section{Conclusion}
-Write your conclusion here.
+Write your conclusion here. \\
+%\tikztimingmetachar{w}[1]{ [! wscale=#1 !] }         % relative
+%\tikztimingmetachar{W}[1]{ [! wscale=#1/\wscale !] } % absolute
+%\texttiming{ HL .2w HLHLH 3w LH 1W LH } \\
+%\texttiming{ HL 1.2w 3HLHLH .3w LH 1W LH } \\
+\texttiming{ HL.2H.2L.2H.2L.2H.6L.6HLH }
 
 \end{document}
