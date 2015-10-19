@@ -107,7 +107,10 @@ int main(int argc, char* argv[]) {
 	// Register signal and signal handler
 	signal(SIGINT, terminateProgram);
 	setbuf(stdout,NULL);
-
+	setbuf(stderr,NULL);
+	FILE* fp;
+	fp = fopen("/home/powerserver/joe/serverpower/transcoders/videos/iCstderr.log", "w");
+	setbuf(fp,NULL);
 	char* str;
 
 	double prevInput = input;
@@ -120,6 +123,8 @@ int main(int argc, char* argv[]) {
 	double currentTime;
 
 	double integral = 0.0;
+	int iter = 0;
+	int lastIter = 0;
 
 	if(cmdline(argc,argv)){
 		exit(EXIT_FAILURE);
@@ -167,6 +172,7 @@ int main(int argc, char* argv[]) {
 				}
 				else{
 					if(sscanf(str,"%lf",&input) > 0 && prevInput != input){
+						iter=iter+1;
 						if(verbose)
 							fprintf(stderr, "Input updated from %g to %g\n",prevInput, input);
 					}
@@ -176,15 +182,14 @@ int main(int argc, char* argv[]) {
 
 		prevTime = currentTime;
 		currentTime = getCurrentTime();
-
 		double prevError = setpoint - prevInput;
 		double currentError = setpoint - input;
 		double timeDelta = currentTime - prevTime;
 
 		double derivative = (currentError - prevError)/timeDelta;
-		double integralDelta = timeDelta*((currentError + prevError)/2.0);
+		double integralDelta = timeDelta*(currentError);
 
-		if(prevSetpoint == setpoint){
+		if(iter != lastIter){
 			if(tvalue*(integral + integralDelta) > maximum_output)
 				integral = maximum_output/tvalue;
 			else if(tvalue*(integral + integralDelta) < minimum_output)
@@ -213,6 +218,7 @@ int main(int argc, char* argv[]) {
 				if(verbose)
 					fprintf(stderr, "output: %lf\n",newOutput);
 			}
+			lastIter = iter;
 		}
 		else{
 			//integral = 0.0;
@@ -221,7 +227,7 @@ int main(int argc, char* argv[]) {
 		prevSetpoint = setpoint;
 		prevInput = input;
 	}
-
+	fclose(fp);
 	exit(EXIT_SUCCESS);
 	return 0;
 }
