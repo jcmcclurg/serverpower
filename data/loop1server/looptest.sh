@@ -47,11 +47,11 @@ kill -KILL $(pgrep stress)
 $stopPowerMeasure
 #echo "q" > pipe
 rm pipe pipe2
-kill -KILL $(pgrep power)
-kill -KILL $(pgrep Freq)
-kill -KILL $(pgrep integral)
-kill -KILL $(pgrep insert)
-kill -KILL $(pgrep calc)
+sudo kill -KILL $(pgrep power)
+sudo kill -KILL $(pgrep Freq)
+sudo kill -KILL $(pgrep integral)
+sudo kill -KILL $(pgrep insert)
+sudo kill -KILL $(pgrep calc)
 
 ./formatData.sh
 
