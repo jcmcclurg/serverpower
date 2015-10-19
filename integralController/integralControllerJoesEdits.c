@@ -119,13 +119,12 @@ int main(int argc, char* argv[]) {
 	double prevDValue = dvalue;
 	double prevSetpoint = NAN;
 
-double newOutput = 0.0;//Joe
-double limitedOutput = 0.0;//Joe
-
 	double prevTime;
 	double currentTime;
 
 	double integral = 0.0;
+	int iter = 0;
+	int lastIter = 0;
 
 	if(cmdline(argc,argv)){
 		exit(EXIT_FAILURE);
@@ -173,6 +172,7 @@ double limitedOutput = 0.0;//Joe
 				}
 				else{
 					if(sscanf(str,"%lf",&input) > 0 && prevInput != input){
+						iter=iter+1;
 						if(verbose)
 							fprintf(stderr, "Input updated from %g to %g\n",prevInput, input);
 					}
@@ -187,33 +187,29 @@ double limitedOutput = 0.0;//Joe
 		double timeDelta = currentTime - prevTime;
 
 		double derivative = (currentError - prevError)/timeDelta;
-//Joe	double integralDelta = timeDelta*((currentError + prevError)/2.0);
-double integralDelta = timeDelta*(currentError/2.0)+((limitedOutput-newOutput)/tvalue/2.0);//Joe
-// limitedOutput-newOutput adds an "antiwindup" term, see p310 in Astrom's Computer Controlled Systems //Joe 
+		double integralDelta = timeDelta*(currentError);
 
-//Joe	if(prevSetpoint == setpoint){
-//Joe		if(tvalue*(integral + integralDelta) > maximum_output)
-//Joe			integral = maximum_output/tvalue;
-//Joe		else if(tvalue*(integral + integralDelta) < minimum_output)
-//Joe			integral = minimum_output/tvalue;
-//Joe		else
+		if(iter != lastIter){
+			if(tvalue*(integral + integralDelta) > maximum_output)
+				integral = maximum_output/tvalue;
+			else if(tvalue*(integral + integralDelta) < minimum_output)
+				integral = minimum_output/tvalue;
+			else
 				integral += integralDelta;
 
-			newOutput = kvalue*currentError + integral*tvalue + dvalue*derivative;
-limitedOutput = newOutput;//Joe
+			double newOutput = kvalue*currentError + integral*tvalue + dvalue*derivative;
 
 			if(prefix != NULL)
 				fprintf(stdout,"%s",prefix);
 
 			if(newOutput > maximum_output){
 				fprintf(stdout,"%lf\n",maximum_output);
-limitedOutput = maximum_output;//Joe
+
 				if(verbose)
 					fprintf(stderr, "output capped (max)\n");
 			}
 			else if(newOutput < minimum_output){
 				fprintf(stdout,"%lf\n",minimum_output);
-limitedOutput = minimum_output;//Joe
 				if(verbose)
 					fprintf(stderr, "output capped (min)\n");
 			}
@@ -222,11 +218,11 @@ limitedOutput = minimum_output;//Joe
 				if(verbose)
 					fprintf(stderr, "output: %lf\n",newOutput);
 			}
-fprintf(fp,"limited output: %.2f newOutput: %.2f\n",limitedOutput,newOutput);
-//		}
-//		else{
+			lastIter = iter;
+		}
+		else{
 			//integral = 0.0;
-//		}
+		}
 
 		prevSetpoint = setpoint;
 		prevInput = input;
