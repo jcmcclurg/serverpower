@@ -17,6 +17,7 @@ char* progname;
 char* prefix;
 FILE* fp;
 char* logfile;
+char josiahVersion;
 double setpoint;
 double input;
 double update_interval;
@@ -53,6 +54,7 @@ void usage(){
 	fprintf(stdout, "   -x [maximum output value (default: -1e37)]\n");
 	fprintf(stdout, "   -p [prefix (default: (none) )]\n");
 	fprintf(stdout, "   -o [log file (default: (none))]\n");
+	fprintf(stdout, "   -j [use the updated calculation, not the default so as not to mess up Joe's scripts.]\n");
 	fprintf(stdout, "\n");
 }
 
@@ -63,6 +65,7 @@ int cmdline(int argc, char **argv){
 	dvalue = 0.0;
 
 	verbose = 0;
+	josiahVersion = 0;
 	progname = argv[0];
 	setpoint = 0.0;
 	input = 0.0;
@@ -73,7 +76,7 @@ int cmdline(int argc, char **argv){
 	logfile = NULL;
 	fp = NULL;
 
-	while ((opt = getopt(argc, argv, "p:t:d:n:x:u:s:i:k:vho:")) != -1) {
+	while ((opt = getopt(argc, argv, "p:t:d:n:x:u:s:i:k:vho:j")) != -1) {
 		switch (opt) {
 			case 'n':
 				minimum_output = atof(optarg);
@@ -117,10 +120,34 @@ int cmdline(int argc, char **argv){
 				}
 				setbuf(fp,NULL);
 				break;
+			case 'j':
+				josiahVersion = 1;
+				break;
 			default:
 				usage();
 				return -1;
 		}
+	}
+
+	LOG("proportional gain is %lf\n",kvalue);
+	LOG("integral gain is %lf\n",tvalue);
+	LOG("derivative gain is %lf\n",dvalue);
+
+	if(josiahVersion){
+		LOG("method is josiah\n");
+	}
+	else{
+		LOG("method is joe\n");
+	}
+	LOG("setpoint is %lf\n",setpoint);
+	LOG("input is %lf\n",input);
+	LOG("update interval is %lf\n",update_interval);
+	LOG("output is limited to [%lf, %lf]\n",minimum_output,maximum_output);
+	if(prefix != NULL){
+		LOG("prefix is %s\n",prefix);
+	}
+	if(logfile != NULL){
+		LOG("logfile is %s\n",logfile);
 	}
 
 	return 0;
@@ -145,14 +172,11 @@ int main(int argc, char* argv[]) {
 
 	double integral = 0.0;
 	double newOutput;
+	double oldOutput;
 
 	if(cmdline(argc,argv)){
 		exit(EXIT_FAILURE);
 	}
-
-	LOG("Initial setpoint: %lf\n",setpoint);
-	LOG("Initial input: %lf\n",input);
-	LOG("Update interval: %lf\n",update_interval);
 
 	while(1) {
 		if(checkStdin(update_interval) > 0){
@@ -201,7 +225,13 @@ int main(int argc, char* argv[]) {
 		double derivative = (currentError - prevError)/timeDelta;
 		double integralDelta = timeDelta*((currentError + prevError)/2.0);
 
-		newOutput = kvalue*currentError + tvalue*(integralDelta + integral) + dvalue*derivative;
+		if(josiahVersion){
+			newOutput = kvalue*currentError + tvalue*(integralDelta + integral) + dvalue*derivative;
+		}
+		else{
+			newOutput = kvalue*currentError + integral + dvalue*derivative;
+			oldOutput = newOutput;
+		}
 		if(prefix != NULL)
 			fprintf(stdout,"%s",prefix);
 
@@ -218,13 +248,16 @@ int main(int argc, char* argv[]) {
 		}
 		fprintf(stdout,"%lf\n",newOutput);
 
-		// I don't understand the following:
-		// integralDelta = (0.0075*currentError+(newOutput-oldOutput))*timeDelta/tvalue;
-		// 
-		// If you're trying to prevent integral windup, you can do it by limiting the accumulator
-		// (as I did previously), or by back-calculating the integral term. That method is shown here:
-		integral = (newOutput - kvalue*currentError - dvalue*derivative)/tvalue;
-
+		if(josiahVersion){
+			// If you're trying to prevent integral windup, you can do it by limiting the accumulator
+			// (as I did previously), or by back-calculating the integral term. That method is shown here:
+			integral = (newOutput - kvalue*currentError - dvalue*derivative)/tvalue;
+		}
+		else{
+			// If it hits the upper cap, this starts decreasing the integral
+			// If it hits the lower cap, this starts increasing the integral
+			integralDelta = (0.0075*currentError+(newOutput-oldOutput))*timeDelta/tvalue;
+		}
 		prevSetpoint = setpoint;
 		prevInput = input;
 	}
