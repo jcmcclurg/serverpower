@@ -28,7 +28,7 @@ mkfifo pipe
 mkfifo pipe2
 rm powerMeasure.csv pg_data.csv remoteData.csv calcSet1Data.csv
 
-cat < pipe | $powerGadget -e 100 > pipe2 & pgid=$! 
+cat < pipe | $powerGadget -e 100 > /dev/null & pgid=$! 
 
 $initializePowerMeasure
 $powerMeasure | tee powerMeasure.csv | unbuffer -p cut -d , -f 5 > pipe2 & pmid=$! 
