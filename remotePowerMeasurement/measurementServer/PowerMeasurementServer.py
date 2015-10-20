@@ -101,7 +101,7 @@ class PowerMeasurementServer(MeasurementServer):
 				self.streamBlockLen = streamBlockLen
 				self.streamType = streamType
 				self.streamIndices = streamIndices
-				self.streamingDelimiter = streamingDelimeter
+				self.streamingDelimiter = streamingDelimiter
 				self.isStreaming = True
 		else:
 			output = "already streaming"
