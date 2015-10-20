@@ -37,7 +37,7 @@ $getFreq | $calcSetpoint -d 0 -M $maxPower -m $minPower -o calcSet1Data.csv > pi
 
 stress -m 10 & sid=$!
 
-cat < pipe2 | $integralController -s $maxPower -n 0.001 -x 0.999 -t 0.3 -k 0 -d 0 -u 10 | $insertDelays -U -d 0.5 -w 0.001 -p $sid &
+cat < pipe2 | $integralController -s $maxPower -n 0.001 -x 0.999 -t 0.3 -k 0.0075 -d 0 -u 10 | $insertDelays -U -d 0.5 -w 0.001 -p $sid &
 
 echo "entering sleep"
 sleep 480
