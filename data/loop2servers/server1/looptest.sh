@@ -38,7 +38,7 @@ rm powerMeasure.csv pg_data.csv remoteData.csv calcSet1Data.csv
 cat < pipe | $powerGadget -e 100 > /dev/null & pgid=$! 
 
 $initializePowerMeasure
-$powerMeasure | tee powerMeasure.csv | unbuffer -p awk -v fA=$fieldA -v fB=$fieldB -F [,] '{printf("%.2f\n",$fA+$fB)}' > pipe2 & pmid=$! 
+$powerMeasure | tee powerMeasure.csv | unbuffer -p awk -v fA=$fieldA -v fB=$fieldB -F [,] '{printf("%.2f\n",$fA)}' > pipe2 & pmid=$! 
 
 $getFreq | $calcSetpoint -d 0 -M $maxPower -m $minPower -o calcSet1Data.csv > pipe2 & 
 
