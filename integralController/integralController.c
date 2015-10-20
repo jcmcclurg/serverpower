@@ -107,7 +107,10 @@ int main(int argc, char* argv[]) {
 	// Register signal and signal handler
 	signal(SIGINT, terminateProgram);
 	setbuf(stdout,NULL);
-
+	setbuf(stderr,NULL);
+	FILE* fp;
+	fp = fopen("/home/powerserver/joe/serverpower/transcoders/videos/iCstderr.log", "w");
+	setbuf(fp,NULL);
 	char* str;
 
 	double prevInput = input;
@@ -120,6 +123,11 @@ int main(int argc, char* argv[]) {
 	double currentTime;
 
 	double integral = 0.0;
+	double integralDelta = 0.0;
+	int iter = 0;
+	int lastIter = 0;
+	double newOutput;
+	double oldOutput;
 
 	if(cmdline(argc,argv)){
 		exit(EXIT_FAILURE);
@@ -167,6 +175,7 @@ int main(int argc, char* argv[]) {
 				}
 				else{
 					if(sscanf(str,"%lf",&input) > 0 && prevInput != input){
+						iter=iter+1;
 						if(verbose)
 							fprintf(stderr, "Input updated from %g to %g\n",prevInput, input);
 					}
@@ -174,36 +183,38 @@ int main(int argc, char* argv[]) {
 			}
 		}
 
-		prevTime = currentTime;
-		currentTime = getCurrentTime();
+		if(iter != lastIter){
 
-		double prevError = setpoint - prevInput;
-		double currentError = setpoint - input;
-		double timeDelta = currentTime - prevTime;
+			prevTime = currentTime;
+			currentTime = getCurrentTime();
+			double prevError = setpoint - prevInput;
+			double currentError = setpoint - input;
+			double timeDelta = currentTime - prevTime;
 
-		double derivative = (currentError - prevError)/timeDelta;
-		double integralDelta = timeDelta*((currentError + prevError)/2.0);
+			double derivative = (currentError - prevError)/timeDelta;
+			
 
-		if(prevSetpoint == setpoint){
-			if(tvalue*(integral + integralDelta) > maximum_output)
-				integral = maximum_output/tvalue;
-			else if(tvalue*(integral + integralDelta) < minimum_output)
-				integral = minimum_output/tvalue;
-			else
-				integral += integralDelta;
+		
+		//	if(tvalue*(integral + integralDelta) > maximum_output)
+		//		integral = maximum_output/tvalue;
+		//	else if(tvalue*(integral + integralDelta) < minimum_output)
+		//		integral = minimum_output/tvalue;
+		//	else
+		//		integral += integralDelta;
 
-			double newOutput = kvalue*currentError + integral*tvalue + dvalue*derivative;
-
+			newOutput = kvalue*currentError + integral + dvalue*derivative;
+			oldOutput = newOutput;
 			if(prefix != NULL)
 				fprintf(stdout,"%s",prefix);
 
 			if(newOutput > maximum_output){
 				fprintf(stdout,"%lf\n",maximum_output);
-
+				newOutput =  maximum_output;
 				if(verbose)
 					fprintf(stderr, "output capped (max)\n");
 			}
 			else if(newOutput < minimum_output){
+				newOutput = minimum_output;
 				fprintf(stdout,"%lf\n",minimum_output);
 				if(verbose)
 					fprintf(stderr, "output capped (min)\n");
@@ -213,6 +224,9 @@ int main(int argc, char* argv[]) {
 				if(verbose)
 					fprintf(stderr, "output: %lf\n",newOutput);
 			}
+			lastIter = iter;
+			integralDelta = (0.0075*currentError+(newOutput-oldOutput))*timeDelta/tvalue;
+			integral += integralDelta;
 		}
 		else{
 			//integral = 0.0;
@@ -221,7 +235,7 @@ int main(int argc, char* argv[]) {
 		prevSetpoint = setpoint;
 		prevInput = input;
 	}
-
+	fclose(fp);
 	exit(EXIT_SUCCESS);
 	return 0;
 }

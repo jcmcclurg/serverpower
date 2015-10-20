@@ -1,6 +1,7 @@
 #!/bin/bash
 
-dir=$( dirname $0 )
+#dir=$( dirname $0 )
+dir="/home/powerserver/joe/serverpower/remotePowerMeasurement"
 addr='http://192.168.1.200:8282'
 
 $dir/stopStreaming.sh $addr
