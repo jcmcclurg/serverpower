@@ -38,6 +38,8 @@ class PowerMeasurementServer(MeasurementServer):
 		self.streamType = None
 		self.streamingAddr = '224.1.1.1'
 		self.streamingPort = 9999
+		self.streamingDelimiter=','
+		self.streamingNumberFormat='%.3f'
 		self.streamingSocket = None
 		self.multicast_endpoint = Endpoint(port=self.streamingPort,hostname=self.streamingAddr)
 		self.streamingSocket = MulticastSocket(self.multicast_endpoint,bind_single=True,debug=0)
@@ -52,7 +54,7 @@ class PowerMeasurementServer(MeasurementServer):
 		channels.append(AIChannelSpec('JDAQ', 5, 'server2', termConf=DAQmx_Val_Diff, rangemin=-5, rangemax=5))
 		channels.append(AIChannelSpec('JDAQ', 6, 'server1', termConf=DAQmx_Val_Diff, rangemin=-5, rangemax=5))
 
-		m = MultiChannelAITask(channels,sampleRate=self.sampleRate,dataWindowLength=int(np.round(self.sampleRate*100.0)), data_updated_callback=self.data_updated)
+		m = MultiChannelAITask(channels,sampleRate=self.sampleRate,dataWindowLength=int(np.round(self.sampleRate*100.0)), sampleEvery=500, data_updated_callback=self.data_updated)
 		if port is None:
 			super(PowerMeasurementServer, self).__init__(m)
 		else:
@@ -70,11 +72,11 @@ class PowerMeasurementServer(MeasurementServer):
 					b = self._getFreqFFT(b, self.streamBlockLen)
 				
 				s = StringIO.StringIO()
-				np.savetxt(s,b,fmt='%.3f',delimiter=',')
+				np.savetxt(s,b,fmt=self.streamingNumberFormat,delimiter=self.streamingDelimiter)
 				packet = Packet(s.getvalue(),self.multicast_endpoint)
 				self.streamingSocket.sendPacket(packet)
 	
-	def _startStream(self, streamLength, streamBlockLen, streamType, streamIndices):
+	def _startStream(self, streamLength, streamBlockLen, streamType, streamIndices, streamingDelimiter):
 		output = None
 		if not self.isStreaming:
 			if streamLength <= self.task.dataWindow.size and streamLength > 0:
@@ -99,6 +101,7 @@ class PowerMeasurementServer(MeasurementServer):
 				self.streamBlockLen = streamBlockLen
 				self.streamType = streamType
 				self.streamIndices = streamIndices
+				self.streamingDelimiter = streamingDelimiter
 				self.isStreaming = True
 		else:
 			output = "already streaming"
@@ -187,6 +190,7 @@ class PowerMeasurementServer(MeasurementServer):
 		numSamples = b.shape[0]
 		blockLen = np.max([10 , np.min([blockLen, numSamples])])
 		numBlocks = int(np.ceil(numSamples/float(blockLen)))
+		sampleRate = self.sampleRate
 		offset = 0
 
 		r = np.zeros((numBlocks,4))
@@ -240,6 +244,7 @@ class PowerMeasurementServer(MeasurementServer):
 				streamBlockLen = int(cgi.escape(qs.get('blockLength', ["-1"])[0]));
 				streamType = str(cgi.escape(qs.get('type', ["-1"])[0]));
 				streamIndices = str(cgi.escape(qs.get('fields', ["-1"])[0]));
+				streamingDelimiter = str(cgi.escape(qs.get('delimiter', [","])[0]));
 				valid = False
 				if command == 'stop':
 					errors = self._stopStream()
@@ -254,7 +259,7 @@ class PowerMeasurementServer(MeasurementServer):
 					except ValueError:
 						streamIndices = np.array([-1])
 
-					errors = self._startStream(streamLength,streamBlockLen,streamType,streamIndices)
+					errors = self._startStream(streamLength,streamBlockLen,streamType,streamIndices,streamingDelimiter)
 					if errors is None:
 						output = "Successfully started streaming fields %s %s of %d-sample chunks, taken in %d-length blocks"%(streamIndices, streamType, streamLength, streamBlockLen)
 					else:
@@ -315,7 +320,7 @@ class PowerMeasurementServer(MeasurementServer):
 <body>
 <table>
 """
-						for i in range(0,numBlocks):
+						for i in range(0,r.shape[0]):
 							output += "  <tr>"
 							for j in range(0,3):
 								output += "<td>%f</td>"%(r[i,j])
