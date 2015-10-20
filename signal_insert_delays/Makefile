@@ -19,11 +19,11 @@ trie.o: trie.c trie.h
 #commonFunctions.o: commonFunctions.c commonFunctions.h
 #	$(CC) -c commonFunctions.c $(CFLAGS) $(FLAGS)
 
-#triangleWave:	triangleWave.c
-#	$(CC) -o triangleWave triangleWave.c $(CFLAGS) $(FLAGS)
+triangleWave:	triangleWave.c
+	$(CC) -o triangleWave triangleWave.c $(CFLAGS) $(FLAGS)
 
 #sig_catcher: sig_catcher.c
 #	$(CC) -o sig_catcher sig_catcher.c $(CFLAGS) $(FLAGS)
 
 clean:
-	rm -f *~ *.o $(TARGETS)
+	rm -f *~ *.o $(TARGETS) triangleWave
