@@ -52,7 +52,7 @@ class PowerMeasurementServer(MeasurementServer):
 		channels.append(AIChannelSpec('JDAQ', 5, 'server2', termConf=DAQmx_Val_Diff, rangemin=-5, rangemax=5))
 		channels.append(AIChannelSpec('JDAQ', 6, 'server1', termConf=DAQmx_Val_Diff, rangemin=-5, rangemax=5))
 
-		m = MultiChannelAITask(channels,sampleRate=self.sampleRate,dataWindowLength=int(np.round(self.sampleRate*100.0)), sampleEvery=1000, data_updated_callback=self.data_updated)
+		m = MultiChannelAITask(channels,sampleRate=self.sampleRate,dataWindowLength=int(np.round(self.sampleRate*100.0)), sampleEvery=500, data_updated_callback=self.data_updated)
 		if port is None:
 			super(PowerMeasurementServer, self).__init__(m)
 		else:
