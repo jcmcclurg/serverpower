@@ -38,6 +38,8 @@ class PowerMeasurementServer(MeasurementServer):
 		self.streamType = None
 		self.streamingAddr = '224.1.1.1'
 		self.streamingPort = 9999
+		self.streamingDelimiter=','
+		self.streamingNumberFormat='%.3f'
 		self.streamingSocket = None
 		self.multicast_endpoint = Endpoint(port=self.streamingPort,hostname=self.streamingAddr)
 		self.streamingSocket = MulticastSocket(self.multicast_endpoint,bind_single=True,debug=0)
@@ -70,11 +72,11 @@ class PowerMeasurementServer(MeasurementServer):
 					b = self._getFreqFFT(b, self.streamBlockLen)
 				
 				s = StringIO.StringIO()
-				np.savetxt(s,b,fmt='%.3f',delimiter=',')
+				np.savetxt(s,b,fmt=self.streamingNumberFormat,delimiter=self.streamingDelimiter)
 				packet = Packet(s.getvalue(),self.multicast_endpoint)
 				self.streamingSocket.sendPacket(packet)
 	
-	def _startStream(self, streamLength, streamBlockLen, streamType, streamIndices):
+	def _startStream(self, streamLength, streamBlockLen, streamType, streamIndices, streamingDelimiter):
 		output = None
 		if not self.isStreaming:
 			if streamLength <= self.task.dataWindow.size and streamLength > 0:
@@ -99,6 +101,7 @@ class PowerMeasurementServer(MeasurementServer):
 				self.streamBlockLen = streamBlockLen
 				self.streamType = streamType
 				self.streamIndices = streamIndices
+				self.streamingDelimiter = streamingDelimeter
 				self.isStreaming = True
 		else:
 			output = "already streaming"
@@ -241,6 +244,7 @@ class PowerMeasurementServer(MeasurementServer):
 				streamBlockLen = int(cgi.escape(qs.get('blockLength', ["-1"])[0]));
 				streamType = str(cgi.escape(qs.get('type', ["-1"])[0]));
 				streamIndices = str(cgi.escape(qs.get('fields', ["-1"])[0]));
+				streamingDelimiter = str(cgi.escape(qs.get('delimiter', [","])[0]));
 				valid = False
 				if command == 'stop':
 					errors = self._stopStream()
@@ -255,7 +259,7 @@ class PowerMeasurementServer(MeasurementServer):
 					except ValueError:
 						streamIndices = np.array([-1])
 
-					errors = self._startStream(streamLength,streamBlockLen,streamType,streamIndices)
+					errors = self._startStream(streamLength,streamBlockLen,streamType,streamIndices,streamingDelimiter)
 					if errors is None:
 						output = "Successfully started streaming fields %s %s of %d-sample chunks, taken in %d-length blocks"%(streamIndices, streamType, streamLength, streamBlockLen)
 					else:
