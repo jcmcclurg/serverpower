@@ -8,27 +8,40 @@
 
 #include "commonFunctions.h"
 
+
 char verbose;
 double kvalue;
 double tvalue;
 double dvalue;
 char* progname;
 char* prefix;
+FILE* fp;
+char* logfile;
+char josiahVersion;
 double setpoint;
 double input;
 double update_interval;
 double maximum_output;
 double minimum_output;
 
+#define LOG(args...) if(verbose){ fprintf(stderr,args); } if(fp != NULL){ fprintf(fp,args); }
+
 void usage(){
-	fprintf(stdout, "\nIntegral controller prints a value proportional to the integral of the error.\n");
+	fprintf(stdout, "\nIntegral controller prints a value according to the following formula:\n");
+	fprintf(stdout, "      currentError = setpoint - input\n");
+	fprintf(stdout, "      dt = currentTime - previousTime\n");
+	fprintf(stdout, "      de = currentError - previousError\n");
+	fprintf(stdout, "      di = currentError*dt\n");
+	fprintf(stdout, "      output = k*currentError + t*(integral + di) + d*de/dt\n");
+	fprintf(stdout, "      integral = (output - (k*currentError - d*de/dt))/t\n");
+	fprintf(stdout, "      Note that the integral term is back-calculated to prevent integral windup.\n\n");
 	fprintf(stdout, "  The setpoint is changed by typing s[setpoint] on a line by itself.\n");
 	fprintf(stdout, "  The k value is changed by typing k[kvalue] on a line by itself.\n");
 	fprintf(stdout, "  The t value is changed by typing t[tvalue] on a line by itself.\n");
 	fprintf(stdout, "  The d value is changed by typing d[dvalue] on a line by itself.\n");
 	fprintf(stdout, "  The input is changed by typing [input] on a line by itself.\n");
 	fprintf(stdout, "\nUsage: \n");
-	fprintf(stdout, "%s [option]\n",progname);
+	fprintf(stdout, "%s [options]\n",progname);
 	fprintf(stdout, "   -s [initial setpoint (default: 0.0)]\n");
 	fprintf(stdout, "   -i [initial input (default: 0.0)]\n");
 	fprintf(stdout, "   -u [update interval in seconds (default: 1.0)]\n");
@@ -37,9 +50,11 @@ void usage(){
 	fprintf(stdout, "   -d [d is the derivative gain (default: 0.0)]\n");
 	fprintf(stdout, "   -h [this help]\n");
 	fprintf(stdout, "   -v [verbose]\n");
-	fprintf(stdout, "   -n [minimum integral value (default:  1e37)]\n");
-	fprintf(stdout, "   -x [maximum integral value (default: -1e37)]\n");
+	fprintf(stdout, "   -n [minimum output value (default:  1e37)]\n");
+	fprintf(stdout, "   -x [maximum output value (default: -1e37)]\n");
 	fprintf(stdout, "   -p [prefix (default: (none) )]\n");
+	fprintf(stdout, "   -o [log file (default: (none))]\n");
+	fprintf(stdout, "   -j [use the updated calculation, not the default so as not to mess up Joe's scripts.]\n");
 	fprintf(stdout, "\n");
 }
 
@@ -50,6 +65,7 @@ int cmdline(int argc, char **argv){
 	dvalue = 0.0;
 
 	verbose = 0;
+	josiahVersion = 0;
 	progname = argv[0];
 	setpoint = 0.0;
 	input = 0.0;
@@ -57,8 +73,10 @@ int cmdline(int argc, char **argv){
 	minimum_output = -DBL_MAX;
 	maximum_output = DBL_MAX;
 	prefix = NULL;
+	logfile = NULL;
+	fp = NULL;
 
-	while ((opt = getopt(argc, argv, "p:t:d:n:x:u:s:i:k:vh")) != -1) {
+	while ((opt = getopt(argc, argv, "p:t:d:n:x:u:s:i:k:vho:j")) != -1) {
 		switch (opt) {
 			case 'n':
 				minimum_output = atof(optarg);
@@ -94,10 +112,42 @@ int cmdline(int argc, char **argv){
 			case 'p':
 				prefix = (char*) optarg;
 				break;
+			case 'o':
+				logfile = (char*) optarg;
+				fp = fopen(logfile, "w");
+				if(!fp){
+					exit(EXIT_FAILURE);
+				}
+				setbuf(fp,NULL);
+				break;
+			case 'j':
+				josiahVersion = 1;
+				break;
 			default:
 				usage();
 				return -1;
 		}
+	}
+
+	LOG("proportional gain is %lf\n",kvalue);
+	LOG("integral gain is %lf\n",tvalue);
+	LOG("derivative gain is %lf\n",dvalue);
+
+	if(josiahVersion){
+		LOG("method is josiah\n");
+	}
+	else{
+		LOG("method is joe\n");
+	}
+	LOG("setpoint is %lf\n",setpoint);
+	LOG("input is %lf\n",input);
+	LOG("update interval is %lf\n",update_interval);
+	LOG("output is limited to [%lf, %lf]\n",minimum_output,maximum_output);
+	if(prefix != NULL){
+		LOG("prefix is %s\n",prefix);
+	}
+	if(logfile != NULL){
+		LOG("logfile is %s\n",logfile);
 	}
 
 	return 0;
@@ -108,9 +158,7 @@ int main(int argc, char* argv[]) {
 	signal(SIGINT, terminateProgram);
 	setbuf(stdout,NULL);
 	setbuf(stderr,NULL);
-	FILE* fp;
-	fp = fopen("/home/powerserver/joe/serverpower/transcoders/videos/iCstderr.log", "w");
-	setbuf(fp,NULL);
+
 	char* str;
 
 	double prevInput = input;
@@ -123,20 +171,11 @@ int main(int argc, char* argv[]) {
 	double currentTime;
 
 	double integral = 0.0;
-	double integralDelta = 0.0;
-	int iter = 0;
-	int lastIter = 0;
 	double newOutput;
 	double oldOutput;
 
 	if(cmdline(argc,argv)){
 		exit(EXIT_FAILURE);
-	}
-
-	if(verbose){
-		fprintf(stderr,"Initial setpoint: %lf\n",setpoint);
-		fprintf(stderr,"Initial input: %lf\n",input);
-		fprintf(stderr,"Update interval: %lf\n",update_interval);
 	}
 
 	while(1) {
@@ -148,90 +187,77 @@ int main(int argc, char* argv[]) {
 				}
 				else if(str[0] == 's'){
 					if(sscanf(str+1,"%lf",&setpoint) > 0 && prevSetpoint != setpoint){
-						if(verbose)
-							fprintf(stderr, "Setpoint updated from %g to %g\n",prevSetpoint, setpoint);
+						LOG("Setpoint updated from %g to %g\n",prevSetpoint, setpoint);
 					}
 				}
 				else if(str[0] == 'd'){
 					prevDValue = dvalue;
 					if(sscanf(str+1,"%lf",&dvalue) > 0 && prevDValue != dvalue){
-						if(verbose)
-							fprintf(stderr, "dvalue updated from %g to %g\n",prevDValue, dvalue);
+						LOG("dvalue updated from %g to %g\n",prevDValue, dvalue);
 					}
 				}
 				else if(str[0] == 't'){
 					prevTValue = tvalue;
 					if(sscanf(str+1,"%lf",&tvalue) > 0 && prevTValue != tvalue){
-						if(verbose)
-							fprintf(stderr, "tvalue updated from %g to %g\n",prevTValue, tvalue);
+						LOG("tvalue updated from %g to %g\n",prevTValue, tvalue);
 					}
 				}
 				else if(str[0] == 'k'){
 					prevKValue = kvalue;
 					if(sscanf(str+1,"%lf",&kvalue) > 0 && prevKValue != kvalue){
-						if(verbose)
-							fprintf(stderr, "kvalue updated from %g to %g\n",prevKValue, kvalue);
+						LOG("kvalue updated from %g to %g\n",prevKValue, kvalue);
 					}
 				}
 				else{
 					if(sscanf(str,"%lf",&input) > 0 && prevInput != input){
-						iter=iter+1;
-						if(verbose)
-							fprintf(stderr, "Input updated from %g to %g\n",prevInput, input);
+						LOG("Input updated from %g to %g\n",prevInput, input);
 					}
 				}
 			}
 		}
 
-		if(iter != lastIter){
+		prevTime = currentTime;
+		currentTime = getCurrentTime();
+		double prevError = setpoint - prevInput;
+		double currentError = setpoint - input;
+		double timeDelta = currentTime - prevTime;
 
-			prevTime = currentTime;
-			currentTime = getCurrentTime();
-			double prevError = setpoint - prevInput;
-			double currentError = setpoint - input;
-			double timeDelta = currentTime - prevTime;
+		double derivative = (currentError - prevError)/timeDelta;
+		double integralDelta = timeDelta*((currentError + prevError)/2.0);
 
-			double derivative = (currentError - prevError)/timeDelta;
-			
-
-		
-		//	if(tvalue*(integral + integralDelta) > maximum_output)
-		//		integral = maximum_output/tvalue;
-		//	else if(tvalue*(integral + integralDelta) < minimum_output)
-		//		integral = minimum_output/tvalue;
-		//	else
-		//		integral += integralDelta;
-
-			newOutput = kvalue*currentError + integral + dvalue*derivative;
-			oldOutput = newOutput;
-			if(prefix != NULL)
-				fprintf(stdout,"%s",prefix);
-
-			if(newOutput > maximum_output){
-				fprintf(stdout,"%lf\n",maximum_output);
-				newOutput =  maximum_output;
-				if(verbose)
-					fprintf(stderr, "output capped (max)\n");
-			}
-			else if(newOutput < minimum_output){
-				newOutput = minimum_output;
-				fprintf(stdout,"%lf\n",minimum_output);
-				if(verbose)
-					fprintf(stderr, "output capped (min)\n");
-			}
-			else {
-				fprintf(stdout,"%lf\n",newOutput);
-				if(verbose)
-					fprintf(stderr, "output: %lf\n",newOutput);
-			}
-			lastIter = iter;
-			integralDelta = (0.0075*currentError+(newOutput-oldOutput))*timeDelta/tvalue;
-			integral += integralDelta;
+		if(josiahVersion){
+			newOutput = kvalue*currentError + tvalue*(integralDelta + integral) + dvalue*derivative;
 		}
 		else{
-			//integral = 0.0;
+			newOutput = kvalue*currentError + integral + dvalue*derivative;
+			oldOutput = newOutput;
 		}
+		if(prefix != NULL)
+			fprintf(stdout,"%s",prefix);
 
+		if(newOutput > maximum_output){
+			newOutput =  maximum_output;
+			LOG("output capped (max)\n");
+		}
+		else if(newOutput < minimum_output){
+			newOutput = minimum_output;
+			LOG("output capped (min)\n");
+		}
+		else {
+			LOG("output: %lf\n",newOutput);
+		}
+		fprintf(stdout,"%lf\n",newOutput);
+
+		if(josiahVersion){
+			// If you're trying to prevent integral windup, you can do it by limiting the accumulator
+			// (as I did previously), or by back-calculating the integral term. That method is shown here:
+			integral = (newOutput - kvalue*currentError - dvalue*derivative)/tvalue;
+		}
+		else{
+			// If it hits the upper cap, this starts decreasing the integral
+			// If it hits the lower cap, this starts increasing the integral
+			integralDelta = (0.0075*currentError+(newOutput-oldOutput))*timeDelta/tvalue;
+		}
 		prevSetpoint = setpoint;
 		prevInput = input;
 	}
