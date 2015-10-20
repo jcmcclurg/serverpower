@@ -123,8 +123,11 @@ int main(int argc, char* argv[]) {
 	double currentTime;
 
 	double integral = 0.0;
+	double integralDelta = 0.0;
 	int iter = 0;
 	int lastIter = 0;
+	double newOutput;
+	double oldOutput;
 
 	if(cmdline(argc,argv)){
 		exit(EXIT_FAILURE);
@@ -180,35 +183,38 @@ int main(int argc, char* argv[]) {
 			}
 		}
 
-		prevTime = currentTime;
-		currentTime = getCurrentTime();
-		double prevError = setpoint - prevInput;
-		double currentError = setpoint - input;
-		double timeDelta = currentTime - prevTime;
-
-		double derivative = (currentError - prevError)/timeDelta;
-		double integralDelta = timeDelta*(currentError);
-
 		if(iter != lastIter){
-			if(tvalue*(integral + integralDelta) > maximum_output)
-				integral = maximum_output/tvalue;
-			else if(tvalue*(integral + integralDelta) < minimum_output)
-				integral = minimum_output/tvalue;
-			else
-				integral += integralDelta;
 
-			double newOutput = kvalue*currentError + integral*tvalue + dvalue*derivative;
+			prevTime = currentTime;
+			currentTime = getCurrentTime();
+			double prevError = setpoint - prevInput;
+			double currentError = setpoint - input;
+			double timeDelta = currentTime - prevTime;
 
+			double derivative = (currentError - prevError)/timeDelta;
+			
+
+		
+		//	if(tvalue*(integral + integralDelta) > maximum_output)
+		//		integral = maximum_output/tvalue;
+		//	else if(tvalue*(integral + integralDelta) < minimum_output)
+		//		integral = minimum_output/tvalue;
+		//	else
+		//		integral += integralDelta;
+
+			newOutput = kvalue*currentError + integral + dvalue*derivative;
+			oldOutput = newOutput;
 			if(prefix != NULL)
 				fprintf(stdout,"%s",prefix);
 
 			if(newOutput > maximum_output){
 				fprintf(stdout,"%lf\n",maximum_output);
-
+				newOutput =  maximum_output;
 				if(verbose)
 					fprintf(stderr, "output capped (max)\n");
 			}
 			else if(newOutput < minimum_output){
+				newOutput = minimum_output;
 				fprintf(stdout,"%lf\n",minimum_output);
 				if(verbose)
 					fprintf(stderr, "output capped (min)\n");
@@ -219,6 +225,8 @@ int main(int argc, char* argv[]) {
 					fprintf(stderr, "output: %lf\n",newOutput);
 			}
 			lastIter = iter;
+			integralDelta = (0.0075*currentError+(newOutput-oldOutput))*timeDelta/tvalue;
+			integral += integralDelta;
 		}
 		else{
 			//integral = 0.0;
