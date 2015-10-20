@@ -14,6 +14,43 @@ from MulticastSocket import *
 from MeasurementServer import *
 from sineFit import *
 
+class PowerStream(object):
+	def __init__(self, socket, streamLength, streamBlockLen, streamType, streamIndices, streamingDelimiter):
+		self.isStreaming = False
+		self.streamingSocket = socket
+		self.streamIndices = streamIndices
+		self.streamLength = streamLength
+		self.streamBlockLen = streamBlockLen
+		self.streamType = streamType
+		self.streamingDelimiter=streamingDelimiter
+		self.streamingNumberFormat='%.3f'
+		self.currentUnstreamedLen = 0
+
+	def data_updated(self,server,startTime,endTime,length):
+		if self.isStreaming:
+			self.currentUnstreamedLen += length
+			if(self.currentUnstreamedLen >= self.streamLength):
+				# We don't check the length of b, and just assume that it's streamLength.
+				# There's no good reason for this except simplicity of code, which is a good reason enough.
+				self.currentUnstreamedLen -= self.streamLength
+				b = server._getData(self.streamLength)
+				if self.streamType == 'power':
+					b = server._getPower(b, self.streamBlockLen)
+				elif self.streamType == 'freq':
+					b = server._getFreqFFT(b, self.streamBlockLen)
+				
+				s = StringIO.StringIO()
+				np.savetxt(s,b[:,self.streamIndices],fmt=self.streamingNumberFormat,delimiter=self.streamingDelimiter)
+
+				packet = Packet(s.getvalue(),self.streamingSocket.multicast_endpoint)
+				self.streamingSocket.sendPacket(packet)
+	
+	def start(self):
+		self.isStreaming = True
+
+	def stop(self):
+		self.isStreaming = False
+
 class PowerMeasurementServer(MeasurementServer):
 	def __init__(self, port=None):
 		self.voltageScalingFactor = 124.0/6.55;
@@ -31,17 +68,8 @@ class PowerMeasurementServer(MeasurementServer):
 		self.serverIndices = np.array([0, 4, 3, 2, 1]) + 3;
 		self.sampleRate = 10000;
 
-		self.isStreaming = False
-		self.streamIndices = []
-		self.streamLength = 0
-		self.streamBlockLen = 0
-		self.streamType = None
-		self.streamingAddr = '224.1.1.1'
-		self.streamingPort = 9999
-		self.streamingSocket = None
-		self.multicast_endpoint = Endpoint(port=self.streamingPort,hostname=self.streamingAddr)
-		self.streamingSocket = MulticastSocket(self.multicast_endpoint,bind_single=True,debug=0)
-		self.currentUnstreamedLen = 0
+		self.sockets = {}
+		self.streams = {}
 
 		channels = []
 		channels.append(AIChannelSpec('JDAQ', 0, 'voltage', termConf=DAQmx_Val_Diff, rangemin=-10, rangemax=10))
@@ -59,24 +87,15 @@ class PowerMeasurementServer(MeasurementServer):
 			super(PowerMeasurementServer, self).__init__(m, port)
 
 	def data_updated(self,startTime,endTime, length):
-		if self.isStreaming:
-			self.currentUnstreamedLen += length
-			if(self.currentUnstreamedLen >= self.streamLength):
-				self.currentUnstreamedLen -= self.streamLength
-				b = self._getData(self.streamLength)
-				if self.streamType == 'power':
-					b = self._getPower(b, self.streamBlockLen)
-				elif self.streamType == 'freq':
-					b = self._getFreqFFT(b, self.streamBlockLen)
-				
-				s = StringIO.StringIO()
-				np.savetxt(s,b,fmt='%.3f',delimiter=',')
-				packet = Packet(s.getvalue(),self.multicast_endpoint)
-				self.streamingSocket.sendPacket(packet)
+		for stream in self.streams:
+			self.streams[stream].data_updated(self,startTime,endTime,length)
+
 	
-	def _startStream(self, streamLength, streamBlockLen, streamType, streamIndices):
+	def _startStream(self, port, addr, uniqueid, streamLength, streamBlockLen, streamType, streamIndices, streamingDelimiter):
 		output = None
-		if not self.isStreaming:
+		socketID = '%s:%d'%(addr, port)
+		streamID = '%s:%d'%(socketID, uniqueid)
+		if (not (streamID in self.streams)) or (not self.streams[streamID].isStreaming):
 			if streamLength <= self.task.dataWindow.size and streamLength > 0:
 				if streamBlockLen <= streamLength and streamBlockLen > 0:
 					if streamType in ['power','csvScaled']:
@@ -94,23 +113,40 @@ class PowerMeasurementServer(MeasurementServer):
 			
 			if output is None:
 				self.currentUnstreamedLen = 0
+				
+				if not (streamID in self.streams):
+					if not (socketID in self.sockets):
+						multicast_endpoint = Endpoint(port=port,hostname=addr)
+						socket = MulticastSocket(multicast_endpoint,bind_single=True,debug=0)
+						self.sockets[socketID] = socket
 
-				self.streamLength = streamLength
-				self.streamBlockLen = streamBlockLen
-				self.streamType = streamType
-				self.streamIndices = streamIndices
-				self.isStreaming = True
+					self.streams[streamID] = PowerStream(self.sockets[socketID],streamLength,streamBlockLen,streamType,streamIndices,streamingDelimiter)
+					self.streams[streamID].start()
+				else:
+					self.streams[streamID].update(streamLength,streamBlockLen,streamType,streamIndices,streamingDelimiter)
+					self.streams[streamID].start()
 		else:
-			output = "already streaming"
+			output = "stream %s already streaming"%(streamID)
 
 		return output
 	
-	def _stopStream(self):
-		if self.isStreaming:
-			self.isStreaming = False
+	def _stopAllStreams(self):
+		stopped = []
+		for key in self.streams:
+			if self.streams[key].isStreaming:
+				stopped.append(key)
+				self.streams[key].stop()
+		return stopped
+
+	def _stopStream(self,port, addr, uniqueid):
+		streamID = '%s:%d:%d'%(addr, port, uniqueid)
+		if not (streamID in self.streams):
+			return "stream %s never started"%(streamID)
+		elif self.streams[streamID].isStreaming:
+			self.streams[streamID].stop()
 			return None
 		else:
-			return "already stopped"
+			return "stream %s stopped"%(key)
 
 	def _getData(self,length):
 		length = np.min([np.max([1,length]), self.task.dataWindow.size]);
@@ -241,11 +277,19 @@ class PowerMeasurementServer(MeasurementServer):
 				streamBlockLen = int(cgi.escape(qs.get('blockLength', ["-1"])[0]));
 				streamType = str(cgi.escape(qs.get('type', ["-1"])[0]));
 				streamIndices = str(cgi.escape(qs.get('fields', ["-1"])[0]));
+				streamingDelimiter = str(cgi.escape(qs.get('delimiter', [","])[0]));
+				port = int(cgi.escape(qs.get('port', ["9999"])[0]));
+				addr = str(cgi.escape(qs.get('address', ["224.1.1.1"])[0]));
+				uniqueid = int(cgi.escape(qs.get('uniqueid', ["0"])[0]));
+
 				valid = False
-				if command == 'stop':
-					errors = self._stopStream()
+				if command == 'stopAll':
+					l = self._stopAllStreams()
+					output = "Stopped streams: %s"%(l)
+				elif command == 'stop':
+					errors = self._stopStream(port,addr,uniqueid)
 					if errors is None:
-						output = "Stream stopped."
+						output = "Stream %s:%s:%d stopped."%(addr,port,uniqueid)
 					else:
 						output = "Error: %s"%(errors)
 
@@ -255,9 +299,9 @@ class PowerMeasurementServer(MeasurementServer):
 					except ValueError:
 						streamIndices = np.array([-1])
 
-					errors = self._startStream(streamLength,streamBlockLen,streamType,streamIndices)
+					errors = self._startStream(port,addr,uniqueid,streamLength,streamBlockLen,streamType,streamIndices,streamingDelimiter)
 					if errors is None:
-						output = "Successfully started streaming fields %s %s of %d-sample chunks, taken in %d-length blocks"%(streamIndices, streamType, streamLength, streamBlockLen)
+						output = "Successfully started streaming fields %s %s of %d-sample chunks, taken in %d-length blocks (%s:%d, substream %d)"%(streamIndices, streamType, streamLength, streamBlockLen, addr, port, uniqueid)
 					else:
 						output = "Error: %s"%(errors)
 

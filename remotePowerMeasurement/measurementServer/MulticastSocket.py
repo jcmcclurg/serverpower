@@ -63,7 +63,7 @@ class MulticastSocket(PacketSocket):
 		super(MulticastSocket, self).sendPacket(packet,debug)
 
 	def close(self):
-		self.setsockopt(socket.SOL_IP, socket.IP_DROP_MEMBERSHIP, socket.inet_aton(addr) + socket.inet_aton('0.0.0.0'))
+		self.setsockopt(socket.SOL_IP, socket.IP_DROP_MEMBERSHIP, socket.inet_aton(self.multicast_endpoint.ip) + socket.inet_aton('0.0.0.0'))
 		super(MulticastSocket, self).close()
 
 if __name__ == "__main__":
