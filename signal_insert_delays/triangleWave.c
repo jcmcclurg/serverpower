@@ -20,10 +20,19 @@ double dir;
 double v;
 useconds_t deltat_us;
 char* progname;
+char timestamp_print;
 
 void flip_dir(void){
 	dir *= -1.0;
 	deltav = dir*(maxv-minv)/res;
+}
+
+void print_time(void){
+	struct timespec t;
+
+	clock_gettime(CLOCK_REALTIME, &t);
+	double f = ((double) t.tv_sec ) + ((double) t.tv_nsec)/1.0e9;
+   fprintf(stdout,"%lf,", f);
 }
 
 void update_params(double f,int r,double mnv,double mxv){
@@ -41,6 +50,9 @@ void update_params(double f,int r,double mnv,double mxv){
 }
 
 void do_sleep(void){
+	if(timestamp_print){
+		print_time();
+	}
 	fprintf(stdout,"%s%f\n",prefix_buffer,v);
 	usleep(deltat_us);
 	v += deltav;
@@ -53,8 +65,12 @@ void do_sleep(void){
 void usage(){
 	fprintf(stdout, "\nTriangle wave generator\n");
 	fprintf(stdout, "\nUsage: \n");
-	fprintf(stdout, "%s [-f [frequency (Hz) ] optional] -r [samples per period] -n [minimum value] -x [maximum value] -p [prefix]\n", progname);
-	fprintf(stdout, "\nExample: %s -e 1000 -d 10\n", progname);
+	fprintf(stdout, "%s  -f [frequency (Hz) (default %lf)] \n", progname, DEFFREQ);
+	fprintf(stdout, "    -r [samples per period (default %d)]\n", DEFRES);
+	fprintf(stdout, "    -n [minimum value (default %lf)]\n", DEFMINV);
+	fprintf(stdout, "    -x [maximum value (default %lf)]\n", DEFMAXV);
+	fprintf(stdout, "    -p [prefix (default none)]\n");
+	fprintf(stdout, "    -t show timestamp\n");
 	fprintf(stdout, "\n");
 }
 
@@ -65,10 +81,10 @@ int cmdline(int argc, char **argv){
 	double mnv = DEFMINV;
 	double mxv = DEFMAXV;
 	prefix_buffer[0] = 0;
-
+	timestamp_print = 0;
 	progname = argv[0];
 
-	while ((opt = getopt(argc, argv, "f:r:n:x:p:")) != -1) {
+	while ((opt = getopt(argc, argv, "f:r:n:x:p:t")) != -1) {
 		switch (opt) {
 		case 'f':
 			f = atof(optarg);
@@ -90,6 +106,9 @@ int cmdline(int argc, char **argv){
 			fprintf(stdout,"Hi.");
 			sprintf(prefix_buffer,"%s",optarg);
 			fprintf(stdout,"Hi.");
+			break;
+		case 't':
+			timestamp_print = 1;
 			break;
 		default:
 			usage();
