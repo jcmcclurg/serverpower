@@ -114,17 +114,17 @@ class PowerMeasurementServer(MeasurementServer):
 			if output is None:
 				self.currentUnstreamedLen = 0
 				
-				if not (streamID in self.streams):
-					if not (socketID in self.sockets):
-						multicast_endpoint = Endpoint(port=port,hostname=addr)
-						socket = MulticastSocket(multicast_endpoint,bind_single=True,debug=0)
-						self.sockets[socketID] = socket
+				#if not (streamID in self.streams):
+				if not (socketID in self.sockets):
+					multicast_endpoint = Endpoint(port=port,hostname=addr)
+					socket = MulticastSocket(multicast_endpoint,bind_single=True,debug=0)
+					self.sockets[socketID] = socket
 
-					self.streams[streamID] = PowerStream(self.sockets[socketID],streamLength,streamBlockLen,streamType,streamIndices,streamingDelimiter)
-					self.streams[streamID].start()
-				else:
-					self.streams[streamID].update(streamLength,streamBlockLen,streamType,streamIndices,streamingDelimiter)
-					self.streams[streamID].start()
+				self.streams[streamID] = PowerStream(self.sockets[socketID],streamLength,streamBlockLen,streamType,streamIndices,streamingDelimiter)
+				self.streams[streamID].start()
+				#else:
+				#	self.streams[streamID].update(streamLength,streamBlockLen,streamType,streamIndices,streamingDelimiter)
+				#	self.streams[streamID].start()
 		else:
 			output = "stream %s already streaming"%(streamID)
 
