@@ -34,8 +34,6 @@ if __name__ == "__main__":
 				sys.stdout.write(p.data)
 			else:
 				sys.stdout.write(p.data+"\n")
-		except (KeyboardInterrupt, ValueError, IOError) as e:
+		except (KeyboardInterrupt, ValueError) as e:
 			running = False
-
-	s.close()
 	sys.stderr.write("Goodbye.\n")
