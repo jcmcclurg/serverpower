@@ -25,13 +25,17 @@ if __name__ == "__main__":
 	running = True
 	while running:
 		try:
+			data = None
 			if args.nonewline:
 				data = sys.stdin.read(args.size)
 			else:
 				data = sys.stdin.readline()[:-1]
-			p = Packet(data,multicast_endpoint)
-			s.sendPacket(p)
-			#sys.stderr.write("Sent packet %s!\n"%(p))
+
+			if (data is None) or (data == ""):
+				running = False
+			else:
+				p = Packet(data,multicast_endpoint)
+				s.sendPacket(p)
 		except (KeyboardInterrupt, ValueError) as e:
 			running = False
 	s.close()
