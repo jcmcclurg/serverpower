@@ -12,16 +12,18 @@ import datetime
 from Endpoint import *
 from MulticastSocket import *
 from MeasurementServer import *
+from FreqServer import *
 from sineFit import *
 
 class PowerStream(object):
-	def __init__(self, socket, streamLength, streamBlockLen, streamType, streamIndices, streamingDelimiter):
+	def __init__(self, socket, streamLength, streamBlockLen, streamType, estimatorType, streamIndices, streamingDelimiter):
 		self.isStreaming = False
 		self.streamingSocket = socket
 		self.streamIndices = streamIndices
 		self.streamLength = streamLength
 		self.streamBlockLen = streamBlockLen
 		self.streamType = streamType
+		self.estimatorType = estimatorType
 		self.streamingDelimiter=streamingDelimiter
 		self.streamingNumberFormat='%.3f'
 		self.currentUnstreamedLen = 0
@@ -37,7 +39,10 @@ class PowerStream(object):
 				if self.streamType == 'power':
 					b = server._getPower(b, self.streamBlockLen)
 				elif self.streamType == 'freq':
-					b = server._getFreqFFT(b, self.streamBlockLen)
+					if self.estimatorType == 'nlls':
+						b = server._getFreqFFT(b, self.streamBlockLen)
+					elif self.estimatorType == 'fft':
+						b = server._getFreqFFT(b, self.streamBlockLen)
 				
 				s = StringIO.StringIO()
 				np.savetxt(s,b[:,self.streamIndices],fmt=self.streamingNumberFormat,delimiter=self.streamingDelimiter)
@@ -68,6 +73,12 @@ class PowerMeasurementServer(MeasurementServer):
 		self.serverIndices = np.array([0, 4, 3, 2, 1]) + 3;
 		self.sampleRate = 10000;
 
+		self.defaultPowerAddr = '224.1.1.1'
+		self.defaultPowerPort = 9999
+		self.defaultFreqAddr = '224.1.1.2'
+		self.defaultFreqPort = 9999
+
+		self.freqServer = FreqServer()
 		self.sockets = {}
 		self.streams = {}
 
@@ -93,6 +104,17 @@ class PowerMeasurementServer(MeasurementServer):
 	
 	def _startStream(self, port, addr, uniqueid, streamLength, streamBlockLen, streamType, streamIndices, streamingDelimiter):
 		output = None
+		if streamType == 'freq':
+			if port == -1:
+				port = self.defaultFreqPort
+			if addr == "-1":
+				addr = self.defaultFreqAddr
+		else:
+			if port == -1:
+				port = self.defaultPowerPort
+			if addr == "-1":
+				addr = self.defaultPowerAddr
+
 		socketID = '%s:%d'%(addr, port)
 		streamID = '%s:%d'%(socketID, uniqueid)
 		if (not (streamID in self.streams)) or (not self.streams[streamID].isStreaming):
@@ -138,7 +160,18 @@ class PowerMeasurementServer(MeasurementServer):
 				self.streams[key].stop()
 		return stopped
 
-	def _stopStream(self,port, addr, uniqueid):
+	def _stopStream(self,port, addr, uniqueid, streamType):
+		if streamType == 'freq':
+			if port == -1:
+				port = self.defaultFreqPort
+			if addr == "-1":
+				addr = self.defaultFreqAddr
+		else:
+			if port == -1:
+				port = self.defaultPowerPort
+			if addr == "-1":
+				addr = self.defaultPowerAddr
+
 		streamID = '%s:%d:%d'%(addr, port, uniqueid)
 		if not (streamID in self.streams):
 			return "stream %s never started"%(streamID)
@@ -275,11 +308,14 @@ class PowerMeasurementServer(MeasurementServer):
 				command = str(cgi.escape(qs.get('command', ["-1"])[0]));
 				streamLength = int(cgi.escape(qs.get('length', ["-1"])[0]));
 				streamBlockLen = int(cgi.escape(qs.get('blockLength', ["-1"])[0]));
-				streamType = str(cgi.escape(qs.get('type', ["-1"])[0]));
+				streamType = str(cgi.escape(qs.get('type', ["power"])[0]));
+				# For type=freq
+				estimatorType = str(cgi.escape(qs.get('t', ["hardware"])[0]))
+
 				streamIndices = str(cgi.escape(qs.get('fields', ["-1"])[0]));
 				streamingDelimiter = str(cgi.escape(qs.get('delimiter', [","])[0]));
-				port = int(cgi.escape(qs.get('port', ["9999"])[0]));
-				addr = str(cgi.escape(qs.get('address', ["224.1.1.1"])[0]));
+				port = int(cgi.escape(qs.get('port', ["-1"])[0]));
+				addr = str(cgi.escape(qs.get('address', ["-1"])[0]));
 				uniqueid = int(cgi.escape(qs.get('uniqueid', ["0"])[0]));
 
 				valid = False
@@ -287,7 +323,7 @@ class PowerMeasurementServer(MeasurementServer):
 					l = self._stopAllStreams()
 					output = "Stopped streams: %s"%(l)
 				elif command == 'stop':
-					errors = self._stopStream(port,addr,uniqueid)
+					errors = self._stopStream(port,addr,uniqueid,streamType)
 					if errors is None:
 						output = "Stream %s:%s:%d stopped."%(addr,port,uniqueid)
 					else:
@@ -299,7 +335,7 @@ class PowerMeasurementServer(MeasurementServer):
 					except ValueError:
 						streamIndices = np.array([-1])
 
-					errors = self._startStream(port,addr,uniqueid,streamLength,streamBlockLen,streamType,streamIndices,streamingDelimiter)
+					errors = self._startStream(port,addr,uniqueid,streamLength,streamBlockLen,streamType,estimatorType,streamIndices,streamingDelimiter)
 					if errors is None:
 						output = "Successfully started streaming fields %s %s of %d-sample chunks, taken in %d-length blocks (%s:%d, substream %d)"%(streamIndices, streamType, streamLength, streamBlockLen, addr, port, uniqueid)
 					else:
@@ -332,10 +368,8 @@ class PowerMeasurementServer(MeasurementServer):
 				defaultLen = 10000
 				length = int(cgi.escape(qs.get('l', [str(defaultLen)])[0]));
 				b = self._getData(length)
-				defaultEstimatorType = "fft"
-				estimatorType = str(cgi.escape(qs.get('t', [str(defaultEstimatorType)])[0]))
 
-				if estimatorType in ['nlls', 'fft'] and length >= 10:
+				if estimatorType in ['hardware', 'nlls', 'fft'] and length >= 10:
 					sampleRate = self.task.sampleRate
 
 					if estimatorType == 'nlls':
