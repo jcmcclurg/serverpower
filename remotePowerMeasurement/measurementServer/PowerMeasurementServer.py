@@ -44,12 +44,24 @@ class PowerStream(object):
 
 				packet = Packet(s.getvalue(),self.streamingSocket.multicast_endpoint)
 				self.streamingSocket.sendPacket(packet)
+				return True
+		else:
+			return False
 	
 	def start(self):
 		self.isStreaming = True
 
 	def stop(self):
 		self.isStreaming = False
+	
+	def __str__(self):
+		if self.isStreaming:
+			return "Stream(length=%d,blockLength=%d,type=%s,indices=%s,delimiter=%s)"%(self.streamLength,self.blockLength,self.streamIndices,self.streamingDelimiter)
+		else:
+			return "Stream(stopped. awaiting deletion.)"
+
+	def __repr__(self):
+		return self.__str__()
 
 class PowerMeasurementServer(MeasurementServer):
 	def __init__(self, port=None):
@@ -88,14 +100,16 @@ class PowerMeasurementServer(MeasurementServer):
 
 	def data_updated(self,startTime,endTime, length):
 		for stream in self.streams:
-			self.streams[stream].data_updated(self,startTime,endTime,length)
+			if not self.streams[stream].data_updated(self,startTime,endTime,length):
+				# Clean up the list, but only at the right time.
+				del self.streams[stream]
 
 	
 	def _startStream(self, port, addr, uniqueid, streamLength, streamBlockLen, streamType, streamIndices, streamingDelimiter):
 		output = None
 		socketID = '%s:%d'%(addr, port)
 		streamID = '%s:%d'%(socketID, uniqueid)
-		if (not (streamID in self.streams)) or (not self.streams[streamID].isStreaming):
+		if not (streamID in self.streams):
 			if streamLength <= self.task.dataWindow.size and streamLength > 0:
 				if streamBlockLen <= streamLength and streamBlockLen > 0:
 					if streamType in ['power','csvScaled']:
@@ -114,17 +128,17 @@ class PowerMeasurementServer(MeasurementServer):
 			if output is None:
 				self.currentUnstreamedLen = 0
 				
-				#if not (streamID in self.streams):
 				if not (socketID in self.sockets):
-					multicast_endpoint = Endpoint(port=port,hostname=addr)
-					socket = MulticastSocket(multicast_endpoint,bind_single=True,debug=0)
-					self.sockets[socketID] = socket
+					try:
+						multicast_endpoint = Endpoint(port=port,hostname=addr)
+						socket = MulticastSocket(multicast_endpoint,bind_single=True,debug=0)
+						self.sockets[socketID] = socket
+					except socket.error as serror:
+						output = "bad address. could not create the stream"
 
-				self.streams[streamID] = PowerStream(self.sockets[socketID],streamLength,streamBlockLen,streamType,streamIndices,streamingDelimiter)
-				self.streams[streamID].start()
-				#else:
-				#	self.streams[streamID].update(streamLength,streamBlockLen,streamType,streamIndices,streamingDelimiter)
-				#	self.streams[streamID].start()
+				if output is None:
+					self.streams[streamID] = PowerStream(self.sockets[socketID],streamLength,streamBlockLen,streamType,streamIndices,streamingDelimiter)
+					self.streams[streamID].start()
 		else:
 			output = "stream %s already streaming"%(streamID)
 
@@ -283,9 +297,18 @@ class PowerMeasurementServer(MeasurementServer):
 				uniqueid = int(cgi.escape(qs.get('uniqueid', ["0"])[0]));
 
 				valid = False
-				if command == 'stopAll':
+				if command == 'info':
+					if len(streams) > 0:
+						output = "Streams:\n"
+						for k in self.streams:
+							output += "   %s:%s\n"%(k, self.streams[k])
+					else:
+						output = "No streams running."
+
+				elif command == 'stopAll':
 					l = self._stopAllStreams()
 					output = "Stopped streams: %s"%(l)
+
 				elif command == 'stop':
 					errors = self._stopStream(port,addr,uniqueid)
 					if errors is None:
