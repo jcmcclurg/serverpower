@@ -13,10 +13,10 @@ from Endpoint import *
 from MulticastSocket import *
 from MeasurementServer import *
 from sineFit import *
+import threading
 
 class PowerStream(object):
 	def __init__(self, socket, streamLength, streamBlockLen, streamType, streamIndices, streamingDelimiter):
-		self.isStreaming = False
 		self.streamingSocket = socket
 		self.streamIndices = streamIndices
 		self.streamLength = streamLength
@@ -27,38 +27,25 @@ class PowerStream(object):
 		self.currentUnstreamedLen = 0
 
 	def data_updated(self,server,startTime,endTime,length):
-		if self.isStreaming:
-			self.currentUnstreamedLen += length
-			if(self.currentUnstreamedLen >= self.streamLength):
-				# We don't check the length of b, and just assume that it's streamLength.
-				# There's no good reason for this except simplicity of code, which is a good reason enough.
-				self.currentUnstreamedLen -= self.streamLength
-				b = server._getData(self.streamLength)
-				if self.streamType == 'power':
-					b = server._getPower(b, self.streamBlockLen)
-				elif self.streamType == 'freq':
-					b = server._getFreqFFT(b, self.streamBlockLen)
-				
-				s = StringIO.StringIO()
-				np.savetxt(s,b[:,self.streamIndices],fmt=self.streamingNumberFormat,delimiter=self.streamingDelimiter)
+		self.currentUnstreamedLen += length
+		if(self.currentUnstreamedLen >= self.streamLength):
+			# We don't check the length of b, and just assume that it's streamLength.
+			# There's no good reason for this except simplicity of code, which is a good reason enough.
+			self.currentUnstreamedLen -= self.streamLength
+			b = server._getData(self.streamLength)
+			if self.streamType == 'power':
+				b = server._getPower(b, self.streamBlockLen)
+			elif self.streamType == 'freq':
+				b = server._getFreqFFT(b, self.streamBlockLen)
+			
+			s = StringIO.StringIO()
+			np.savetxt(s,b[:,self.streamIndices],fmt=self.streamingNumberFormat,delimiter=self.streamingDelimiter)
 
-				packet = Packet(s.getvalue(),self.streamingSocket.multicast_endpoint)
-				self.streamingSocket.sendPacket(packet)
-				return True
-		else:
-			return False
-	
-	def start(self):
-		self.isStreaming = True
-
-	def stop(self):
-		self.isStreaming = False
+			packet = Packet(s.getvalue(),self.streamingSocket.multicast_endpoint)
+			self.streamingSocket.sendPacket(packet)
 	
 	def __str__(self):
-		if self.isStreaming:
-			return "Stream(length=%d,blockLength=%d,type=%s,indices=%s,delimiter=%s)"%(self.streamLength,self.blockLength,self.streamIndices,self.streamingDelimiter)
-		else:
-			return "Stream(stopped. awaiting deletion.)"
+		return "Stream(length=%d,blockLength=%d,type=%s,indices=%s,delimiter=%s)"%(self.streamLength,self.blockLength,self.streamIndices,self.streamingDelimiter)
 
 	def __repr__(self):
 		return self.__str__()
@@ -82,6 +69,7 @@ class PowerMeasurementServer(MeasurementServer):
 
 		self.sockets = {}
 		self.streams = {}
+		self.streamsLock = threading.Lock()
 
 		channels = []
 		channels.append(AIChannelSpec('JDAQ', 0, 'voltage', termConf=DAQmx_Val_Diff, rangemin=-10, rangemax=10))
@@ -99,11 +87,13 @@ class PowerMeasurementServer(MeasurementServer):
 			super(PowerMeasurementServer, self).__init__(m, port)
 
 	def data_updated(self,startTime,endTime, length):
+		# Don't allow any changes to be made to the stream list while it's updating.
+		# If the blocking behavior causes problems, try using an if statement and setting
+		# the parameter of acquire equal to False
+		self.streamsLock.acquire()
 		for stream in self.streams:
-			if not self.streams[stream].data_updated(self,startTime,endTime,length):
-				# Clean up the list, but only at the right time.
-				del self.streams[stream]
-
+			self.streams[stream].data_updated(self,startTime,endTime,length)
+		self.streamsLock.release()
 	
 	def _startStream(self, port, addr, uniqueid, streamLength, streamBlockLen, streamType, streamIndices, streamingDelimiter):
 		output = None
@@ -137,30 +127,31 @@ class PowerMeasurementServer(MeasurementServer):
 						output = "bad address. could not create the stream"
 
 				if output is None:
+					self.streamsLock.acquire()
 					self.streams[streamID] = PowerStream(self.sockets[socketID],streamLength,streamBlockLen,streamType,streamIndices,streamingDelimiter)
-					self.streams[streamID].start()
+					self.streamsLock.release()
 		else:
 			output = "stream %s already streaming"%(streamID)
 
 		return output
 	
 	def _stopAllStreams(self):
-		stopped = []
-		for key in self.streams:
-			if self.streams[key].isStreaming:
-				stopped.append(key)
-				self.streams[key].stop()
+		self.streamsLock.acquire()
+		stopped = copy.deepcopy(self.streams)
+		self.streams = {}
+		self.streamsLock.release()
 		return stopped
 
 	def _stopStream(self,port, addr, uniqueid):
 		streamID = '%s:%d:%d'%(addr, port, uniqueid)
+		ret = None
 		if not (streamID in self.streams):
-			return "stream %s never started"%(streamID)
-		elif self.streams[streamID].isStreaming:
-			self.streams[streamID].stop()
-			return None
+			ret = "stream %s does not exist."%(streamID)
 		else:
-			return "stream %s stopped"%(key)
+			self.streamsLock.acquire()
+			del self.streams[streamID]
+			self.streamsLock.release()
+		return ret
 
 	def _getData(self,length):
 		length = np.min([np.max([1,length]), self.task.dataWindow.size]);
