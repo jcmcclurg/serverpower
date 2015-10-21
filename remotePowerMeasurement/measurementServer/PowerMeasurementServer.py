@@ -298,7 +298,7 @@ class PowerMeasurementServer(MeasurementServer):
 
 				valid = False
 				if command == 'info':
-					if len(streams) > 0:
+					if len(self.streams) > 0:
 						output = "Streams:\n"
 						for k in self.streams:
 							output += "   %s:%s\n"%(k, self.streams[k])
