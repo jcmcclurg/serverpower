@@ -45,7 +45,7 @@ class PowerStream(object):
 			self.streamingSocket.sendPacket(packet)
 	
 	def __str__(self):
-		return "Stream(length=%d,blockLength=%d,type=%s,indices=%s,delimiter=%s)"%(self.streamLength,self.blockLength,self.streamIndices,self.streamingDelimiter)
+		return "Stream(length=%d,blockLength=%d,type=%s,indices=%s,delimiter=%s)"%(self.streamLength,self.streamBlockLen,self.streamType,self.streamIndices,self.streamingDelimiter)
 
 	def __repr__(self):
 		return self.__str__()
