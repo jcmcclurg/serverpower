@@ -1,5 +1,5 @@
 #!/bin/bash
 
-#dir=$( dirname $0 )
-dir="/home/powerserver/joe/serverpower/remotePowerMeasurement"
-python -u $dir/measurementServer/multicast_listen.py -n
+dir=$( dirname $0 )
+#dir="/home/powerserver/joe/serverpower/remotePowerMeasurement"
+python -u $dir/measurementServer/multicast_listen.py -n -a 224.1.1.1 -p 9500
