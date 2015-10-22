@@ -21,7 +21,7 @@ port=${3:-$defPort}
 if [ -f $dir/.avgPowerStream ]; then
 	echo "Stream already running." >&2
 else
-	s=$(wget -O - "$addr/stream?command=start&length=1000&blockLength=1000&type=power&fields=56&delimiter=%20&address=$group&port=$port" --quiet)
+	s=$(wget -O - "$addr/stream?command=start&length=1000&blockLength=1000&type=power&fields=67&delimiter=%20&address=$group&port=$port" --quiet)
 	echo "Start stream returned ($s)"
 
 	echo $addr > $dir/.avgPowerStream
