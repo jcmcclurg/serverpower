@@ -17,12 +17,7 @@ from sineFit import *
 import threading
 
 class PowerStream(object):
-<<<<<<< HEAD
 	def __init__(self, socket, streamLength, streamBlockLen, streamType, estimatorType, streamIndices, streamingDelimiter):
-		self.isStreaming = False
-=======
-	def __init__(self, socket, streamLength, streamBlockLen, streamType, streamIndices, streamingDelimiter):
->>>>>>> ea9d402d4df04f745c48ddaf33ddd7d7a7ac11a7
 		self.streamingSocket = socket
 		self.streamIndices = streamIndices
 		self.streamLength = streamLength
@@ -43,7 +38,10 @@ class PowerStream(object):
 			if self.streamType == 'power':
 				b = server._getPower(b, self.streamBlockLen)
 			elif self.streamType == 'freq':
-				b = server._getFreqFFT(b, self.streamBlockLen)
+				if self.estimatorType == 'fft':
+					b = server._getFreqFFT(b, self.streamBlockLen)
+				elif self.estimatorType == 'nlls':
+					b = server._getFreqNLLS(b, self.streamBlockLen)
 			
 			s = StringIO.StringIO()
 			np.savetxt(s,b[:,self.streamIndices],fmt=self.streamingNumberFormat,delimiter=self.streamingDelimiter)
@@ -56,6 +54,30 @@ class PowerStream(object):
 
 	def __repr__(self):
 		return self.__str__()
+
+class HardwareFreqStream(object):
+	def __init__(self, socket, streamLength, streamBlockLen, streamIndices, streamingDelimiter):
+		self.socket = socket
+		self.streamLength = streamLength
+		self.streamBlockLen = streamBlockLen
+		self.streamingDelimiter = streamingDelimiter
+		self.streamIndices = streamIndices
+		self.streamingNumberFormat='%.3f'
+	
+	def data_updated(self,server, time, millihz):
+		b = server._getFreqHardware(self.streamLength, self.streamBlockLen)
+		s = StringIO.StringIO()
+		np.savetxt(s,b[:,self.streamIndices],fmt=self.streamingNumberFormat,delimiter=self.streamingDelimiter)
+		s.getvalue()
+		p = Packet(s.getvalue(),self.socket.multicast_endpoint)
+		self.socket.sendPacket(p)
+
+	def __str__(self):
+		return "HardwareFreqStream(length=%d,blockLength=%d,indices=%s,delimiter=%s)"%(self.streamLength,self.streamBlockLen,self.streamIndices,self.streamingDelimiter)
+
+	def __repr__(self):
+		return self.__str__()
+
 
 class PowerMeasurementServer(MeasurementServer):
 	def __init__(self, port=None):
@@ -77,9 +99,13 @@ class PowerMeasurementServer(MeasurementServer):
 		self.defaultPowerAddr = '224.1.1.1'
 		self.defaultPowerPort = 9999
 		self.defaultFreqAddr = '224.1.1.2'
-		self.defaultFreqPort = 9999
+		self.defaultFreqPort = 9998
+		self.bufferWindowLengthInSeconds = 100.0
+		self.hardwareFreqMsPeriod = 500
 
-		self.freqServer = FreqServer()
+		self.freqServer = FreqServer(ms_period=self.hardwareFreqMsPeriod,dataWindowLength=int(np.round(1000.0*self.bufferWindowLengthInSeconds/float(self.hardwareFreqMsPeriod))),data_updated_callback=self.hardware_freq_data_updated,verbose=False)
+		self.hardwareFreqStreams = {}
+		self.hardwareFreqStreamsLock = threading.Lock()
 		self.sockets = {}
 		self.streams = {}
 		self.streamsLock = threading.Lock()
@@ -93,13 +119,20 @@ class PowerMeasurementServer(MeasurementServer):
 		channels.append(AIChannelSpec('JDAQ', 5, 'server2', termConf=DAQmx_Val_Diff, rangemin=-5, rangemax=5))
 		channels.append(AIChannelSpec('JDAQ', 6, 'server1', termConf=DAQmx_Val_Diff, rangemin=-5, rangemax=5))
 
-		m = MultiChannelAITask(channels,sampleRate=self.sampleRate,dataWindowLength=int(np.round(self.sampleRate*100.0)), sampleEvery=500, data_updated_callback=self.data_updated)
+		# sampleEvery=500 means that data_updated_callback is called every 500 samples = 3 cycles at 60 Hz
+		m = MultiChannelAITask(channels,sampleRate=self.sampleRate,dataWindowLength=int(np.round(self.sampleRate*self.bufferWindowLengthInSeconds)), sampleEvery=500, data_updated_callback=self.power_data_updated)
 		if port is None:
 			super(PowerMeasurementServer, self).__init__(m)
 		else:
 			super(PowerMeasurementServer, self).__init__(m, port)
 
-	def data_updated(self,startTime,endTime, length):
+	def hardware_freq_data_updated(self, time, millihz):
+		self.hardwareFreqStreamsLock.acquire()
+		for stream in self.hardwareFreqStreams:
+			self.hardwareFreqStreams[stream].data_updated(self,time,millihz)
+		self.hardwareFreqStreamsLock.release()
+
+	def power_data_updated(self,startTime,endTime, length):
 		# Don't allow any changes to be made to the stream list while it's updating.
 		# If the blocking behavior causes problems, try using an if statement and setting
 		# the parameter of acquire equal to False
@@ -108,7 +141,7 @@ class PowerMeasurementServer(MeasurementServer):
 			self.streams[stream].data_updated(self,startTime,endTime,length)
 		self.streamsLock.release()
 	
-	def _startStream(self, port, addr, uniqueid, streamLength, streamBlockLen, streamType, streamIndices, streamingDelimiter):
+	def _startStream(self, port, addr, uniqueid, streamLength, streamBlockLen, streamType, estimatorType, streamIndices, streamingDelimiter):
 		output = None
 		if streamType == 'freq':
 			if port == -1:
@@ -123,15 +156,19 @@ class PowerMeasurementServer(MeasurementServer):
 
 		socketID = '%s:%d'%(addr, port)
 		streamID = '%s:%d'%(socketID, uniqueid)
-		if not (streamID in self.streams):
+		if (not (streamID in self.streams)) and (not (streamID in self.hardwareFreqStreams)):
 			if streamLength <= self.task.dataWindow.size and streamLength > 0:
 				if streamBlockLen <= streamLength and streamBlockLen > 0:
 					if streamType in ['power','csvScaled']:
 						if np.max(streamIndices) > 7 or np.min(streamIndices) < 0:
 							output = "for the specified type, fields must numbers between between 0 and 7"
 					elif streamType == 'freq':
-						if np.max(streamIndices) > 3 or np.min(streamIndices) < 0:
-							output = "for the specified type, fields must numbers between between 0 and 3"
+						if estimatorType == 'hardware':
+							if np.max(streamIndices) > 2 or np.min(streamIndices) < 0:
+								output = "for the specified type, fields must numbers between between 0 and 2"
+						elif estimatorType in ['nlls', 'fft']:
+							if np.max(streamIndices) > 3 or np.min(streamIndices) < 0:
+								output = "for the specified type, fields must numbers between between 0 and 3"
 					else:
 						output = "type must be power, freq, or csvScaled"
 				else:
@@ -140,8 +177,6 @@ class PowerMeasurementServer(MeasurementServer):
 				output = "length must be between %d and %d"%(1, self.task.dataWindow.size)
 			
 			if output is None:
-				self.currentUnstreamedLen = 0
-				
 				if not (socketID in self.sockets):
 					try:
 						multicast_endpoint = Endpoint(port=port,hostname=addr)
@@ -151,9 +186,14 @@ class PowerMeasurementServer(MeasurementServer):
 						output = "bad address. could not create the stream"
 
 				if output is None:
-					self.streamsLock.acquire()
-					self.streams[streamID] = PowerStream(self.sockets[socketID],streamLength,streamBlockLen,streamType,streamIndices,streamingDelimiter)
-					self.streamsLock.release()
+					if streamType == 'freq' and estimatorType == 'hardware':
+						self.hardwareFreqStreamsLock.acquire()
+						self.hardwareFreqStreams[streamID] = HardwareFreqStream(self.sockets[socketID], streamLength, streamBlockLen, streamIndices, streamingDelimiter)
+						self.hardwareFreqStreamsLock.release()
+					else:
+						self.streamsLock.acquire()
+						self.streams[streamID] = PowerStream(self.sockets[socketID], streamLength, streamBlockLen, streamType, estimatorType, streamIndices, streamingDelimiter)
+						self.streamsLock.release()
 		else:
 			output = "stream %s already streaming"%(streamID)
 
@@ -161,31 +201,30 @@ class PowerMeasurementServer(MeasurementServer):
 	
 	def _stopAllStreams(self):
 		self.streamsLock.acquire()
-		stopped = copy.deepcopy(self.streams)
+		self.hardwareFreqStreamsLock.acquire()
+		stopped = {}
+		stopped.update(self.streams)
+		stopped.update(self.hardwareFreqStreams)
 		self.streams = {}
+		self.hardwareFreqStreams = {}
+		self.hardwareFreqStreamsLock.release()
 		self.streamsLock.release()
 		return stopped
 
-	def _stopStream(self,port, addr, uniqueid, streamType):
-		if streamType == 'freq':
-			if port == -1:
-				port = self.defaultFreqPort
-			if addr == "-1":
-				addr = self.defaultFreqAddr
-		else:
-			if port == -1:
-				port = self.defaultPowerPort
-			if addr == "-1":
-				addr = self.defaultPowerAddr
+	def _stopStream(self,port, addr, uniqueid):
 
 		streamID = '%s:%d:%d'%(addr, port, uniqueid)
 		ret = None
-		if not (streamID in self.streams):
-			ret = "stream %s does not exist."%(streamID)
-		else:
+		if streamID in self.streams:
 			self.streamsLock.acquire()
 			del self.streams[streamID]
 			self.streamsLock.release()
+		elif streamID in self.hardwareFreqStreams:
+			self.hardwareFreqStreamsLock.acquire()
+			del self.hardwareFreqStreams[streamID]
+			self.hardwareFreqStreamsLock.release()
+		else:
+			ret = "stream %s does not exist."%(streamID)
 		return ret
 
 	def _getData(self,length):
@@ -226,7 +265,32 @@ class PowerMeasurementServer(MeasurementServer):
 			r[-1,2:] = np.mean(b[offset:,2:],axis=0)
 
 			return r
-	
+
+	def _getFreqHardware(self, length, blockLen):
+		numSamples = np.min([np.max([1,length]), self.freqServer.dataWindow.size]);
+		b = self.freqServer.dataWindow.getLIFO(numSamples);
+		numSamples = b.shape[0]
+
+		blockLen = np.max([1 , np.min([blockLen, numSamples])])
+		numBlocks = int(np.ceil(float(numSamples)/float(blockLen)))
+		b = b[::-1,:]
+		# The raw frequency is reported in millihertz
+		b[:,1] *= 0.001
+
+		r = np.zeros((numBlocks,3))
+		offset = 0
+		for i in range(0,numBlocks - 1):
+			blockRange = np.arange(0,blockLen) + offset
+			r[i,0] = b[blockRange[0],0]
+			r[i,1] = b[blockRange[-1],0]
+			r[i,2] = np.mean(b[blockRange,1],axis=0)
+			offset += blockLen
+
+		r[-1,0] = b[offset,0]
+		r[-1,1] = b[-1,0]
+		r[-1,2] = np.mean(b[offset:,1],axis=0)
+		return r
+
 	def _getFreqNLLS(self, b, blockLen ):
 		numSamples = b.shape[0]
 		blockLen = np.max([int(np.round(0.5*sampleRate/nominalFreq)) , np.min([blockLen, numSamples])])
@@ -300,6 +364,13 @@ class PowerMeasurementServer(MeasurementServer):
 		r[-1,3] = ftone
 
 		return r
+	
+	def serve(self):
+		self.freqServer.start(autojoin=False)
+		super(PowerMeasurementServer,self).serve()
+		if self.freqServer.running:
+			self.freqServer.stop()
+		print "Finished."
 
 	def webApp(self, environ, start_response):
 		#print "%s serving %s to %s"%(datetime.datetime.now().isoformat(), environ['PATH_INFO'], environ['REMOTE_ADDR'])
@@ -317,21 +388,43 @@ class PowerMeasurementServer(MeasurementServer):
 				streamBlockLen = int(cgi.escape(qs.get('blockLength', ["-1"])[0]));
 				streamType = str(cgi.escape(qs.get('type', ["power"])[0]));
 				# For type=freq
-				estimatorType = str(cgi.escape(qs.get('t', ["hardware"])[0]))
+				estimatorType = str(cgi.escape(qs.get('estimator', ["hardware"])[0]))
 
 				streamIndices = str(cgi.escape(qs.get('fields', ["-1"])[0]));
 				streamingDelimiter = str(cgi.escape(qs.get('delimiter', [","])[0]));
-				port = int(cgi.escape(qs.get('port', ["-1"])[0]));
-				addr = str(cgi.escape(qs.get('address', ["-1"])[0]));
+
+				defaultPort = "-1"
+				defaultAddr = "-1"
+				if streamType == 'freq':
+					defaultPort = self.defaultFreqPort
+					defaultAddr = self.defaultFreqAddr
+				else:
+					defaultPort = self.defaultPowerPort
+					defaultAddr = self.defaultPowerAddr
+
+				port = int(cgi.escape(qs.get('port', [str(defaultPort)])[0]));
+				addr = str(cgi.escape(qs.get('address', [str(defaultAddr)])[0]));
 				uniqueid = int(cgi.escape(qs.get('uniqueid', ["0"])[0]));
 
 				valid = False
 				if command == 'info':
+					output = ""
+
+					self.streamsLock.acquire()
 					if len(self.streams) > 0:
-						output = "Streams:\n"
+						output += "Streams from DAQ:\n"
 						for k in self.streams:
 							output += "   %s:%s\n"%(k, self.streams[k])
-					else:
+					self.streamsLock.release()
+
+					self.hardwareFreqStreamsLock.acquire()
+					if len(self.hardwareFreqStreams) > 0:
+						output += "Streams from hardware frequency measurement:\n"
+						for k in self.hardwareFreqStreams:
+							output += "   %s:%s\n"%(k, self.hardwareFreqStreams[k])
+					self.hardwareFreqStreamsLock.release()
+
+					if output == "":
 						output = "No streams running."
 
 				elif command == 'stopAll':
@@ -339,7 +432,7 @@ class PowerMeasurementServer(MeasurementServer):
 					output = "Stopped streams: %s"%(l)
 
 				elif command == 'stop':
-					errors = self._stopStream(port,addr,uniqueid,streamType)
+					errors = self._stopStream(port,addr,uniqueid)
 					if errors is None:
 						output = "Stream %s:%s:%d stopped."%(addr,port,uniqueid)
 					else:
@@ -351,7 +444,7 @@ class PowerMeasurementServer(MeasurementServer):
 					except ValueError:
 						streamIndices = np.array([-1])
 
-					errors = self._startStream(port,addr,uniqueid,streamLength,streamBlockLen,streamType,estimatorType,streamIndices,streamingDelimiter)
+					errors = self._startStream(port,addr,uniqueid, streamLength,streamBlockLen,streamType,estimatorType,streamIndices,streamingDelimiter)
 					if errors is None:
 						output = "Successfully started streaming fields %s %s of %d-sample chunks, taken in %d-length blocks (%s:%d, substream %d)"%(streamIndices, streamType, streamLength, streamBlockLen, addr, port, uniqueid)
 					else:
@@ -381,86 +474,97 @@ class PowerMeasurementServer(MeasurementServer):
 				output = s.getvalue()
 
 			elif environ['PATH_INFO'] == '/freq':
-				defaultLen = 10000
-				length = int(cgi.escape(qs.get('l', [str(defaultLen)])[0]));
-				b = self._getData(length)
+				estimatorType = str(cgi.escape(qs.get('t', ["hardware"])[0]))
 
-				if estimatorType in ['hardware', 'nlls', 'fft'] and length >= 10:
-					sampleRate = self.task.sampleRate
+				r = None
+				if estimatorType == 'hardware':
+					defaultLen = 1
+					length = int(cgi.escape(qs.get('l', [str(defaultLen)])[0]));
+					defaultBlockLen = 1
+					blockLen = int(cgi.escape(qs.get('b', [str(defaultBlockLen)])[0]))
+					r = self._getFreqHardware(length, blockLen)
 
-					if estimatorType == 'nlls':
-						defaultBlockLen = int(np.round(10.0*sampleRate/nominalFreq))
-						blockLen = int(cgi.escape(qs.get('b', [str(defaultBlockLen)])[0]))
-						r = self._getFreqNLLS(b, blockLen)
-					elif estimatorType == 'fft':
-						defaultBlockLen = length
-						blockLen = int(cgi.escape(qs.get('b', [str(defaultBlockLen)])[0]))
-						r = self._getFreqFFT(b, blockLen)
+				elif estimatorType in ['nlls', 'fft']:
+					defaultLen = 10000
+					length = int(cgi.escape(qs.get('l', [str(defaultLen)])[0]));
+					if length > 10:
+						b = self._getData(length)
+						sampleRate = self.task.sampleRate
 
+						if estimatorType == 'nlls':
+							defaultBlockLen = int(np.round(10.0*sampleRate/nominalFreq))
+							blockLen = int(cgi.escape(qs.get('b', [str(defaultBlockLen)])[0]))
+							r = self._getFreqNLLS(b, blockLen)
+						elif estimatorType == 'fft':
+							defaultBlockLen = length
+							blockLen = int(cgi.escape(qs.get('b', [str(defaultBlockLen)])[0]))
+							r = self._getFreqFFT(b, blockLen)
+					else:
+						output = "Length must be >= 10 for 'fft' and 'nlls' estimator type."
+				else:
+					output = "Valid estimator types are 'hardware', 'fft', or 'nlls'."
+
+				if not (r is None):
 					htmlDisplay = bool(cgi.escape(qs.get('h', [str(0)])[0]))
 					if htmlDisplay:
 						contentType = 'text/html'
-						output="""<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
- "http://www.w3.org/TR/html4/strict.dtd">
-<html lang="en">
-<head>
- <meta http-equiv="content-type" content="text/html; charset=utf-8">
- <title>title</title>
-</head>
-<body>
-<table>
-"""
+						output ='<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">\n'
+						output+='<html lang="en">\n'
+						output+='	<head>\n'
+						output+='	<meta http-equiv="content-type" content="text/html; charset=utf-8">\n'
+						output+='		<title>Frequency estimate via %s</title>\n'%(estimatorType)
+						output+='	</head>\n'
+						output+='	<body>\n'
+						output+='		<table>\n'
+
 						for i in range(0,r.shape[0]):
-							output += "  <tr>"
-							for j in range(0,3):
+							output+="			<tr>"
+							for j in range(0,r.shape[1]-1):
 								output += "<td>%f</td>"%(r[i,j])
 
-							if r[i,3] <= 59.980:
+							if r[i,-1] <= 59.980:
 								bgcolor='0000ff'
 								color  ='ffffff'
-							elif r[i,3] <= 59.986:
+							elif r[i,-1] <= 59.986:
 								bgcolor='0055ff'
 								color  ='ffffff'
-							elif r[i,3] <= 59.990:
+							elif r[i,-1] <= 59.990:
 								bgcolor='00aaff'
 								color  ='ffffff'
-							elif r[i,3] <= 59.994:
+							elif r[i,-1] <= 59.994:
 								bgcolor='00ffff'
 								color  ='000000'
-							elif r[i,3] <= 59.998:
+							elif r[i,-1] <= 59.998:
 								bgcolor='00ff7f'
 								color  ='000000'
-							elif r[i,3] <= 60.002:
+							elif r[i,-1] <= 60.002:
 								bgcolor='00ff00'
 								color  ='000000'
-							elif r[i,3] <= 60.006:
+							elif r[i,-1] <= 60.006:
 								bgcolor='7fff00'
 								color  ='000000'
-							elif r[i,3] <= 60.010:
+							elif r[i,-1] <= 60.010:
 								bgcolor='ffff00'
 								color  ='000000'
-							elif r[i,3] <= 60.014:
+							elif r[i,-1] <= 60.014:
 								bgcolor='ffaa00'
 								color  ='000000'
-							elif r[i,3] <= 60.020:
+							elif r[i,-1] <= 60.020:
 								bgcolor='ff5500'
 								color  ='ffffff'
 							else:
 								bgcolor='ff0000'
 								color  ='ffffff'
 
-							output += "<td style='background-color:#%s;color:#%s'>%0.4f</td></tr>\n"%(bgcolor,color, r[i,3])
+							output += "<td style='background-color:#%s;color:#%s'>%0.4f</td></tr>\n"%(bgcolor,color, r[i,-1])
 
-						output += """
-</table>
-</body>
-</html>"""
+						output+='		</table>\n'
+						output+='	</body>\n'
+						output+='</html>\n'
 					else:
 						s = StringIO.StringIO()
 						np.savetxt(s,r)
 						output = s.getvalue()
-				else:
-					output = "Valid estimator types are 'fft' or 'nlls' and length must be >= 10."
 
 			response_headers = [('Cache-Control', 'no-cache, no-store, must-revalidate'),
 							('Pragma', 'no-cache'),
@@ -471,6 +575,7 @@ class PowerMeasurementServer(MeasurementServer):
 			return [output]
 		else:
 			return super(PowerMeasurementServer,self).webApp(environ,start_response)
+	
 
 if __name__ == '__main__':
 	import sys
@@ -491,3 +596,4 @@ if __name__ == '__main__':
 
 	s = PowerMeasurementServer()
 	s.serve()
+	print "Goodbye"
