@@ -1,7 +1,10 @@
 % plotData.m
 clear all; clc; close all;
 source("~/Documents/research/serverpower/data/loop1server/loadData.m");
-
+set (0, "defaultaxesfontname", "Helvetica")
+set (0, "defaultaxesfontsize", 12)
+set (0, "defaulttextfontname", "Helvetica")
+set (0, "defaulttextfontsize", 12) 
 figure
 plot(t_pg,pkg_pg,'.r','linewidth',1,'displayname','RAPL PKG'); hold on
 %plot(t_pg,dram_pg+pkg_pg,'-<b','linewidth',1,'displayname','RAPL PKG+DRAM');
@@ -46,9 +49,9 @@ plot(t_fmd1,sp_fmd1,'k','linewidth',2,'displayname','Power Setpoint'); hold on;
 y2=plot(tStep,pStdStep+pMeanStep,'g','linewidth',2,'displayname','mean(DAQ)+/-std(DAQ)');
 y3=plot(tStep,pMeanStep-pStdStep,'g','linewidth',2);
 y1=plot(tStep,pMeanStep,'b','linewidth',2,'displayname','mean(DAQ)');
-y5=plot(tPkgStep,pkgStdStep+pkgMeanStep,'g','linewidth',2,'displayname','mean(PKG)+/-std(PKG)');
-y6=plot(tPkgStep,pkgMeanStep-pkgStdStep,'g','linewidth',2);
-y4=plot(tPkgStep,pkgMeanStep,'m','linewidth',2,'displayname','mean(PKG)')
+%y5=plot(tPkgStep,pkgStdStep+pkgMeanStep,'g','linewidth',2,'displayname','mean(PKG)+/-std(PKG)');
+%y6=plot(tPkgStep,pkgMeanStep-pkgStdStep,'g','linewidth',2);
+%y4=plot(tPkgStep,pkgMeanStep,'m','linewidth',2,'displayname','mean(PKG)')
 %y7=plot(tDramStep,dramMeanStep+pkgMeanStep,'g','linewidth',2,'displayname','mean(PKG+DRAM)'); 
 %plot(tDramStep,dramStdStep+dramMeanStep,'k','linewidth',1,'displayname','mean(DAQ)+/-std(DAQ)');
 %plot(tDramStep,dramMeanStep-dramStdStep,'k','linewidth',1);
