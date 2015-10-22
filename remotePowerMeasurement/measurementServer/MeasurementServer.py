@@ -66,7 +66,7 @@ class MeasurementServer(object):
 		except:
 			pass
 		finally:
-			print "Stopped."
 			self.task.StopTask()
 			self.task.ClearTask()
+			print "Stopped."
 
