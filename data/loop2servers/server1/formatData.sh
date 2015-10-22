@@ -1,5 +1,6 @@
 #!/bin/bash
 dir="/home/powerserver/joe/serverpower"
+rm pg_data.csv remoteData.csv formatedData1.csv
 # get power_gadget output data
 awk -F [::.,] '{printf("%.16G\n",($1*3600+$2*60+$3+$4/1000000000))}' $dir/rapl/data/data.csv > time_pg.csv #> /dev/null
 cut -d, -f3 $dir/rapl/data/data.csv > pkg_pg.csv #> /dev/null
