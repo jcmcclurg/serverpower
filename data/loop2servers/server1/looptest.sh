@@ -38,7 +38,7 @@ rm powerMeasure.csv pg_data.csv remoteData.csv calcSet1Data.csv
 cat < pipe | $powerGadget -e 100 > /dev/null & pgid=$! 
 
 $initializePowerMeasure
-$powerMeasure | tee powerMeasure.csv | unbuffer -p awk -v fA=$fieldA -F [,] '{printf("%.2f\n",$fA)}' > pipe2 & pmid=$! 
+$powerMeasure | tee powerMeasure.csv | unbuffer -p awk -v fA=$fieldA -v fB=$fieldB -F [,] '{printf("%.2f\n",$fA+$fB)}' > pipe2 & pmid=$! 
 
 $getFreq | $calcSetpoint -d 0 -M $maxPower -m $minPower -o calcSet1Data.csv > pipe2 & 
 
@@ -47,9 +47,9 @@ stress -m 10 & sid=$!
 cat < pipe2 | $integralController -s $maxPower -n 0.001 -x 0.999 -t 0.3 -k 0 -d 0 -u 10 | $insertDelays -U -d 0.5 -w 0.001 -p $sid &
 
 echo "entering sleep"
-sleep 60
+sleep 360
 echo "test finished"
-kill -KILL $(pgrep stress)
+sudo kill -KILL $(pgrep stress)
 
 $stopPowerMeasure
 echo "q" > pipe
