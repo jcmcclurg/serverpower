@@ -1,7 +1,7 @@
 #!/bin/bash
 dir="/home/powerserver/joe/serverpower"
 powerGadget="$dir/rapl/power_gadget"
-initializePowerMeasure="$dir/remotePowerMeasurement/initializeStreaming.sh"
+initializePowerMeasure="$dir/remotePowerMeasurement/initializeAllStreams.sh"
 powerMeasure="$dir/remotePowerMeasurement/streamPowerFast.sh"
 stopPowerMeasure="$dir/remotePowerMeasurement/stopStreaming.sh"
 insertDelays="$dir/signal_insert_delays/insertDelays"
@@ -20,11 +20,11 @@ stress -m 10 & sid=$!
 COUNTER=0
 iterations=1000
 sleepTime=$(bc <<< "scale=3; 10/$iterations")
-while [  $COUNTER -lt $iterations ]; do
+while [  $COUNTER -lt $(($iterations-900)) ]; do
 	bc <<< "scale=3; $COUNTER/$iterations"
 	let COUNTER=COUNTER+1 
 	sleep 1
-done | $insertDelays -U -d 0.5 -w 0.001 -p $sid
+done | $insertDelays -U -d 0.001 -w 0.000001 -p $sid
 echo "loop finished"
 kill -KILL $(pgrep stress)
 $stopPowerMeasure

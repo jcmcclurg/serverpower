@@ -357,6 +357,9 @@ int main(int argc, char *argv[]) {
 	fd_set readfds;
 	double prevTime_sec, currentTime_sec, time_last_updated;
 	struct timespec currentTime;
+	struct timespec sleepTime;
+	sleepTime.tv_sec = 0;
+	
 
 	// Clear output buffering on STDOUT
 	setbuf(stdout, NULL);
@@ -374,6 +377,7 @@ int main(int argc, char *argv[]) {
 	}
 	slen = 0;
 	sleeplen = 0;
+	sleepTime.tv_nsec = 0;
 
 	prevTime_sec = ((double)(currentTime.tv_sec)) + (((double)(currentTime.tv_nsec))/1.0e9);
 	time_last_updated = prevTime_sec;
@@ -423,10 +427,11 @@ int main(int argc, char *argv[]) {
 			//slen = (1.0-duty)*0.1;
 			//slen = (1.0-duty)*work_interval*10.0;
 			slen = work_interval*(1.0/duty-1.0);			
-			sleeplen = (useconds_t)(slen*1.0e6);
+			//sleeplen = (useconds_t)(slen*1.0e9);
+			sleepTime.tv_nsec = (long)(slen*1.0e9);			
 			//if(verbose)
 			//	fprintf(stderr,"Sleeping for %g seconds\n",slen);
-			usleep(sleeplen);
+			nanosleep(&sleepTime,NULL);
 			prevTime_sec = currentTime_sec;
 		}
 
