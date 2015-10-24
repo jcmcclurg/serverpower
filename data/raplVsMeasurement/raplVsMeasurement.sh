@@ -20,7 +20,7 @@ stress -m 10 & sid=$!
 COUNTER=0
 iterations=10
 while [  $COUNTER -lt $(($iterations)) ]; do
-	bc <<< "scale=3; 0.001+$COUNTER/$iterations"
+	bc <<< "scale=3; 0.001+$COUNTER/$iterations/10"
 	let COUNTER=COUNTER+1 
 	sleep 5
 done | $insertDelays -U -d 0.001 -w 0.0001 -p $sid
