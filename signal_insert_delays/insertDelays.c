@@ -13,7 +13,7 @@
 #define normExit()	do { close_insertDelays(); exit(EXIT_SUCCESS); } while (0)
 
 #define MAX_DUTY 0.999
-#define MIN_DUTY 0.001
+#define MIN_DUTY 0.000001
 #define DEFAULT_UPDATE_INTERVAL 10.0
 #define DEFAULT_WORK_INTERVAL 0.1
 #define DEFAULT_DUTY MAX_DUTY
@@ -427,11 +427,12 @@ int main(int argc, char *argv[]) {
 			//slen = (1.0-duty)*0.1;
 			//slen = (1.0-duty)*work_interval*10.0;
 			slen = work_interval*(1.0/duty-1.0);			
-			//sleeplen = (useconds_t)(slen*1.0e9);
-			sleepTime.tv_nsec = (long)(slen*1.0e9);			
+			sleeplen = (useconds_t)(slen*1.0e6);
+			//sleepTime.tv_nsec = (long)(slen*1.0e9);			
 			//if(verbose)
 			//	fprintf(stderr,"Sleeping for %g seconds\n",slen);
-			nanosleep(&sleepTime,NULL);
+			usleep(sleeplen);			
+			//nanosleep(&sleepTime,NULL);
 			prevTime_sec = currentTime_sec;
 		}
 
