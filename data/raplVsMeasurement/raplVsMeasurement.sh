@@ -17,7 +17,7 @@ echo "pmid=$pmid"
 
 stress -m 10 & sid=$!
 
-COUNTER=0
+COUNTER=1
 iterations=100
 while [  $COUNTER -lt $(($iterations/2)) ]; do
 	bc <<< "scale=3; $COUNTER/$iterations"
