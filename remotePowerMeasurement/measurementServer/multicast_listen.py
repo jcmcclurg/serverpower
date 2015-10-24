@@ -30,8 +30,11 @@ if __name__ == "__main__":
 	while running:
 		try:
 			p = s.readPacket(args.size)
+			t = time.time()
+			if args.verbose:
+				sys.stderr.write("Received packet %s\n"%(p))
 			if args.timestamp:
-				sys.stdout.write("%f:"%(time.time()))
+				sys.stdout.write("%f:"%(t))
 			if args.nonewline:
 				sys.stdout.write(p.data)
 			else:
