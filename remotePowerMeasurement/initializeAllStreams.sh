@@ -3,6 +3,11 @@ addr="192.168.1.200:8282"
 port="9500"
 port2="9501"
 l=1000
+echo "l=$l See?"
+if [ $# -eq 0 ] ; then : 
+else l=$1
+fi
+
 # for type=power, fields are
 # 0 - start time
 # 1 - end time
@@ -19,5 +24,6 @@ l=1000
 # 2 - frequency in hz
 
 
-wget -O - "$addr/stream?command=start&length=$l&blockLength=$l&type=power&fields=01234567&address=224.1.1.1&port=$port" --quiet
-wget -O - "$addr/stream?command=start&length=1&blockLength=1&type=freq&fields=02&address=224.1.1.1&port=$port2" --quiet
+wget -O - "$addr/stream?command=start&length=$l&blockLength=$l&type=power&fields=0145&address=224.1.1.1&port=$port" --quiet
+echo '\n'
+wget -O - "$addr/stream?command=start&length=1&blockLength=1&type=freq&fields=012&address=224.1.1.1&port=$port2" --quiet
