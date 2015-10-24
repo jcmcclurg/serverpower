@@ -20,7 +20,7 @@ stress -m 10 & sid=$!
 COUNTER=0
 iterations=10000
 sleepTime=$(bc <<< "scale=3; 10/$iterations")
-while [  $COUNTER -lt $(($iterations-9000)) ]; do
+while [  $COUNTER -lt $(($iterations-9900)) ]; do
 	bc <<< "scale=3; 0.0001+$COUNTER/$iterations"
 	let COUNTER=COUNTER+1 
 	sleep 1
