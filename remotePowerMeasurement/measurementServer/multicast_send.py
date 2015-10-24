@@ -6,6 +6,7 @@ Created on Mon Oct 12 17:18:13 2015
 """
 
 import sys
+import time
 import argparse
 from MulticastSocket import *
 
@@ -16,6 +17,7 @@ if __name__ == "__main__":
 	parser.add_argument('-n', '--nonewline', help='do not use a newline to send the packet', action='store_true')
 	parser.add_argument('-s', '--size', type=int, help='size of packets (used with -n)', default=1024)
 	parser.add_argument('-v', '--verbose', help='turn on verbose mode', action='store_true')
+	parser.add_argument('-t', '--timestamp', help='display timestamp', action='store_true')
 	args = parser.parse_args()
 
 	debug=0
@@ -37,7 +39,10 @@ if __name__ == "__main__":
 				running = False
 			else:
 				p = Packet(data,multicast_endpoint)
+				t = time.time()
 				s.sendPacket(p)
+				if args.timestamp:
+					sys.stdout.write("Sent:%f\n"%(t))
 				if args.verbose:
 					sys.stderr.write("Sent packet %s\n"%(p));
 		except (KeyboardInterrupt, ValueError) as e:
