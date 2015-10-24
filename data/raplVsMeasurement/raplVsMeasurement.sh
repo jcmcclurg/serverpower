@@ -19,11 +19,11 @@ stress -m 10 & sid=$!
 
 COUNTER=0
 iterations=100
-while [  $COUNTER -lt $(($iterations)) ]; do
+while [  $COUNTER -lt $(($iterations/2)) ]; do
 	bc <<< "scale=3; $COUNTER/$iterations"
 	let COUNTER=COUNTER+1 
 	sleep 1
-done | $insertDelays -U -d 0.001 -w 0.001 -p $sid
+done | $insertDelays -U -d 0.001 -w 0.0001 -p $sid
 echo "loop finished"
 kill -KILL $(pgrep stress)
 $stopPowerMeasure
