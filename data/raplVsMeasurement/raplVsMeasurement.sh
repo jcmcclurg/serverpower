@@ -24,7 +24,7 @@ while [  $COUNTER -lt $(($iterations-9900)) ]; do
 	bc <<< "scale=3; 0.0001+$COUNTER/$iterations"
 	let COUNTER=COUNTER+1 
 	sleep 1
-done | $insertDelays -U -d 0.001 -w 0.00001 -p $sid
+done | $insertDelays -U -d 0.001 -w 0.0001 -p $sid
 echo "loop finished"
 kill -KILL $(pgrep stress)
 $stopPowerMeasure
