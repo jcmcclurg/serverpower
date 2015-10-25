@@ -18,10 +18,10 @@ echo "pmid=$pmid"
 stress -m 10 & sid=$!
 
 COUNTER=1
-iterations=100
+iterations=1000
 while [  $COUNTER -lt $(($iterations/2)) ]; do
 	bc <<< "scale=3; $COUNTER/$iterations"
-	let COUNTER=COUNTER+1 
+	let COUNTER=COUNTER+10 
 	sleep 2
 done | $insertDelays -U -d 0.01 -w 0.001 -p $sid
 echo "loop finished"
