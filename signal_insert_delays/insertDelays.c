@@ -359,7 +359,6 @@ int main(int argc, char *argv[]) {
 	struct timespec currentTime;
 	struct timespec sleepTime;
 	sleepTime.tv_sec = 0;
-	double workPeriod = 0.01;
 	
 
 	// Clear output buffering on STDOUT
@@ -424,11 +423,9 @@ int main(int argc, char *argv[]) {
 				time_last_updated = ((double)(currentTime.tv_sec)) + (((double)(currentTime.tv_nsec))/1.0e9);
 				//time_last_updated = currentTime_sec;
 			}
-			//slen = (1.0-duty)*(currentTime_sec - prevTime_sec);
+			slen = (1.0-duty)*(currentTime_sec - prevTime_sec);
 			//slen = (1.0-duty)*0.1;
 			//slen = (1.0-duty)*work_interval*10.0;
-			work_interval=duty*workPeriod;
-			slen = (1.0-duty)*workPeriod;
 //			slen = work_interval*(1.0/duty-1.0);			
 			sleeplen = (useconds_t)(slen*1.0e6);
 			//sleepTime.tv_nsec = (long)(slen*1.0e9);			
