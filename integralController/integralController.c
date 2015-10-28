@@ -19,6 +19,8 @@ double input;
 double update_interval;
 double maximum_output;
 double minimum_output;
+int outputfile;
+
 
 void usage(){
 	fprintf(stdout, "\nIntegral controller prints a value proportional to the integral of the error.\n");
@@ -57,8 +59,9 @@ int cmdline(int argc, char **argv){
 	minimum_output = -DBL_MAX;
 	maximum_output = DBL_MAX;
 	prefix = NULL;
+	outputfile=0;
 
-	while ((opt = getopt(argc, argv, "p:t:d:n:x:u:s:i:k:vh")) != -1) {
+	while ((opt = getopt(argc, argv, "p:t:d:n:x:u:s:i:k:o:v:h")) != -1) {
 		switch (opt) {
 			case 'n':
 				minimum_output = atof(optarg);
@@ -94,6 +97,9 @@ int cmdline(int argc, char **argv){
 			case 'p':
 				prefix = (char*) optarg;
 				break;
+			case 'o':
+				outputfile = (int)atof(optarg);
+				break;
 			default:
 				usage();
 				return -1;
@@ -108,9 +114,11 @@ int main(int argc, char* argv[]) {
 	signal(SIGINT, terminateProgram);
 	setbuf(stdout,NULL);
 	setbuf(stderr,NULL);
-	FILE* fp;
-	fp = fopen("/home/powerserver/joe/serverpower/transcoders/videos/iCstderr.log", "w");
-	setbuf(fp,NULL);
+//	FILE *fp = NULL;
+//	if (outputfile == 1)
+//		fp = fopen("/home/powerserver/joe/serverpower/integralController/controlSignal.csv","w+");
+//	if (fp != NULL)	
+//		setbuf(fp,NULL);
 	char* str;
 
 	double prevInput = input;
@@ -148,8 +156,8 @@ int main(int argc, char* argv[]) {
 				}
 				else if(str[0] == 's'){
 					if(sscanf(str+1,"%lf",&setpoint) > 0 && prevSetpoint != setpoint){
-						if(verbose)
-							fprintf(stderr, "Setpoint updated from %g to %g\n",prevSetpoint, setpoint);
+//						if(verbose)
+//							fprintf(stderr, "Setpoint updated from %g to %g\n",prevSetpoint, setpoint);
 					}
 				}
 				else if(str[0] == 'd'){
@@ -176,8 +184,8 @@ int main(int argc, char* argv[]) {
 				else{
 					if(sscanf(str,"%lf",&input) > 0 && prevInput != input){
 						iter=iter+1;
-						if(verbose)
-							fprintf(stderr, "Input updated from %g to %g\n",prevInput, input);
+//						if(verbose)
+//							fprintf(stderr, "Input updated from %g to %g\n",prevInput, input);
 					}
 				}
 			}
@@ -203,6 +211,9 @@ int main(int argc, char* argv[]) {
 		//		integral += integralDelta;
 
 			newOutput = kvalue*currentError + integral + dvalue*derivative;
+			//newOutput = integral;
+			//newOutput = kvalue*currentError + 0.5 + integral; // +0.5 pushes up P term to account for the nonlinearity introduced by the actuator limits (0,1)
+
 			oldOutput = newOutput;
 			if(prefix != NULL)
 				fprintf(stdout,"%s",prefix);
@@ -210,23 +221,27 @@ int main(int argc, char* argv[]) {
 			if(newOutput > maximum_output){
 				fprintf(stdout,"%lf\n",maximum_output);
 				newOutput =  maximum_output;
-				if(verbose)
-					fprintf(stderr, "output capped (max)\n");
+//				if(verbose)
+//					fprintf(stderr, "output capped (max)\n");
 			}
 			else if(newOutput < minimum_output){
 				newOutput = minimum_output;
 				fprintf(stdout,"%lf\n",minimum_output);
-				if(verbose)
-					fprintf(stderr, "output capped (min)\n");
+//				if(verbose)
+//					fprintf(stderr, "output capped (min)\n");
 			}
 			else {
 				fprintf(stdout,"%lf\n",newOutput);
-				if(verbose)
-					fprintf(stderr, "output: %lf\n",newOutput);
+//				if(verbose)
+//					fprintf(stderr, "output: %lf\n",newOutput);
 			}
 			lastIter = iter;
-			integralDelta = (0.0075*currentError+(newOutput-oldOutput))*timeDelta/tvalue;
+			//integralDelta = (0.0075*currentError+(newOutput-oldOutput))*timeDelta/tvalue;
+			integralDelta = (kvalue*currentError+newOutput-oldOutput)*timeDelta/tvalue;
 			integral += integralDelta;
+			//if (fp != NULL)
+				fprintf(stderr,"%.9f,%.3f,%.3f,\n",currentTime,newOutput,oldOutput);
+			
 		}
 		else{
 			//integral = 0.0;
@@ -235,7 +250,8 @@ int main(int argc, char* argv[]) {
 		prevSetpoint = setpoint;
 		prevInput = input;
 	}
-	fclose(fp);
+	//if (fp != NULL)
+	//	fclose(fp);
 	exit(EXIT_SUCCESS);
 	return 0;
 }
