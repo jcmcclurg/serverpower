@@ -39,7 +39,7 @@ $getFreq | tee freq.csv | unbuffer -p awk -F [,,.] '{printf("f%d\n",$5*1000+$6)}
 
 stress -m 10 & sid=$!
 
-cat < pipe2 | $integralController -s $minPower -n 0.001 -x 0.4 -t 0.15 -k 0.003 -d 0 -u 10 -v 1 2>controlVerbose | $insertDelays -U -d 0.5 -w 0.001 -p $sid &
+cat < pipe2 | $integralController -s $minPower -n 0.001 -x 0.4 -t 0.6 -k 0.02 -d 0 -u 10 -v 1 2>controlVerbose | $insertDelays -U -d 0.5 -w 0.001 -p $sid &
 #cat < pipe2 | $integralController -s $minPower -n 0.001 -x 0.4 -t 0.5 -k 0.0125 -d 0 -u 10 -v 1 2>controlVerbose | $insertDelays -U -d 0.5 -w 0.001 -p $sid &
 #cat < pipe2 | $integralController -s $maxPower -n 0.001 -x 0.999 -t 0.3 -k 0 -d 0 -u 10 | $insertDelays -U -d 0.5 -w 0.001 -p $sid &
 
