@@ -34,7 +34,7 @@ $initializePowerMeasure
 $powerMeasure | tee powerMeasure.csv | unbuffer -p cut -d , -f 3 > pipe2 & pmid=$! 
 
 #$getFreq | tee freq.csv | unbuffer -p cut -d , -f 3 | $calcSetpoint -d 0 -M $maxPower -m $minPower -o calcSet1Data.csv > pipe2 & 
-$getFreq | tee freq.csv | awk -F [,,.] '{printf("%d\n",($3*1000+$4))}' | $calcSetpoint -d 0 -M $maxPower -m $minPower -o calcSet1Data.csv > pipe2 & 
+$getFreq | tee freq.csv | unbuffer -p awk -F [,,.] '{printf("f%d\n",$5*1000+$6)}' | $calcSetpoint -d 0 -M $maxPower -m $minPower -o calcSet1Data.csv > pipe2 & 
 
 
 stress -m 10 & sid=$!
