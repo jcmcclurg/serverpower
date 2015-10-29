@@ -210,8 +210,8 @@ int main(int argc, char* argv[]) {
 		//	else
 		//		integral += integralDelta;
 
-			newOutput = kvalue*currentError + integral + dvalue*derivative;
-			//newOutput = integral;
+			//newOutput = kvalue*currentError + integral + dvalue*derivative;
+			newOutput = integral;
 			//newOutput = kvalue*currentError + 0.5 + integral; // +0.5 pushes up P term to account for the nonlinearity introduced by the actuator limits (0,1)
 
 			oldOutput = newOutput;
