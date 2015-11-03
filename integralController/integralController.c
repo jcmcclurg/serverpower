@@ -210,7 +210,7 @@ int main(int argc, char* argv[]) {
 				}
 				else{
 					if(sscanf(str,"%lf",&input) > 0 && prevInput != input){
-						LOG("Input updated from %g to %g\n",prevInput, input);
+						LOG("Input updated from %g to %g (setpoint = %g)\n",prevInput, input, setpoint);
 					}
 				}
 			}
@@ -237,11 +237,11 @@ int main(int argc, char* argv[]) {
 
 		if(newOutput > maximum_output){
 			newOutput =  maximum_output;
-			LOG("output capped (max)\n");
+			LOG("output capped (max=%lf)\n",maximum_output);
 		}
 		else if(newOutput < minimum_output){
 			newOutput = minimum_output;
-			LOG("output capped (min)\n");
+			LOG("output capped (min=%lf)\n",minimum_output);
 		}
 		else {
 			LOG("output: %lf\n",newOutput);
@@ -252,6 +252,7 @@ int main(int argc, char* argv[]) {
 			// If you're trying to prevent integral windup, you can do it by limiting the accumulator
 			// (as I did previously), or by back-calculating the integral term. That method is shown here:
 			integral = (newOutput - kvalue*currentError - dvalue*derivative)/tvalue;
+			LOG("integral value: %lf\n",integral);
 		}
 		else{
 			// If it hits the upper cap, this starts decreasing the integral
