@@ -1,7 +1,7 @@
 #!/bin/bash
 dir="/home/powerserver/joe/serverpower"
 powerGadget="$dir/rapl/power_gadget"
-initializePowerMeasure="$dir/remotePowerMeasurement/initializeStreaming.sh"
+initializePowerMeasure="$dir/remotePowerMeasurement/initializeAllStreams.sh"
 powerMeasure="$dir/remotePowerMeasurement/streamPowerFast.sh"
 stopPowerMeasure="$dir/remotePowerMeasurement/stopStreaming.sh"
 insertDelays="$dir/signal_insert_delays/insertDelays"
@@ -37,19 +37,19 @@ rm powerMeasure.csv pg_data.csv remoteData.csv calcSet1Data.csv
 
 cat < pipe | $powerGadget -e 100 > /dev/null & pgid=$! 
 
-#$initializePowerMeasure
+$initializePowerMeasure
 $powerMeasure | tee powerMeasure.csv | unbuffer -p awk -v fA=$fieldA -v fB=$fieldB -F [,] '{printf("%.2f\n",$fA+$fB)}' > pipe2 & pmid=$! 
 
-$getFreq | $calcSetpoint -d 0 -M $maxPower -m $minPower -o calcSet1Data.csv > pipe2 & 
+$getFreq | unbuffer -p awk -F [,,.] '{printf("f%d\n",$5*1000+$6)}' | $calcSetpoint -d 0 -M $maxPower -m $minPower -o calcSet1Data.csv > pipe2 & 
 
 stress -m 10 & sid=$!
 
-cat < pipe2 | $integralController -s $maxPower -n 0.001 -x 0.999 -t 0.3 -k 0 -d 0 -u 10 | $insertDelays -U -d 0.5 -w 0.001 -p $sid &
+cat < pipe2 | $integralController -s $(($minPower/2+$maxPower/2)) -n 0.001 -x 0.4 -t 0.6 -k 0.015 -d 0 -u 10 -v 1 2>controlVerbose | $insertDelays -U -d 0.5 -w 0.001 -p $sid &
 
 echo "entering sleep"
 sleep 360
 echo "test finished"
-kill -KILL $(pgrep stress)
+sudo kill -KILL $(pgrep stress)
 
 $stopPowerMeasure
 echo "q" > pipe
