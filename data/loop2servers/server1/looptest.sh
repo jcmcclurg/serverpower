@@ -47,7 +47,7 @@ stress -m 10 & sid=$!
 cat < pipe2 | $integralController -s $(($minPower/2+$maxPower/2)) -n 0.001 -x 0.4 -t 0.6 -k 0.015 -d 0 -u 10 -v 1 2>controlVerbose | $insertDelays -U -d 0.5 -w 0.001 -p $sid &
 
 echo "entering sleep"
-sleep 600
+sleep 1200
 echo "test finished"
 sudo kill -KILL $(pgrep stress)
 
@@ -55,6 +55,7 @@ $stopPowerMeasure
 echo "q" > pipe
 rm pipe pipe2
 sudo kill -KILL $(pgrep power)
+pkill Power
 sudo kill -KILL $(pgrep Freq)
 sudo kill -KILL $(pgrep integral)
 sudo kill -KILL $(pgrep insert)
