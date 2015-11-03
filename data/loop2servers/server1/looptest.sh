@@ -26,8 +26,8 @@ echo "minPower = $minPower"
 
 serverA=$3
 serverB=$4
-fieldA=$(($3+4))
-fieldB=$(($4+4))
+fieldA=$(($3))
+fieldB=$(($4))
 echo "serverA=$serverA serverB=$serverB"
 echo "fieldA=$fieldA fieldB=$fieldB"
 
@@ -38,7 +38,7 @@ rm powerMeasure.csv pg_data.csv remoteData.csv calcSet1Data.csv
 cat < pipe | $powerGadget -e 100 > /dev/null & pgid=$! 
 
 $initializePowerMeasure
-$powerMeasure | tee powerMeasure.csv | unbuffer -p awk -v fA=$fieldA -v fB=$fieldB -F [,] '{printf("%.2f\n",$fA+$fB)}' > pipe2 & pmid=$! 
+$powerMeasure | tee powerMeasure.csv | unbuffer -p awk -v fA=$fieldA -v fB=$fieldB -F [,] '{printf("%.3f\n",$fA+$fB)}' > pipe2 & pmid=$! 
 
 $getFreq | unbuffer -p awk -F [,,.] '{printf("f%d\n",$5*1000+$6)}' | $calcSetpoint -d 0 -M $maxPower -m $minPower -o calcSet1Data.csv > pipe2 & 
 
@@ -47,7 +47,7 @@ stress -m 10 & sid=$!
 cat < pipe2 | $integralController -s $(($minPower/2+$maxPower/2)) -n 0.001 -x 0.4 -t 0.6 -k 0.015 -d 0 -u 10 -v 1 2>controlVerbose | $insertDelays -U -d 0.5 -w 0.001 -p $sid &
 
 echo "entering sleep"
-sleep 360
+sleep 60
 echo "test finished"
 sudo kill -KILL $(pgrep stress)
 
