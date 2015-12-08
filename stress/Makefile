@@ -1,7 +1,7 @@
 # build an executable named myprog from myprog.c
 CC = gcc
 
-CFLAGS = -lm -g -Wall
+CFLAGS = -lrt -lm -g -Wall
 
 TARGET = cstress
 #DEPENDS = 
@@ -13,12 +13,6 @@ $(TARGET): $(TARGET).o $(DEPENDS)
 
 cstress.o: cstress.c
 	$(CC) -c cstress.c $(CFLAGS)
-
-cpustress.o: cpustress.c
-	$(CC) -c cpustress.c $(CFLAGS)
-
-cpustress2.o: cpustress2.c
-	$(CC) -c cpustress2.c $(CFLAGS)
 
 clean:
 	$(RM) $(TARGET) $(TARGET).o $(DEPENDS)
