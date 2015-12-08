@@ -9,3 +9,9 @@ This directory contains the code for interacting with the data acquisition unit,
 
 ## utilities
 This directory contains useful utilities for measuring computer performance and infrastructure for performing tests.
+
+## profiling
+This directory contains scripts for remotely running profiling tests on the cluster. It also contains measured data for key experiments.
+
+## unused
+This directory contains various leftover artifacts that I'm afraid to delete, but don't use. It will eventually go away.
