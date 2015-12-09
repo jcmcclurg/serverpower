@@ -11,7 +11,7 @@ dummyRampFile="$dir/../../utilities/playback/ramp_0_1_short.csv"
 
 rampFile=${1-$defRampFile}
 
-if [[ "x$rampFile" -eq "xdummy" ]]; then
+if [[ "x$rampFile" == "xdummy" ]]; then
 	rampFile=$dummyRampFile
 fi
 
