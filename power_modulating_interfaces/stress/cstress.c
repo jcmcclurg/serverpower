@@ -131,7 +131,7 @@ int cmdline(int argc, char **argv){
 	id = defaultId;
 	int opt;
 
-	while ((opt = getopt(argc, argv, "i:p:d:v")) != -1) {
+	while ((opt = getopt(argc, argv, "i:p:d:vh")) != -1) {
 		switch (opt) {
 		case 'i':
 			id = optarg;
@@ -146,7 +146,7 @@ int cmdline(int argc, char **argv){
 			break;
 		case 'h':
 			usage();
-			exit(0);
+			exit(EXIT_SUCCESS);
 			break;
 		default:
 			usage();
