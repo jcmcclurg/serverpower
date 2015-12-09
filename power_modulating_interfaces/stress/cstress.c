@@ -195,23 +195,31 @@ void start_timer(void){
 }
 
 void sigaio_handler(int signum, siginfo_t *info, void* uap){
-	char* b = (char*) my_aiocb.aio_buf;
-	if(verbose)
-		fprintf(stderr,"Got input: %s", b);
-	double d;
-	if(sscanf(b, "%lf", &d) > 0)
-		set_duty(d);
+	if(aio_return(&my_aiocb) == -1){
+		//errExit("aio_return");
+		if(verbose)
+			fprintf(stderr,"I/O error\n");
+	}
+	else{
+		char* b = (char*) my_aiocb.aio_buf;
+		if(verbose)
+			fprintf(stderr,"Got input: %s", b);
+		double d;
+		if(sscanf(b, "%lf", &d) > 0)
+			set_duty(d);
 
-	else if(b[0] == 'p' && sscanf(b+1,"%lf", &d) > 0)
-		set_period(d);
+		else if(b[0] == 'p' && sscanf(b+1,"%lf", &d) > 0)
+			set_period(d);
 
-	else if(b[0] == 'q')
-		state = STATE_FINISHED;
+		else if(b[0] == 'q')
+			state = STATE_FINISHED;
 
-	else if(verbose)
-		fprintf(stderr,"Could not parse.\n");
+		else if(verbose)
+			fprintf(stderr,"Could not parse.\n");
 
-	aio_read(&my_aiocb);
+		if(aio_read(&my_aiocb) == -1)
+			errExit("aio_read");
+	}
 }
 
 void start_io(void){
@@ -236,7 +244,8 @@ void start_io(void){
 	my_aiocb.aio_sigevent.sigev_notify = SIGEV_SIGNAL;
 	my_aiocb.aio_sigevent.sigev_signo = SIG_AIO;
 	my_aiocb.aio_sigevent.sigev_value.sival_int = 0;
-	aio_read(&my_aiocb);
+	if(aio_read(&my_aiocb) == -1)
+		errExit("aio_read");
 }
 
 static void sigint_handler(int sig, siginfo_t *si, void *uc) {
