@@ -100,7 +100,7 @@ int cmdline(int argc, char **argv){
 	progname = (char*) argv[0];
 	int i;
 	char opt = 0;
-	verbose = 1;
+	verbose = 0;
 	state = STATE_RUNNING;
 	value[0] = 0;
 	fname = NULL;

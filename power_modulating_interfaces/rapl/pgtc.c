@@ -87,8 +87,8 @@ void print_rapl_control_info(uint64_t node)  // added by Joe Hall 4/25/15
 		"Limit1ON=\t%d\tLimit2ON=\t%d\nClamp1ON=\t%d\tClamp2ON=\t%d\nLockON=\t%d\n\n"
 		,pkg_plc.power_limit_watts_1,pkg_plc.power_limit_watts_2
 		,pkg_plc.limit_time_window_seconds_1,pkg_plc.limit_time_window_seconds_2
-		,pkg_plc.limit_enabled_1,pkg_plc.limit_enabled_2
-		,pkg_plc.clamp_enabled_1,pkg_plc.clamp_enabled_2,pkg_plc.lock_enabled);	
+		,(int) pkg_plc.limit_enabled_1, (int) pkg_plc.limit_enabled_2
+		,(int) pkg_plc.clamp_enabled_1, (int) pkg_plc.clamp_enabled_2, (int) pkg_plc.lock_enabled);	
 
 	   printf("RAPL Package Parameters:\n"	
 		"ThermalSpecPower(W) = %f\tMaxWindow(sec) = %f\nMinimumPower(W) = %f\tMaximumPower(W) = %f\n\n"
@@ -98,8 +98,8 @@ void print_rapl_control_info(uint64_t node)  // added by Joe Hall 4/25/15
 	   printf("RAPL PowerPlane0 (Core) Power Limit Control:\n"
 		"PowerLimit(W) =\t%f\tWindow(sec) =%f\nLimitON = %d\tClampON = %d\n"
 		"LockON = %d\tPolicyLevel = %d\n\n"
-		,pp0_plc.power_limit_watts,pp0_plc.limit_time_window_seconds,pp0_plc.limit_enabled
-		,pp0_plc.clamp_enabled,pp0_plc.lock_enabled,pp0_priority_level);
+		,pp0_plc.power_limit_watts, pp0_plc.limit_time_window_seconds, (int) pp0_plc.limit_enabled
+		,(int) pp0_plc.clamp_enabled, (int) pp0_plc.lock_enabled, (int) pp0_priority_level);
 /*
 	   printf("RAPL PP1 Power Limit Control:\n"
 		"PowerLimit(W) =\t%f\tWindow(sec) =%f\nLimitON = %d\tClampON = %d\n"
@@ -110,8 +110,8 @@ void print_rapl_control_info(uint64_t node)  // added by Joe Hall 4/25/15
 	   printf("RAPL DRAM Power Limit Control:\n"
 		"PowerLimit(W) =\t%f\tWindow(sec) =%f\nLimitON = %d\tClampON = %d\n"
 		"LockON = %d\n\n"
-		,dram_plc.power_limit_watts,dram_plc.limit_time_window_seconds,dram_plc.limit_enabled
-		,dram_plc.clamp_enabled,dram_plc.lock_enabled);
+		,dram_plc.power_limit_watts,dram_plc.limit_time_window_seconds, (int) dram_plc.limit_enabled
+		,(int) dram_plc.clamp_enabled, (int) dram_plc.lock_enabled);
 
 	   printf("RAPL DRAM Parameters:\nThermalSpecPower(W) = %f\tMaxWindow(sec) = %f\n" 
 		 "MinimumPower(W) = %f\tMaximumPower(W) = %f\n\n"
@@ -262,13 +262,13 @@ void do_set_power_limit(void)
     /* don't buffer if piped */
     setbuf(fp, NULL);
   
-    gettimeofday(&tv, NULL);
+    gettimeofday((struct timeval *__restrict__) &tv, NULL);
     start = convert_time_to_sec(tv);
     end = start;
 
     while (1) {
         usleep(delay_us);
-        gettimeofday(&tv, NULL);
+        gettimeofday((struct timeval *__restrict__) &tv, NULL);
         interval_start = convert_time_to_sec(tv);
         interval_elapsed_time = interval_start - end;
         total_elapsed_time = end - start;
@@ -502,7 +502,7 @@ do_print_energy_info()
         for (i = node; i < num_node; i++) {
             //get_pp0_freq_mhz(i, &freq);
             get_pp0_freq_mhz(i, freq); //changed by Joe 4/25/15 to get 4 CPU freq
-            fprintf(fp, "%u|%u|%u|%u,", freq[0],freq[1],freq[2],freq[3]);
+            fprintf(fp, "%u|%u|%u|%u,", (unsigned int) freq[0], (unsigned int) freq[1], (unsigned int) freq[2], (unsigned int) freq[3]);
             for (domain = 0; domain < RAPL_NR_DOMAIN; ++domain) {
             	if(is_supported_domain(domain)) {
 //              	fprintf(fp, "%.4lf,%.4lf,%.4lf,",power_watt[i][domain], cum_energy_J[i][domain], cum_energy_mWh[i][domain]);
