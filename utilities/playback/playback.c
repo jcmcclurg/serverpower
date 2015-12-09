@@ -51,7 +51,10 @@ static void handler(int sig, siginfo_t *si, void *uc) {
 	struct timespec ts;
 
 	if(value[0] != 0){
-		fprintf(stdout,"%s\n",value);
+		if(prefix == NULL)
+			fprintf(stdout,"%s\n",value);
+		else
+			fprintf(stdout,"%s%s\n",prefix,value);
 
 		if(verbose){
 			clock_gettime(CLOCKID,&ts);
@@ -89,6 +92,7 @@ void usage(){
 	fprintf(stdout, "\nTimed playback %s\n", version);
 	fprintf(stdout, "\nUsage: %s\n",progname);
 	fprintf(stdout, "   -f    the csv file to play back. first column is seconds (relative to now). second column is value to play back\n");
+	fprintf(stdout, "   -p    prefix before playback\n");
 	fprintf(stdout, "   -v    verbose output\n");
 	fprintf(stdout, "\n");
 	fprintf(stdout, "If the program is unable to schedule at the specified time, it notifies via stderr and schedules as soon as possible. \n");
@@ -104,6 +108,7 @@ int cmdline(int argc, char **argv){
 	state = STATE_RUNNING;
 	value[0] = 0;
 	fname = NULL;
+	prefix = NULL;
 
 	for(i = 1; i < argc; i++){
 		if(argv[i][0] == '-'){
@@ -118,6 +123,9 @@ int cmdline(int argc, char **argv){
 		else{
 			if(opt == 'f'){
 				fname = (char *) argv[i];
+			}
+			else if(opt == 'p'){
+				prefix = (char *) argv[i];
 			}
 			else{
 				usage();
