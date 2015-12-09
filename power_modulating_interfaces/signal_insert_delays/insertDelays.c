@@ -12,15 +12,21 @@
 #define errExit(msg)	do { close_insertDelays(); perror(msg); exit(EXIT_FAILURE); } while (0)
 #define normExit()	do { close_insertDelays(); exit(EXIT_SUCCESS); } while (0)
 
-#define MAX_DUTY 0.999
-#define MIN_DUTY 0.001
+#define LOG(args...) if(verbose){ fprintf(stderr,args); } if(fp != NULL){ fprintf(fp,args); }
+
+#define DEFAULT_MAX_DUTY 0.999
+#define DEFAULT_MIN_DUTY 0.001
 #define DEFAULT_UPDATE_INTERVAL 10.0
 #define DEFAULT_WORK_INTERVAL 0.1
-#define DEFAULT_DUTY MAX_DUTY
+#define DEFAULT_DUTY max_duty
 
 double update_interval;
 double work_interval;
+double max_duty;
+double min_duty;
 double duty;
+FILE* fp;
+
 char verbose;
 char update_on_error;
 pid_t my_pid;
@@ -38,13 +44,11 @@ void close_insertDelays(void){
 		if(ptree_info->stoppableList != NULL){
 			int i = 0;
 			while(ptree_info->stoppableList[i] > 0){
-				if(verbose)
-					fprintf(stderr,"%d ",ptree_info->stoppableList[i]);
+				LOG("%d ",ptree_info->stoppableList[i]);
 				f -= kill(ptree_info->stoppableList[i++],SIGCONT);
 			}
 		}
-		if(verbose)
-			fprintf(stderr,"\n");
+		LOG("\n");
 
 		if(f > 0)
 			errExit("Couldn't send SIGCONT");
@@ -75,7 +79,10 @@ void usage(){
 	fprintf(stdout, "     -u   [Process tree update interval in seconds (default: %lf)]\n", DEFAULT_UPDATE_INTERVAL);
 	fprintf(stdout, "     -w   [Work interval in seconds (default: %lf)]\n", DEFAULT_WORK_INTERVAL);
 	fprintf(stdout, "     -v   Verbose mode\n");
+	fprintf(stdout, "     -l   [log file (default: (none))]\n");
 	fprintf(stdout, "     -U   Update on error\n");
+	fprintf(stdout, "\n Type a number between 0 and 1 to set the duty cycle.\n");
+	fprintf(stdout, " Type w followed by a number of seconds (like w0.001) to set the work interval.\n");
 	fprintf(stdout, "\n");
 }
 
@@ -114,6 +121,7 @@ int cmdline(int argc, char **argv){
 	parentList = NULL;
 	exclusionList = NULL;
 	proc_tree = NULL;
+	fp = NULL;
 	my_pid = getpid();
 
 	char opt = 0;
@@ -140,6 +148,20 @@ int cmdline(int argc, char **argv){
 			}
 			else if(opt == 'x'){
 				explicitExclusionList = 1;
+			}
+			else if(opt == 'l'){
+				if(i+1 >= argc ){
+					fprintf(stderr,"Please specify filename for logfile.\n");
+					usage();
+					return -1;
+				}
+				else{
+					fp = fopen(argv[i+1],"w");
+					if(fp == NULL){
+						fprintf(stderr,"Couldn't open %s.\n",argv[i+1]);
+						return -1;
+					}
+				}
 			}
 			else if(opt == 'v'){
 				verbose = 1;
@@ -261,33 +283,31 @@ int cmdline(int argc, char **argv){
 		}
 	}
 
-	if(verbose){
-		fprintf(stderr,"Update interval: %g\n",update_interval);
-		fprintf(stderr,"Work interval: %g\n",work_interval);
-		fprintf(stderr,"Duty cycle: %g\n",duty);
-		fprintf(stderr,"Parent list (");
-		if(explicitParentList){
-			fprintf(stderr,"these and only these):\n");
-		}
-		else{
-			fprintf(stderr,"these and their children):\n");
-		}
-		i = 0;
-		while(parentList[i] > 0){
-			fprintf(stderr,"   %d\n",parentList[i++]);
-		}
+	LOG("Update interval: %g\n",update_interval);
+	LOG("Work interval: %g\n",work_interval);
+	LOG("Duty cycle: %g\n",duty);
+	LOG("Parent list (");
+	if(explicitParentList){
+		LOG("these and only these):\n");
+	}
+	else{
+		LOG("these and their children):\n");
+	}
+	i = 0;
+	while(parentList[i] > 0){
+		LOG("   %d\n",parentList[i++]);
+	}
 
-		fprintf(stderr,"Exclusion list (");
-		if(explicitExclusionList){
-			fprintf(stderr,"these and only these):\n");
-		}
-		else{
-			fprintf(stderr,"these and their children):\n");
-		}
-		i = 0;
-		while(exclusionList[i] > 0){
-			fprintf(stderr,"   %d\n",exclusionList[i++]);
-		}
+	LOG("Exclusion list (");
+	if(explicitExclusionList){
+		LOG("these and only these):\n");
+	}
+	else{
+		LOG("these and their children):\n");
+	}
+	i = 0;
+	while(exclusionList[i] > 0){
+		LOG("   %d\n",exclusionList[i++]);
 	}
 
 	if(proc_tree == NULL){
@@ -301,16 +321,14 @@ int cmdline(int argc, char **argv){
 		}
 	}
 
-	if(verbose){
-		fprintf(stderr,"Stoppable list (buffer size: %d, index: %d): ", ptree_info->stoppableListSize, ptree_info->stoppableListIndex);
-		if(ptree_info->stoppableList != NULL){
-			i = 0;
-			while(ptree_info->stoppableList[i] > 0){
-				fprintf(stderr,"%d ",ptree_info->stoppableList[i++]);
-			}
+	LOG("Stoppable list (buffer size: %d, index: %d): ", ptree_info->stoppableListSize, ptree_info->stoppableListIndex);
+	if(ptree_info->stoppableList != NULL){
+		i = 0;
+		while(ptree_info->stoppableList[i] > 0){
+			LOG("%d ",ptree_info->stoppableList[i++]);
 		}
-		fprintf(stderr,"\n");
 	}
+	LOG("\n");
 
 	free(parentList);
 	free(exclusionList);
@@ -402,15 +420,15 @@ int main(int argc, char *argv[]) {
 					errExit("Couldn't update process tree.");
 				}
 				else if(verbose){
-					fprintf(stderr,"Updated process tree. ");
-					fprintf(stderr,"Stoppable list: ");
+					LOG("Updated process tree. ");
+					LOG("Stoppable list: ");
 					if(ptree_info->stoppableList != NULL){
 						int i = 0;
 						while(ptree_info->stoppableList[i] > 0){
-							fprintf(stderr,"%d ",ptree_info->stoppableList[i++]);
+							LOG("%d ",ptree_info->stoppableList[i++]);
 						}
 					}
-					fprintf(stderr,"\n");
+					LOG("\n");
 				}
 
 				if(clock_gettime(CLOCK_BOOTTIME, &currentTime)){
@@ -433,20 +451,23 @@ int main(int argc, char *argv[]) {
 		// If the user has typed something, process what the user has typed.
 		else if (num_readable == 1) {
 			if(scanf("%lf",&duty) > 0){
-				if(duty > MAX_DUTY){
-					duty = MAX_DUTY;
+				if(duty > max_duty){
+					duty = max_duty;
 				}
-				else if(duty < MIN_DUTY){
-					duty = MIN_DUTY;
+				else if(duty < min_duty){
+					duty = min_duty;
 				}
-				if(verbose)
-					fprintf(stderr,"Set duty to %lg (previous sleeplen was %lg)\n",duty, slen);
+				LOG("Set duty to %lg (previous sleeplen was %lg)\n",duty, slen);
 			}
 			else if(scanf("%s",buf) > 0 ){
 				if(buf[0] == 'q'){
-					if(verbose)
-						fprintf(stderr,"Quitting\n");
+					LOG("Quitting\n");
 					break;
+				}
+				else if(buf[0] == 'w'){
+					if(sscanf(buf+1,"%lf",&work_interval) > 0){
+						LOG("Set work interval to %lf\n", work_interval);
+					}
 				}
 				else{
 					errExit("Quit on scanf");
