@@ -37,7 +37,6 @@ Modified summer 2015 by Josiah McClurg
 #define DEFAULT_DUTY 0.5
 #define DEFAULT_PERIOD 0.01
 
-#define STATE_INPUT_READY 3
 #define STATE_FINISHED 2 
 #define STATE_WORKING 1
 #define STATE_SLEEPING 0
@@ -158,12 +157,13 @@ int cmdline(int argc, char **argv){
 }
 
 static void sigtimer_handler(int sig, siginfo_t *si, void *uc) {
+	//fprintf(stderr,"sigtimer_handler\n");
 	if(state == STATE_WORKING){
 		state = STATE_SLEEPING;
 		if (timer_settime(timerid, 0, &timer_off, NULL) == -1)
 			errExit("timer_settime1");
 	}
-	else{ // if state == STATE_SLEEPING
+	else if(state == STATE_SLEEPING){
 		state = STATE_WORKING;
 		if (timer_settime(timerid, 0, &timer_on, NULL) == -1)
 			errExit("timer_settime2");
@@ -195,10 +195,16 @@ void start_timer(void){
 }
 
 void sigaio_handler(int signum, siginfo_t *info, void* uap){
-	if(aio_return(&my_aiocb) == -1){
+	ssize_t r = aio_return(&my_aiocb);
+	//fprintf(stderr,"sigaio_handler %ld\n", r);
+	if(r == -1){
 		//errExit("aio_return");
 		if(verbose)
 			fprintf(stderr,"I/O error\n");
+	}
+	else if(r == 0){
+		if(verbose)
+			fprintf(stderr,"null I/O\n");
 	}
 	else{
 		char* b = (char*) my_aiocb.aio_buf;
@@ -249,6 +255,7 @@ void start_io(void){
 }
 
 static void sigint_handler(int sig, siginfo_t *si, void *uc) {
+	//fprintf(stderr,"sigint_handler\n");
 	if(sigint_count < 2){
 		state = STATE_FINISHED;
 		sigint_count++;
@@ -280,6 +287,13 @@ int main(int argc, char **argv){
 	start_io();
 	start_timer();
 
+	/*sigset_t mask;
+	sigemptyset(&mask);
+	sigaddset(&mask, SIG_INT);
+	sigaddset(&mask, SIG_AIO);
+	sigaddset(&mask, SIG_TIMER);
+	sigprocmask(SIG_UNBLOCK,&mask,NULL);*/
+
 	double r;
 	double l;
 	int i;
@@ -297,7 +311,7 @@ int main(int argc, char **argv){
 		//if(verbose && state == STATE_SLEEPING)
 		//	fprintf(stderr,"Sleeping\n");
 		while(state == STATE_SLEEPING){
-			pause();
+			i = pause();
 		}
 		//if(verbose && state == STATE_FINISHED)
 		//	fprintf(stderr,"Finished\n");
