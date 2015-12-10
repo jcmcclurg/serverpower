@@ -291,8 +291,13 @@ struct aiocb my_aiocb;
 
 void sigaio_handler(int signum, siginfo_t *info, void* uap){
 	//fprintf(stderr,"sigaio\n");
-	if(aio_return(&my_aiocb) == -1){
+	ssize_t r = aio_return(&my_aiocb);
+
+	if(r == -1){
 		LOG("I/O error\n");
+	}
+	else if(r == 0){
+		LOG("null I/O");
 	}
 	else{
 		char* b = (char*) my_aiocb.aio_buf;
