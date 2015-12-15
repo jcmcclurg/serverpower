@@ -32,6 +32,7 @@ Modified summer 2015 by Josiah McClurg
 #define SIG_TIMER SIGRTMIN
 #define SIG_AIO (SIGRTMIN+1)
 
+#define LOG(args...) if(verbose){ fprintf(stderr,"%s:",id); fprintf(stderr,args); }
 #define errExit(msg)	do { perror(msg); exit(EXIT_FAILURE); } while (0)
 
 #define DEFAULT_DUTY 0.5
@@ -46,6 +47,7 @@ Modified summer 2015 by Josiah McClurg
 char* progname;
 char* id;
 char* defaultId = "iterations:";
+sigset_t mask, oldmask;
 
 struct sigaction aio_action;
 char stdin_buf[BUFSIZE];
@@ -157,7 +159,7 @@ int cmdline(int argc, char **argv){
 }
 
 static void sigtimer_handler(int sig, siginfo_t *si, void *uc) {
-	//fprintf(stderr,"sigtimer_handler\n");
+	LOG("sigtimer_handler\n");
 	if(state == STATE_WORKING){
 		state = STATE_SLEEPING;
 		if (timer_settime(timerid, 0, &timer_off, NULL) == -1)
@@ -196,20 +198,17 @@ void start_timer(void){
 
 void sigaio_handler(int signum, siginfo_t *info, void* uap){
 	ssize_t r = aio_return(&my_aiocb);
-	//fprintf(stderr,"sigaio_handler %ld\n", r);
+	LOG("sigaio_handler %ld\n", r);
 	if(r == -1){
 		//errExit("aio_return");
-		if(verbose)
-			fprintf(stderr,"I/O error\n");
+		LOG("I/O error\n");
 	}
 	else if(r == 0){
-		if(verbose)
-			fprintf(stderr,"null I/O\n");
+		LOG("null I/O\n");
 	}
 	else{
 		char* b = (char*) my_aiocb.aio_buf;
-		if(verbose)
-			fprintf(stderr,"Got input: %s", b);
+		LOG("Got input: %s", b);
 		double d;
 		if(sscanf(b, "%lf", &d) > 0)
 			set_duty(d);
@@ -220,8 +219,9 @@ void sigaio_handler(int signum, siginfo_t *info, void* uap){
 		else if(b[0] == 'q')
 			state = STATE_FINISHED;
 
-		else if(verbose)
-			fprintf(stderr,"Could not parse.\n");
+		else {
+			LOG("Could not parse.\n");
+		}
 
 		if(aio_read(&my_aiocb) == -1)
 			errExit("aio_read");
@@ -255,7 +255,7 @@ void start_io(void){
 }
 
 static void sigint_handler(int sig, siginfo_t *si, void *uc) {
-	//fprintf(stderr,"sigint_handler\n");
+	LOG("sigint_handler\n");
 	if(sigint_count < 2){
 		state = STATE_FINISHED;
 		sigint_count++;
@@ -287,20 +287,19 @@ int main(int argc, char **argv){
 	start_io();
 	start_timer();
 
-	/*sigset_t mask;
 	sigemptyset(&mask);
 	sigaddset(&mask, SIG_INT);
 	sigaddset(&mask, SIG_AIO);
 	sigaddset(&mask, SIG_TIMER);
-	sigprocmask(SIG_UNBLOCK,&mask,NULL);*/
+	sigprocmask(SIG_UNBLOCK,&mask,NULL);
 
 	double r;
 	double l;
 	int i;
 	long long iterations = 0;
+	LOG("started\n");
 	while(state != STATE_FINISHED){
-		//if(verbose && state == STATE_WORKING)
-		//	fprintf(stderr,"Working\n");
+		LOG("working\n");
 		while(state == STATE_WORKING){
 			l = 0;
 			for(i = 0; i < 1024; i++){
@@ -308,16 +307,15 @@ int main(int argc, char **argv){
 			}
 			iterations++;
 		}
-		//if(verbose && state == STATE_SLEEPING)
-		//	fprintf(stderr,"Sleeping\n");
+
+		LOG("sleeping\n");
+		sigprocmask(SIG_BLOCK,&mask,&oldmask);
 		while(state == STATE_SLEEPING){
-			i = pause();
+			sigsuspend(&oldmask);
 		}
-		//if(verbose && state == STATE_FINISHED)
-		//	fprintf(stderr,"Finished\n");
+		sigprocmask(SIG_UNBLOCK, &mask, NULL);
 	}
-	if(verbose)
-		fprintf(stderr,"Goodbye.\n");
+	LOG("Goodbye.\n");
 	fprintf(stdout,"%s%lld\n",id,iterations);
 	exit(EXIT_SUCCESS);
 	return (int) r;
