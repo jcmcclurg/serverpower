@@ -76,8 +76,8 @@ pid_t get_ppid_of(pid_t pid);
 char* get_name_of(pid_t pid, char* buff, int size);
 
 // Used to check whether the signal actually was accepted.
-#define CHECK_EXTERNAL_RESTART_WAITLEN_US 5000
-#define CHECK_CONT_WAITLEN_US 5000
+#define CHECK_EXTERNAL_RESTART_WAITLEN_US 50000
+#define CHECK_CONT_WAITLEN_US 50000
 
 // Return values for get_stoppable_status
 #define INSUFFICIENT_PERMISSIONS_STOP 1
