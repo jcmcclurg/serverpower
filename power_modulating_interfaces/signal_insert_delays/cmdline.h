@@ -4,10 +4,9 @@
 #include "trie.h"
 #include "get_children.h"
 
-#define LOG(args...) if(_opts.verbose){ fprintf(stderr,args); } if(_opts.logfp != NULL){ fprintf(_opts.logfp,args); }
 #define DEFAULT_DUTY 0.5
 #define DEFAULT_PERIOD 0.01
-#define DEFAULT_UPDATE_INTERVAL -1
+#define DEFAULT_UPDATE_INTERVAL 0.0
 
 typedef struct cmdline_opts_S {
 	double duty;
