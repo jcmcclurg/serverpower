@@ -11,6 +11,25 @@
 
 cmdline_opts _opts;
 
+#define LOG(args...) if(_opts.verbose){ fprintf(stderr,args); } if(_opts.logfp != NULL){ fprintf(_opts.logfp,args); }
+
+void usage(void){
+   fprintf(stdout, "\nUsage: %s \n", _opts.progname);
+   fprintf(stdout, "   -v    verbose\n");
+	fprintf(stdout, "   -p    list of PIDs to control (default: all that this user has permissions to)\n");
+   fprintf(stdout, "   -w    modulation period in seconds default %g\n",DEFAULT_PERIOD);
+   fprintf(stdout, "   -d    initial duty cycle (0 - 1) default %g\n",DEFAULT_DUTY);
+   fprintf(stdout, "   -u    Process tree update interval in seconds (default: %lf). 0 = update process tree only once at the beginning.\n", DEFAULT_UPDATE_INTERVAL);
+   fprintf(stdout, "   -o    Only control PIDs specified at the beginning. Leave their children alone. Does not require -p.\n");
+   fprintf(stdout, "   -e    list of PIDs to exclude (default: none)\n");
+   fprintf(stdout, "   -x    Only exclude specified PIDs. Allow their children to potentially be controlled. Requires -e.\n");
+   fprintf(stdout, "   -l    log file (default: (none))\n");
+   fprintf(stdout, "   -U    Update on error\n");
+   fprintf(stdout, "\nType a number to change the duty cycle.\n");
+   fprintf(stdout, "Type p followed by a number to change the period.\n");
+   fprintf(stdout, "\n");
+}
+
 // Turn stoppable children of init (pid = 1) into parents.
 // Clear all the child flags, since this only gets called with explicitParentList set.
 int update_snapshot_pid(int pid, void* value, trie_root* root){
@@ -106,6 +125,13 @@ cmdline_opts* cmdline(int argc, char **argv){
 					return NULL;
 				}
 			}
+			else if(opt == 'w'){
+				if(i+1 >= argc || sscanf(argv[i+1],"%lf",&_opts.period) != 1) {
+					fprintf(stderr,"work: %d, %lf\n",i+1,_opts.period);
+					usage();
+					return NULL;
+				}
+			}
 			else if(opt == 'd'){
 				if(i+1 >= argc || sscanf(argv[i+1],"%lf",&_opts.duty) != 1 ){
 					fprintf(stderr,"duty: %d, %lf\n",i+1,_opts.duty);
@@ -123,6 +149,7 @@ cmdline_opts* cmdline(int argc, char **argv){
 	}
 	//trie_set_verbose(_opts.verbose);
 	proc_tree_set_verbose(_opts.verbose);
+	//proc_tree_set_verbose(1);
 
 	if(e_flag_pos > 0){
 		if(exclusionListLen < 0){
@@ -214,7 +241,8 @@ cmdline_opts* cmdline(int argc, char **argv){
 	}
 	i = 0;
 	while(parentList[i] > 0){
-		LOG("   %d\n",parentList[i++]);
+		LOG("   %d\n",parentList[i]);
+		i++;
 	}
 
 	LOG("Exclusion list (");
@@ -226,7 +254,8 @@ cmdline_opts* cmdline(int argc, char **argv){
 	}
 	i = 0;
 	while(exclusionList[i] > 0){
-		LOG("   %d\n",exclusionList[i++]);
+		LOG("   %d\n",exclusionList[i]);
+		i++;
 	}
 
 	if(_opts.proc_tree == NULL){
@@ -244,7 +273,8 @@ cmdline_opts* cmdline(int argc, char **argv){
 	if(_opts.ptree_info->stoppableList != NULL){
 		i = 0;
 		while(_opts.ptree_info->stoppableList[i] > 0){
-			LOG("%d ",_opts.ptree_info->stoppableList[i++]);
+			LOG("%d ",_opts.ptree_info->stoppableList[i]);
+			i++;
 		}
 	}
 	LOG("\n");
