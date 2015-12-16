@@ -27,7 +27,7 @@ done
 # -U: except if there is an error sending signals to the PIDs
 # -o: do not try to find or control any children of the specified PIDs
 # -p: control the specified PIDs
-(($playbackCmd -v -f $rampFile; echo "q"; echo "q"; ) | $insertDelays -w 0.01 -d 0.5 -u 0 -U -o -p ${pids[*]}) 2>&1
+(($playbackCmd -v -f $rampFile; echo "q"; echo "q"; ) | $insertDelays -v -w 0.01 -d 0.5 -u 0 -U -o -p ${pids[*]}) 2>&1
 
 echo ${pids[*]}
 
