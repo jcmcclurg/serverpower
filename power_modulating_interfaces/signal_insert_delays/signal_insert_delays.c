@@ -75,7 +75,7 @@ struct sigaction sigint_action;
 char sigint_count;
 
 static void sigint_handler(int sig, siginfo_t *si, void *uc) {
-	fprintf(stderr,"sigint\n");
+	//fprintf(stderr,"sigint\n");
 	if(sigint_count < 2){
 		state = STATE_FINISHED;
 		sigint_count++;
