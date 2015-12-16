@@ -18,7 +18,7 @@ fi
 numCPUs=12
 
 for i in $(seq 1 $numCPUs); do
-	$s -v -i "$i:" -d 1 -p 10 2> "/tmp/signal_insert_delays_worker_${i}.log" & pids[$[ $i - 1 ]]=$!
+	$s -i "$i:" -d 1 -p 10 2> "/tmp/signal_insert_delays_worker_${i}.log" & pids[$[ $i - 1 ]]=$!
 done
 
 # -w: period of 10 ms
@@ -27,12 +27,12 @@ done
 # -U: except if there is an error sending signals to the PIDs
 # -o: do not try to find or control any children of the specified PIDs
 # -p: control the specified PIDs
-($playbackCmd -f $rampFile; echo "q"; echo "q"; ) | $insertDelays -w 0.01 -d 0.5 -u 0 -U -o -p ${pids[*]}
+(($playbackCmd -v -f $rampFile; echo "q"; echo "q"; ) | $insertDelays -w 0.01 -d 0.5 -u 0 -U -o -p ${pids[*]}) 2>&1
 
 echo ${pids[*]}
 
 for pid in ${pids[*]}; do
-	echo "Killing $pid"
+	echo "Killing $pid" >&2
 	pkill --signal INT -P $pid
 	kill -s INT $pid
 done
