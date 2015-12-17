@@ -17,10 +17,10 @@ trap "echo '0' > $device/cur_state; echo 'Reset powerclamp on exit.' >&2; exit;"
 while [[ "x$val" != "xq" ]]; do
 	if [ $(echo "$val < $rangeMin" | bc) == 1 ]; then
 		val=$rangeMin
-	elif [ $(echo "$limitVal > $rangeMax" | bc) == 1 ]; then
+	elif [ $(echo "$val > $rangeMax" | bc) == 1 ]; then
 		val=$rangeMax
 	fi
-	echo val > $device/cur_state
+	echo $val > $device/cur_state
 	cs=$(cat $device/cur_state)
 	echo "Set to $cs." >&2
 	read val
