@@ -194,124 +194,6 @@ convert_time_to_sec(struct timeval tv)
 }
 */
 
-void do_set_power_limit(void)
-{
-    int i = 0;
-    int domain = 0;
-    uint64_t node = 0;
-    double delta;
-    double power;
-
-	double new_sample[num_node][RAPL_NR_DOMAIN];;
-    double prev_sample[num_node][RAPL_NR_DOMAIN];
-    double power_watt[num_node][RAPL_NR_DOMAIN];
-    double cum_energy_J[num_node][RAPL_NR_DOMAIN];
-    double cum_energy_mWh[num_node][RAPL_NR_DOMAIN];
-
-    char time_buffer[32];
-    //struct timeval tv;
-	struct timespec tv, t_setpoint, t_realtime;    
-	int msec;
-    uint64_t tsc;
-    uint64_t freq[4];
-    double start, end, interval_start;
-    double total_elapsed_time;
-    double interval_elapsed_time;
-
-    // setup input command variables:
-    int	rcvd = 0;
-    char input[256];
-    char *buff = &input[0];
-    int	bytes_so_far = 0; 
-    int ret;
-    double setpoint = 0.0;
-    char pp;
-
-	pkg_rapl_power_limit_control_t pkg_plc;
-	pkg_plc.power_limit_watts_1 = 80.0;
-	pkg_plc.power_limit_watts_2 = 96.0;
-	// printed rapl info: MaxWindow(sec) = 0.045898
-	pkg_plc.limit_time_window_seconds_1 = 8.8;
-	//pkg_plc.limit_time_window_seconds_2 = 0.007812;
-	pkg_plc.limit_time_window_seconds_2 = 0.0001;
-	pkg_plc.limit_enabled_1 = 1;
-	pkg_plc.limit_enabled_2 = 1;
-	pkg_plc.clamp_enabled_1 = 1;
-	pkg_plc.clamp_enabled_2 = 1;
-	pkg_plc.lock_enabled = 0;  
-
-    pp0_rapl_power_limit_control_t pp0_plc;
-    pp0_plc.power_limit_watts = 80.0;
-    pp0_plc.limit_time_window_seconds = 0.0001;
-    pp0_plc.limit_enabled = 1;
-    pp0_plc.clamp_enabled = 1;
-    pp0_plc.lock_enabled = 0;
-
-	dram_rapl_power_limit_control_t dram_plc;
-	dram_plc.power_limit_watts = 80.0;
-    dram_plc.limit_time_window_seconds = 0.03;
-    dram_plc.limit_enabled = 1;
-    dram_plc.clamp_enabled = 1;
-    dram_plc.lock_enabled = 0;
-    /* if output FILE pointer is not initiated in main(), let it be standard output (Joe)*/
-	
-    /* don't buffer if piped */
-    setbuf(stdout, NULL);
-  
-    gettimeofday((struct timeval *__restrict__) &tv, NULL);
-    start = convert_time_to_sec(tv);
-    end = start;
-	 total_elapsed_time = end-start;
-
-    while (total_elapsed_time < duration) {
-        gettimeofday((struct timeval *__restrict__) &tv, NULL);
-        end = convert_time_to_sec(tv);
-        total_elapsed_time = end - start;
-		  
-		rcvd = fscanf(stdin,"%s",buff); // get stdin input
-		if (rcvd == 1) {
-			pp = interpret_power_limit_command(buff, &setpoint); // interpret stdin input for power limit command
-			if (setpoint > 0) {
-				if (pp=='s') {
-					fprintf(stdout, "s%f\n", setpoint); // forward setpoint to pipe via stdout
-				}
-				else {
-					for (i=0;i<num_node;i++) { // added by Joe Hall 4/25/15
-						if (pp=='p') {
-							pkg_plc.power_limit_watts_2 = setpoint;
-							ret = set_pkg_rapl_power_limit_control(i,&pkg_plc);
-						}
-						else if (pp=='c') {
-							pp0_plc.power_limit_watts = setpoint;
-							ret = set_pp0_rapl_power_limit_control(i, &pp0_plc);
-						}
-                        else if (pp=='d') {
-							dram_plc.power_limit_watts = setpoint;
-							ret = set_dram_rapl_power_limit_control(i, &dram_plc);
-						}
-						//fprintf(stdout, "Setpoint = %f & char = %c\n", setpoint,pp);
-						//print_rapl_control_info(i);
-						if (ret != 0)
-	    					fprintf(stderr, "Error setting RAPL power limit controls\n");
-					} // end for(numnode)
-				} //end if-else(pp)	
-
-                // timestamp setpoint using real-time clock
-				clock_gettime(CLOCK_REALTIME, &t_setpoint);
-				convert_time_to_string(t_setpoint, time_buffer);
-    		} // end if(setpoint)
-			else if (setpoint == -1) { // -1 for quit, therefore exit while()
-				fprintf(stderr, "quit power_gadget\n"); // forward quit-command to pipe via stdout
-				break;
-			}
-		}
-		// else rcvd=-1 means perror("select") 
-		
-    }
-    
-    end = clock();
-}
-
 
 void
 do_print_energy_info()
@@ -376,6 +258,8 @@ do_print_energy_info()
 
     /* don't buffer if piped */
     setbuf(stdout, NULL);
+    setbuf(stderr, NULL);
+    setbuf(stdin, NULL);
 
 
 	clock_gettime(CLOCK_REALTIME, &tv);    
@@ -383,13 +267,19 @@ do_print_energy_info()
     start = convert_time_to_sec(tv);
     end = start;
 
-    /* Begin sampling */
-    while (1) {
+    gettimeofday((struct timeval *__restrict__) &tv, NULL);
+    start = convert_time_to_sec(tv);
+    end = start;
+	 total_elapsed_time = end-start;
 
-	  usleep(delay_us);
+    while (total_elapsed_time < duration) {
+        gettimeofday((struct timeval *__restrict__) &tv, NULL);
+        end = convert_time_to_sec(tv);
+        total_elapsed_time = end - start;
+		  
+		rcvd = fscanf(stdin,"%s",buff); // get stdin input
+		fprintf(stderr,"Got: (%s)\n",buff);
 
-		// set RAPL Power Limits: (added by Joe Hall 5/27/15)
-		rcvd = get_usr_input(buff, &bytes_so_far); // get stdin input
 		if (rcvd == 1) {
 			pp = interpret_power_limit_command(buff, &setpoint); // interpret stdin input for power limit command
 			if (setpoint > 0) {
@@ -411,7 +301,7 @@ do_print_energy_info()
 							dram_plc.power_limit_watts = setpoint;
 							ret = set_dram_rapl_power_limit_control(i, &dram_plc);
 						}
-						print_rapl_control_info(i);
+						//print_rapl_control_info(i);
 						if (ret != 0)
 	    					fprintf(stderr, "Error setting RAPL power limit controls\n");
 					} // end for(numnode)
@@ -422,11 +312,10 @@ do_print_energy_info()
 				convert_time_to_string(t_setpoint, time_buffer);
     		} // end if(setpoint)
 			else if (setpoint == -1) { // -1 for quit, therefore exit while()
-				fprintf(stdout, "quit power_gadget\n"); // forward quit-command to pipe via stdout
+				fprintf(stderr, "quit power_gadget\n"); // forward quit-command to pipe via stdout
 				break;
 			}
 		}
-		
     }
     
     end = clock();
