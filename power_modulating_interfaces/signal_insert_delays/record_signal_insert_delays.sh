@@ -5,9 +5,9 @@ p=0.01
 s=$dir/../stress/cstress
 
 playbackCmd="$dir/../../utilities/playback/playback"
-powerClamp="$dir/powerclamp.sh"
-defRampFile="$dir/../../utilities/playback/ramp_0_50.csv"
-dummyRampFile="$dir/../../utilities/playback/ramp_0_50_short.csv"
+insertDelays="$dir/signal_insert_delays"
+defRampFile="$dir/../../utilities/playback/ramp_0_1.csv"
+dummyRampFile="$dir/../../utilities/playback/ramp_0_1_short.csv"
 
 rampFile=${1-$defRampFile}
 
@@ -18,7 +18,7 @@ fi
 numCPUs=12
 
 for i in $(seq 1 $numCPUs); do
-	$s -i "$i:" -d 1 -p 10 2> "/tmp/powerclamp_worker_${i}.log" & pids[$[ $i - 1 ]]=$!
+	$s -i "$i:" -d 1 -p 10 2> "/tmp/signal_insert_delays_worker_${i}.log" & pids[$[ $i - 1 ]]=$!
 done
 
 # -w: period of 10 ms
@@ -27,7 +27,7 @@ done
 # -U: except if there is an error sending signals to the PIDs
 # -o: do not try to find or control any children of the specified PIDs
 # -p: control the specified PIDs
-(($playbackCmd -v -f $rampFile; echo "q"; echo "q"; ) | sudo $powerClamp ) 2>&1
+(($playbackCmd -v -f $rampFile; echo "q"; echo "q"; ) | $insertDelays -v -w 0.01 -d 0.5 -u 0 -U -o -p ${pids[*]}) 2>&1
 
 echo ${pids[*]}
 
