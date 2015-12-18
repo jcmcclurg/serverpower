@@ -11,21 +11,22 @@ echo "The voltage is controlled by the processor." >&2
 
 trap "sudo cpupower frequency-set -g ondemand; echo 'Reset cpufreq on exit.' >&2; exit;" SIGINT SIGTERM
 
-limitVal=$rangeMax
-sudo cpupower frequency-set -g userspace
+val=$rangeMax
+sudo cpupower -c all frequency-set -g userspace
 echo "Set to governor to userspace (returned $?)." >&2
 
-while [[ "$limitVal" != "q" ]]; do
-	if [ $(echo "$limitVal < $rangeMin" | bc) == 1 ]; then
-		limitVal=$rangeMin
-	elif [ $(echo "$limitVal > $rangeMax" | bc) == 1 ]; then
-		limitVal=$rangeMax
+while [[ "$val" != "q" ]]; do
+	if [ $(echo "$val < $rangeMin" | bc) == 1 ]; then
+		val=$rangeMin
+	elif [ $(echo "$val > $rangeMax" | bc) == 1 ]; then
+		val=$rangeMax
 	fi
-	#sudo cpufreq-set -f $limitVal
-	sudo cpupower frequency-set -f $limitVal > /dev/null
-	echo "Set to $limitVal" >&2
-	read limitVal
+	#sudo cpufreq-set -f $val
+	sudo cpupower -c all frequency-set -f $val
+	echo "Set to $val:" >&2
+	sudo cpupower -c all frequency-info -w >&2
+	read val
 done
-sudo cpupower frequency-set -g ondemand
+sudo cpupower -c all frequency-set -g ondemand
 echo 'Reset cpufreq' >&2;
 echo "Done" >&2
