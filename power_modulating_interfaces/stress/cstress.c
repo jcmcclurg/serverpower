@@ -32,12 +32,12 @@ Modified summer 2015 by Josiah McClurg
 #define SIG_TIMER SIGRTMIN
 #define SIG_AIO (SIGRTMIN+1)
 
+#define LOG(args...) if(verbose){ fprintf(stderr,"%s:",id); fprintf(stderr,args); }
 #define errExit(msg)	do { perror(msg); exit(EXIT_FAILURE); } while (0)
 
 #define DEFAULT_DUTY 0.5
 #define DEFAULT_PERIOD 0.01
 
-#define STATE_INPUT_READY 3
 #define STATE_FINISHED 2 
 #define STATE_WORKING 1
 #define STATE_SLEEPING 0
@@ -47,6 +47,7 @@ Modified summer 2015 by Josiah McClurg
 char* progname;
 char* id;
 char* defaultId = "iterations:";
+sigset_t mask, oldmask;
 
 struct sigaction aio_action;
 char stdin_buf[BUFSIZE];
@@ -131,7 +132,7 @@ int cmdline(int argc, char **argv){
 	id = defaultId;
 	int opt;
 
-	while ((opt = getopt(argc, argv, "i:p:d:v")) != -1) {
+	while ((opt = getopt(argc, argv, "i:p:d:vh")) != -1) {
 		switch (opt) {
 		case 'i':
 			id = optarg;
@@ -146,7 +147,7 @@ int cmdline(int argc, char **argv){
 			break;
 		case 'h':
 			usage();
-			exit(0);
+			exit(EXIT_SUCCESS);
 			break;
 		default:
 			usage();
@@ -158,12 +159,13 @@ int cmdline(int argc, char **argv){
 }
 
 static void sigtimer_handler(int sig, siginfo_t *si, void *uc) {
+	LOG("sigtimer_handler\n");
 	if(state == STATE_WORKING){
 		state = STATE_SLEEPING;
 		if (timer_settime(timerid, 0, &timer_off, NULL) == -1)
 			errExit("timer_settime1");
 	}
-	else{ // if state == STATE_SLEEPING
+	else if(state == STATE_SLEEPING){
 		state = STATE_WORKING;
 		if (timer_settime(timerid, 0, &timer_on, NULL) == -1)
 			errExit("timer_settime2");
@@ -195,23 +197,35 @@ void start_timer(void){
 }
 
 void sigaio_handler(int signum, siginfo_t *info, void* uap){
-	char* b = (char*) my_aiocb.aio_buf;
-	if(verbose)
-		fprintf(stderr,"Got input: %s", b);
-	double d;
-	if(sscanf(b, "%lf", &d) > 0)
-		set_duty(d);
+	ssize_t r = aio_return(&my_aiocb);
+	LOG("sigaio_handler %ld\n", r);
+	if(r == -1){
+		//errExit("aio_return");
+		LOG("I/O error\n");
+	}
+	else if(r == 0){
+		LOG("null I/O\n");
+	}
+	else{
+		char* b = (char*) my_aiocb.aio_buf;
+		LOG("Got input: %s", b);
+		double d;
+		if(sscanf(b, "%lf", &d) > 0)
+			set_duty(d);
 
-	else if(b[0] == 'p' && sscanf(b+1,"%lf", &d) > 0)
-		set_period(d);
+		else if(b[0] == 'p' && sscanf(b+1,"%lf", &d) > 0)
+			set_period(d);
 
-	else if(b[0] == 'q')
-		state = STATE_FINISHED;
+		else if(b[0] == 'q')
+			state = STATE_FINISHED;
 
-	else if(verbose)
-		fprintf(stderr,"Could not parse.\n");
+		else {
+			LOG("Could not parse.\n");
+		}
 
-	aio_read(&my_aiocb);
+		if(aio_read(&my_aiocb) == -1)
+			errExit("aio_read");
+	}
 }
 
 void start_io(void){
@@ -236,10 +250,12 @@ void start_io(void){
 	my_aiocb.aio_sigevent.sigev_notify = SIGEV_SIGNAL;
 	my_aiocb.aio_sigevent.sigev_signo = SIG_AIO;
 	my_aiocb.aio_sigevent.sigev_value.sival_int = 0;
-	aio_read(&my_aiocb);
+	if(aio_read(&my_aiocb) == -1)
+		errExit("aio_read");
 }
 
 static void sigint_handler(int sig, siginfo_t *si, void *uc) {
+	LOG("sigint_handler\n");
 	if(sigint_count < 2){
 		state = STATE_FINISHED;
 		sigint_count++;
@@ -271,13 +287,19 @@ int main(int argc, char **argv){
 	start_io();
 	start_timer();
 
+	sigemptyset(&mask);
+	sigaddset(&mask, SIG_INT);
+	sigaddset(&mask, SIG_AIO);
+	sigaddset(&mask, SIG_TIMER);
+	sigprocmask(SIG_UNBLOCK,&mask,NULL);
+
 	double r;
 	double l;
 	int i;
 	long long iterations = 0;
+	LOG("started\n");
 	while(state != STATE_FINISHED){
-		//if(verbose && state == STATE_WORKING)
-		//	fprintf(stderr,"Working\n");
+		LOG("working\n");
 		while(state == STATE_WORKING){
 			l = 0;
 			for(i = 0; i < 1024; i++){
@@ -285,16 +307,15 @@ int main(int argc, char **argv){
 			}
 			iterations++;
 		}
-		//if(verbose && state == STATE_SLEEPING)
-		//	fprintf(stderr,"Sleeping\n");
+
+		LOG("sleeping\n");
+		sigprocmask(SIG_BLOCK,&mask,&oldmask);
 		while(state == STATE_SLEEPING){
-			pause();
+			sigsuspend(&oldmask);
 		}
-		//if(verbose && state == STATE_FINISHED)
-		//	fprintf(stderr,"Finished\n");
+		sigprocmask(SIG_UNBLOCK, &mask, NULL);
 	}
-	if(verbose)
-		fprintf(stderr,"Goodbye.\n");
+	LOG("Goodbye.\n");
 	fprintf(stdout,"%s%lld\n",id,iterations);
 	exit(EXIT_SUCCESS);
 	return (int) r;
