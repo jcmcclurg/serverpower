@@ -20,7 +20,8 @@ Exclusion list (these and their children):
    34216
 Creating proc tree...
    Inserting parents Scheduling (0.000000,0) as soon as possible.
-34197 (yes) 34198 (yes) 34199 (yes) 34200 1450283418.111447,0
+34197 (yes) 34198 (yes) 34199 (yes) 34200
+1450283418.111447,0
 (yes) 34201 (yes) 34202 (yes) 34203 (yes) 34204 (yes) 34205 (yes) 34206 (yes) 34209 (yes) 34211 (yes) 
    Inserting exclusions 34216 (yes) 
 Inserting process 1   New! Getting ppid.
