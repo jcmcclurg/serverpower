@@ -6,8 +6,8 @@ s=/home/josiah/cstress
 
 playbackCmd="$dir/../../utilities/playback/playback"
 hypervisor="$dir/hypervisor.sh"
-defRampFile="$dir/../../utilities/playback/ramp_0_1200.csv"
-dummyRampFile="$dir/../../utilities/playback/ramp_0_1200_short.csv"
+defRampFile="$dir/../../utilities/playback/ramp_1_1200.csv"
+dummyRampFile="$dir/../../utilities/playback/ramp_1_1200_short.csv"
 
 rampFile=${1-$defRampFile}
 
@@ -22,13 +22,14 @@ if ! sudo xl list ubud1 >/dev/null 2>/dev/null; then
 	sleep 15
 fi
 
-ssh $(hostname)v "/bin/bash -c 'for i in \$(seq 1 $numCPUs); do $s -i \"\$i:\" -d 1 -p 10 2> \"/tmp/hypervisor_worker\${i}.log\" & echo \$! > /tmp/hypervisor_worker\${i}.pid; done'" & pid=$!
+ssh $(hostname)v "/bin/bash -c '( for i in \$(seq 1 $numCPUs); do $s -i \"\$i:\" -d 1 -p 10 2> \"/tmp/hypervisor_worker\${i}.log\" & echo \$! > /tmp/hypervisor_worker\${i}.pid; done ) > /tmp/output.out'" & pid=$!
 
 (($playbackCmd -v -f $rampFile; echo "q"; echo "q"; ) | sudo $hypervisor ) 2>&1
 
-ssh $(hostname)v "/bin/bash -c 'killall cstress'"
+ssh $(hostname)v "/bin/bash -c 'killall --signal INT cstress'"
+wait
+ssh $(hostname)v "/bin/bash -c 'cat /tmp/output.out'"
 
 #echo "Killing $pid" >&2
 #pkill --signal INT -P $pid
 
-wait
