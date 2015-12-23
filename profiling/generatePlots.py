@@ -4,11 +4,11 @@ import sys
 import matplotlib.pyplot as plt
 import statsmodels.api as sm
 
-
 experiment = 'rapl'
 
 #dates = {'stress':'1450289756.980881700','signal_insert_delays':'1450283415.294282500','powerclamp':'1450373827.544375800','rapl':'1450477549.649160300','cpufreq':'1450468081.615612300','hypervisor':'1450736746.670078800'}
 dates = {'stress':'1450742429.184057100','signal_insert_delays':'1450752640.493576200','powerclamp':'1450767060.149459000','rapl':'1450821921.795694700','cpufreq':'1450791071.645437800','hypervisor':'1450802061.405142400'}
+
 date = dates[experiment]
 
 expDir = 'experiments/'+experiment
