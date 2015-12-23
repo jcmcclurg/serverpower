@@ -6,13 +6,20 @@ s=$dir/../stress/cstress
 
 playbackCmd="$dir/../../utilities/playback/playback"
 powerClamp="$dir/powerclamp.sh"
-defRampFile="$dir/../../utilities/playback/ramp_0_50.csv"
-dummyRampFile="$dir/../../utilities/playback/ramp_0_50_short.csv"
+
+rangeMin=0
+rangeMax=50
+defRampFile="$dir/interleavedRamp_${rangeMin}_${rangeMax}.csv"
+dummyRampFile="$dir/interleavedRamp_${rangeMin}_${rangeMax}_short.csv"
 
 rampFile=${1-$defRampFile}
 
-if [[ "x$rampFile" == "xdummy" ]]; then
+if [[ "x$rampFile" == "xnone" ]]; then
+	rampFile=$defRampFile
+elif [[ "x$rampFile" == "xdummy" ]]; then
 	rampFile=$dummyRampFile
+else
+	rampFile="$dir/${rampFile}_${rangeMin}_${rangeMax}.csv"
 fi
 
 numCPUs=12
