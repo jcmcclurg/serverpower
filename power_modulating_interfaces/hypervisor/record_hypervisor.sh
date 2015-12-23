@@ -6,13 +6,19 @@ s=/home/josiah/cstress
 
 playbackCmd="$dir/../../utilities/playback/playback"
 hypervisor="$dir/hypervisor.sh"
-defRampFile="$dir/../../utilities/playback/ramp_1_1200.csv"
-dummyRampFile="$dir/../../utilities/playback/ramp_1_1200_short.csv"
+rangeMin=1
+rangeMax=1200
+defRampFile="$dir/interleavedRamp_${rangeMin}_${rangeMax}.csv"
+dummyRampFile="$dir/interleavedRamp_${rangeMin}_${rangeMax}_short.csv"
 
 rampFile=${1-$defRampFile}
 
-if [[ "x$rampFile" == "xdummy" ]]; then
+if [[ "x$rampFile" == "xnone" ]]; then
+	rampFile=$defRampFile
+elif [[ "x$rampFile" == "xdummy" ]]; then
 	rampFile=$dummyRampFile
+else
+	rampFile="$dir/${rampFile}_${rangeMin}_${rangeMax}.csv"
 fi
 
 numCPUs=12
