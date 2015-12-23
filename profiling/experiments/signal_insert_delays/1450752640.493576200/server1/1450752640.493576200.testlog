@@ -1,0 +1,1190 @@
+1450752641.094854480
+ 
+Scheduling (0.000000,0) as soon as possible.
+1450752641.134441,0
+Update interval: 0
+Duty cycle: 0.5
+Period: 0.01
+Parent list (these and only these):
+   2807
+   2808
+   2809
+   2810
+   2811
+   2812
+   2813
+   2814
+   2815
+   2817
+   2818
+   2821
+Exclusion list (these and their children):
+   2827
+Creating proc tree...
+   Inserting parents 2807 (yes) 2808 (yes) 2809 (yes) 2810 (yes) 2811 (yes) 2812 (yes) 2813 (yes) 2814 (yes) 2815 (yes) 2817 (yes) 2818 (yes) 2821 (yes) 
+   Inserting exclusions 2827 (yes) 
+Inserting process 1   New! Getting ppid.
+Inserting process 2   New! Getting ppid.
+Inserting process 3   New! Getting ppid.
+Inserting process 4   New! Getting ppid.
+Inserting process 5   New! Getting ppid.
+Inserting process 7   New! Getting ppid.
+Inserting process 8   New! Getting ppid.
+Inserting process 9   New! Getting ppid.
+Inserting process 10   New! Getting ppid.
+Inserting process 11   New! Getting ppid.
+Inserting process 12   New! Getting ppid.
+Inserting process 13   New! Getting ppid.
+Inserting process 14   New! Getting ppid.
+Inserting process 15   New! Getting ppid.
+Inserting process 16   New! Getting ppid.
+Inserting process 17   New! Getting ppid.
+Inserting process 18   New! Getting ppid.
+Inserting process 19   New! Getting ppid.
+Inserting process 20   New! Getting ppid.
+Inserting process 21   New! Getting ppid.
+Inserting process 22   New! Getting ppid.
+Inserting process 23   New! Getting ppid.
+Inserting process 24   New! Getting ppid.
+Inserting process 25   New! Getting ppid.
+Inserting process 26   New! Getting ppid.
+Inserting process 27   New! Getting ppid.
+Inserting process 28   New! Getting ppid.
+Inserting process 29   New! Getting ppid.
+Inserting process 30   New! Getting ppid.
+Inserting process 31   New! Getting ppid.
+Inserting process 32   New! Getting ppid.
+Inserting process 33   New! Getting ppid.
+Inserting process 34   New! Getting ppid.
+Inserting process 35   New! Getting ppid.
+Inserting process 36   New! Getting ppid.
+Inserting process 37   New! Getting ppid.
+Inserting process 38   New! Getting ppid.
+Inserting process 39   New! Getting ppid.
+Inserting process 40   New! Getting ppid.
+Inserting process 41   New! Getting ppid.
+Inserting process 42   New! Getting ppid.
+Inserting process 43   New! Getting ppid.
+Inserting process 44   New! Getting ppid.
+Inserting process 45   New! Getting ppid.
+Inserting process 46   New! Getting ppid.
+Inserting process 47   New! Getting ppid.
+Inserting process 48   New! Getting ppid.
+Inserting process 49   New! Getting ppid.
+Inserting process 50   New! Getting ppid.
+Inserting process 51   New! Getting ppid.
+Inserting process 52   New! Getting ppid.
+Inserting process 53   New! Getting ppid.
+Inserting process 54   New! Getting ppid.
+Inserting process 55   New! Getting ppid.
+Inserting process 56   New! Getting ppid.
+Inserting process 57   New! Getting ppid.
+Inserting process 58   New! Getting ppid.
+Inserting process 59   New! Getting ppid.
+Inserting process 60   New! Getting ppid.
+Inserting process 61   New! Getting ppid.
+Inserting process 62   New! Getting ppid.
+Inserting process 63   New! Getting ppid.
+Inserting process 64   New! Getting ppid.
+Inserting process 65   New! Getting ppid.
+Inserting process 66   New! Getting ppid.
+Inserting process 67   New! Getting ppid.
+Inserting process 68   New! Getting ppid.
+Inserting process 69   New! Getting ppid.
+Inserting process 70   New! Getting ppid.
+Inserting process 71   New! Getting ppid.
+Inserting process 72   New! Getting ppid.
+Inserting process 73   New! Getting ppid.
+Inserting process 74   New! Getting ppid.
+Inserting process 75   New! Getting ppid.
+Inserting process 76   New! Getting ppid.
+Inserting process 77   New! Getting ppid.
+Inserting process 78   New! Getting ppid.
+Inserting process 79   New! Getting ppid.
+Inserting process 80   New! Getting ppid.
+Inserting process 81   New! Getting ppid.
+Inserting process 82   New! Getting ppid.
+Inserting process 83   New! Getting ppid.
+Inserting process 84   New! Getting ppid.
+Inserting process 85   New! Getting ppid.
+Inserting process 86   New! Getting ppid.
+Inserting process 87   New! Getting ppid.
+Inserting process 88   New! Getting ppid.
+Inserting process 89   New! Getting ppid.
+Inserting process 90   New! Getting ppid.
+Inserting process 91   New! Getting ppid.
+Inserting process 92   New! Getting ppid.
+Inserting process 93   New! Getting ppid.
+Inserting process 94   New! Getting ppid.
+Inserting process 95   New! Getting ppid.
+Inserting process 96   New! Getting ppid.
+Inserting process 97   New! Getting ppid.
+Inserting process 98   New! Getting ppid.
+Inserting process 99   New! Getting ppid.
+Inserting process 100   New! Getting ppid.
+Inserting process 101   New! Getting ppid.
+Inserting process 102   New! Getting ppid.
+Inserting process 103   New! Getting ppid.
+Inserting process 104   New! Getting ppid.
+Inserting process 105   New! Getting ppid.
+Inserting process 108   New! Getting ppid.
+Inserting process 109   New! Getting ppid.
+Inserting process 111   New! Getting ppid.
+Inserting process 113   New! Getting ppid.
+Inserting process 114   New! Getting ppid.
+Inserting process 115   New! Getting ppid.
+Inserting process 116   New! Getting ppid.
+Inserting process 118   New! Getting ppid.
+Inserting process 119   New! Getting ppid.
+Inserting process 120   New! Getting ppid.
+Inserting process 121   New! Getting ppid.
+Inserting process 123   New! Getting ppid.
+Inserting process 124   New! Getting ppid.
+Inserting process 125   New! Getting ppid.
+Inserting process 126   New! Getting ppid.
+Inserting process 128   New! Getting ppid.
+Inserting process 129   New! Getting ppid.
+Inserting process 130   New! Getting ppid.
+Inserting process 131   New! Getting ppid.
+Inserting process 133   New! Getting ppid.
+Inserting process 134   New! Getting ppid.
+Inserting process 136   New! Getting ppid.
+Inserting process 138   New! Getting ppid.
+Inserting process 139   New! Getting ppid.
+Inserting process 140   New! Getting ppid.
+Inserting process 141   New! Getting ppid.
+Inserting process 143   New! Getting ppid.
+Inserting process 144   New! Getting ppid.
+Inserting process 145   New! Getting ppid.
+Inserting process 146   New! Getting ppid.
+Inserting process 148   New! Getting ppid.
+Inserting process 149   New! Getting ppid.
+Inserting process 150   New! Getting ppid.
+Inserting process 151   New! Getting ppid.
+Inserting process 153   New! Getting ppid.
+Inserting process 154   New! Getting ppid.
+Inserting process 156   New! Getting ppid.
+Inserting process 158   New! Getting ppid.
+Inserting process 159   New! Getting ppid.
+Inserting process 160   New! Getting ppid.
+Inserting process 161   New! Getting ppid.
+Inserting process 162   New! Getting ppid.
+Inserting process 163   New! Getting ppid.
+Inserting process 164   New! Getting ppid.
+Inserting process 165   New! Getting ppid.
+Inserting process 166   New! Getting ppid.
+Inserting process 167   New! Getting ppid.
+Inserting process 168   New! Getting ppid.
+Inserting process 169   New! Getting ppid.
+Inserting process 170   New! Getting ppid.
+Inserting process 171   New! Getting ppid.
+Inserting process 172   New! Getting ppid.
+Inserting process 174   New! Getting ppid.
+Inserting process 175   New! Getting ppid.
+Inserting process 176   New! Getting ppid.
+Inserting process 177   New! Getting ppid.
+Inserting process 179   New! Getting ppid.
+Inserting process 181   New! Getting ppid.
+Inserting process 182   New! Getting ppid.
+Inserting process 183   New! Getting ppid.
+Inserting process 195   New! Getting ppid.
+Inserting process 196   New! Getting ppid.
+Inserting process 197   New! Getting ppid.
+Inserting process 198   New! Getting ppid.
+Inserting process 200   New! Getting ppid.
+Inserting process 201   New! Getting ppid.
+Inserting process 209   New! Getting ppid.
+Inserting process 221   New! Getting ppid.
+Inserting process 222   New! Getting ppid.
+Inserting process 223   New! Getting ppid.
+Inserting process 244   New! Getting ppid.
+Inserting process 250   New! Getting ppid.
+Inserting process 286   New! Getting ppid.
+Inserting process 287   New! Getting ppid.
+Inserting process 293   New! Getting ppid.
+Inserting process 296   New! Getting ppid.
+Inserting process 297   New! Getting ppid.
+Inserting process 298   New! Getting ppid.
+Inserting process 299   New! Getting ppid.
+Inserting process 300   New! Getting ppid.
+Inserting process 301   New! Getting ppid.
+Inserting process 302   New! Getting ppid.
+Inserting process 303   New! Getting ppid.
+Inserting process 304   New! Getting ppid.
+Inserting process 305   New! Getting ppid.
+Inserting process 306   New! Getting ppid.
+Inserting process 307   New! Getting ppid.
+Inserting process 325   New! Getting ppid.
+Inserting process 326   New! Getting ppid.
+Inserting process 332   New! Getting ppid.
+Inserting process 333   New! Getting ppid.
+Inserting process 455   New! Getting ppid.
+Inserting process 476   New! Getting ppid.
+Inserting process 482   New! Getting ppid.
+Inserting process 540   New! Getting ppid.
+Inserting process 547   New! Getting ppid.
+Inserting process 549   New! Getting ppid.
+Inserting process 671   New! Getting ppid.
+Inserting process 681   New! Getting ppid.
+Inserting process 732   New! Getting ppid.
+Inserting process 836   New! Getting ppid.
+Inserting process 844   New! Getting ppid.
+Inserting process 876   New! Getting ppid.
+Inserting process 880   New! Getting ppid.
+Inserting process 939   New! Getting ppid.
+Inserting process 942   New! Getting ppid.
+Inserting process 947   New! Getting ppid.
+Inserting process 1001   New! Getting ppid.
+Inserting process 1170   New! Getting ppid.
+Inserting process 1171   New! Getting ppid.
+Inserting process 1201   New! Getting ppid.
+Inserting process 1202   New! Getting ppid.
+Inserting process 1312   New! Getting ppid.
+Inserting process 1413   New! Getting ppid.
+Inserting process 1416   New! Getting ppid.
+Inserting process 1417   New! Getting ppid.
+Inserting process 1426   New! Getting ppid.
+Inserting process 1427   New! Getting ppid.
+Inserting process 1430   New! Getting ppid.
+Inserting process 1474   New! Getting ppid.
+Inserting process 1475   New! Getting ppid.
+Inserting process 1483   New! Getting ppid.
+Inserting process 1548   New! Getting ppid.
+Inserting process 1556   New! Getting ppid.
+Inserting process 1560   New! Getting ppid.
+Inserting process 1587   New! Getting ppid.
+Inserting process 1626   New! Getting ppid.
+Inserting process 1700   New! Getting ppid.
+Inserting process 1841   New! Getting ppid.
+Inserting process 1962   New! Getting ppid.
+Inserting process 1998   New! Getting ppid.
+Inserting process 2053   New! Getting ppid.
+Inserting process 2055   New! Getting ppid.
+Inserting process 2066   New! Getting ppid.
+Inserting process 2131   New! Getting ppid.
+Inserting process 2373   New! Getting ppid.
+Inserting process 2374   New! Getting ppid.
+Inserting process 2504   New! Getting ppid.
+Inserting process 2508   New! Getting ppid.
+Inserting process 2553   New! Getting ppid.
+Inserting process 2623   New! Getting ppid.
+Inserting process 2657   New! Getting ppid.
+Inserting process 2737   New! Getting ppid.
+Inserting process 2740   New! Getting ppid.
+Inserting process 2791   New! Getting ppid.
+Inserting process 2792   New! Getting ppid.
+Inserting process 2793   New! Getting ppid.
+Inserting process 2794   New! Getting ppid.
+Inserting process 2798   New! Getting ppid.
+Inserting process 2799   New! Getting ppid.
+Inserting process 2800   New! Getting ppid.
+Inserting process 2801   New! Getting ppid.
+Inserting process 2802   New! Getting ppid.
+Inserting process 2807   Already inserted.
+   Getting ppid.
+Inserting process 2808   Already inserted.
+   Getting ppid.
+Inserting process 2809   Already inserted.
+   Getting ppid.
+Inserting process 2810   Already inserted.
+   Getting ppid.
+Inserting process 2811   Already inserted.
+   Getting ppid.
+Inserting process 2812   Already inserted.
+   Getting ppid.
+Inserting process 2813   Already inserted.
+   Getting ppid.
+Inserting process 2814   Already inserted.
+   Getting ppid.
+Inserting process 2815   Already inserted.
+   Getting ppid.
+Inserting process 2817   Already inserted.
+   Getting ppid.
+Inserting process 2818   Already inserted.
+   Getting ppid.
+Inserting process 2821   Already inserted.
+   Getting ppid.
+Inserting process 2824   New! Getting ppid.
+Inserting process 2825   New! Getting ppid.
+Inserting process 2827   Already inserted.
+   Getting ppid.
+Inserting process 2828   New! Getting ppid.
+Reallocating stoppable list buffer to size 273.
+Updating PID 128 (migration/5): cleared_ok cleared_new 
+Updating PID 64 (rcuob/7): cleared_ok cleared_new 
+Updating PID 32 (rcuos/24): cleared_ok cleared_new 
+Updating PID 1312 (dhclient): cleared_ok cleared_new 
+Updating PID 160 (kworker/11:0): cleared_ok cleared_new 
+Updating PID 96 (rcuob/39): cleared_ok cleared_new 
+Updating PID 16 (rcuos/8): cleared_ok cleared_new 
+Updating PID 144 (ksoftirqd/8): cleared_ok cleared_new 
+Updating PID 80 (rcuob/23): cleared_ok cleared_new 
+Updating PID 48 (rcuos/40): cleared_ok cleared_new 
+Updating PID 304 (scsi_eh_4): cleared_ok cleared_new 
+Updating PID 176 (md): cleared_ok cleared_new 
+Updating PID 880 (nfsiod): cleared_ok cleared_new 
+Updating PID 2800 (sudo): cleared_ok cleared_new 
+Updating PID 8 (rcuos/0): cleared_ok cleared_new 
+Updating PID 2824 (record_signal_i): cleared_ok cleared_new 
+Updating PID 136 (kworker/6:0H): cleared_ok cleared_new 
+Updating PID 1416 (getty): cleared_ok cleared_new 
+Updating PID 72 (rcuob/15): cleared_ok cleared_new 
+Updating PID 200 (kworker/8:1): cleared_ok cleared_new 
+Updating PID 2504 (kworker/4:1H): cleared_ok cleared_new 
+Updating PID 40 (rcuos/32): cleared_ok cleared_new 
+Updating PID 296 (scsi_eh_0): cleared_ok cleared_new 
+Updating PID 168 (khugepaged): cleared_ok cleared_new 
+Updating PID 104 (rcuob/47): cleared_ok cleared_new 
+Updating PID 2792 (bash): cleared_ok cleared_new 
+Updating PID 24 (rcuos/16): cleared_ok cleared_new 
+Updating PID 1560 (acpid): cleared_ok cleared_new 
+Updating PID 88 (rcuob/31): cleared_ok cleared_new 
+Updating PID 56 (rcu_bh): cleared_ok cleared_new 
+Updating PID 120 (kworker/3:0): cleared_ok cleared_new 
+Updating PID 2808 (cstress): cleared_ok cleared_new 2808 is stoppable.
+ got_stoppable_status add_to_stoppable_list 
+Updating PID 4 (kworker/0:0): cleared_ok cleared_new 
+Updating PID 68 (rcuob/11): cleared_ok cleared_new 
+Updating PID 836 (rpcbind): cleared_ok cleared_new 
+Updating PID 196 (acpi_thermal_pm): cleared_ok cleared_new 
+Updating PID 36 (rcuos/28): cleared_ok cleared_new 
+Updating PID 164 (netns): cleared_ok cleared_new 
+Updating PID 1700 (gpm): cleared_ok cleared_new 
+Updating PID 100 (rcuob/43): cleared_ok cleared_new 
+Updating PID 20 (rcuos/12): cleared_ok cleared_new 
+Updating PID 1556 (automount): cleared_ok cleared_new 
+Updating PID 148 (migration/9): cleared_ok cleared_new 
+Updating PID 84 (rcuob/27): cleared_ok cleared_new 
+Updating PID 52 (rcuos/44): cleared_ok cleared_new 
+Updating PID 2740 (systemd-shim): cleared_ok cleared_new 
+Updating PID 116 (kworker/2:0H): cleared_ok cleared_new 
+Updating PID 244 (kworker/7:1): cleared_ok cleared_new 
+Updating PID 12 (rcuos/4): cleared_ok cleared_new 
+Updating PID 1548 (irqbalance): cleared_ok cleared_new 
+Updating PID 2828 (playback): cleared_ok cleared_new 
+Updating PID 140 (kworker/7:0): cleared_ok cleared_new 
+Updating PID 76 (rcuob/19): cleared_ok cleared_new 
+Updating PID 332 (jbd2/sda1-8): cleared_ok cleared_new 
+Updating PID 844 (rpc.statd): cleared_ok cleared_new 
+Updating PID 2508 (kworker/1:1H): cleared_ok cleared_new 
+Updating PID 44 (rcuos/36): cleared_ok cleared_new 
+Updating PID 300 (scsi_eh_2): cleared_ok cleared_new 
+Updating PID 172 (kblockd): cleared_ok cleared_new 
+Updating PID 108 (migration/1): cleared_ok cleared_new 
+Updating PID 876 (rpciod): cleared_ok cleared_new 
+Updating PID 28 (rcuos/20): cleared_ok cleared_new 
+Updating PID 540 (kworker/0:1H): cleared_ok cleared_new 
+Updating PID 156 (kworker/10:0H): cleared_ok cleared_new 
+Updating PID 92 (rcuob/35): cleared_ok cleared_new 
+Updating PID 732 (kworker/0:2): cleared_ok cleared_new 
+Updating PID 476 (upstart-udev-br): cleared_ok cleared_new 
+Updating PID 60 (rcuob/3): cleared_ok cleared_new 
+Updating PID 124 (ksoftirqd/4): cleared_ok cleared_new 
+Updating PID 2812 (cstress): cleared_ok cleared_new 2812 is stoppable.
+ got_stoppable_status add_to_stoppable_list 
+Updating PID 2 (kthreadd): cleared_ok cleared_new 
+Updating PID 2818 (cstress): cleared_ok cleared_new 2818 is stoppable.
+ got_stoppable_status add_to_stoppable_list 
+Updating PID 130 (kworker/5:0): cleared_ok cleared_new 
+Updating PID 66 (rcuob/9): cleared_ok cleared_new 
+Updating PID 1474 (cron): cleared_ok cleared_new 
+Updating PID 34 (rcuos/26): cleared_ok cleared_new 
+Updating PID 162 (khelper): cleared_ok cleared_new 
+Updating PID 98 (rcuob/41): cleared_ok cleared_new 
+Updating PID 482 (systemd-udevd): cleared_ok cleared_new 
+Updating PID 18 (rcuos/10): cleared_ok cleared_new 
+Updating PID 2066 (console-kit-dae): cleared_ok cleared_new 
+Updating PID 146 (kworker/8:0H): cleared_ok cleared_new 
+Updating PID 1170 (monitor): cleared_ok cleared_new 
+Updating PID 1426 (getty): cleared_ok cleared_new 
+Updating PID 82 (rcuob/25): cleared_ok cleared_new 
+Updating PID 50 (rcuos/42): cleared_ok cleared_new 
+Updating PID 306 (scsi_eh_5): cleared_ok cleared_new 
+Updating PID 1202 (ovs-vswitchd): cleared_ok cleared_new 
+Updating PID 114 (ksoftirqd/2): cleared_ok cleared_new 
+Updating PID 2802 (power_gadget): cleared_ok cleared_new 
+Updating PID 10 (rcuos/2): cleared_ok cleared_new 
+Updating PID 138 (migration/7): cleared_ok cleared_new 
+Updating PID 74 (rcuob/17): cleared_ok cleared_new 
+Updating PID 42 (rcuos/34): cleared_ok cleared_new 
+Updating PID 298 (scsi_eh_1): cleared_ok cleared_new 
+Updating PID 170 (kintegrityd): cleared_ok cleared_new 
+Updating PID 1962 (getty): cleared_ok cleared_new 
+Updating PID 2794 (bash): cleared_ok cleared_new 
+Updating PID 26 (rcuos/18): cleared_ok cleared_new 
+Updating PID 154 (ksoftirqd/10): cleared_ok cleared_new 
+Updating PID 90 (rcuob/33): cleared_ok cleared_new 
+Updating PID 1626 (uuidd): cleared_ok cleared_new 
+Updating PID 58 (rcuob/1): cleared_ok cleared_new 
+Updating PID 250 (kworker/10:1): cleared_ok cleared_new 
+Updating PID 2810 (cstress): cleared_ok cleared_new 2810 is stoppable.
+ got_stoppable_status add_to_stoppable_list 
+Updating PID 134 (ksoftirqd/6): cleared_ok cleared_new 
+Updating PID 70 (rcuob/13): cleared_ok cleared_new 
+Updating PID 326 (bioset): cleared_ok cleared_new 
+Updating PID 2374 (kworker/6:2): cleared_ok cleared_new 
+Updating PID 198 (kworker/4:1): cleared_ok cleared_new 
+Updating PID 38 (rcuos/30): cleared_ok cleared_new 
+Updating PID 166 (writeback): cleared_ok cleared_new 
+Updating PID 102 (rcuob/45): cleared_ok cleared_new 
+Updating PID 22 (rcuos/14): cleared_ok cleared_new 
+Updating PID 150 (kworker/9:0): cleared_ok cleared_new 
+Updating PID 1430 (getty): cleared_ok cleared_new 
+Updating PID 86 (rcuob/29): cleared_ok cleared_new 
+Updating PID 54 (rcuos/46): cleared_ok cleared_new 
+Updating PID 182 (fsnotify_mark): cleared_ok cleared_new 
+Updating PID 118 (migration/3): cleared_ok cleared_new 
+Updating PID 14 (rcuos/6): cleared_ok cleared_new 
+Updating PID 78 (rcuob/21): cleared_ok cleared_new 
+Updating PID 1998 (kworker/3:1H): cleared_ok cleared_new 
+Updating PID 46 (rcuos/38): cleared_ok cleared_new 
+Updating PID 302 (scsi_eh_3): cleared_ok cleared_new 
+Updating PID 174 (ata_sff): cleared_ok cleared_new 
+Updating PID 942 (rsyslogd): cleared_ok cleared_new 
+Updating PID 2798 (record_signal_i): cleared_ok cleared_new 
+Updating PID 30 (rcuos/22): cleared_ok cleared_new 
+Updating PID 286 (kworker/3:1): cleared_ok cleared_new 
+Updating PID 158 (migration/11): cleared_ok cleared_new 
+Updating PID 94 (rcuob/37): cleared_ok cleared_new 
+Updating PID 222 (charger_manager): cleared_ok cleared_new 
+Updating PID 62 (rcuob/5): cleared_ok cleared_new 
+Updating PID 126 (kworker/4:0H): cleared_ok cleared_new 
+Updating PID 2814 (cstress): cleared_ok cleared_new 2814 is stoppable.
+ got_stoppable_status add_to_stoppable_list 
+Updating PID 1 (init): cleared_ok cleared_new 
+Updating PID 2817 (cstress): cleared_ok cleared_new 2817 is stoppable.
+ got_stoppable_status add_to_stoppable_list 
+Updating PID 129 (ksoftirqd/5): cleared_ok cleared_new 
+Updating PID 65 (rcuob/8): cleared_ok cleared_new 
+Updating PID 33 (rcuos/25): cleared_ok cleared_new 
+Updating PID 161 (kworker/11:0H): cleared_ok cleared_new 
+Updating PID 97 (rcuob/40): cleared_ok cleared_new 
+Updating PID 2657 (kworker/1:2): cleared_ok cleared_new 
+Updating PID 17 (rcuos/9): cleared_ok cleared_new 
+Updating PID 145 (kworker/8:0): cleared_ok cleared_new 
+Updating PID 81 (rcuob/24): cleared_ok cleared_new 
+Updating PID 209 (kworker/5:1): cleared_ok cleared_new 
+Updating PID 49 (rcuos/41): cleared_ok cleared_new 
+Updating PID 305 (scsi_tmf_4): cleared_ok cleared_new 
+Updating PID 1841 (x2gocleansessio): cleared_ok cleared_new 
+Updating PID 177 (devfreq_wq): cleared_ok cleared_new 
+Updating PID 1201 (monitor): cleared_ok cleared_new 
+Updating PID 2737 (sshd): cleared_ok cleared_new 
+Updating PID 113 (migration/2): cleared_ok cleared_new 
+Updating PID 2801 (perf): cleared_ok cleared_new 
+Updating PID 9 (rcuos/1): cleared_ok cleared_new 
+Updating PID 2825 (record_signal_i): cleared_ok cleared_new 
+Updating PID 1417 (thermald): cleared_ok cleared_new 
+Updating PID 73 (rcuob/16): cleared_ok cleared_new 
+Updating PID 201 (ipv6_addrconf): cleared_ok cleared_new 
+Updating PID 41 (rcuos/33): cleared_ok cleared_new 
+Updating PID 297 (scsi_tmf_0): cleared_ok cleared_new 
+Updating PID 169 (crypto): cleared_ok cleared_new 
+Updating PID 681 (kvm-irqfd-clean): cleared_ok cleared_new 
+Updating PID 105 (migration/0): cleared_ok cleared_new 
+Updating PID 2793 (bash): cleared_ok cleared_new 
+Updating PID 1001 (rpc.idmapd): cleared_ok cleared_new 
+Updating PID 25 (rcuos/17): cleared_ok cleared_new 
+Updating PID 153 (migration/10): cleared_ok cleared_new 
+Updating PID 89 (rcuob/32): cleared_ok cleared_new 
+Updating PID 57 (rcuob/0): cleared_ok cleared_new 
+Updating PID 121 (kworker/3:0H): cleared_ok cleared_new 
+Updating PID 2809 (cstress): cleared_ok cleared_new 2809 is stoppable.
+ got_stoppable_status add_to_stoppable_list 
+Updating PID 2553 (kworker/u96:1): cleared_ok cleared_new 
+Updating PID 5 (kworker/0:0H): cleared_ok cleared_new 
+Updating PID 2053 (kauditd): cleared_ok cleared_new 
+Updating PID 2821 (cstress): cleared_ok cleared_new 2821 is stoppable.
+ got_stoppable_status add_to_stoppable_list 
+Updating PID 133 (migration/6): cleared_ok cleared_new 
+Updating PID 1413 (getty): cleared_ok cleared_new 
+Updating PID 69 (rcuob/12): cleared_ok cleared_new 
+Updating PID 325 (kdmflush): cleared_ok cleared_new 
+Updating PID 2373 (kworker/10:2): cleared_ok cleared_new 
+Updating PID 197 (kworker/11:1): cleared_ok cleared_new 
+Updating PID 37 (rcuos/29): cleared_ok cleared_new 
+Updating PID 549 (edac-poller): cleared_ok cleared_new 
+Updating PID 293 (kworker/9:1): cleared_ok cleared_new 
+Updating PID 165 (khungtaskd): cleared_ok cleared_new 
+Updating PID 101 (rcuob/44): cleared_ok cleared_new 
+Updating PID 21 (rcuos/13): cleared_ok cleared_new 
+Updating PID 149 (ksoftirqd/9): cleared_ok cleared_new 
+Updating PID 85 (rcuob/28): cleared_ok cleared_new 
+Updating PID 53 (rcuos/45): cleared_ok cleared_new 
+Updating PID 181 (kswapd0): cleared_ok cleared_new 
+Updating PID 13 (rcuos/5): cleared_ok cleared_new 
+Updating PID 141 (kworker/7:0H): cleared_ok cleared_new 
+Updating PID 77 (rcuob/20): cleared_ok cleared_new 
+Updating PID 333 (ext4-rsv-conver): cleared_ok cleared_new 
+Updating PID 45 (rcuos/37): cleared_ok cleared_new 
+Updating PID 301 (scsi_tmf_2): cleared_ok cleared_new 
+Updating PID 109 (ksoftirqd/1): cleared_ok cleared_new 
+Updating PID 29 (rcuos/21): cleared_ok cleared_new 
+Updating PID 93 (rcuob/36): cleared_ok cleared_new 
+Updating PID 221 (deferwq): cleared_ok cleared_new 
+Updating PID 61 (rcuob/4): cleared_ok cleared_new 
+Updating PID 125 (kworker/4:0): cleared_ok cleared_new 
+Updating PID 2813 (cstress): cleared_ok cleared_new 2813 is stoppable.
+ got_stoppable_status add_to_stoppable_list 
+Updating PID 3 (ksoftirqd/0): cleared_ok cleared_new 
+Updating PID 131 (kworker/5:0H): cleared_ok cleared_new 
+Updating PID 67 (rcuob/10): cleared_ok cleared_new 
+Updating PID 195 (kthrotld): cleared_ok cleared_new 
+Updating PID 1475 (atd): cleared_ok cleared_new 
+Updating PID 35 (rcuos/27): cleared_ok cleared_new 
+Updating PID 547 (kworker/11:1H): cleared_ok cleared_new 
+Updating PID 163 (kdevtmpfs): cleared_ok cleared_new 
+Updating PID 99 (rcuob/42): cleared_ok cleared_new 
+Updating PID 19 (rcuos/11): cleared_ok cleared_new 
+Updating PID 1171 (ovsdb-server): cleared_ok cleared_new 
+Updating PID 1427 (getty): cleared_ok cleared_new 
+Updating PID 83 (rcuob/26): cleared_ok cleared_new 
+Updating PID 2131 (polkitd): cleared_ok cleared_new 
+Updating PID 51 (rcuos/43): cleared_ok cleared_new 
+Updating PID 1587 (noip2): cleared_ok cleared_new 
+Updating PID 307 (scsi_tmf_5): cleared_ok cleared_new 
+Updating PID 179 (kworker/2:1): cleared_ok cleared_new 
+Updating PID 947 (dbus-daemon): cleared_ok cleared_new 
+Updating PID 115 (kworker/2:0): cleared_ok cleared_new 
+Updating PID 11 (rcuos/3): cleared_ok cleared_new 
+Updating PID 2827 (signal_insert_d): cleared_ok 
+Updating PID 139 (ksoftirqd/7): cleared_ok cleared_new 
+Updating PID 75 (rcuob/18): cleared_ok cleared_new 
+Updating PID 1483 (sshd): cleared_ok cleared_new 
+Updating PID 43 (rcuos/35): cleared_ok cleared_new 
+Updating PID 299 (scsi_tmf_1): cleared_ok cleared_new 
+Updating PID 171 (bioset): cleared_ok cleared_new 
+Updating PID 939 (upstart-file-br): cleared_ok cleared_new 
+Updating PID 27 (rcuos/19): cleared_ok cleared_new 
+Updating PID 91 (rcuob/34): cleared_ok cleared_new 
+Updating PID 59 (rcuob/2): cleared_ok cleared_new 
+Updating PID 123 (migration/4): cleared_ok cleared_new 
+Updating PID 2811 (cstress): cleared_ok cleared_new 2811 is stoppable.
+ got_stoppable_status add_to_stoppable_list 
+Updating PID 7 (rcu_sched): cleared_ok cleared_new 
+Updating PID 2055 (systemd-logind): cleared_ok cleared_new 
+Updating PID 71 (rcuob/14): cleared_ok cleared_new 
+Updating PID 455 (cgmanager): cleared_ok cleared_new 
+Updating PID 39 (rcuos/31): cleared_ok cleared_new 
+Updating PID 167 (ksmd): cleared_ok cleared_new 
+Updating PID 103 (rcuob/46): cleared_ok cleared_new 
+Updating PID 2791 (sshd): cleared_ok cleared_new 
+Updating PID 23 (rcuos/15): cleared_ok cleared_new 
+Updating PID 151 (kworker/9:0H): cleared_ok cleared_new 
+Updating PID 87 (rcuob/30): cleared_ok cleared_new 
+Updating PID 55 (rcuos/47): cleared_ok cleared_new 
+Updating PID 183 (ecryptfs-kthrea): cleared_ok cleared_new 
+Updating PID 119 (ksoftirqd/3): cleared_ok cleared_new 
+Updating PID 2807 (cstress): cleared_ok cleared_new 2807 is stoppable.
+ got_stoppable_status add_to_stoppable_list 
+Updating PID 15 (rcuos/7): cleared_ok cleared_new 
+Updating PID 143 (migration/8): cleared_ok cleared_new 
+Updating PID 79 (rcuob/22): cleared_ok cleared_new 
+Updating PID 47 (rcuos/39): cleared_ok cleared_new 
+Updating PID 303 (scsi_tmf_3): cleared_ok cleared_new 
+Updating PID 175 (khubd): cleared_ok cleared_new 
+Updating PID 111 (kworker/1:0H): cleared_ok cleared_new 
+Updating PID 2799 (sudo): cleared_ok cleared_new 
+Updating PID 31 (rcuos/23): cleared_ok cleared_new 
+Updating PID 287 (kworker/1:1): cleared_ok cleared_new 
+Updating PID 159 (ksoftirqd/11): cleared_ok cleared_new 
+Updating PID 671 (upstart-socket-): cleared_ok cleared_new 
+Updating PID 95 (rcuob/38): cleared_ok cleared_new 
+Updating PID 223 (kworker/6:1): cleared_ok cleared_new 
+Updating PID 63 (rcuob/6): cleared_ok cleared_new 
+Updating PID 2623 (kworker/u96:2): cleared_ok cleared_new 
+Updating PID 2815 (cstress): cleared_ok cleared_new 2815 is stoppable.
+ got_stoppable_status add_to_stoppable_list 
+Stoppable list (buffer size: 274, index: 12): 2808 2812 2818 2810 2814 2817 2809 2821 2813 2811 2807 2815 
+PID: 128 (migration/5), PPID: 2, Flags: 
+PID: 64 (rcuob/7), PPID: 2, Flags: 
+PID: 32 (rcuos/24), PPID: 2, Flags: 
+PID: 1312 (dhclient), PPID: 1, Flags: 
+PID: 160 (kworker/11:0), PPID: 2, Flags: 
+PID: 96 (rcuob/39), PPID: 2, Flags: 
+PID: 16 (rcuos/8), PPID: 2, Flags: 
+PID: 144 (ksoftirqd/8), PPID: 2, Flags: 
+PID: 80 (rcuob/23), PPID: 2, Flags: 
+PID: 48 (rcuos/40), PPID: 2, Flags: 
+PID: 304 (scsi_eh_4), PPID: 2, Flags: 
+PID: 176 (md), PPID: 2, Flags: 
+PID: 880 (nfsiod), PPID: 2, Flags: 
+PID: 2800 (sudo), PPID: 2794, Flags: 
+PID: 8 (rcuos/0), PPID: 2, Flags: 
+PID: 2824 (record_signal_i), PPID: 2798, Flags: 
+PID: 136 (kworker/6:0H), PPID: 2, Flags: 
+PID: 1416 (getty), PPID: 1, Flags: 
+PID: 72 (rcuob/15), PPID: 2, Flags: 
+PID: 200 (kworker/8:1), PPID: 2, Flags: 
+PID: 2504 (kworker/4:1H), PPID: 2, Flags: 
+PID: 40 (rcuos/32), PPID: 2, Flags: 
+PID: 296 (scsi_eh_0), PPID: 2, Flags: 
+PID: 168 (khugepaged), PPID: 2, Flags: 
+PID: 104 (rcuob/47), PPID: 2, Flags: 
+PID: 2792 (bash), PPID: 2791, Flags: 
+PID: 24 (rcuos/16), PPID: 2, Flags: 
+PID: 1560 (acpid), PPID: 1, Flags: 
+PID: 88 (rcuob/31), PPID: 2, Flags: 
+PID: 56 (rcu_bh), PPID: 2, Flags: 
+PID: 120 (kworker/3:0), PPID: 2, Flags: 
+PID: 2808 (cstress), PPID: 2798, Flags: PARENT STOPPABLE 
+PID: 4 (kworker/0:0), PPID: 2, Flags: 
+PID: 68 (rcuob/11), PPID: 2, Flags: 
+PID: 836 (rpcbind), PPID: 1, Flags: 
+PID: 196 (acpi_thermal_pm), PPID: 2, Flags: 
+PID: 36 (rcuos/28), PPID: 2, Flags: 
+PID: 164 (netns), PPID: 2, Flags: 
+PID: 1700 (gpm), PPID: 1, Flags: 
+PID: 100 (rcuob/43), PPID: 2, Flags: 
+PID: 20 (rcuos/12), PPID: 2, Flags: 
+PID: 1556 (automount), PPID: 1, Flags: 
+PID: 148 (migration/9), PPID: 2, Flags: 
+PID: 84 (rcuob/27), PPID: 2, Flags: 
+PID: 52 (rcuos/44), PPID: 2, Flags: 
+PID: 2740 (systemd-shim), PPID: 1, Flags: 
+PID: 116 (kworker/2:0H), PPID: 2, Flags: 
+PID: 244 (kworker/7:1), PPID: 2, Flags: 
+PID: 12 (rcuos/4), PPID: 2, Flags: 
+PID: 1548 (irqbalance), PPID: 1, Flags: 
+PID: 2828 (playback), PPID: 2825, Flags: 
+PID: 140 (kworker/7:0), PPID: 2, Flags: 
+PID: 76 (rcuob/19), PPID: 2, Flags: 
+PID: 332 (jbd2/sda1-8), PPID: 2, Flags: 
+PID: 844 (rpc.statd), PPID: 1, Flags: 
+PID: 2508 (kworker/1:1H), PPID: 2, Flags: 
+PID: 44 (rcuos/36), PPID: 2, Flags: 
+PID: 300 (scsi_eh_2), PPID: 2, Flags: 
+PID: 172 (kblockd), PPID: 2, Flags: 
+PID: 108 (migration/1), PPID: 2, Flags: 
+PID: 876 (rpciod), PPID: 2, Flags: 
+PID: 28 (rcuos/20), PPID: 2, Flags: 
+PID: 540 (kworker/0:1H), PPID: 2, Flags: 
+PID: 156 (kworker/10:0H), PPID: 2, Flags: 
+PID: 92 (rcuob/35), PPID: 2, Flags: 
+PID: 732 (kworker/0:2), PPID: 2, Flags: 
+PID: 476 (upstart-udev-br), PPID: 1, Flags: 
+PID: 60 (rcuob/3), PPID: 2, Flags: 
+PID: 124 (ksoftirqd/4), PPID: 2, Flags: 
+PID: 2812 (cstress), PPID: 2798, Flags: PARENT STOPPABLE 
+PID: 2 (kthreadd), PPID: 0, Flags: 
+PID: 2818 (cstress), PPID: 2798, Flags: PARENT STOPPABLE 
+PID: 130 (kworker/5:0), PPID: 2, Flags: 
+PID: 66 (rcuob/9), PPID: 2, Flags: 
+PID: 1474 (cron), PPID: 1, Flags: 
+PID: 34 (rcuos/26), PPID: 2, Flags: 
+PID: 162 (khelper), PPID: 2, Flags: 
+PID: 98 (rcuob/41), PPID: 2, Flags: 
+PID: 482 (systemd-udevd), PPID: 1, Flags: 
+PID: 18 (rcuos/10), PPID: 2, Flags: 
+PID: 2066 (console-kit-dae), PPID: 1, Flags: 
+PID: 146 (kworker/8:0H), PPID: 2, Flags: 
+PID: 1170 (monitor), PPID: 1, Flags: 
+PID: 1426 (getty), PPID: 1, Flags: 
+PID: 82 (rcuob/25), PPID: 2, Flags: 
+PID: 50 (rcuos/42), PPID: 2, Flags: 
+PID: 306 (scsi_eh_5), PPID: 2, Flags: 
+PID: 1202 (ovs-vswitchd), PPID: 1201, Flags: 
+PID: 114 (ksoftirqd/2), PPID: 2, Flags: 
+PID: 2802 (power_gadget), PPID: 2800, Flags: 
+PID: 10 (rcuos/2), PPID: 2, Flags: 
+PID: 138 (migration/7), PPID: 2, Flags: 
+PID: 74 (rcuob/17), PPID: 2, Flags: 
+PID: 42 (rcuos/34), PPID: 2, Flags: 
+PID: 298 (scsi_eh_1), PPID: 2, Flags: 
+PID: 170 (kintegrityd), PPID: 2, Flags: 
+PID: 1962 (getty), PPID: 1, Flags: 
+PID: 2794 (bash), PPID: 2792, Flags: 
+PID: 26 (rcuos/18), PPID: 2, Flags: 
+PID: 154 (ksoftirqd/10), PPID: 2, Flags: 
+PID: 90 (rcuob/33), PPID: 2, Flags: 
+PID: 1626 (uuidd), PPID: 1, Flags: 
+PID: 58 (rcuob/1), PPID: 2, Flags: 
+PID: 250 (kworker/10:1), PPID: 2, Flags: 
+PID: 2810 (cstress), PPID: 2798, Flags: PARENT STOPPABLE 
+PID: 134 (ksoftirqd/6), PPID: 2, Flags: 
+PID: 70 (rcuob/13), PPID: 2, Flags: 
+PID: 326 (bioset), PPID: 2, Flags: 
+PID: 2374 (kworker/6:2), PPID: 2, Flags: 
+PID: 198 (kworker/4:1), PPID: 2, Flags: 
+PID: 38 (rcuos/30), PPID: 2, Flags: 
+PID: 166 (writeback), PPID: 2, Flags: 
+PID: 102 (rcuob/45), PPID: 2, Flags: 
+PID: 22 (rcuos/14), PPID: 2, Flags: 
+PID: 150 (kworker/9:0), PPID: 2, Flags: 
+PID: 1430 (getty), PPID: 1, Flags: 
+PID: 86 (rcuob/29), PPID: 2, Flags: 
+PID: 54 (rcuos/46), PPID: 2, Flags: 
+PID: 182 (fsnotify_mark), PPID: 2, Flags: 
+PID: 118 (migration/3), PPID: 2, Flags: 
+PID: 14 (rcuos/6), PPID: 2, Flags: 
+PID: 78 (rcuob/21), PPID: 2, Flags: 
+PID: 1998 (kworker/3:1H), PPID: 2, Flags: 
+PID: 46 (rcuos/38), PPID: 2, Flags: 
+PID: 302 (scsi_eh_3), PPID: 2, Flags: 
+PID: 174 (ata_sff), PPID: 2, Flags: 
+PID: 942 (rsyslogd), PPID: 1, Flags: 
+PID: 2798 (record_signal_i), PPID: 2792, Flags: 
+PID: 30 (rcuos/22), PPID: 2, Flags: 
+PID: 286 (kworker/3:1), PPID: 2, Flags: 
+PID: 158 (migration/11), PPID: 2, Flags: 
+PID: 94 (rcuob/37), PPID: 2, Flags: 
+PID: 222 (charger_manager), PPID: 2, Flags: 
+PID: 62 (rcuob/5), PPID: 2, Flags: 
+PID: 126 (kworker/4:0H), PPID: 2, Flags: 
+PID: 2814 (cstress), PPID: 2798, Flags: PARENT STOPPABLE 
+PID: 1 (init), PPID: 0, Flags: 
+PID: 2817 (cstress), PPID: 2798, Flags: PARENT STOPPABLE 
+PID: 129 (ksoftirqd/5), PPID: 2, Flags: 
+PID: 65 (rcuob/8), PPID: 2, Flags: 
+PID: 33 (rcuos/25), PPID: 2, Flags: 
+PID: 161 (kworker/11:0H), PPID: 2, Flags: 
+PID: 97 (rcuob/40), PPID: 2, Flags: 
+PID: 2657 (kworker/1:2), PPID: 2, Flags: 
+PID: 17 (rcuos/9), PPID: 2, Flags: 
+PID: 145 (kworker/8:0), PPID: 2, Flags: 
+PID: 81 (rcuob/24), PPID: 2, Flags: 
+PID: 209 (kworker/5:1), PPID: 2, Flags: 
+PID: 49 (rcuos/41), PPID: 2, Flags: 
+PID: 305 (scsi_tmf_4), PPID: 2, Flags: 
+PID: 1841 (x2gocleansessio), PPID: 1, Flags: 
+PID: 177 (devfreq_wq), PPID: 2, Flags: 
+PID: 1201 (monitor), PPID: 1, Flags: 
+PID: 2737 (sshd), PPID: 1483, Flags: 
+PID: 113 (migration/2), PPID: 2, Flags: 
+PID: 2801 (perf), PPID: 2799, Flags: 
+PID: 9 (rcuos/1), PPID: 2, Flags: 
+PID: 2825 (record_signal_i), PPID: 2824, Flags: 
+PID: 1417 (thermald), PPID: 1, Flags: 
+PID: 73 (rcuob/16), PPID: 2, Flags: 
+PID: 201 (ipv6_addrconf), PPID: 2, Flags: 
+PID: 41 (rcuos/33), PPID: 2, Flags: 
+PID: 297 (scsi_tmf_0), PPID: 2, Flags: 
+PID: 169 (crypto), PPID: 2, Flags: 
+PID: 681 (kvm-irqfd-clean), PPID: 2, Flags: 
+PID: 105 (migration/0), PPID: 2, Flags: 
+PID: 2793 (bash), PPID: 2792, Flags: 
+PID: 1001 (rpc.idmapd), PPID: 1, Flags: 
+PID: 25 (rcuos/17), PPID: 2, Flags: 
+PID: 153 (migration/10), PPID: 2, Flags: 
+PID: 89 (rcuob/32), PPID: 2, Flags: 
+PID: 57 (rcuob/0), PPID: 2, Flags: 
+PID: 121 (kworker/3:0H), PPID: 2, Flags: 
+PID: 2809 (cstress), PPID: 2798, Flags: PARENT STOPPABLE 
+PID: 2553 (kworker/u96:1), PPID: 2, Flags: 
+PID: 5 (kworker/0:0H), PPID: 2, Flags: 
+PID: 2053 (kauditd), PPID: 2, Flags: 
+PID: 2821 (cstress), PPID: 2798, Flags: PARENT STOPPABLE 
+PID: 133 (migration/6), PPID: 2, Flags: 
+PID: 1413 (getty), PPID: 1, Flags: 
+PID: 69 (rcuob/12), PPID: 2, Flags: 
+PID: 325 (kdmflush), PPID: 2, Flags: 
+PID: 2373 (kworker/10:2), PPID: 2, Flags: 
+PID: 197 (kworker/11:1), PPID: 2, Flags: 
+PID: 37 (rcuos/29), PPID: 2, Flags: 
+PID: 549 (edac-poller), PPID: 2, Flags: 
+PID: 293 (kworker/9:1), PPID: 2, Flags: 
+PID: 165 (khungtaskd), PPID: 2, Flags: 
+PID: 101 (rcuob/44), PPID: 2, Flags: 
+PID: 21 (rcuos/13), PPID: 2, Flags: 
+PID: 149 (ksoftirqd/9), PPID: 2, Flags: 
+PID: 85 (rcuob/28), PPID: 2, Flags: 
+PID: 53 (rcuos/45), PPID: 2, Flags: 
+PID: 181 (kswapd0), PPID: 2, Flags: 
+PID: 13 (rcuos/5), PPID: 2, Flags: 
+PID: 141 (kworker/7:0H), PPID: 2, Flags: 
+PID: 77 (rcuob/20), PPID: 2, Flags: 
+PID: 333 (ext4-rsv-conver), PPID: 2, Flags: 
+PID: 45 (rcuos/37), PPID: 2, Flags: 
+PID: 301 (scsi_tmf_2), PPID: 2, Flags: 
+PID: 109 (ksoftirqd/1), PPID: 2, Flags: 
+PID: 29 (rcuos/21), PPID: 2, Flags: 
+PID: 93 (rcuob/36), PPID: 2, Flags: 
+PID: 221 (deferwq), PPID: 2, Flags: 
+PID: 61 (rcuob/4), PPID: 2, Flags: 
+PID: 125 (kworker/4:0), PPID: 2, Flags: 
+PID: 2813 (cstress), PPID: 2798, Flags: PARENT STOPPABLE 
+PID: 3 (ksoftirqd/0), PPID: 2, Flags: 
+PID: 131 (kworker/5:0H), PPID: 2, Flags: 
+PID: 67 (rcuob/10), PPID: 2, Flags: 
+PID: 195 (kthrotld), PPID: 2, Flags: 
+PID: 1475 (atd), PPID: 1, Flags: 
+PID: 35 (rcuos/27), PPID: 2, Flags: 
+PID: 547 (kworker/11:1H), PPID: 2, Flags: 
+PID: 163 (kdevtmpfs), PPID: 2, Flags: 
+PID: 99 (rcuob/42), PPID: 2, Flags: 
+PID: 19 (rcuos/11), PPID: 2, Flags: 
+PID: 1171 (ovsdb-server), PPID: 1170, Flags: 
+PID: 1427 (getty), PPID: 1, Flags: 
+PID: 83 (rcuob/26), PPID: 2, Flags: 
+PID: 2131 (polkitd), PPID: 1, Flags: 
+PID: 51 (rcuos/43), PPID: 2, Flags: 
+PID: 1587 (noip2), PPID: 1, Flags: 
+PID: 307 (scsi_tmf_5), PPID: 2, Flags: 
+PID: 179 (kworker/2:1), PPID: 2, Flags: 
+PID: 947 (dbus-daemon), PPID: 1, Flags: 
+PID: 115 (kworker/2:0), PPID: 2, Flags: 
+PID: 11 (rcuos/3), PPID: 2, Flags: 
+PID: 2827 (signal_insert_d), PPID: 2824, Flags: EXCLUDE 
+PID: 139 (ksoftirqd/7), PPID: 2, Flags: 
+PID: 75 (rcuob/18), PPID: 2, Flags: 
+PID: 1483 (sshd), PPID: 1, Flags: 
+PID: 43 (rcuos/35), PPID: 2, Flags: 
+PID: 299 (scsi_tmf_1), PPID: 2, Flags: 
+PID: 171 (bioset), PPID: 2, Flags: 
+PID: 939 (upstart-file-br), PPID: 1, Flags: 
+PID: 27 (rcuos/19), PPID: 2, Flags: 
+PID: 91 (rcuob/34), PPID: 2, Flags: 
+PID: 59 (rcuob/2), PPID: 2, Flags: 
+PID: 123 (migration/4), PPID: 2, Flags: 
+PID: 2811 (cstress), PPID: 2798, Flags: PARENT STOPPABLE 
+PID: 7 (rcu_sched), PPID: 2, Flags: 
+PID: 2055 (systemd-logind), PPID: 1, Flags: 
+PID: 71 (rcuob/14), PPID: 2, Flags: 
+PID: 455 (cgmanager), PPID: 1, Flags: 
+PID: 39 (rcuos/31), PPID: 2, Flags: 
+PID: 167 (ksmd), PPID: 2, Flags: 
+PID: 103 (rcuob/46), PPID: 2, Flags: 
+PID: 2791 (sshd), PPID: 2737, Flags: 
+PID: 23 (rcuos/15), PPID: 2, Flags: 
+PID: 151 (kworker/9:0H), PPID: 2, Flags: 
+PID: 87 (rcuob/30), PPID: 2, Flags: 
+PID: 55 (rcuos/47), PPID: 2, Flags: 
+PID: 183 (ecryptfs-kthrea), PPID: 2, Flags: 
+PID: 119 (ksoftirqd/3), PPID: 2, Flags: 
+PID: 2807 (cstress), PPID: 2798, Flags: PARENT STOPPABLE 
+PID: 15 (rcuos/7), PPID: 2, Flags: 
+PID: 143 (migration/8), PPID: 2, Flags: 
+PID: 79 (rcuob/22), PPID: 2, Flags: 
+PID: 47 (rcuos/39), PPID: 2, Flags: 
+PID: 303 (scsi_tmf_3), PPID: 2, Flags: 
+PID: 175 (khubd), PPID: 2, Flags: 
+PID: 111 (kworker/1:0H), PPID: 2, Flags: 
+PID: 2799 (sudo), PPID: 2793, Flags: 
+PID: 31 (rcuos/23), PPID: 2, Flags: 
+PID: 287 (kworker/1:1), PPID: 2, Flags: 
+PID: 159 (ksoftirqd/11), PPID: 2, Flags: 
+PID: 671 (upstart-socket-), PPID: 1, Flags: 
+PID: 95 (rcuob/38), PPID: 2, Flags: 
+PID: 223 (kworker/6:1), PPID: 2, Flags: 
+PID: 63 (rcuob/6), PPID: 2, Flags: 
+PID: 2623 (kworker/u96:2), PPID: 2, Flags: 
+PID: 2815 (cstress), PPID: 2798, Flags: PARENT STOPPABLE 
+Got input: 0
+1450752741.134423,1
+Got input: 1
+1450752841.134382,0.0202020202020202
+Got input: 0.0202020202020202
+1450752941.134421,0.9797979797979799
+Got input: 0.9797979797979799
+1450753041.134377,0.04040404040404041
+Got input: 0.04040404040404041
+1450753141.134426,0.9595959595959597
+Got input: 0.9595959595959597
+
+1450753241.134382,0.06060606060606061
+Got input: 0.06060606060606061
+1450753341.134418,0.9393939393939394
+Got input: 0.9393939393939394
+
+1450753441.134406,0.08080808080808081
+Got input: 0.08080808080808081
+1450753541.134414,0.9191919191919192
+Got input: 0.9191919191919192
+
+1450753641.134379,0.101010101010101
+Got input: 0.101010101010101
+
+
+1450753741.134420,0.8989898989898991
+Got input: 0.8989898989898991
+
+1450753841.134402,0.1212121212121212
+Got input: 0.1212121212121212
+
+1450753941.134430,0.8787878787878789
+Got input: 0.8787878787878789
+
+1450754041.134376,0.1414141414141414
+Got input: 0.1414141414141414
+
+1450754141.134420,0.8585858585858587
+Got input: 0.8585858585858587
+
+1450754241.134402,0.1616161616161616
+Got input: 0.1616161616161616
+
+1450754341.134427,0.8383838383838385
+Got input: 0.8383838383838385
+
+1450754441.134408,0.1818181818181818
+Got input: 0.1818181818181818
+
+1450754541.134423,0.8181818181818182
+Got input: 0.8181818181818182
+
+1450754641.134382,0.202020202020202
+Got input: 0.202020202020202
+
+
+1450754741.134380,0.797979797979798
+Got input: 0.797979797979798
+
+
+1450754841.134380,0.2222222222222222
+Got input: 0.2222222222222222
+
+1450754941.134415,0.7777777777777778
+Got input: 0.7777777777777778
+
+1450755041.134380,0.2424242424242424
+Got input: 0.2424242424242424
+
+1450755141.134379,0.7575757575757577
+Got input: 0.7575757575757577
+
+1450755241.134433,0.2626262626262627
+Got input: 0.2626262626262627
+
+1450755341.134402,0.7373737373737375
+Got input: 0.7373737373737375
+
+1450755441.134378,0.2828282828282829
+Got input: 0.2828282828282829
+
+1450755541.134424,0.7171717171717172
+Got input: 0.7171717171717172
+
+1450755641.134381,0.303030303030303
+Got input: 0.303030303030303
+
+
+1450755741.134427,0.696969696969697
+Got input: 0.696969696969697
+
+
+1450755841.134454,0.3232323232323233
+Got input: 0.3232323232323233
+
+1450755941.134416,0.6767676767676768
+Got input: 0.6767676767676768
+
+1450756041.134416,0.3434343434343435
+Got input: 0.3434343434343435
+
+1450756141.134422,0.6565656565656566
+Got input: 0.6565656565656566
+
+1450756241.134413,0.3636363636363636
+Got input: 0.3636363636363636
+
+1450756341.134417,0.6363636363636365
+Got input: 0.6363636363636365
+
+1450756441.134421,0.3838383838383839
+Got input: 0.3838383838383839
+
+1450756541.134402,0.6161616161616162
+Got input: 0.6161616161616162
+
+1450756641.134444,0.4040404040404041
+Got input: 0.4040404040404041
+
+1450756741.134402,0.595959595959596
+Got input: 0.595959595959596
+
+
+1450756841.134419,0.4242424242424243
+Got input: 0.4242424242424243
+
+1450756941.134382,0.5757575757575758
+Got input: 0.5757575757575758
+
+1450757041.134380,0.4444444444444445
+Got input: 0.4444444444444445
+
+1450757141.134401,0.5555555555555556
+Got input: 0.5555555555555556
+
+1450757241.134420,0.4646464646464647
+Got input: 0.4646464646464647
+
+1450757341.134460,0.5353535353535354
+Got input: 0.5353535353535354
+
+1450757441.134423,0.4848484848484849
+Got input: 0.4848484848484849
+
+1450757541.134418,0.5151515151515152
+Got input: 0.5151515151515152
+
+1450757641.134425,0.5050505050505051
+Got input: 0.5050505050505051
+
+1450757741.134417,0.494949494949495
+Got input: 0.494949494949495
+
+
+1450757841.134424,0.5252525252525253
+Got input: 0.5252525252525253
+
+1450757941.134402,0.4747474747474748
+Got input: 0.4747474747474748
+
+1450758041.134415,0.5454545454545455
+Got input: 0.5454545454545455
+
+1450758141.134381,0.4545454545454546
+Got input: 0.4545454545454546
+
+1450758241.134421,0.5656565656565657
+Got input: 0.5656565656565657
+
+1450758341.134434,0.4343434343434344
+Got input: 0.4343434343434344
+
+1450758441.134424,0.5858585858585859
+Got input: 0.5858585858585859
+
+1450758541.134403,0.4141414141414142
+Got input: 0.4141414141414142
+
+1450758641.134386,0.6060606060606061
+Got input: 0.6060606060606061
+
+1450758741.134381,0.393939393939394
+Got input: 0.393939393939394
+
+
+1450758841.134423,0.6262626262626263
+Got input: 0.6262626262626263
+
+1450758941.134382,0.3737373737373738
+Got input: 0.3737373737373738
+
+1450759041.134417,0.6464646464646465
+Got input: 0.6464646464646465
+
+1450759141.134379,0.3535353535353536
+Got input: 0.3535353535353536
+
+1450759241.134414,0.6666666666666667
+Got input: 0.6666666666666667
+
+1450759341.134381,0.3333333333333334
+Got input: 0.3333333333333334
+
+1450759441.134416,0.686868686868687
+Got input: 0.686868686868687
+
+
+1450759541.134402,0.3131313131313131
+Got input: 0.3131313131313131
+
+1450759641.134420,0.7070707070707072
+Got input: 0.7070707070707072
+
+1450759741.134382,0.2929292929292929
+Got input: 0.2929292929292929
+
+1450759841.134379,0.7272727272727273
+Got input: 0.7272727272727273
+
+1450759941.134421,0.2727272727272728
+Got input: 0.2727272727272728
+
+1450760041.134426,0.7474747474747475
+Got input: 0.7474747474747475
+
+1450760141.134418,0.2525252525252525
+Got input: 0.2525252525252525
+
+1450760241.134381,0.7676767676767677
+Got input: 0.7676767676767677
+
+1450760341.134377,0.2323232323232323
+Got input: 0.2323232323232323
+
+1450760441.134424,0.787878787878788
+Got input: 0.787878787878788
+
+
+1450760541.134379,0.2121212121212121
+Got input: 0.2121212121212121
+
+1450760641.134423,0.8080808080808082
+Got input: 0.8080808080808082
+
+1450760741.134405,0.1919191919191919
+Got input: 0.1919191919191919
+
+1450760841.134428,0.8282828282828284
+Got input: 0.8282828282828284
+
+1450760941.134382,0.1717171717171717
+Got input: 0.1717171717171717
+
+1450761041.134423,0.8484848484848485
+Got input: 0.8484848484848485
+
+1450761141.134378,0.1515151515151515
+Got input: 0.1515151515151515
+
+1450761241.134419,0.8686868686868687
+Got input: 0.8686868686868687
+
+1450761341.134382,0.1313131313131313
+Got input: 0.1313131313131313
+
+1450761441.134427,0.888888888888889
+Got input: 0.888888888888889
+
+
+1450761541.134410,0.1111111111111111
+Got input: 0.1111111111111111
+
+1450761641.134429,0.9090909090909092
+Got input: 0.9090909090909092
+
+1450761741.134378,0.09090909090909091
+Got input: 0.09090909090909091
+1450761841.134420,0.9292929292929294
+Got input: 0.9292929292929294
+
+1450761941.134403,0.07070707070707072
+Got input: 0.07070707070707072
+1450762041.134432,0.9494949494949496
+Got input: 0.9494949494949496
+
+1450762141.134382,0.05050505050505051
+Got input: 0.05050505050505051
+1450762241.134420,0.9696969696969697
+Got input: 0.9696969696969697
+
+1450762341.134443,0.0303030303030303
+Got input: 0.0303030303030303
+
+1450762441.134416,0.9898989898989899
+Got input: 0.9898989898989899
+
+1450762541.134377,0.0101010101010101
+Got input: 0.0101010101010101
+
+Got input: q
+q
+01010101010101
+
+Goodbye.
+null I/ORestarting PIDs: 2808 2812 2818 2810 2814 2817 2809 2821 2813 2811 2807 2815 
+2807 2808 2809 2810 2811 2812 2813 2814 2815 2817 2818 2821
+1:416822045
+2:416540883
+3:417863558
+4:417844161
+5:417120753
+6:416633865
+7:417713305
+8:417658777
+9:416537109
+10:418255809
+11:416914729
+12:417803933
