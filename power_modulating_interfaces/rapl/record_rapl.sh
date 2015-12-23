@@ -9,13 +9,17 @@ rapl="$dir/power_gadget"
 
 rangeMin=21
 rangeMax=36
-defRampFile="$dir/../../utilities/playback/ramp_${rangeMin}_${rangeMax}.csv"
-dummyRampFile="$dir/../../utilities/playback/ramp_${rangeMin}_${rangeMax}_short.csv"
+defRampFile="$dir/interleavedRamp_${rangeMin}_${rangeMax}.csv"
+dummyRampFile="$dir/interleavedRamp_${rangeMin}_${rangeMax}_short.csv"
 
 rampFile=${1-$defRampFile}
 
-if [[ "x$rampFile" == "xdummy" ]]; then
+if [[ "x$rampFile" == "xnone" ]]; then
+	rampFile=$defRampFile
+elif [[ "x$rampFile" == "xdummy" ]]; then
 	rampFile=$dummyRampFile
+else
+	rampFile="$dir/${rampFile}_${rangeMin}_${rangeMax}.csv"
 fi
 
 numCPUs=12
