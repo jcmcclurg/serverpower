@@ -4,11 +4,16 @@ import sys
 import matplotlib.pyplot as plt
 import statsmodels.api as sm
 
-experiment = 'rapl'
+experiment = 'hypervisor'
 
+# 10 seconds per level, interleaved ramp
 #dates = {'stress':'1450289756.980881700','signal_insert_delays':'1450283415.294282500','powerclamp':'1450373827.544375800','rapl':'1450477549.649160300','cpufreq':'1450468081.615612300','hypervisor':'1450736746.670078800'}
-dates = {'stress':'1450742429.184057100','signal_insert_delays':'1450752640.493576200','powerclamp':'1450767060.149459000','rapl':'1450821921.795694700','cpufreq':'1450791071.645437800','hypervisor':'1450802061.405142400'}
 
+# 100 seconds per level, interleaved ramp
+#dates = {'stress':'1450742429.184057100','signal_insert_delays':'1450752640.493576200','powerclamp':'1450767060.149459000','rapl':'1450821921.795694700','cpufreq':'1450791071.645437800','hypervisor':'1450802061.405142400'}
+
+# 100 seconds per level, normal ramp interleaved with "dead time"
+dates = {'stress': '1450906198.395250100', 'signal_insert_delays': '1450928315.329759300', 'rapl': '1450950431.522555400', 'powerclamp': '1450972547.536620000', 'cpufreq':'1451001234.240994800', 'hypervisor':'1451231243.990451400'}
 date = dates[experiment]
 
 expDir = 'experiments/'+experiment
@@ -66,21 +71,28 @@ for i in serverNums:
 		#deleteme = np.append(deleteme,r)
 		#print "Before: %d, After: %d"%(powerData[segment,i].size, r.size)
 
-	setpointData[i] = {"setpoints": setpoints[:-1,1], "power": power }
+	setpointData[i] = {"setpoints": setpoints[:-1,1], "power": power, "indices": None }
+	s = np.array(setpointData[i]["setpoints"].argsort(),dtype=int)
+	prevS = float("inf")
+	a = []
+	for j in list(s):
+		if not (setpointData[i]["setpoints"][j] == prevS):
+			a.append(j)
+			prevS = setpointData[i]["setpoints"][j]
+
+	setpointData[i]["indices"] = np.array(a)
+
 
 numSetpoints = 10
-indices = np.array(np.round(np.linspace(0,setpointData[1]["setpoints"].size -1,numSetpoints)),dtype=int)
+indices = np.array(np.round(np.linspace(0,setpointData[1]["indices"].size -1,numSetpoints)),dtype=int)
 data = [None]*numSetpoints*serverNums.size
 for server in serverNums:
-	order = setpointData[server]["setpoints"].argsort()
 	j = server - 1
-	for i in order[indices]:
+	for i in setpointData[server]["indices"][indices]:
 		data[j] = setpointData[server]["power"][i]
 		j += serverNums.size
 
-labels = ["%g"%(i) for i in setpointData[1]["setpoints"][order[indices]]]
-
-order = setpointData[1]["setpoints"][:-1].argsort()
+labels = ["%g"%(i) for i in setpointData[1]["setpoints"][ setpointData[1]["indices"][indices] ]]
 
 fig = plt.figure()
 ax = fig.add_subplot(111)
@@ -109,18 +121,16 @@ axs.append(fig.add_subplot(413))
 axs.append(fig.add_subplot(414))
 
 for server in serverNums:
-	order = setpointData[server]["setpoints"].argsort()
-	sm.graphics.beanplot([setpointData[server]["power"][i] for i in order], ax=axs[server], jitter=True, plot_opts=plot_opts)
+	sm.graphics.beanplot([setpointData[server]["power"][i] for i in setpointData[server]["indices"]], ax=axs[server], jitter=True, plot_opts=plot_opts)
 
 	axs[server].set_ylabel("Server %d power (W)"%(server))
 	axs[server].set_xticklabels([])
-	axs[server].set_xticks(np.array(range(order.size)) + 1, minor=True)
-	axs[server].set_xticks(np.array(range(order.size))[0::8] + 1, minor=False)
+	axs[server].set_xticks(np.array(range(setpointData[server]["indices"].size)) + 1, minor=True)
+	axs[server].set_xticks(np.array(range(setpointData[server]["indices"].size))[0::8] + 1, minor=False)
 
 axs[1].set_title("Power distribution across all setpoints\nunder the %s interface."%(experiment))
 
-order = setpointData[4]["setpoints"].argsort()
-labels = ["%g"%(i) for i in setpointData[4]["setpoints"][order]]
+labels = ["%g"%(i) for i in setpointData[4]["setpoints"][ setpointData[server]["indices"] ]]
 axs[4].set_xticklabels(labels[0::8],rotation=45)
 fig.set_size_inches(11.975, 13.425, forward=True)
 fig.tight_layout(pad=0, w_pad=0, h_pad=0)
