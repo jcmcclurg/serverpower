@@ -123,7 +123,7 @@ class MultiChannelAITask(Task):
 			print '%d is not %d'%(numRead, self.sampleEvery)
 			return -1
 
-		startTime = endTime - float(numRead)/self.sampleRate
+		startTime = endTime - float(numRead - 1)/self.sampleRate
 		timeVector = np.linspace(startTime,endTime,numRead).reshape(numRead,1)
 		readPortion = self.buffer[0:numRead*self.numChans].reshape(numRead,self.numChans)
 
