@@ -15,6 +15,30 @@ from MeasurementServer import *
 from FreqServer import *
 from sineFit import *
 import threading
+import cPickle as pickle
+import numpy as np
+
+class LogStream(object):
+	def __init__(self, streamLength, logfile):
+		self.streamLength = streamLength
+		self.currentUnstreamedLen = 0
+		self.logfile = logfile
+
+	def data_updated(self,server,startTime,endTime,length):
+		self.currentUnstreamedLen += length
+		if(self.currentUnstreamedLen >= self.streamLength):
+			# We don't check the length of b, and just assume that it's streamLength.
+			# There's no good reason for this except simplicity of code, which is a good reason enough.
+			self.currentUnstreamedLen -= self.streamLength
+			b = server._getData(self.streamLength)
+			pickle.dump(b,self.logfile,-1)
+			self.logfile.flush()
+	
+	def __str__(self):
+		return "LogStream(length=%d,logfile=%s)"%(self.streamLength,self.logfile)
+
+	def __repr__(self):
+		return self.__str__()
 
 class PowerStream(object):
 	def __init__(self, socket, streamLength, streamBlockLen, streamType, estimatorType, streamIndices, streamingDelimiter):
@@ -80,7 +104,7 @@ class HardwareFreqStream(object):
 
 
 class PowerMeasurementServer(MeasurementServer):
-	def __init__(self, port=None):
+	def __init__(self, port=None, logfile=None, logEvery=500, verbose=False):
 		self.voltageScalingFactor = 124.0/6.55;
 
 		rackResistor = 0.02;
@@ -108,6 +132,9 @@ class PowerMeasurementServer(MeasurementServer):
 		self.hardwareFreqStreamsLock = threading.Lock()
 		self.sockets = {}
 		self.streams = {}
+		if logfile != None:
+			self.streams["logfile"] = LogStream(logEvery, logfile)
+
 		self.streamsLock = threading.Lock()
 
 		channels = []
@@ -579,6 +606,7 @@ class PowerMeasurementServer(MeasurementServer):
 
 if __name__ == '__main__':
 	import sys
+	import argparse
 
 	class flushfile():
 		def __init__(self, f):
@@ -594,6 +622,20 @@ if __name__ == '__main__':
 	# Make the output unbuffered
 	sys.stdout = flushfile(sys.stdout)
 
-	s = PowerMeasurementServer()
+	parser = argparse.ArgumentParser(description="Measures the power consumption of our cluster")
+	parser.add_argument('-p','--port',type=int,help='The webserver port to use',default=8282)
+	parser.add_argument('-l','--log',type=str,help='The log file to use',default="")
+	parser.add_argument('-e','--logevery',type=int,help='Write to the log every X number of samples.',default=500)
+	parser.add_argument('-v', '--verbose', help='turn on verbose mode', action='store_true')
+	args = parser.parse_args()
+
+	if args.log == "":
+		f = None
+	else:
+		f = open(args.log,'wb')
+	
+	s = PowerMeasurementServer(port=args.port, logfile=f, logEvery=args.logevery, verbose=args.verbose)
 	s.serve()
+	if f != None:
+		f.close()
 	print "Goodbye"
