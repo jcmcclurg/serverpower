@@ -10,7 +10,7 @@ playback:
 	$(MAKE) -C playback all
 
 turbostat:
-	$(MAKE) -C turbostat all
+	$(MAKE) -C turbostat turbostat
 
 power_gadget_whileloop:
 	$(MAKE) -C power_gadget_whileloop all
