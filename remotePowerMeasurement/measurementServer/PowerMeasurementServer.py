@@ -17,11 +17,13 @@ from sineFit import *
 import threading
 import cPickle as pickle
 import numpy as np
+import socket as skt
 
 class LogStream(object):
-	def __init__(self, streamLength, logfile):
+	def __init__(self, streamLength, streamIndices, logfile):
 		self.streamLength = streamLength
 		self.currentUnstreamedLen = 0
+		self.streamIndices = streamIndices
 		self.logfile = logfile
 
 	def data_updated(self,server,startTime,endTime,length):
@@ -31,11 +33,11 @@ class LogStream(object):
 			# There's no good reason for this except simplicity of code, which is a good reason enough.
 			self.currentUnstreamedLen -= self.streamLength
 			b = server._getData(self.streamLength)
-			pickle.dump(b,self.logfile,-1)
+			pickle.dump(b[:,self.streamIndices],self.logfile,-1)
 			self.logfile.flush()
 	
 	def __str__(self):
-		return "LogStream(length=%d,logfile=%s)"%(self.streamLength,self.logfile)
+		return "LogStream(length=%d,indices=%s,logfile=%s)"%(self.streamLength,self.streamIndices,self.logfile)
 
 	def __repr__(self):
 		return self.__str__()
@@ -120,6 +122,9 @@ class PowerMeasurementServer(MeasurementServer):
 		self.serverIndices = np.array([0, 4, 3, 2, 1]) + 3;
 		self.sampleRate = 10000;
 
+		self.defaultLogAddr = './power.log'
+		self.defaultLogPort = -1
+
 		self.defaultPowerAddr = '224.1.1.1'
 		self.defaultPowerPort = 9999
 		self.defaultFreqAddr = '224.1.1.2'
@@ -132,8 +137,9 @@ class PowerMeasurementServer(MeasurementServer):
 		self.hardwareFreqStreamsLock = threading.Lock()
 		self.sockets = {}
 		self.streams = {}
-		if logfile != None:
-			self.streams["logfile"] = LogStream(logEvery, logfile)
+		if (logfile != None) and (logfile != ""):
+			self.sockets["%s:-1"%(logfile)] = open(logfile,'wb')
+			self.streams["%s:-1:0"%(logfile)] = LogStream(logEvery, np.array(range(8)), self.sockets["%s:-1"%(logfile)])
 
 		self.streamsLock = threading.Lock()
 
@@ -175,20 +181,27 @@ class PowerMeasurementServer(MeasurementServer):
 				port = self.defaultFreqPort
 			if addr == "-1":
 				addr = self.defaultFreqAddr
-		else:
+		elif streamType == 'power':
 			if port == -1:
 				port = self.defaultPowerPort
 			if addr == "-1":
 				addr = self.defaultPowerAddr
+		elif streamType == 'csvScaled':
+			if port == "-1":
+				port = self.defaultLogPort
+			if addr == '-1':
+				addr = self.defaultLogAddr
 
 		socketID = '%s:%d'%(addr, port)
 		streamID = '%s:%d'%(socketID, uniqueid)
+
 		if (not (streamID in self.streams)) and (not (streamID in self.hardwareFreqStreams)):
 			if streamLength <= self.task.dataWindow.size and streamLength > 0:
-				if streamBlockLen <= streamLength and streamBlockLen > 0:
+				if (streamBlockLen <= streamLength and streamBlockLen > 0) or (streamType == 'csvScaled'):
 					if streamType in ['power','csvScaled']:
 						if np.max(streamIndices) > 7 or np.min(streamIndices) < 0:
-							output = "for the specified type, fields must numbers between between 0 and 7"
+							output = "for the specified type, fields must be between 0 and 7"
+
 					elif streamType == 'freq':
 						if estimatorType == 'hardware':
 							if np.max(streamIndices) > 2 or np.min(streamIndices) < 0:
@@ -206,11 +219,15 @@ class PowerMeasurementServer(MeasurementServer):
 			if output is None:
 				if not (socketID in self.sockets):
 					try:
-						multicast_endpoint = Endpoint(port=port,hostname=addr)
-						socket = MulticastSocket(multicast_endpoint,bind_single=True,debug=0)
+						if streamType == 'csvScaled':
+							socket = open(addr,'wb')
+						else:
+							multicast_endpoint = Endpoint(port=port,hostname=addr)
+							socket = MulticastSocket(multicast_endpoint,bind_single=True,debug=0)
+
 						self.sockets[socketID] = socket
-					except socket.error as serror:
-						output = "bad address. could not create the stream"
+					except (skt.error, IOError) as serror:
+						output = "bad address (%s) %s. could not create the stream"%(serror,socketID)
 
 				if output is None:
 					if streamType == 'freq' and estimatorType == 'hardware':
@@ -219,7 +236,10 @@ class PowerMeasurementServer(MeasurementServer):
 						self.hardwareFreqStreamsLock.release()
 					else:
 						self.streamsLock.acquire()
-						self.streams[streamID] = PowerStream(self.sockets[socketID], streamLength, streamBlockLen, streamType, estimatorType, streamIndices, streamingDelimiter)
+						if streamType == 'csvScaled':
+							self.streams[streamID] = LogStream(streamLength, streamIndices, self.sockets[socketID]) 
+						else:
+							self.streams[streamID] = PowerStream(self.sockets[socketID], streamLength, streamBlockLen, streamType, estimatorType, streamIndices, streamingDelimiter)
 						self.streamsLock.release()
 		else:
 			output = "stream %s already streaming"%(streamID)
@@ -239,7 +259,6 @@ class PowerMeasurementServer(MeasurementServer):
 		return stopped
 
 	def _stopStream(self,port, addr, uniqueid):
-
 		streamID = '%s:%d:%d'%(addr, port, uniqueid)
 		ret = None
 		if streamID in self.streams:
@@ -425,9 +444,12 @@ class PowerMeasurementServer(MeasurementServer):
 				if streamType == 'freq':
 					defaultPort = self.defaultFreqPort
 					defaultAddr = self.defaultFreqAddr
-				else:
+				elif streamType == 'power':
 					defaultPort = self.defaultPowerPort
 					defaultAddr = self.defaultPowerAddr
+				elif streamType == 'csvScaled':
+					defaultPort = self.defaultLogPort
+					defaultAddr = self.defaultLogAddr
 
 				port = int(cgi.escape(qs.get('port', [str(defaultPort)])[0]));
 				addr = str(cgi.escape(qs.get('address', [str(defaultAddr)])[0]));
@@ -629,13 +651,6 @@ if __name__ == '__main__':
 	parser.add_argument('-v', '--verbose', help='turn on verbose mode', action='store_true')
 	args = parser.parse_args()
 
-	if args.log == "":
-		f = None
-	else:
-		f = open(args.log,'wb')
-	
-	s = PowerMeasurementServer(port=args.port, logfile=f, logEvery=args.logevery, verbose=args.verbose)
+	s = PowerMeasurementServer(port=args.port, logfile=args.log, logEvery=args.logevery, verbose=args.verbose)
 	s.serve()
-	if f != None:
-		f.close()
 	print "Goodbye"
