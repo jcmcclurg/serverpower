@@ -1,4 +1,4 @@
-TARGETS = integralController playback power_gadget_whileloop triangleWave
+TARGETS = integralController turbostat playback power_gadget_whileloop triangleWave
 
 all: $(TARGETS)
 
@@ -9,6 +9,9 @@ integralController:
 playback:
 	$(MAKE) -C playback all
 
+turbostat:
+	$(MAKE) -C turbostat turbostat
+
 power_gadget_whileloop:
 	$(MAKE) -C power_gadget_whileloop all
 
@@ -17,6 +20,7 @@ triangleWave:
 
 clean:
 	$(MAKE) -C integralController clean
+	$(MAKE) -C turbostat clean
 	$(MAKE) -C playback clean
 	$(MAKE) -C power_gadget_whileloop clean
 	$(MAKE) -C triangleWave clean
