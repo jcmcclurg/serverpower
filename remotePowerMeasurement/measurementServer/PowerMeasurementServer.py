@@ -18,6 +18,7 @@ import threading
 import cPickle as pickle
 import numpy as np
 import socket as skt
+import gzip
 
 class LogStream(object):
 	def __init__(self, streamLength, streamIndices, logfile):
@@ -106,7 +107,7 @@ class HardwareFreqStream(object):
 
 
 class PowerMeasurementServer(MeasurementServer):
-	def __init__(self, port=None, logfile=None, logEvery=500, verbose=False):
+	def __init__(self, port=None, logfile=None, logEvery=500, nocompress=False, verbose=False):
 		self.voltageScalingFactor = 124.0/6.55;
 
 		rackResistor = 0.02;
@@ -132,13 +133,17 @@ class PowerMeasurementServer(MeasurementServer):
 		self.bufferWindowLengthInSeconds = 100.0
 		self.hardwareFreqMsPeriod = 500
 
+		self.nocompress = nocompress
 		self.freqServer = FreqServer(ms_period=self.hardwareFreqMsPeriod,dataWindowLength=int(np.round(1000.0*self.bufferWindowLengthInSeconds/float(self.hardwareFreqMsPeriod))),data_updated_callback=self.hardware_freq_data_updated,verbose=False)
 		self.hardwareFreqStreams = {}
 		self.hardwareFreqStreamsLock = threading.Lock()
 		self.sockets = {}
 		self.streams = {}
 		if (logfile != None) and (logfile != ""):
-			self.sockets["%s:-1"%(logfile)] = open(logfile,'wb')
+			if self.nocompress:
+				self.sockets["%s:-1"%(logfile)] = open(logfile,'wb')
+			else:
+				self.sockets["%s:-1"%(logfile)] = gzip.open(logfile,'wb')
 			self.streams["%s:-1:0"%(logfile)] = LogStream(logEvery, np.array(range(8)), self.sockets["%s:-1"%(logfile)])
 
 		self.streamsLock = threading.Lock()
@@ -220,7 +225,10 @@ class PowerMeasurementServer(MeasurementServer):
 				if not (socketID in self.sockets):
 					try:
 						if streamType == 'csvScaled':
-							socket = open(addr,'wb')
+							if self.nocompress:
+								socket = open(addr,'wb')
+							else:
+								socket = gzip.open(addr,'wb')
 						else:
 							multicast_endpoint = Endpoint(port=port,hostname=addr)
 							socket = MulticastSocket(multicast_endpoint,bind_single=True,debug=0)
@@ -256,10 +264,17 @@ class PowerMeasurementServer(MeasurementServer):
 		self.hardwareFreqStreams = {}
 		self.hardwareFreqStreamsLock.release()
 		self.streamsLock.release()
+
+		for s in self.sockets:
+			print "Closing %s"%(self.sockets[s])
+			self.sockets[s].close()
+		self.sockets = {}
+
 		return stopped
 
 	def _stopStream(self,port, addr, uniqueid):
 		streamID = '%s:%d:%d'%(addr, port, uniqueid)
+		socketID = '%s:%d'%(addr, port)
 		ret = None
 		if streamID in self.streams:
 			self.streamsLock.acquire()
@@ -271,6 +286,17 @@ class PowerMeasurementServer(MeasurementServer):
 			self.hardwareFreqStreamsLock.release()
 		else:
 			ret = "stream %s does not exist."%(streamID)
+		
+		deleteSocket = True
+		for sid in self.streams:
+			if sid[0:len(socketID)] == socketID:
+				deleteSocket = False
+				break
+		if deleteSocket:
+			self.sockets[socketID].close()
+			del self.sockets[socketID]
+			print "Closing socket %s"%(socketID)
+
 		return ret
 
 	def _getData(self,length):
@@ -649,8 +675,10 @@ if __name__ == '__main__':
 	parser.add_argument('-l','--log',type=str,help='The log file to use',default="")
 	parser.add_argument('-e','--logevery',type=int,help='Write to the log every X number of samples.',default=500)
 	parser.add_argument('-v', '--verbose', help='turn on verbose mode', action='store_true')
+	parser.add_argument('-n', '--nocompress', help='turn off compression for logging', action='store_true')
 	args = parser.parse_args()
 
-	s = PowerMeasurementServer(port=args.port, logfile=args.log, logEvery=args.logevery, verbose=args.verbose)
+	s = PowerMeasurementServer(port=args.port, logfile=args.log, logEvery=args.logevery, verbose=args.verbose, nocompress=args.nocompress)
 	s.serve()
+	s.closeSockets()
 	print "Goodbye"
