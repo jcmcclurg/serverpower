@@ -287,15 +287,16 @@ class PowerMeasurementServer(MeasurementServer):
 		else:
 			ret = "stream %s does not exist."%(streamID)
 		
-		deleteSocket = True
-		for sid in self.streams:
-			if sid[0:len(socketID)] == socketID:
-				deleteSocket = False
-				break
-		if deleteSocket:
-			self.sockets[socketID].close()
-			del self.sockets[socketID]
-			print "Closing socket %s"%(socketID)
+		if ret == None:
+			deleteSocket = True
+			for sid in self.streams:
+				if sid[0:len(socketID)] == socketID:
+					deleteSocket = False
+					break
+			if deleteSocket:
+				self.sockets[socketID].close()
+				del self.sockets[socketID]
+				print "Closing socket %s"%(socketID)
 
 		return ret
 
@@ -680,5 +681,5 @@ if __name__ == '__main__':
 
 	s = PowerMeasurementServer(port=args.port, logfile=args.log, logEvery=args.logevery, verbose=args.verbose, nocompress=args.nocompress)
 	s.serve()
-	s.closeSockets()
+	s._stopAllStreams()
 	print "Goodbye"
