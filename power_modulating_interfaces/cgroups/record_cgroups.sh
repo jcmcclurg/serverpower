@@ -5,7 +5,7 @@ p=0.01
 s=$dir/../stress/cstress
 
 playbackCmd="$dir/../../utilities/playback/playback"
-cgroups="$dir/cgroup.sh"
+cgroups="$dir/cgroups.sh"
 
 rangeMin=12000
 rangeMax=1200000

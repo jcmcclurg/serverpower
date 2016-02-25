@@ -4,8 +4,8 @@ defDevice=/sys/fs/cgroup/cpu/jgroup
 device=${1:-$defDevice}
 group=$(basename $device)
 
-rangeMax=12000
-rangeMin=1200000
+rangeMax=1200000
+rangeMin=12000
 baseVal=100000
 if [ ! -f $device/cpu.cfs_quota_us ]; then
 	echo "Having to create the cgroup..." >&2
@@ -24,8 +24,10 @@ trap "echo '-1' > $device/cpu.cfs_quota_us; echo 'Reset cgroup on exit.' >&2; ex
 while [[ "x$val" != "xq" ]]; do
 	if [ $(echo "$val < $rangeMin" | bc) == 1 ]; then
 		val=$rangeMin
+		echo "Capped at $val" >&2
 	elif [ $(echo "$val > $rangeMax" | bc) == 1 ]; then
 		val=$rangeMax
+		echo "Capped at $val" >&2
 	fi
 	echo $val > $device/cpu.cfs_quota_us
 	cs=$(cat $device/cpu.cfs_quota_us)
