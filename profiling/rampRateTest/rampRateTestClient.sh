@@ -12,9 +12,9 @@ kill -SIGSTOP $pids
 echo "Stopped them."
 
 toggle=1
-while read cmd; do
-	echo "Read (${cmd:0:-1})"
-	if [ "${cmd:0:-1}" == "t" ]; then
+while read -r; do
+	cmd=$REPLY
+	if [ "$cmd" == "t" ]; then
 		if [ "$toggle" -eq "1" ]; then
 			kill -SIGCONT $pids
 			echo "Continue"
@@ -30,4 +30,5 @@ while read cmd; do
 	fi
 done < <(python -u $dir/../../remotePowerMeasurement/measurementServer/multicast_listen.py)
 
-kill -SIGINT $pids
+echo "Killing pids"
+kill -SIGKILL $pids
