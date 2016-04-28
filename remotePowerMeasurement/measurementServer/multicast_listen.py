@@ -13,6 +13,7 @@ from MulticastSocket import *
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser(description='Listens to a multicast address and prints the packet data to standard output.')
 	parser.add_argument('-p', '--port', type=int, help='the port on which to listen', default=9999)
+	parser.add_argument('-i', '--interface', help='the port on which to listen', default='0.0.0.0')
 	parser.add_argument('-a', '--address', help='the address on which to listen', default='224.1.1.1')
 	parser.add_argument('-l', '--logfile', help='write to logfile instead of standard out', default='')
 	parser.add_argument('-n', '--nonewline', help='do not print a newline after the packet data', action='store_true')
@@ -35,7 +36,7 @@ if __name__ == "__main__":
 		output.flush()
 		#output.truncate()
 
-	s = MulticastSocket(multicast_endpoint,bind_single=False,debug=debug)
+	s = MulticastSocket(multicast_endpoint,interface=args.interface,bind_single=False,debug=debug)
 	running = True
 	while running:
 		try:
