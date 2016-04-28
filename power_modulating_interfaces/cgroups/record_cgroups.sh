@@ -24,7 +24,7 @@ fi
 
 numCPUs=12
 
-echo "Starting workers..." >&2
+echo "Starting workers on $(hostname)..." >&2
 for i in $(seq 1 $numCPUs); do
 	$s -i "$i:" -d 1 -p 10 2> "/tmp/cgroup_worker_${i}.log" & pid=$!
 	pids[$[ $i - 1 ]]=$pid

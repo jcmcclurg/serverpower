@@ -1,9 +1,9 @@
 #!/bin/bash
 
-exps=(stress signal_insert_delays rapl powerclamp)
+exps=(stress signal_insert_delays rapl powerclamp cgroups)
 for i in ${exps[@]}; do
 	echo "Running $i."
-	./run-experiment.sh $i > $i.out 2> $i.err
+	./run-experiment-new.sh $i interleavedRamp > $i.out 2> $i.err
 	echo "Finished with $i."
 	sleep 300
 done

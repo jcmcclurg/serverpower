@@ -10,10 +10,17 @@ t = (0:(numSteps-1))*durationPerStep;
 
 
 
+<<<<<<< HEAD
+names = {'cpufreq','powerclamp','stress','signal_insert_delays','hypervisor','rapl'}
+minVals = [1200000 0  0 0 1    21];
+maxVals = [2201000 50 1 1 1200 36];
+ints    = [1       0  0 0 1    0 ];
+=======
 names = {'cpufreq','powerclamp','stress','signal_insert_delays','hypervisor','rapl','cgroups'}
 minVals = [1200000 0  0 0 1    21 12000];
 maxVals = [2201000 50 1 1 1200 36 1200000];
 ints    = [1       0  0 0 1    0  1];
+>>>>>>> b3bbf2dcee90641cb1f7dbbb64e4b84bfa258e10
 
 for i = 1:size(maxVals,2)
 	minVal = minVals(i);
