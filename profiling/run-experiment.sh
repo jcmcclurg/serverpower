@@ -8,7 +8,7 @@ port=9999
 group="224.1.1.1"
 
 exp=${1-none}
-dummy=${2-none}
+expArg=${2-none}
 
 if [[ "x$exp" == "xnone" ]]; then
 	ls $dir/experiments
@@ -19,10 +19,13 @@ powerGadgetPath="/home/josiah/research/serverpower/utilities/power_gadget_whilel
 
 testPath="/home/josiah/research/serverpower/power_modulating_interfaces/$exp/record_$exp.sh"
 date=$( date +%s.%N )
-
-if [[ "x$dummy" == "xdummy" ]]; then
-	testPath="/home/josiah/research/serverpower/power_modulating_interfaces/$exp/record_$exp.sh dummy"
+if [[ "x$expArg" == "xnone" ]]; then
+	echo "Using default parameters." >&2
+elif [[ "x$expArg" == "xdummy" ]]; then
+	testPath="$testPath dummy"
 	date="today"
+else
+	testPath="$testPath $expArg"
 fi
 
 

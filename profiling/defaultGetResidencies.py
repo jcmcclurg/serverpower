@@ -6,7 +6,12 @@ import cPickle as pickle
 import gzip
 import time
 
-def getSetpointsFromRaw(filename,verbose=False):
+def getResidenciesFromRaw(filename,verbose=False):
+	f=open(filename,'rb')
+	data = []
+	foundTimestamp = False
+	counter = 0
+
 	printEvery = 1
 	if(verbose):
 		startTime = time.time()
@@ -14,35 +19,42 @@ def getSetpointsFromRaw(filename,verbose=False):
 	else:
 		startTime = 0
 
-	f=open(filename,'rb')
-	data = []
 	for line in f:
-		if re.search('^[0-9]+(\.[0-9]*)?,[0-9]+(\.[0-9]*)?$', line) != None:
-			v = [ float(i) for i in line.strip().split(',') ]
-			data.append(v)
+		if (not foundTimestamp) and ( re.search('^Time: [0-9]+\.[0-9]+$', line) != None ):
+			timestamp = float(line.split()[1])
+			foundTimestamp = True
 
-			if verbose and (time.time() - startTime > printEvery):
+		elif foundTimestamp:
+			counter += 1
+			if counter == 2:
+				v = [timestamp]
+				v.extend([float(i) for i in line.split()[2:]])
+				foundTimestamp = False
+				counter = 0
+				data.append(v)
+
+				if verbose and (time.time() - startTime > printEvery):
 					startTime = time.time()
 					print "The list has %d blocks."%(len(data))
 
 	return numpy.array(data)
 
-def rawFileToSetpointsFile(oldFilename,newFilename,verbose=False):
+def rawFileToResidenciesFile(oldFilename,newFilename,verbose=False):
 	if verbose:
 		print "Loading data from raw..."
-	data = getSetpointsFromRaw(oldFilename,verbose)
+	data = getResidenciesFromRaw(oldFilename,verbose)
 	if verbose:
-		print "Writing data (%d blocks) to setpoints file..."%(data.shape[0])
+		print "Writing data (%d blocks) to residencies file..."%(data.shape[0])
 	fp = gzip.open(newFilename,'wb')
 	pickle.dump(data,fp,-1)
 	fp.close()
 
 	return data
 
-def readSetpointsFile(filename,verbose=False):
+def readResidenciesFile(filename,verbose=False):
 	try:
 		if verbose:
-			print "Loading data from setpoints file..."
+			print "Loading data from residencies file..."
 		fp = gzip.open(filename+"_cache.gz","rb")
 		data = pickle.load(fp)
 		fp.close()
@@ -50,7 +62,7 @@ def readSetpointsFile(filename,verbose=False):
 	except IOError as err:
 		if verbose:
 			print "Does not exist (%s). Attempting to create..."%(err)
-		data = rawFileToSetpointsFile(filename, filename+"_cache.gz", verbose)
+		data = rawFileToResidenciesFile(filename, filename+"_cache.gz", verbose)
 
 	if verbose:
 		print "Got %d blocks."%(data.shape[0])
@@ -66,5 +78,6 @@ if __name__ == "__main__":
 
 		for i in [1,2,3,4]:
 			print " server "+str(i)
-			data = readSetpointsFile(d+"/server"+str(i)+"/"+date+".testlog",True)
+			data = readResidenciesFile(d+"/server"+str(i)+"/"+date+".pgadglog",True)
 		print ""
+
