@@ -27,8 +27,9 @@ formats = {'stress':'%0.3f', 'signal_insert_delays':'%0.3f','rapl':'%0.3f','powe
 multipliers = {'stress':100, 'signal_insert_delays':100,'rapl':1,'powerclamp':1,'cpufreq':1.0e-6,'hypervisor':float(1.0/12.0)}
 units = {'stress':'percent work time', 'signal_insert_delays':'percent work time','rapl':'W','powerclamp':'percent idle time','cpufreq':'GHz','hypervisor':'percent work time'}
 
+serverNums = np.array([1,2,3,4])
 
-for experiment in dates:
+for experiment in ['cpufreq','rapl','powerclamp','hypervisor','stress','signal_insert_delays']:
 	if verbose:
 		print "Experiment %s"%(experiment)
 	date = dates[experiment]
@@ -36,7 +37,6 @@ for experiment in dates:
 	expDir = 'experiments/'+experiment
 	currentExpDir = expDir+'/'+date
 
-	serverNums = np.array([1,2,3,4])
 	
 	if verbose:
 		print "  Reading power file..."
@@ -77,7 +77,7 @@ for experiment in dates:
 	if verbose:
 		print "  Plotting..."
 
-	for server in [1]:
+	for server in serverNums:
 		plot_opts = {"violin_width":1, "jitter_marker":None,"jitter_marker_size":0.5, "violin_alpha": 1, "violin_ec": '#95A5A6', "violin_fc": '#F9E79F', "violin_lw": 0.5}
 
 		residencyDescriptionsToPlot = [1,2,5,7]
@@ -88,34 +88,58 @@ for experiment in dates:
 		numSetpoints = len(setpointData[server]["setpoints"])
 		ticksEvery = 8
 
-		pstateMeans = np.array([np.mean(i[:,2]) for i in setpointData[server]["residencyChunks"]])
-		power = pstateMeans - np.min(pstateMeans)
-		power = (66-51.5)*power/np.max(power) + (51.5 - 37)
+		
+		measuredPower = np.array([np.median(i) for i in setpointData[server]["powerChunks"]])
+		if experiment == 'cpufreq':
+			mxTurboFreq = np.median(setpointData[server]["residencyChunks"][-1][:,2])
+			mxFreq = np.median(setpointData[server]["residencyChunks"][-2][:,2])
+			mnFreq = np.median(setpointData[server]["residencyChunks"][0][:,2])
 
-		#c1Means = np.array([np.mean(i[:,5]) for i in setpointData[server]["residencyChunks"]])
-		#power *= (1.0-(c1Means/100.0))
-		#power += (40 - 37)
+			mxTurbo = measuredPower[-1]
+			mx = measuredPower[-2]
+			mn = measuredPower[0]
+			idlePower = 37.0
+			print [mxTurboFreq, mxFreq, mnFreq, mxTurbo, mx, mn]
 
-		c6Means = np.array([np.mean(i[:,7]) for i in setpointData[server]["residencyChunks"]])
-		power *= (1.0-(c6Means/100.0))
-		power += 37
+		estimatedPower = []
+		c = 0
+		for i in setpointData[server]["residencyChunks"]:
+			c1Means = i[:,5]
+			sleepPower1 = (mn)*(c1Means/100.0)
 
-		measuredPower = np.array([np.mean(i) for i in setpointData[server]["powerChunks"]])
+			c6Means = i[:,7]
+			sleepPower2 = idlePower*(c6Means/100.0)
+
+			activePower = i[:,2]
+			turboRange = activePower > mxFreq
+			nonTurboRange = activePower <= mxFreq
+			#print "%g/%g..."%(np.sum(turboRange), np.sum(nonTurboRange))
+			activePower[turboRange] = (mxTurbo - mx)*(activePower[turboRange] - mxFreq)/(mxTurboFreq - mxFreq) + mx
+			activePower[nonTurboRange] = (mx - mn)*(activePower[nonTurboRange] - mnFreq)/(mxFreq - mnFreq) + mn
+			activePower = activePower*(100.0 - c1Means - c6Means)/100.0
+
+			power = activePower + sleepPower1 + sleepPower2
+			estimatedPower.append(np.median(power))
+
+		estimatedPower = np.array(estimatedPower)
 
 		fig2 = plt.figure()
 		ax = fig2.add_subplot(1,1,1)
-		ax.plot(measuredPower - power)
-		ax.set_title("Estimated c1 residency for %s"%(experiment))
-		ax.set_ylabel("Measured power - power (W)")
+		fig2.set_size_inches(individualHeight, individualWidth, forward=True)
+		mp, = ax.plot(measuredPower)
+		ep, = ax.plot(estimatedPower)
+		ax.set_title("Residency-based power estimation for %s"%(experiment))
+		ax.set_ylabel("Median power (W)")
+		ax.set_ylim(35,75)
+		ax.legend([mp,ep],['Measured','Estimated'],loc='best')
 		ax.set_xticks(range(1,numSetpoints + 1), minor=True)
 		ax.set_xticks(range(1,numSetpoints + 1,ticksEvery), minor=False)
 		ax.set_xticklabels([ formats[experiment]%(multipliers[experiment]*setpointData[server]["setpoints"][j]) for j in range(0,numSetpoints,ticksEvery)],rotation=45)
 		ax.set_xlabel("Interface setpoint (%s)"%(units[experiment]))
 
-		fig2.set_size_inches(individualHeight, individualWidth, forward=True)
 		fig2.tight_layout()
 		if saveFig:
-			path = currentExpDir+'/'+experiment+'_server'+str(server)+'_estimated_c1.png'
+			path = currentExpDir+'/'+experiment+'_server'+str(server)+'_estimated.png'
 			if verbose:
 				print "  Wrote: "+path
 			plt.savefig(path, bbox_inches='tight')

@@ -45,8 +45,8 @@ def getPowerFromRaw(filename,blockLen,verbose=False):
 			offset = 0
 			for i in range(0,numBlocks):
 				blockRange = np.arange(0,blockLen) + offset
-				r[i,0] = np.min(b[:,0])
-				r[i,1] = np.max(b[:,0])
+				r[i,0] = np.min(b[blockRange,0])
+				r[i,1] = np.max(b[blockRange,0])
 				r[i,rackIndex] = np.mean(b[blockRange,voltageIndex]*b[blockRange,rackIndex],axis=0)
 				for j in serverIndices:
 					r[i,j] = np.mean(b[blockRange,voltageIndex]*b[blockRange,j],axis=0)
@@ -97,7 +97,7 @@ def readPowerFile(filename,blockLen,verbose=False):
 	return data
 
 if __name__ == "__main__":
-	exps = { 'stress': '1452722752.651508100', 'signal_insert_delays':'1452732970.201413700', 'rapl':'1452743186.881235700','powerclamp':'1452753403.717082000','cpufreq':'today' }
+	exps = { 'stress': '1452722752.651508100', 'signal_insert_delays':'1452732970.201413700', 'rapl':'1452743186.881235700','powerclamp':'1452753403.717082000','cpufreq':'1452796934.955382300' }
 	for exp in exps:
 		date = exps[exp]
 		print exp+": "+date

@@ -107,7 +107,7 @@ class HardwareFreqStream(object):
 
 
 class PowerMeasurementServer(MeasurementServer):
-	def __init__(self, port=None, logfile=None, logEvery=500, nocompress=False, verbose=False):
+	def __init__(self, port=8282, logfile=None, logEvery=500, nocompress=False, verbose=False):
 		self.voltageScalingFactor = 124.0/6.55;
 
 		rackResistor = 0.02;
@@ -134,7 +134,11 @@ class PowerMeasurementServer(MeasurementServer):
 		self.hardwareFreqMsPeriod = 500
 
 		self.nocompress = nocompress
+		self.verbose = verbose
+		if self.verbose:
+			print "Setting up frequency server..."
 		self.freqServer = FreqServer(ms_period=self.hardwareFreqMsPeriod,dataWindowLength=int(np.round(1000.0*self.bufferWindowLengthInSeconds/float(self.hardwareFreqMsPeriod))),data_updated_callback=self.hardware_freq_data_updated,verbose=False)
+
 		self.hardwareFreqStreams = {}
 		self.hardwareFreqStreamsLock = threading.Lock()
 		self.sockets = {}
@@ -157,12 +161,11 @@ class PowerMeasurementServer(MeasurementServer):
 		channels.append(AIChannelSpec('JDAQ', 5, 'server2', termConf=DAQmx_Val_Diff, rangemin=-5, rangemax=5))
 		channels.append(AIChannelSpec('JDAQ', 6, 'server1', termConf=DAQmx_Val_Diff, rangemin=-5, rangemax=5))
 
+		if self.verbose:
+			print "Setting up & starting sampling task..."
 		# sampleEvery=500 means that data_updated_callback is called every 500 samples = 3 cycles at 60 Hz
 		m = MultiChannelAITask(channels,sampleRate=self.sampleRate,dataWindowLength=int(np.round(self.sampleRate*self.bufferWindowLengthInSeconds)), sampleEvery=500, data_updated_callback=self.power_data_updated)
-		if port is None:
-			super(PowerMeasurementServer, self).__init__(m)
-		else:
-			super(PowerMeasurementServer, self).__init__(m, port)
+		super(PowerMeasurementServer, self).__init__(m, port, verbose)
 
 	def hardware_freq_data_updated(self, time, millihz):
 		self.hardwareFreqStreamsLock.acquire()
@@ -439,15 +442,27 @@ class PowerMeasurementServer(MeasurementServer):
 		return r
 	
 	def serve(self):
+		if self.verbose:
+			print "Starting frequency server..."
 		self.freqServer.start(autojoin=False)
-		super(PowerMeasurementServer,self).serve()
+
+		if self.verbose:
+			print "Starting measurementServer web interface..."
+		r = super(PowerMeasurementServer,self).serve()
+		if self.verbose:
+			print "Web interface finished with exit status %s"%(r)
+
 		if self.freqServer.running:
+			if self.verbose:
+				print "Stopping frequency server..."
 			self.freqServer.stop()
-		print "Finished."
+
+		if self.verbose:
+			print "."
 
 	def webApp(self, environ, start_response):
 		#print "%s serving %s to %s"%(datetime.datetime.now().isoformat(), environ['PATH_INFO'], environ['REMOTE_ADDR'])
-		if environ['PATH_INFO'] in ['/stream', '/csvScaled', '/power', '/freq']:
+		if environ['PATH_INFO'] in ['/stream', '/csvScaled', '/power', '/freq','/help']:
 			# Start out with text/plain and 200 OK. Modified below if needed.
 			contentType = 'text/plain'
 			status = '200 OK'
@@ -455,7 +470,26 @@ class PowerMeasurementServer(MeasurementServer):
 
 			qs = cgi.parse_qs(environ['QUERY_STRING'])
 
-			if environ['PATH_INFO'] == '/stream':
+			if environ['PATH_INFO'] == '/help':
+				output = """/
+ stream?
+        command=[info,stopAll,stop,start]
+        length
+        blockLength
+        type=[freq,power,csvScaled]
+           For type=freq: estimator=[hardware,nlls,fft]
+                          address=[multicast group]
+           For type=csvScaled: address=[filename of log file]
+           For type=power: address=[multicast group] 
+        fields
+        delimiter
+        port
+        uniqueid
+ csvScaled?
+ power?
+ freq?
+"""
+			elif environ['PATH_INFO'] == '/stream':
 				command = str(cgi.escape(qs.get('command', ["-1"])[0]));
 				streamLength = int(cgi.escape(qs.get('length', ["-1"])[0]));
 				streamBlockLen = int(cgi.escape(qs.get('blockLength', ["-1"])[0]));
@@ -679,7 +713,10 @@ if __name__ == '__main__':
 	parser.add_argument('-n', '--nocompress', help='turn off compression for logging', action='store_true')
 	args = parser.parse_args()
 
+	if args.verbose:
+		print "Starting PowerMeasurementServer..."
 	s = PowerMeasurementServer(port=args.port, logfile=args.log, logEvery=args.logevery, verbose=args.verbose, nocompress=args.nocompress)
 	s.serve()
 	s._stopAllStreams()
+
 	print "Goodbye"

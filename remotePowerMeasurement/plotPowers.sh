@@ -11,7 +11,7 @@ port=${3:-$defPort}
 s=$(wget -O - "$addr/stream?command=stop&address=$group&port=$port" --quiet)
 echo "Stop stream returned ($s)"
 
-s=$(wget -O - "$addr/stream?command=start&length=10000&blockLength=1000&type=power&fields=34567&delimiter=%20&address=$group&port=$port" --quiet)
+s=$(wget -O - "$addr/stream?command=start&length=10000&blockLength=500&type=power&fields=34567&delimiter=%20&address=$group&port=$port" --quiet)
 echo "Start stream returned ($s)"
 
 cmd="$dir/feedgnuplot/bin/feedgnuplot --line --stream 0.1 --xlen 120"
