@@ -1,12 +1,14 @@
 #!/bin/bash
 
 dir=$( dirname $0 )
-defAddr='http://192.168.1.200:8282'
+defAddr='http://192.168.0.200:8282'
 defGroup='224.1.1.1'
 defPort=9995
 addr=${1:-$defAddr}
 group=${2:-$defGroup}
 port=${3:-$defPort}
+
+trap "wget -O - '$addr/stream?command=stop&address=$group&port=$port' --quiet" SIGINT SIGTERM
 
 s=$(wget -O - "$addr/stream?command=stop&address=$group&port=$port" --quiet)
 echo "Stop stream returned ($s)"
