@@ -17,13 +17,25 @@ if verbose:
 
 #from defaultGetPower import readPowerFile, rawFileToPowerFile
 from defaultJobEnergy import readJobEnergy, generateJobEnergyFile
+from my_plot_common import get_cmap, get_mean_with_err
 
 knnClasses = ['KnnArray','KnnHorizontal','KnnRange']
 #knnClasses = ['KnnArray']
-higgsNums = [5,10,15,20,28]
+#higgsNums = [5,10,15,20,28]
+higgsNums = [28,20,15,10,5]
 expRange = range(22,35+1)
 
-expIDs = ["Jul27_powercap","Jul28_powercap","Jul18_28_powercap","Jul28_powercap2"]#,"Jul28_powercap3"]
+expIDs = ["Jul27_powercap",
+		"Jul28_powercap",
+		"Jul18_28_powercap",
+		"Jul28_powercap2",
+		"Jul28_powercap3",
+		"Jul28_powercap4",
+		"Jul28_powercap5",
+		"Jul29_powercap",
+		"Jul29_powercap2",
+		"Jul29_powercap3"]
+
 #knnClasses = ['KnnHorizontal']
 #higgsNums = [15]
 #expRange = [22, 35, 23, 34, 24,  33, 25, 32, 26, 31, 27, 30, 28, 29]
@@ -64,23 +76,11 @@ rng = rng[s]
 
 legends = []
 
-import matplotlib.cm as cmx
-import matplotlib.colors as colors
-
-def get_cmap(N):
-    '''Returns a function that maps each index in 0, 1, ... N-1 to a distinct
-    RGB color.'''
-    color_norm  = colors.Normalize(vmin=0, vmax=N-1)
-    scalar_map = cmx.ScalarMappable(norm=color_norm, cmap='hsv')
-    def map_index_to_rgb_color(index):
-        return scalar_map.to_rgba(index)
-    return map_index_to_rgb_color
-
 numColors=36
 cmap = get_cmap(numColors)
 colorStartIndex = 0
 
-baselinePowerToSubtract = 200.0
+baselinePowerToSubtract = 203.721
 fig = plt.figure()
 ax = fig.add_subplot(111)
 
@@ -96,13 +96,17 @@ for knnClass in knnClasses:
 			dur.append([expData[expID][e][higgsNum][knnClass]["jobDuration"] for e in rng])
 			mpwr.append([expData[expID][e][higgsNum][knnClass]["meanPower"] for e in rng])
 
-		duration = np.mean(np.array(dur),axis=0)
-		meanPower = np.mean(np.array(mpwr),axis=0)
+		dur = np.array(dur)
+		mpwr = np.array(mpwr)
+		enrg = dur*(mpwr - baselinePowerToSubtract)/1000.0
+
+		duration,derr = get_mean_with_err(dur)
+		energy,eerr = get_mean_with_err(enrg)
 
 		color = cmap(colorIndex)
 
-		line, = ax.plot(rng,duration*(meanPower - baselinePowerToSubtract)/1000.0,color=color,linestyle='dashed',marker='o',markerfacecolor=color)
-		line, = ax2.plot(rng,duration,color=color,linestyle='dashed',marker='o',markerfacecolor=color)
+		ax.errorbar(rng,energy,yerr=eerr,color=color,linestyle='dashed',marker='o',markerfacecolor=color)
+		ax2.errorbar(rng,duration,yerr=derr,color=color,linestyle='dashed',marker='o',markerfacecolor=color)
 
 		legends.append("%s%d"%(knnClass,higgsNum))
 		colorIndex += 1
@@ -126,11 +130,14 @@ ax2.legend(legends,loc='center left', bbox_to_anchor=(1, 0.5))
 ax.set_title("Job energy for Higgs dataset")
 ax.set_xlabel('Processor power cap (W)')
 ax.set_ylabel('Job energy (kJ)')
+ax.set_ylim(0,7)
+ax.set_xlim(21,36)
 
 ax2.set_title("Job duration for Higgs dataset")
 ax2.set_xlabel('Processor power cap (W)')
 ax2.set_ylabel('Job duration (s)')
-#ax.set_ylim(150,450)
+ax2.set_xlim(21,36)
+ax2.set_ylim(0,100)
 
 fig.canvas.draw()
 fig2.canvas.draw()

@@ -32,7 +32,8 @@ def getPowerFromRaw(filename,blockLen,verbose=False):
 	while not fileEnded:
 		try:
 			if numLeftover > 0:
-				b = np.concatenate((b[-numLeftover,:], pickle.load(f)), axis=0)
+				c = pickle.load(f)
+				b = np.concatenate((b[-numLeftover::,:], c), axis=0)
 			else:
 				b = pickle.load(f)
 
@@ -51,7 +52,7 @@ def getPowerFromRaw(filename,blockLen,verbose=False):
 				for j in serverIndices:
 					r[i,j] = np.mean(b[blockRange,voltageIndex]*b[blockRange,j],axis=0)
 				offset += blockLen
-			
+
 			if verbose and (time.time() - startTime > printEvery):
 				startTime = time.time()
 				print "The list has %d blocks of length %d."%(totalBlocks,blockLen)
