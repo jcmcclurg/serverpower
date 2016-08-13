@@ -7,7 +7,7 @@ ifeq ("$(origin O)", "command line")
 	BUILD_OUTPUT := $(O)
 endif
 
-turbostat : turbostat.c
+turbostat_josiah : turbostat_josiah.c
 CFLAGS +=	-Wall
 CFLAGS +=	-DMSRHEADER='"./msr-index.h"'
 
@@ -17,10 +17,10 @@ CFLAGS +=	-DMSRHEADER='"./msr-index.h"'
 
 .PHONY : clean
 clean :
-	@rm -f $(BUILD_OUTPUT)/turbostat
+	@rm -f $(BUILD_OUTPUT)/turbostat_josiah
 
-install : turbostat
-	install -d  $(DESTDIR)$(PREFIX)/bin
-	install $(BUILD_OUTPUT)/turbostat $(DESTDIR)$(PREFIX)/bin/turbostat
-	install -d  $(DESTDIR)$(PREFIX)/share/man/man8
-	install turbostat.8 $(DESTDIR)$(PREFIX)/share/man/man8
+#install : turbostat
+#	install -d  $(DESTDIR)$(PREFIX)/bin
+#	install $(BUILD_OUTPUT)/turbostat $(DESTDIR)$(PREFIX)/bin/turbostat
+#	install -d  $(DESTDIR)$(PREFIX)/share/man/man8
+#	install turbostat.8 $(DESTDIR)$(PREFIX)/share/man/man8
