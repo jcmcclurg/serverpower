@@ -2,16 +2,14 @@
 dir=$(dirname $0)
 
 turboStat="$dir/turbostat_josiah"
+
 turboStatOut="/tmp/turbostat.out"
 turboStatErr="/tmp/turbostat.err"
 turboStatPIDFile="/tmp/turbostat.pid"
 
-streamListener="../multicast_tool/multicast_listen.py"
-listenerPort=9979
-
 currentCommand="none"
 echo "Started turbostat runner." >&2
-python -u $streamListener -p $listenerPort | while read cmd; do
+while read cmd; do
 	if [ "x$cmd" != "x$currentCommand" ]; then
 		if [ "x$cmd" == "xstart" ]; then
 			echo "Starting turbostat..." >&2
