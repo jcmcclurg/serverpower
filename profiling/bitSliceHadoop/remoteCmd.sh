@@ -5,15 +5,16 @@ dir=$(dirname $0)
 remoteDir=$1
 masterUser=$2
 
-knnClass=$3
-higgsNum=$4
+queryType=$3
+algorithm=$4
+dataset=$5
 
 # Create the working directory
 rm -r $remoteDir
 mkdir -p $remoteDir
 
 # Copy the appropriate template
-sed -e "s/DEFAULT_HIGGS_NUM/$higgsNum/g" "$dir/spark_""$knnClass""_template.sh" > $remoteDir/submit.sh
+cp "$dir/spark_$queryType-$algorithm-$dataset""_template.sh" $remoteDir/submit.sh
 
 # Go to the working directory
 cd $remoteDir

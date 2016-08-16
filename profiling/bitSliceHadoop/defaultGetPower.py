@@ -11,14 +11,169 @@ import cPickle as pickle
 import numpy as np
 import time
 import gzip
+import matplotlib.pyplot as plt
+
+
+def generateTotalPowerFile(rawFile,newFile,serverNums,startTime=-float("inf"),endTime=float("inf"),verbose=False):
+	f = gzip.open(rawFile,"rb")
+	if(verbose):
+		printStartTime = time.time()
+		print "Opened raw file %s."%(rawFile)
+	else:
+		printStartTime = 0
+
+	fileEnded = False
+
+	timeIndex = 0
+	voltageIndex = 1
+	serverIndices = np.array([0, 4, 3, 2, 1]) + 3;
+
+	timeList = []
+	rlist = []
+	printEvery = 1
+	totalBlocks = 0
+
+	# Gather the recorded timing information.
+	blockLengths = []
+	while not fileEnded:
+		try:
+			r = pickle.load(f)
+			if (len(r.shape) != 2) or (r.shape[1] != 8):
+				print "Skipping a block with dimensions %s"%(r.shape)
+				blockLengths.append(-1)
+			else:
+				timeList.append(r[:,timeIndex])
+				totalBlocks += r.shape[0]
+				if verbose and (time.time() - printStartTime > printEvery):
+					printStartTime = time.time()
+					print "The list has %d blocks."%(totalBlocks)
+				blockLengths.append(r.shape[0])
+
+		except IOError as err:
+			print "Whoopsie: %s"%(err)
+			fileEnded = True
+		except EOFError:
+			fileEnded = True
+	f.close()
+	if totalBlocks == 0:
+		raise ValueError("Empty file!")
+
+	ttime = np.concatenate(timeList)
+	del timeList
+
+	# Recalculate the time so that it is monotonic with the exact sample rate,
+	# but also is a good fit for all the recorded timestamps. We calculate the
+	# residuals from a line with the correct slope, and then take the median
+	# of those to get the y intercept.
+	sampleRate = 10000.0
+	x = np.linspace(0,(totalBlocks - 1)/sampleRate, totalBlocks)
+
+	y = ttime -ttime[0] - x
+	b = np.median(y)
+	if verbose:
+		print "Offsets: %g, %g"%(np.min(y),np.max(y))
+		#plt.plot(x,ttime - (x + b + ttime[0]),'-')
+		#raise Exception("Residuals: %s"%(y-b))
+
+	ttime = x + b + ttime[0]
+
+	# Figure out the exact starting and ending time, and where to look for it
+	tRange, = np.where(ttime <= startTime)
+	if len(tRange) == 0:
+		startIndex = 0
+	else:
+		startIndex = tRange[-1]
+
+	tRange, = np.where(ttime >= endTime)
+	if len(tRange) == 0:
+		stopIndex = totalBlocks-1
+	else:
+		stopIndex = tRange[0]
+
+	# Read in the data
+	f = gzip.open(rawFile,"rb")
+	totalBlocks = 0
+	startOffset = 0
+	#stopOffset = 0
+	for bl in blockLengths:
+		if (bl > 0):
+			# The start index should be less than the end of the block we are about to read
+			# The end index should be greater than the start of the block we are about to read
+			if (startIndex <= totalBlocks + bl-1) and (stopIndex >= totalBlocks):
+				r = pickle.load(f)
+
+				rlist.append( np.sum(r[:,serverIndices[serverNums]],axis=1)*r[:,voltageIndex] )
+
+				if startOffset == 0:
+					startOffset = totalBlocks
+
+				if verbose and (time.time() - printStartTime > printEvery):
+					printStartTime = time.time()
+					print "The list has %d blocks in range."%(totalBlocks)
+
+			else:
+				if verbose:
+					print "Ignoring block %0.4f-%0.4f because it is outside of the range"%(ttime[totalBlocks],ttime[totalBlocks + bl-1])
+					print "               %0.4f-%0.4f"%(startTime,endTime)
+				pickle.load(f)
+
+			totalBlocks += bl
+		elif verbose:
+			print "Ignoring a block because of its size."
+			pickle.load(f)
+
+	f.close()
+
+	power = np.concatenate(rlist)
+	power = power[startIndex-startOffset:stopIndex-startOffset+1]
+	ttime = ttime[startIndex:stopIndex+1]
+
+	validRange = np.logical_and(power > -float("inf"), power < float("inf") )
+	ttime = ttime[validRange]
+	power = power[validRange]
+
+	fp = gzip.open(newFile,'wb')
+	pickle.dump(power,fp,-1)
+	pickle.dump(ttime,fp,-1)
+	fp.close()
+
+	return ( power, ttime )
+
+
+def readTotalPowerFile(rawFile,serverNums,startTime=-float("inf"),endTime=float("inf"),newFile=None,verbose=False,needsReload=False):
+	if newFile == None:
+		newFile = rawFile+"_%s_%0.4f-%0.4f.gz"%("".join(["%d"%(s) for s in serverNums]),startTime,endTime)
+
+	if not needsReload:
+		try:
+			if verbose:
+				print "Loading data from power file..."
+			fp = gzip.open(newFile,"rb")
+			power = pickle.load(fp)
+			ttime = pickle.load(fp)
+			fp.close()
+
+		except IOError as err:
+			needsReload = True
+			if verbose:
+				print "Does not exist (%s). Attempting to create..."%(err)
+
+	if needsReload:
+		power,ttime = generateTotalPowerFile(rawFile, newFile, serverNums,startTime,endTime,verbose)
+
+	if verbose:
+		print "Got %d blocks."%(power.shape[0])
+
+	return (power,ttime)
+
 
 def getPowerFromRaw(filename,blockLen,verbose=False):
 	f = gzip.open(filename,"rb")
 	if(verbose):
-		startTime = time.time()
+		printStartTime = time.time()
 		print "Opened raw file %s."%(filename)
 	else:
-		startTime = 0
+		printStartTime = 0
 
 	fileEnded = False
 
@@ -53,8 +208,8 @@ def getPowerFromRaw(filename,blockLen,verbose=False):
 					r[i,j] = np.mean(b[blockRange,voltageIndex]*b[blockRange,j],axis=0)
 				offset += blockLen
 
-			if verbose and (time.time() - startTime > printEvery):
-				startTime = time.time()
+			if verbose and (time.time() - printStartTime > printEvery):
+				printStartTime = time.time()
 				print "The list has %d blocks of length %d."%(totalBlocks,blockLen)
 
 			rlist.append(r)
@@ -98,10 +253,7 @@ def readPowerFile(filename,blockLen,verbose=False):
 	return data
 
 if __name__ == "__main__":
-	exps = { 'stress': '1452722752.651508100', 'signal_insert_delays':'1452732970.201413700', 'rapl':'1452743186.881235700','powerclamp':'1452753403.717082000','cpufreq':'1452796934.955382300' }
-	for exp in exps:
-		date = exps[exp]
-		print exp+": "+date
-		d = "experiments/"+exp+"/"+date
-		data = readPowerFile(d+"/powerlog.log",1000,True)
-		print ""
+	expDir = "experiments/Aug12_monitored1/exp22/Aggregation-Arrays-Higgs"
+	filename = "powerlog.log"
+
+	(power,ttime) = generateTotalPowerFile("test.log","test_totalPower.gz",[0,1,2,3,4],verbose=True)
