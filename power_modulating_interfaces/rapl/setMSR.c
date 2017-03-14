@@ -29,9 +29,10 @@ char *progname;
 double packagePower;
 double cpuPower;
 double dramPower;
+int num_node;
 const char *version = "2.2";
 
-int do_set_power_limit(int num_node, double packageWatts, double cpuWatts, double dramWatts) {
+int do_set_power_limit(){
 	int i;
 	int ret;
 
@@ -41,31 +42,32 @@ int do_set_power_limit(int num_node, double packageWatts, double cpuWatts, doubl
 
 	// set RAPL Power Limits: (added by Joe Hall 5/27/15)
 	ret = 0;
-	fprintf(stderr, "Setting RAPL power limits to (pkg=%g W,cpu=%g W,dram=%g W)\n",packageWatts,cpuWatts,dramWatts);
+	fprintf(stderr, "Setting RAPL power limits to (pkg=%g W,cpu=%g W,dram=%g W)\n",packagePower,cpuPower,dramPower);
 	for (i=0;i<num_node;i++) { // added by Joe Hall 4/25/15
 
 		// The Package
 		get_pkg_rapl_power_limit_control(i,&pkg_plc);
-		if(packageWatts > 0.0){
+		if(packagePower > 0.0){
 			// Enable power clamping, and make sure the lock is disabled.
-			pkg_plc.power_limit_watts_1 = packageWatts;
-			pkg_plc.limit_enabled_1 = 1;
+			pkg_plc.power_limit_watts_1 = packagePower;
+			pkg_plc.clamp_enabled_1 = 1;
 
-			// I'm not sure what these do, so I'm not messing with them.
-			//pkg_plc.power_limit_watts_2 = packageWatts;
-			//pkg_plc.limit_enabled_2 = 1;
-			//pkg_plc.clamp_enabled_2 = 1;
+			// I'm not sure why you also have to set these, but you do.
+			pkg_plc.power_limit_watts_2 = packagePower;
+			pkg_plc.clamp_enabled_2 = 1;
 		} else {
 			pkg_plc.clamp_enabled_1 = 0;
+			pkg_plc.clamp_enabled_2 = 0;
 		}
-		pkg_plc.clamp_enabled_1 = 1;
+		pkg_plc.limit_enabled_1 = 1;
+		pkg_plc.limit_enabled_2 = 1;
 		pkg_plc.lock_enabled = 0;
 		ret += set_pkg_rapl_power_limit_control(i,&pkg_plc);
 
 		// The CPU
 		get_pp0_rapl_power_limit_control(i,&pp0_plc);
-		if(cpuWatts > 0.0) {
-			pp0_plc.power_limit_watts = cpuWatts;
+		if(cpuPower > 0.0) {
+			pp0_plc.power_limit_watts = cpuPower;
 			pp0_plc.clamp_enabled = 1;
 		} else {
 			pp0_plc.clamp_enabled = 0;
@@ -75,9 +77,9 @@ int do_set_power_limit(int num_node, double packageWatts, double cpuWatts, doubl
 		ret += set_pp0_rapl_power_limit_control(i, &pp0_plc);
 
 		// The DRAM
-		get_dram_rapl_power_limit_control(i,&pp0_plc);
-		if(dramWatts > 0.0){
-			dram_plc.power_limit_watts = dramWatts;
+		get_dram_rapl_power_limit_control(i,&dram_plc);
+		if(dramPower > 0.0){
+			dram_plc.power_limit_watts = dramPower;
 			dram_plc.clamp_enabled = 1;
 		} else {
 			dram_plc.clamp_enabled = 0;
@@ -89,7 +91,7 @@ int do_set_power_limit(int num_node, double packageWatts, double cpuWatts, doubl
 
 	if (ret != 0)
 		fprintf(stderr, "Error setting RAPL power limit controls\n");
-	return ret
+	return ret;
 }
 
 void usage()
@@ -132,7 +134,6 @@ int cmdline(int argc, char **argv)
 int main(int argc, char **argv) {
 	int i = 0;
 	int ret = 0;
-	int num_node;
 
 	// First init the RAPL library
 	ret = init_rapl();
