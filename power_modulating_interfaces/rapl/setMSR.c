@@ -49,18 +49,20 @@ int do_set_power_limit(){
 		get_pkg_rapl_power_limit_control(i,&pkg_plc);
 		if(packagePower > 0.0){
 			// Enable power clamping, and make sure the lock is disabled.
-			pkg_plc.power_limit_watts_1 = packagePower;
-			pkg_plc.clamp_enabled_1 = 1;
-
 			// I'm not sure why you also have to set these, but you do.
+			pkg_plc.power_limit_watts_1 = packagePower;
 			pkg_plc.power_limit_watts_2 = packagePower;
+			pkg_plc.clamp_enabled_1 = 1;
 			pkg_plc.clamp_enabled_2 = 1;
+
+			pkg_plc.limit_enabled_1 = 1;
+			pkg_plc.limit_enabled_2 = 1;
 		} else {
 			pkg_plc.clamp_enabled_1 = 0;
 			pkg_plc.clamp_enabled_2 = 0;
+			pkg_plc.limit_enabled_1 = 0;
+			pkg_plc.limit_enabled_2 = 0;
 		}
-		pkg_plc.limit_enabled_1 = 1;
-		pkg_plc.limit_enabled_2 = 1;
 		pkg_plc.lock_enabled = 0;
 		ret += set_pkg_rapl_power_limit_control(i,&pkg_plc);
 
@@ -69,10 +71,11 @@ int do_set_power_limit(){
 		if(cpuPower > 0.0) {
 			pp0_plc.power_limit_watts = cpuPower;
 			pp0_plc.clamp_enabled = 1;
+			pp0_plc.limit_enabled = 1;
 		} else {
 			pp0_plc.clamp_enabled = 0;
+			pp0_plc.limit_enabled = 0;
 		}
-		pp0_plc.limit_enabled = 1;
 		pp0_plc.lock_enabled = 0;
 		ret += set_pp0_rapl_power_limit_control(i, &pp0_plc);
 
@@ -81,10 +84,11 @@ int do_set_power_limit(){
 		if(dramPower > 0.0){
 			dram_plc.power_limit_watts = dramPower;
 			dram_plc.clamp_enabled = 1;
+			dram_plc.limit_enabled = 1;
 		} else {
 			dram_plc.clamp_enabled = 0;
+			dram_plc.limit_enabled = 0;
 		}
-		dram_plc.limit_enabled = 1;
 		dram_plc.lock_enabled = 0;
 		ret += set_dram_rapl_power_limit_control(i, &dram_plc);
 	}
