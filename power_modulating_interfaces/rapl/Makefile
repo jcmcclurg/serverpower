@@ -26,5 +26,8 @@ power_gadget: librapl.a pgtc.c
 #	gcc $(CFLAGS) power_gadget.c -I. -L. -o power_gadget ./librapl.a -lm
 	gcc $(CFLAGS) pgtc.c -I. -L. -o power_gadget ./librapl.a -lm
 
+setMSR: librapl.a setMSR.c
+	gcc $(CFLAGS) setMSR.c -I. -L. -o setMSR ./librapl.a -lm
+
 clean: 
 	rm -f power_gadget librapl.so librapl.a msr.o cpuid.o rapl.o 
