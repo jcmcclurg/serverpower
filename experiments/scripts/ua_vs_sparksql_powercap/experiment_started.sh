@@ -10,8 +10,8 @@ source "$mydir/functions_powerMonitor.sh"
 setupPowerMonitor
 
 # Upload the files needed for running the driver.
-remoteDir=$( upload "$mydir/*" "$driverLogin" "/tmp/uploads/1489436986.893493500" )
-#remoteDir=$( upload "$mydir/*" "$driverLogin" )
+#remoteDir=$( upload "$mydir/*" "$driverLogin" "/tmp/uploads/1489436986.893493500" )
+remoteDir=$( upload "$mydir/*" "$driverLogin" )
 
 # Write the remote dir, so the stage executor can know where to find things.
 echo "$remoteDir" > "$mydir/remoteDir"
