@@ -83,7 +83,7 @@ function cleanup() {
 trap cleanup INT
 
 startTime=$( date +%s.%N )
-stageResultFile="$resultsdir/stage$stageIndex.txt"
+stageResultFile="$resultsdir/stageResult$stageIndex.txt"
 stageLog="$resultsdir/stage$stageIndex"
 # $1=stageNum, $2=powerCap. These are not needed by runQuerySet
 shift 2
