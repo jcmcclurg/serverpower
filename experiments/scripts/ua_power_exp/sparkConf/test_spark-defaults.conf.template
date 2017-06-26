@@ -1,0 +1,51 @@
+# Default system properties included when running spark-submit.
+# This is useful for setting default environmental settings.
+
+# Example:
+# spark.master                     spark://master:7077
+spark.eventLog.enabled           false
+spark.eventLog.dir               hdfs:///spark-history
+spark.serializer                 org.apache.spark.serializer.KryoSerializer
+
+spark.history.provider	org.apache.spark.deploy.history.FsHistoryProvider
+spark.history.fs.logDirectory	hdfs:///spark-history
+spark.history.fs.cleaner.maxAge 7d
+spark.history.fs.cleaner.interval 1d
+spark.history.fs.cleaner.enabled true
+spark.history.ui.port 18081
+
+# spark.driver.memory              5g
+# spark.executor.extraJavaOptions  -XX:+PrintGCDetails -Dkey=value -Dnumbers="one two three"
+#spark.yarn.services                org.apache.spark.deploy.yarn.history.YarnHistoryService
+#spark.history.provider             org.apache.spark.deploy.yarn.history.YarnHistoryProvider
+## Make sure the host and port match the node where your YARN history server is running
+#spark.yarn.historyServer.address   localhost:18080
+
+
+# Use the native libraries when possible
+#spark.driver.extraJavaOptions -Dhdp.version=2.5.0.0-1245 -agentlib:hprof=cpu=times,file=/home/josiah/sparkLogs/profile.hprof
+
+spark.yarn.appMasterEnv.LD_LIBRARY_PATH /usr/hdp/2.5.0.0-1245/hadoop/lib/native
+
+spark.driver.extraJavaOptions -Dhdp.version=2.5.0.0-1245 -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=8090 -Dcom.sun.management.jmxremote.rmi.port=8091 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=192.168.0.100
+#spark.driver.extraJavaOptions -Dhdp.version=2.5.0.0-1245
+spark.driver.extraLibraryPath	/usr/hdp/2.5.0.0-1245/hadoop/lib/native
+
+spark.executor.extraJavaOptions -Dhdp.version=2.5.0.0-1245 -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=8090 -Dcom.sun.management.jmxremote.rmi.port=8091 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false
+#spark.executor.extraJavaOptions -Dhdp.version=2.5.0.0-1245
+spark.executor.extraLibraryPath	/usr/hdp/2.5.0.0-1245/hadoop/lib/native
+
+#spark.yarn.am.extraJavaOptions -Dhdp.version=2.5.0.0-1245 -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=8090 -Dcom.sun.management.jmxremote.rmi.port=8091 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=192.168.0.100
+spark.yarn.am.extraJavaOptions -Dhdp.version=2.5.0.0-1245
+
+#spark.yarn.executor.extraJavaOptions -Dhdp.version=2.5.0.0-1245 -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=8090 -Dcom.sun.management.jmxremote.rmi.port=8091 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false
+spark.yarn.executor.extraJavaOptions -Dhdp.version=2.5.0.0-1245
+
+spark.scheduler.mode FAIR
+spark.schedular.allocation.file __HERE__/fairscheduler.xml
+spark.scheduler.minRegisteredResourcesRatio 1.0
+spark.scheduler.maxRegisteredResourcesWaitingTime 10m
+
+# Give some hints about where to place the application master and the executors.
+spark.yarn.am.nodeLabelExpression small
+spark.yarn.executor.nodeLabelExpression big
