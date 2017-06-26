@@ -6,6 +6,7 @@ experimentSucceeded="$1"
 stage="$2"
 lastReturnVal="$3"
 
+
 source "$mydir/functions_misc.sh"
 source "$mydir/functions_remoteControl.sh"
 
@@ -34,53 +35,107 @@ cut -d \  -f 2 "$stageFile" | paste "$stageResult" - > "$stageResult.tmp"
 mv "$stageResult.tmp" "$stageResult"
 done
 
+echo "Merging the power summary files..." >&2
+powerFiles=$(ls -1 "$mydir"/powerData/avgPower*-out.log)
+powerFiles=( $powerFiles )
+powerResult="$mydir/powerResultSummary.txt"
+cut -d \  -f 1 "${powerFiles[0]}" > "$powerResult"
+
+for powerFile in "${powerFiles[@]}"; do
+cut -d \  -f 2 "$powerFile" | paste "$powerResult" - > "$powerResult.tmp"
+mv "$powerResult.tmp" "$powerResult"
+done
+
+source "$mydir/functions_powerMonitor.sh"
+shutdownPowerMonitor
+
 echo "Collecting the detailed stage summaries..." >&2
 stageFiles=$( ls -1 "$mydir"/results/stage*-err.log )
 stageFiles=( $stageFiles )
 stageResult="$mydir/results/stageSummary"
 
 ids=()
-isUpdate=()
-startTime=()
-finishTime=()
+updateIDs=()
+queryIDs=()
+
+arr1=()
+arr2=()
+arr3=()
 
 for stageFile in "${stageFiles[@]}"; do
 	s=$( echo "$stageFile" | sed 's/.*stage\([0-9]\+\).*/\1/g' )
 	echo "   Processing stage $s ($stageFile)..." >&2
 	outFile="$stageResult$s.txt"
-	echo -e "id\tisUpdate\tstartTime\tfinishTime" > "$outFile"
+	#echo -e "id localID isUpdate startTime submittedTime finishTime duration percentAffected version" > "$outFile"
 
 	while read line; do
-		id=$( echo "$line" | sed -e 's/.*[uUqQ]\([0-9]\+\):.*/\1/g' )
-		if [[ "$line" =~ ^.*Update\ [0-9]+\ started\ .*at\ .*$ ]]; then
-			#echo "found update start $id"
-			ids[$id]="$id"
-			isUpdate[$id]=1
-			startTime[$id]=$(echo "$line" | sed -e 's/.* started .*at \([0-9]\+\).*/\1/g')
-		elif [[ "$line" =~ ^.*Update\ [0-9]+\ finished\ .*\ at\ .*$ ]]; then
-			#echo "found update finish $id"
-			ids[$id]="$id"
-			isUpdate[$id]=1
-			finishTime[$id]=$(echo "$line" | sed -e 's/.* finished .* at \([0-9]\+\).*/\1/g')
-		elif [[ "$line" =~ ^.*Running\ query\ .*\ at\ .*$ ]]; then
-			#echo "found query start $id"
-			ids[$id]="$id"
-			isUpdate[$id]=0
-			startTime[$id]=$(echo "$line" | sed -e 's/.*Running query .* at \([0-9]\+\).*/\1/g')
-		elif [[ "$line" =~ ^.*Query\ returned\ .*\ from\ version\ .*\ at\ .*$ ]]; then
-			#echo "found query finish $id"
-			ids[$id]="$id"
-			isUpdate[$id]=0
-			finishTime[$id]=$(echo "$line" | sed -e 's/.*Query returned .* at \([0-9]\+\).*/\1/g')
+		l=($line)
+		id=${l[2]}
+		if [ "${l[0]}" == "u" ]; then
+			updateIDs[${l[1]}]=$id
+			arr1[$id]=1
+		else
+			queryIDs[${l[1]}]=$id
+			arr1[$id]=0
 		fi
-	done < <(grep '[uUqQ][0-9]\+:' "$stageFile")
-	
-	for id in "${ids[@]}"; do
-		if [ ! -z "$id" ]; then
-			echo -e "$id\t${isUpdate[$id]}\t${startTime[$id]}\t${finishTime[$id]}" >> "$outFile"
-		fi
-	done
+		arr2[$id]=${l[1]}
+		ids[$id]=$id
+	done < <(grep 'Thread submitted [uq][0-9]\+ (#[0-9]\+' "$stageFile" | sed 's/.*Thread submitted \([uq]\)\([0-9]\+\) (#\([0-9]\+\).*/\1 \2 \3/g')
+	echo "id ${ids[*]}" > "$outFile"
+	echo "isUpdate ${arr1[*]}" >> "$outFile"
+	echo "qid ${arr2[*]}" >> "$outFile"
 
+	for i in "${ids[@]}"; do
+		arr1[$i]=""
+	done
+	while read line; do
+		l=($line)
+		if [ "${l[0]}" == "u" ]; then
+			id=${updateIDs[${l[1]}]}
+		else
+			id=${queryIDs[${l[1]}]}
+		fi
+		arr1[$id]=${l[2]}
+	done < <(grep '[uq][0-9]\+:.*started at [0-9]\+' "$stageFile" | sed -e 's/.*\([uq]\)\([0-9]\+\):.*started at \([0-9]\+\).*/\1 \2 \3/g')
+	echo "startTime ${arr1[*]}" >> "$outFile"
+
+	for i in "${ids[@]}"; do
+		arr1[$i]=""
+		arr2[$i]=""
+	done
+	while read line; do
+		l=($line)
+		if [ "${l[0]}" == "u" ]; then
+			id=${updateIDs[${l[1]}]}
+		else
+			id=${queryIDs[${l[1]}]}
+		fi
+		arr1[$id]=${l[2]}
+		arr2[$id]=${l[3]}
+	done < <(grep '[uq][0-9]\+:.*will affect.* [0-9\.eE+\-]\+ %.*submitting at [0-9]' "$stageFile" | sed -e 's/.*\([uq]\)\([0-9]\+\):.*will affect.* \([0-9\.eE+\-]\+\) %.*submitting at \([0-9]\+\).*/\1 \2 \3 \4/g')
+	echo "percentAffected ${arr1[*]}" >> "$outFile"
+	echo "submittedTime ${arr2[*]}" >> "$outFile"
+
+	for i in "${ids[@]}"; do
+		arr1[$i]=""
+		arr2[$i]=""
+		arr3[$i]=""
+	done
+	while read line; do
+		l=($line)
+		if [ "${l[0]}" == "u" ]; then
+			id=${updateIDs[${l[1]}]}
+		else
+			id=${queryIDs[${l[1]}]}
+		fi
+		arr1[$id]=${l[2]}
+		arr2[$id]=${l[3]}
+		arr3[$id]=${l[4]}
+	done < <(grep '[uq][0-9]\+:.*[fF]inished in [0-9]\+ ms at [0-9]\+.*version is [0-9]\+' "$stageFile" | sed -e 's/.*\([uq]\)\([0-9]\+\):.*[fF]inished in \([0-9]\+\) ms at \([0-9]\+\).*version is \([0-9]\+\).*/\1 \2 \3 \4 \5/g')
+	echo "duration ${arr1[*]}" >> "$outFile"
+	echo "finishTime ${arr2[*]}" >> "$outFile"
+	echo "version ${arr3[*]}" >> "$outFile"
+	
 done
 
 
@@ -94,26 +149,23 @@ done
 
 #downloadMultiple "$remoteDir/powerCapOutput/*" "${executorLoginList[*]}" "$mydir/powerCapOutput"
 
-# Delete temporary remote files.
-if [ "$experimentSucceeded" == 1 ]; then
-	echo "Temporary files deleted from $remoteDir on $driverLogin ${executorLoginList[*]}." >&2
-	runRemoteMultiple "rm -r '$remoteDir'" "$driverLogin ${executorLoginList[*]}"
+if [ "$4" == "test" ]; then
+	echo "This was a test, so we are leaving $remoteDir on $driverLogin ${executorLoginList[*]}"
 else
-	echo "The experiment did not succeed. Temporary files were left in $remoteDir on $driverLogin ${executorLoginList[*]}." >&2
+	# Delete temporary remote files.
+	if [ "$experimentSucceeded" == 1 ]; then
+		echo "Temporary files deleted from $remoteDir on $driverLogin ${executorLoginList[*]}." >&2
+		runRemoteMultiple "rm -r '$remoteDir'" "$driverLogin ${executorLoginList[*]}"
+	else
+		echo "The experiment did not succeed. Temporary files were left in $remoteDir on $driverLogin ${executorLoginList[*]}." >&2
 
-	runRemote "bash '$remoteDir/go_cleanup.sh'" "$driverLogin"
+		runRemote "bash '$remoteDir/go_cleanup.sh'" "$driverLogin"
+	fi
 fi
 
-source "$mydir/functions_powerMonitor.sh"
-shutdownPowerMonitor
 
-echo "Merging the power summary files..." >&2
-powerFiles=$(ls -1 "$mydir"/powerData/avgPower*-out.log)
-powerFiles=( $powerFiles )
-powerResult="$mydir/powerResultSummary.txt"
-cut -d \  -f 1 "${powerFiles[0]}" > "$powerResult"
-
-for powerFile in "${powerFiles[@]}"; do
-cut -d \  -f 2 "$powerFile" | paste "$powerResult" - > "$powerResult.tmp"
-mv "$powerResult.tmp" "$powerResult"
-done
+baseDir=$(readlink -f "$mydir")
+baseDir=$(basename "$baseDir")
+dropboxDir="/cygdrive/c/Users/Josiah/Dropbox/Research/2017/DynamicBigData/paper/$baseDir"
+mkdir -p "$dropboxDir"
+cp $mydir/stageInputs.txt $mydir/stageResultSummary.txt $mydir/powerResultSummary.txt "$dropboxDir"

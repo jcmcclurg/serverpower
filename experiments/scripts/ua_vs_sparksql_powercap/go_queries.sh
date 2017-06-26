@@ -7,59 +7,102 @@ originalDir=$(pwd)
 echo "Changed directory to $dir." >&2
 export SPARK_CONF_DIR=$(readlink -fm "$dir/sparkConf")
 
+# Only needed if you use a custom version of spark, with hadoop-provided
+export SPARK_DIST_CLASSPATH=$(hadoop classpath)
+
 cd "$dir"
 choices_numExecutors=(48 24 16 12 8 4)
 choices_executorCores=(1 2 3 4 6 12)
 choices_executorMemory=(640 1920 3200 4406 6737 13731)
-parallelismIndex=4
+parallelismIndex=5
 
 
-# Usage: runQuerySet mode numQueries queryRate updateAttrSelectivity updateRowSelectivity
+# Usage: runQuerySet isSparkSQL numQueries isQueryTimingImmediate queryTimingSeparation isUpdateAggregationImmediate updateAggregationSeparation updateRowRate mergeSize numFences
 # 
 # Where parallelismIndex is a number from 0 to 5 indicating how small to make the executors.
 # 0 gives a large number of small executors 5 gives a small number of large executors.
 #
 runQuerySet(){
-	local mode=$1
+	local isSparkSQL=$1
 	local numQueries=$2
-	local queryRate=$3
-	local updateAttrSelectivity=$4
-	local updateRowSelectivity=$5
+	local isQueryTimingImmediate=$3
+	local queryTimingSeparation=$4
 
-	if [ "$mode" == 1 ]; then
+	local isUpdateAggregationImmediate=$5
+	local updateAggregationSeparation=$6
+	local useUpdateAdmissionControl=$7
+	local updateRowRate=$8
+	shift 8
+
+	local mergeSize=$1
+	local numFences=$2
+	local density=$3
+	local checkpointEvery=$4
+	local numValues=$5
+	local numAttributes=$6
+	local numRows=$7
+	local numPartitions=$8
+
+	if [ "$isSparkSQL" == 1 ]; then
 		local class="com.jcmcclurg.updateaware.sql.SparkSQLTest"
-	elif [ "$mode" == 0 ]; then
+	elif [ "$isSparkSQL" == 0 ]; then
 		local class="com.jcmcclurg.updateaware.bitmapindex.BitmapIndexTest"
 	else
-		local class="$mode"
+		local class="$isSparkSQL"
+	fi
+
+	if [ "$isQueryTimingImmediate" == 1 ]; then
+		local queryTimingType="immediate"
+	elif [ "$isQueryTimingImmediate" == 0 ]; then
+		local queryTimingType="exponential"
+	else
+		local queryTimingType="constant"
+	fi
+
+	if [ "$isUpdateAggregationImmediate" == 1 ]; then
+		local updateAggregationTimingType="immediate"
+	elif [ "$isUpdateAggregationImmediate" == 0 ]; then
+		local updateAggregationTimingType="exponential"
+	else
+		local updateAggregationTimingType="constant"
+	fi
+
+	if [ "$useUpdateAdmissionControl" == 1 ]; then
+		local admissionControlType="probability"
+	else
+		local admissionControlType="rate"
 	fi
 
 	stdbuf -o L -e L \
-		spark-submit \
+		/home/josiah/spark-2.1.1-bin-without-hadoop/bin/spark-submit \
 		--master yarn \
 		--deploy-mode client \
-		--num-executors ${choices_numExecutors[$parallelismIndex]} \
-		--executor-cores ${choices_executorCores[$parallelismIndex]} \
-		--executor-memory ${choices_executorMemory[$parallelismIndex]}m \
-		--class $class \
-		queries-assembly-1.0.jar \
-		--attributes-per-partition 8 \
-		--max-bits-per-value 8 \
-		--density 0.1 \
-		--num-partitions 32 \
-		--num-rows 1000000 \
-		--merge-size 25000 \
-		--update-rate 0 \
-		--query-rate "$queryRate" \
-		--query-attr-selectivity 0.5 \
-		--update-attr-selectivity "$updateAttrSelectivity" \
-		--update-row-selectivity "$updateRowSelectivity" \
-		--max-select-size 200 \
+		--num-executors "${choices_numExecutors[$parallelismIndex]}" \
+		--executor-cores "${choices_executorCores[$parallelismIndex]}" \
+		--executor-memory "${choices_executorMemory[$parallelismIndex]}m" \
+		--conf "spark.sql.shuffle.partitions=$numPartitions" \
+		--class "$class" \
+		queries-assembly-2.11-1.1.jar \
+		--num-rows "$numRows" \
+		--checkpoint-every "$checkpointEvery" \
+		--num-attributes "$numAttributes" \
+		--num-values "$numValues" \
+		--density "$density" \
+		--num-partitions "$numPartitions" \
 		--num-queries "$numQueries" \
-		--checkpoint-every 1 \
-		--num-fences 0 \
-		--update-ordering-mode random
-		#--random-seed 555554444333221
+		--max-select-size 1000 \
+		--max-schema-size 300 \
+		--query-timing-type "$queryTimingType" \
+		--query-timing-param "$queryTimingSeparation" \
+		--query-initial-attrs 1 \
+		--query-other-attr-probability 0.5 \
+		--update-aggregation-timing-type "$updateAggregationTimingType" \
+		--update-aggregation-timing-param "$updateAggregationSeparation" \
+		--update-row-$admissionControlType "$updateRowRate" \
+		--merge-size "$mergeSize" \
+		--num-fences "$numFences"
+
+	#--random-seed 555554444333221
 }
 
 
@@ -90,9 +133,9 @@ shift 2
 if teeToLogs "$stageLog" runQuerySet "$@"; then
 	endTime=$( date +%s.%N )
 	echo "stage $stageIndex" > "$stageResultFile"
-	echo "startTime $startTime" >> "$stageResultFile"
-	echo "endTime $startTime" >> "$stageResultFile"
-	grep "Measured average" "$stageLog-err.log" | sed 's/.*Measured average \([a-zA-Z]\+\): \([0-9]\+\.\?[0-9]*\) .*/\1 \2/g' >> "$stageResultFile"
+	echo "submitTime $startTime" >> "$stageResultFile"
+	echo "exitTime $endTime" >> "$stageResultFile"
+	grep "QUERY_RESULT: " "$stageLog-err.log" | sed 's/.*QUERY_RESULT: \([a-zA-Z]\+\): \([0-9]\+\.\?[0-9eE\-]*\) .*/\1 \2/g' >> "$stageResultFile"
 	cd "$originalDir"
 
 	echo "Success!" >&2

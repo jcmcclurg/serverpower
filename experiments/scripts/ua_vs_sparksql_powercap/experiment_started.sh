@@ -10,14 +10,40 @@ source "$mydir/functions_powerMonitor.sh"
 setupPowerMonitor
 
 # Upload the files needed for running the driver.
-#remoteDir=$( upload "$mydir/*" "$driverLogin" "/tmp/uploads/1489436986.893493500" )
-remoteDir=$( upload "$mydir/*" "$driverLogin" )
+echo "Uploading script files..." >&2
+if [ "$1" == "test" ]; then
+	echo "Deleting /tmp/uploads/test/results (leaving the other files alone)..." >&2
+	runRemote "rm -r '/tmp/uploads/test/results'" "$driverLogin"
+	remoteDir=$( upload "$mydir/*.sh" "$driverLogin" "/tmp/uploads/test" )
+else
+	if [ -f "$mydir/remoteDir" ]; then
+		rdir=$(cat "$mydir/remoteDir")
+		#echo "Deleting all the previous files in $rdir..." >&2
+		#runRemote "bash rm -r '$rdir'" "$driverLogin"
+		remoteDir=$( upload "$mydir/*.sh" "$driverLogin" "$rdir" )
+	else
+		remoteDir=$( upload "$mydir/*.sh" "$driverLogin" )
+	fi
+
+fi
+
+echo "Uploading jar files..." >&2
+upload "$mydir/*.jar" "$driverLogin" "$remoteDir"
+
+echo "Uploading configuration files..." >&2
+upload "$mydir/sparkConf/*" "$driverLogin" "$remoteDir/sparkConf"
+if [ "$1" == "test" ]; then
+	# Set up the spark configuration
+	runRemote "bash '$remoteDir/sparkConf/setupSparkConf.sh' test" "$driverLogin"
+else
+	# Set up the spark configuration
+	runRemote "bash '$remoteDir/sparkConf/setupSparkConf.sh'" "$driverLogin"
+fi
+
 
 # Write the remote dir, so the stage executor can know where to find things.
 echo "$remoteDir" > "$mydir/remoteDir"
 
-# Set up the spark configuration
-runRemote "bash '$remoteDir/sparkConf/setupSparkConf.sh'" "$driverLogin"
 
 # Upload the files needed for starting and stopping the power caps.
 uploadMultiple "$mydir/functions_powerCap.sh $mydir/go_powerCap.sh $mydir/setupPowerCap.sh" "${executorLoginList[*]}" "$remoteDir"
